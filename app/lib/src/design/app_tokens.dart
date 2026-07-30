@@ -20,11 +20,7 @@ abstract final class AppColors {
   static const iosBackground = LinearGradient(
     begin: Alignment.topLeft,
     end: Alignment.bottomRight,
-    colors: [
-      Color(0xFFEDEAE7),
-      Color(0xFFF7F6F5),
-      Color(0xFFE6E3E0),
-    ],
+    colors: [Color(0xFFEDEAE7), Color(0xFFF7F6F5), Color(0xFFE6E3E0)],
     stops: [0, 0.45, 1],
   );
 }

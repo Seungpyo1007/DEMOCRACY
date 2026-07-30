@@ -1,4 +1,5 @@
 import 'package:democracy/src/core/auth/address_controller.dart';
+import 'package:democracy/src/core/auth/address_state.dart';
 import 'package:democracy/src/core/auth/verified_gate.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';

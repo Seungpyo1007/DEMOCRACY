@@ -6,4 +6,3 @@ abstract final class AppRoutes {
   static const community = '/community';
   static const results = '/results';
 }
-

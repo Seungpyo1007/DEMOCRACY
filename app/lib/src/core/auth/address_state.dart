@@ -1,14 +1,7 @@
-enum AddressStatus {
-  unverified,
-  pending,
-  verified,
-}
+enum AddressStatus { unverified, pending, verified }
 
 class DistrictRef {
-  const DistrictRef({
-    required this.id,
-    required this.displayName,
-  });
+  const DistrictRef({required this.id, required this.displayName});
 
   final String id;
   final String displayName;
@@ -18,8 +11,8 @@ class ResidencyVerificationProof {
   ResidencyVerificationProof({
     required String opaqueToken,
     required DateTime verifiedAt,
-  })  : opaqueToken = _validateToken(opaqueToken),
-        verifiedAt = verifiedAt.toUtc();
+  }) : opaqueToken = _validateToken(opaqueToken),
+       verifiedAt = verifiedAt.toUtc();
 
   final String opaqueToken;
   final DateTime verifiedAt;
@@ -38,25 +31,23 @@ class ResidencyVerificationProof {
 
 class AddressState {
   const AddressState.initial()
-      : status = AddressStatus.unverified,
-        district = null,
-        verification = null;
+    : status = AddressStatus.unverified,
+      district = null,
+      verification = null;
 
   const AddressState.readOnly({this.district})
-      : status = AddressStatus.unverified,
-        verification = null;
+    : status = AddressStatus.unverified,
+      verification = null;
 
-  const AddressState.pending({required DistrictRef district})
-      : status = AddressStatus.pending,
-        district = district,
-        verification = null;
+  const AddressState.pending({required DistrictRef this.district})
+    : status = AddressStatus.pending,
+      verification = null;
 
   const AddressState.verified({
-    required DistrictRef district,
+    required DistrictRef this.district,
     required ResidencyVerificationProof proof,
-  })  : status = AddressStatus.verified,
-        district = district,
-        verification = proof;
+  }) : status = AddressStatus.verified,
+       verification = proof;
 
   final AddressStatus status;
   final DistrictRef? district;

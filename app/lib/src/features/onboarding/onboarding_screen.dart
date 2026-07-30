@@ -1,5 +1,6 @@
 import 'package:democracy/src/app/app_routes.dart';
 import 'package:democracy/src/core/auth/address_controller.dart';
+import 'package:democracy/src/core/auth/address_state.dart';
 import 'package:democracy/src/design/app_tokens.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -15,8 +16,7 @@ class OnboardingScreen extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final surfaceTokens =
-        Theme.of(context).extension<AppSurfaceTokens>()!;
+    final surfaceTokens = Theme.of(context).extension<AppSurfaceTokens>()!;
 
     return Scaffold(
       body: SafeArea(
@@ -100,9 +100,7 @@ class OnboardingScreen extends ConsumerWidget {
                     onPressed: () {
                       ref
                           .read(addressControllerProvider.notifier)
-                          .requestVerification(
-                            district: _previewDistrict,
-                          );
+                          .requestVerification(district: _previewDistrict);
                       context.go(AppRoutes.home);
                     },
                     child: const Text('지역구 설정 완료'),
@@ -111,9 +109,7 @@ class OnboardingScreen extends ConsumerWidget {
                     onPressed: () {
                       ref
                           .read(addressControllerProvider.notifier)
-                          .continueReadOnly(
-                            district: _previewDistrict,
-                          );
+                          .continueReadOnly(district: _previewDistrict);
                       context.go(AppRoutes.home);
                     },
                     child: const Text('나중에 인증하기'),

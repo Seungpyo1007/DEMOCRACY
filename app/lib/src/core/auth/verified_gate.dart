@@ -3,10 +3,8 @@ import 'package:democracy/src/core/auth/address_controller.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
-typedef VerifiedActionBuilder = Widget Function(
-  BuildContext context,
-  VoidCallback onPressed,
-);
+typedef VerifiedActionBuilder =
+    Widget Function(BuildContext context, VoidCallback onPressed);
 
 class VerifiedGate extends ConsumerWidget {
   const VerifiedGate({

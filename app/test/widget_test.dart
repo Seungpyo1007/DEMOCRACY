@@ -3,10 +3,10 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_test/flutter_test.dart';
 
 void main() {
-  testWidgets('continues from onboarding to the read-only home', (tester) async {
-    await tester.pumpWidget(
-      const ProviderScope(child: DemocracyApp()),
-    );
+  testWidgets('continues from onboarding to the read-only home', (
+    tester,
+  ) async {
+    await tester.pumpWidget(const ProviderScope(child: DemocracyApp()));
     await tester.pumpAndSettle();
 
     expect(find.textContaining('주소 인증'), findsOneWidget);

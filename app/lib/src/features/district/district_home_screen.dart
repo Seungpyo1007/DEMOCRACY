@@ -61,18 +61,14 @@ class DistrictHomeScreen extends ConsumerWidget {
 }
 
 class _FoundationCard extends StatelessWidget {
-  const _FoundationCard({
-    required this.title,
-    required this.body,
-  });
+  const _FoundationCard({required this.title, required this.body});
 
   final String title;
   final String body;
 
   @override
   Widget build(BuildContext context) {
-    final surfaceTokens =
-        Theme.of(context).extension<AppSurfaceTokens>()!;
+    final surfaceTokens = Theme.of(context).extension<AppSurfaceTokens>()!;
 
     return DecoratedBox(
       decoration: BoxDecoration(

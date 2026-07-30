@@ -24,9 +24,6 @@ class AddressController extends Notifier<AddressState> {
     required DistrictRef district,
     required ResidencyVerificationProof proof,
   }) {
-    state = AddressState.verified(
-      district: district,
-      proof: proof,
-    );
+    state = AddressState.verified(district: district, proof: proof);
   }
 }

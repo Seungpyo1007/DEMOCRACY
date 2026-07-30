@@ -19,4 +19,3 @@ class DemocracyApp extends ConsumerWidget {
     );
   }
 }
-

@@ -18,11 +18,7 @@ abstract final class PlatformAdaptiveRoute {
 
 class PlatformAdaptiveAppBar extends StatelessWidget
     implements PreferredSizeWidget {
-  const PlatformAdaptiveAppBar({
-    required this.title,
-    this.trailing,
-    super.key,
-  });
+  const PlatformAdaptiveAppBar({required this.title, this.trailing, super.key});
 
   final String title;
   final Widget? trailing;
@@ -40,7 +36,10 @@ class PlatformAdaptiveAppBar extends StatelessWidget
       );
     }
 
-    return AppBar(title: Text(title), actions: trailing == null ? null : [trailing!]);
+    return AppBar(
+      title: Text(title),
+      actions: trailing == null ? null : [trailing!],
+    );
   }
 }
 

@@ -4,7 +4,6 @@ import 'package:democracy/src/features/district/district_home_screen.dart';
 import 'package:democracy/src/features/onboarding/onboarding_screen.dart';
 import 'package:democracy/src/features/shared/feature_placeholder_screen.dart';
 import 'package:democracy/src/features/shell/app_shell.dart';
-import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 
@@ -62,8 +61,7 @@ final appRouterProvider = Provider<GoRouter>((ref) {
                   child: const FeaturePlaceholderScreen(
                     title: 'AI 분석',
                     description: '공약 원문과 공개된 가중치 계약 확정 후 구현합니다.',
-                    notice:
-                        '공약 원문 기반 참고 자료 · 공인 평가 아님 · 알고리즘 검증 필요',
+                    notice: '공약 원문 기반 참고 자료 · 공인 평가 아님 · 알고리즘 검증 필요',
                   ),
                 ),
               ),

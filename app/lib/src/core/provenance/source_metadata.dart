@@ -1,9 +1,7 @@
 class SourceMetadata {
-  SourceMetadata({
-    required Uri sourceUrl,
-    required DateTime fetchedAt,
-  })  : sourceUrl = _validateSourceUrl(sourceUrl),
-        fetchedAt = fetchedAt.toUtc();
+  SourceMetadata({required Uri sourceUrl, required DateTime fetchedAt})
+    : sourceUrl = _validateSourceUrl(sourceUrl),
+      fetchedAt = fetchedAt.toUtc();
 
   final Uri sourceUrl;
   final DateTime fetchedAt;
@@ -22,12 +20,8 @@ class SourceMetadata {
 }
 
 class SourcedValue<T extends num> {
-  const SourcedValue({
-    required this.value,
-    required this.source,
-  });
+  const SourcedValue({required this.value, required this.source});
 
   final T value;
   final SourceMetadata source;
 }
-
