@@ -1,0 +1,33 @@
+# Workspace
+.idea/
+.vscode/
+*.log
+
+# Local secrets and generated environment files
+.env
+.env.*
+!.env.example
+**/google-services.json
+**/GoogleService-Info.plist
+**/*.jks
+**/*.keystore
+
+# Flutter / Dart
+app/.dart_tool/
+app/.packages
+app/.pub-cache/
+app/build/
+app/coverage/
+app/.flutter-plugins
+app/.flutter-plugins-dependencies
+app/android/.gradle/
+app/android/local.properties
+app/ios/Pods/
+app/ios/.symlinks/
+app/ios/Flutter/ephemeral/
+app/macos/Flutter/ephemeral/
+
+# Code generation
+app/lib/**/*.freezed.dart
+app/lib/**/*.g.dart
+
