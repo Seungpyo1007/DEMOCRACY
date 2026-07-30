@@ -31,7 +31,11 @@ M0 완료 조건을 충족했다. 남은 미검증 항목은 실기기 빌드뿐
 - Flutter SDK: `C:\src\flutter` (공식 `flutter_windows_3.44.8-stable.zip`)
 - 사용자 PATH에 `C:\src\flutter\bin` 추가
 - FVM은 설치하지 않았다. `bootstrap.ps1`은 PATH에 `fvm`이 있으면 무조건 우선하는데, FVM 래퍼가 stdout에 배너를 출력하면 버전 확인의 `ConvertFrom-Json`이 깨진다.
-- Android SDK와 JDK는 아직 없다. `flutter analyze`와 `flutter test`는 이들 없이 동작한다.
+- Android Studio 2026.1.2.10: `C:\Program Files\Android\Android Studio`
+- JDK: Android Studio 동봉 OpenJDK 21.0.10. `flutter config --jdk-dir`로 연결했다.
+- Android SDK는 아직 없다. Android Studio를 처음 실행해 설정 마법사를 완료해야 하며, 이 과정에서 Google Android SDK 라이선스 동의가 필요하다.
+- `flutter analyze`와 `flutter test`는 Android SDK 없이 동작한다. 실기기·에뮬레이터 빌드에만 필요하다.
+- Visual Studio 미설치는 Windows 데스크톱 타깃 전용 항목이라 이 프로젝트와 무관하다.
 
 ## bootstrap.ps1 수정
 
@@ -69,7 +73,7 @@ app/lib/
 
 ## 바로 할 일
 
-1. Android Studio를 설치해 JDK와 Android SDK를 확보하고 `flutter doctor`로 toolchain을 확인한다.
+1. Android Studio를 한 번 실행해 설정 마법사로 Android SDK를 설치한다. 완료 후 `flutter doctor`로 Android toolchain이 √ 인지 확인한다.
 2. README의 “API 34+”가 minSdk 의미인지 확정한다. 현재 minSdk는 생성값 24다.
 3. iOS 최종 빌드는 macOS/Xcode 환경에서 검증한다.
 4. `SourceMetadata` 검증을 DTO 파싱/리포지토리 경계에도 적용한다. 현재는 생성자에서만 강제되고, 이를 통과하도록 강제되는 호출부가 없다.
