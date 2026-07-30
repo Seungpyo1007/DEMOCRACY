@@ -15,8 +15,12 @@ if (-not (Test-Path -LiteralPath $appRoot)) {
     throw "App scaffold not found: $appRoot"
 }
 
-$fvmCommand = Get-Command fvm -CommandType Application -ErrorAction SilentlyContinue
-$flutterCommand = Get-Command flutter -CommandType Application -ErrorAction SilentlyContinue
+# Select-Object -First 1 is required: the Flutter SDK ships both `flutter` and
+# `flutter.bat` in bin/, so Get-Command returns two Application matches and
+# $cmd.Source would collapse into a single unusable path string. PATHEXT order
+# puts the .bat first, which is the correct executable on Windows.
+$fvmCommand = Get-Command fvm -CommandType Application -ErrorAction SilentlyContinue | Select-Object -First 1
+$flutterCommand = Get-Command flutter -CommandType Application -ErrorAction SilentlyContinue | Select-Object -First 1
 $useFvm = $null -ne $fvmCommand
 
 if (-not $useFvm -and $null -eq $flutterCommand) {
@@ -51,7 +55,7 @@ function Invoke-DartTool {
         & $fvmCommand.Source dart @CommandArguments
     }
     else {
-        $dartCommand = Get-Command dart -CommandType Application -ErrorAction SilentlyContinue
+        $dartCommand = Get-Command dart -CommandType Application -ErrorAction SilentlyContinue | Select-Object -First 1
         if ($null -eq $dartCommand) {
             throw 'Dart is not available beside the active Flutter SDK.'
         }
