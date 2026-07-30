@@ -10,18 +10,34 @@
 - 디자인 토큰, 지역구 식별자·검증 증거를 포함한 주소 상태, 출처 메타데이터, `VerifiedGate`를 추가했다.
 - 라우트·앱바·탭바·다이얼로그·햅틱은 표준 플랫폼 폴백을 구현했고, 네이티브 인증은 경계 인터페이스만 정의했다.
 - 트래커, AI 분석, 커뮤니티, 개표는 의도적으로 placeholder다.
-- 이 작업공간은 아직 Git 저장소가 아니다.
-- 현재 머신의 PATH에는 Flutter와 Dart가 없다.
+- Git 저장소를 초기화했고 bootstrap 이전 상태를 첫 커밋으로 남겼다.
+- Flutter 3.44.8을 `C:\src\flutter`에 설치하고 사용자 PATH에 등록했다.
+- bootstrap을 실행해 Android/iOS 네이티브 프로젝트를 생성했다.
+- 골격의 컴파일 오류를 복구했고 `flutter analyze`와 `flutter test`가 통과한다.
 
-따라서 Dart 포맷, 의존성 해석, 정적 분석, 단위·위젯 테스트, Android/iOS 빌드는 실행하지 못했다. 소스는 후속 실행자가 SDK 준비 직후 검증해야 한다.
+M0 완료 조건을 충족했다. 남은 미검증 항목은 실기기 빌드뿐이다. Android 빌드는 JDK와 Android SDK, iOS 빌드는 macOS와 Xcode가 필요하다.
 
 ## 도구 기준
 
-- 권장 고정 버전: Flutter 3.44.8 / Dart 3.12.2
-- `app/.fvmrc`에 Flutter 버전을 기록했다.
-- `pubspec.yaml`의 Riverpod과 go_router 버전은 2026-07-30 pub.dev 기준으로 잡았다.
-- 최신 Freezed 3.2.5와 Riverpod generator 4.0.8은 각각 `analyzer <11`, `analyzer ^13`을 요구해 함께 해석되지 않는다. 현재 코드가 생성 파일을 쓰지 않으므로 codegen 의존성은 M1 호환성 spike까지 제외했다.
-- lockfile은 SDK가 없는 상태에서 임의 생성하지 않았다.
+- 고정 버전: Flutter 3.44.8 / Dart 3.12.2. `app/.fvmrc`와 `bootstrap.ps1`의 가드가 동일한 값을 사용한다.
+- 해석된 직접 의존성: `flutter_riverpod 3.4.2`, `go_router 17.3.0`, `flutter_lints 6.0.0`.
+- `app/pubspec.lock`을 커밋했다.
+- Android: compileSdk 36, targetSdk 36, minSdk 24, NDK 28.2.13676358, JVM target 17. 값은 Flutter Gradle 플러그인 기본값이며 `build.gradle.kts`에 하드코딩돼 있지 않다.
+- README의 "API 34+"가 minSdk를 뜻하는지 미확정이라 minSdk 24는 생성값 그대로 두었다. 상향이 필요하면 별도 결정이 필요하다.
+- 해석된 `analyzer`는 12.1.0이다. 최신 Freezed 3.2.5는 `analyzer <11`, Riverpod generator 4.0.8은 `analyzer ^13`을 요구해 어느 쪽도 현재 조합에 들어오지 못한다. codegen 의존성은 M1 호환성 spike까지 계속 제외한다.
+
+## 설치 및 환경
+
+- Flutter SDK: `C:\src\flutter` (공식 `flutter_windows_3.44.8-stable.zip`)
+- 사용자 PATH에 `C:\src\flutter\bin` 추가
+- FVM은 설치하지 않았다. `bootstrap.ps1`은 PATH에 `fvm`이 있으면 무조건 우선하는데, FVM 래퍼가 stdout에 배너를 출력하면 버전 확인의 `ConvertFrom-Json`이 깨진다.
+- Android SDK와 JDK는 아직 없다. `flutter analyze`와 `flutter test`는 이들 없이 동작한다.
+
+## bootstrap.ps1 수정
+
+`Get-Command flutter -CommandType Application`이 Windows에서 항상 두 개(`flutter`, `flutter.bat`)를 반환해 `$flutterCommand.Source`가 두 경로를 이어붙인 문자열이 되고 실행이 실패했다. `fvm`, `flutter`, `dart` 조회 세 곳에 `Select-Object -First 1`을 추가했다. PATHEXT 순서상 `.bat`이 먼저 오며 Windows에서는 그쪽이 올바른 실행 파일이다.
+
+이 결함은 이 머신 한정이 아니라 Windows의 모든 표준 Flutter 설치에서 재현된다.
 
 ## 명세 우선순위
 
@@ -53,17 +69,14 @@ app/lib/
 
 ## 바로 할 일
 
-1. 사용자에게 실제 조직 도메인과 앱 식별자를 확인한다.
-2. Flutter 3.44.8을 설치하거나 FVM으로 연결한다.
-3. Git 초기화 여부를 사용자에게 확인하고 bootstrap 전 초기 커밋 또는 백업을 만든다.
-4. `.\tool\bootstrap.ps1 -Organization "<확정 도메인>"`을 실행한다.
-5. 생성된 Android 설정에서 target/compile API 34 이상을 확인한다. README의 “API 34+”가 minSdk 의미인지는 사용자와 별도 확정한다.
-6. iOS 최종 빌드는 macOS/Xcode 환경에서 검증한다.
-7. 포맷·분석·테스트 오류를 모두 고친 뒤 첫 기능 작업을 시작한다.
-8. `SourceMetadata` 검증을 DTO 파싱/리포지토리 경계에도 적용한다.
-9. Fake repository와 JSON fixture로 온보딩 → 홈 → 공약 → 주민 평가 세로 흐름을 완성한다.
+1. Android Studio를 설치해 JDK와 Android SDK를 확보하고 `flutter doctor`로 toolchain을 확인한다.
+2. README의 “API 34+”가 minSdk 의미인지 확정한다. 현재 minSdk는 생성값 24다.
+3. iOS 최종 빌드는 macOS/Xcode 환경에서 검증한다.
+4. `SourceMetadata` 검증을 DTO 파싱/리포지토리 경계에도 적용한다. 현재는 생성자에서만 강제되고, 이를 통과하도록 강제되는 호출부가 없다.
+5. Fake repository와 JSON fixture로 온보딩 → 홈 → 공약 → 주민 평가 세로 흐름을 완성한다.
+6. 라우터에 `redirect` 가드를 넣는다. 현재 온보딩은 `initialLocation`으로만 도달하므로 딥링크로 우회할 수 있다.
 
-## Claude Code 백로그
+## 백로그
 
 ### MVP 1차
 
@@ -86,7 +99,7 @@ app/lib/
 
 ## 미결정 사항
 
-- Bundle ID/Application ID와 서명 계정
+- 릴리스 서명 계정과 키스토어. 현재 release 빌드는 debug 키로 서명된다
 - dev/staging/prod flavor
 - “주소 인증”의 법적·기술적 검증 주체와 원주소 폐기 정책
 - 국회·선관위·주소·지도 API 계약, 키, 이용 조건
@@ -98,18 +111,35 @@ app/lib/
 
 ## 검증 기록
 
+기준: Flutter 3.44.8 / Dart 3.12.2, Windows 11.
+
 | 항목 | 상태 | 비고 |
 |---|---|---|
 | 원본 README/HTML 확인 | 완료 | UTF-8 기준 |
-| YAML/JSON 및 PowerShell 문법 | 완료 | 로컬 정적 파서 통과 |
-| Dart 구분자·내부 import 순환 검사 | 완료 | 19개 파일, 오류·순환 0 |
-| 기능 계층의 직접 플랫폼 분기 검사 | 완료 | 0건 |
-| Flutter/Dart 탐지 | 실패 | PATH 및 일반 설치 위치에 없음 |
-| Bootstrap SDK 가드 | 완료 | SDK 부재 시 파일 변경 전에 명시적으로 중단 |
-| `flutter pub get` | 미실행 | SDK 필요, codegen 묶음은 호환성 문제로 제외 |
-| 코드 생성 | 보류 | M1에서 호환 패키지 조합 spike |
-| `dart format` | 미실행 | SDK 필요 |
-| `flutter analyze` | 미실행 | SDK 필요 |
-| `flutter test` | 미실행 | SDK 필요 |
-| Android 빌드 | 미실행 | SDK/JDK 필요 |
+| Flutter/Dart 탐지 | 완료 | `frameworkVersion 3.44.8`, `dartSdkVersion 3.12.2` |
+| Bootstrap SDK 가드 | 완료 | 두 버전 조건 모두 통과 |
+| `flutter create` | 완료 | android/ios 생성. `pubspec.yaml`·`analysis_options.yaml`·`.fvmrc` diff 0 |
+| `flutter pub get` | 완료 | `pubspec.lock` 생성 및 커밋 |
+| `dart format` | 완료 | 최초 19개 중 16개 재포맷, 이후 재실행 시 0 changed |
+| `flutter analyze` | 완료 | `No issues found!` |
+| `flutter test` | 완료 | 8개 통과 |
+| bootstrap 전체 체인 | 완료 | 종료 코드 0 |
+| 코드 생성 | 보류 | 해석된 analyzer 12.1.0. M1에서 호환 조합 spike |
+| Android 빌드 | 미실행 | JDK/Android SDK 필요 |
 | iOS 빌드 | 미실행 | macOS/Xcode 필요 |
+
+### 복구한 결함
+
+| 위치 | 내용 |
+|---|---|
+| `onboarding_screen.dart` | `DistrictRef` 사용부에 `address_state.dart` import 누락. 오류 2건 |
+| `verified_gate_test.dart` | `DistrictRef`, `ResidencyVerificationProof` 사용부에 동일 import 누락. 오류 2건 |
+| `app_router.dart` | 미사용 `material.dart` import |
+| `address_state.dart` | `prefer_initializing_formals` 2건. 타입 지정 initializing formal로 교체해 non-null 좁힘 유지 |
+| `tool/bootstrap.ps1` | Windows에서 `Get-Command`가 두 개를 반환하는 문제 |
+
+### 미충족 항목
+
+`docs/INITIAL_PLAN.md`의 필수 테스트 8개 중 3개만 구현돼 있다. 출처 URL 거부, 미인증 쓰기 차단, 인증된 쓰기 1회 실행은 통과한다. 5탭 상태 보존, 후보 가나다순, 상태 색상 3중 부호화, 390dp 골든은 M1 이후 작업이다.
+
+`SourceMetadata`는 생성자에서 `ArgumentError`를 던지는 실제 런타임 검증이며 release에서도 유효하다. 다만 리포지토리와 DTO가 아직 없어 이 경계를 통과하도록 강제되는 코드 경로가 없다.

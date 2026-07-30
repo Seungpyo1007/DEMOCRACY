@@ -3,6 +3,10 @@
 .vscode/
 *.log
 
+# Local agent/assistant working rules. Kept on disk, never published.
+CLAUDE.md
+.claude/
+
 # Local secrets and generated environment files
 .env
 .env.*

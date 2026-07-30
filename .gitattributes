@@ -1,0 +1,37 @@
+# Line endings
+#
+# The repository stores LF and checks out LF everywhere, so `dart format`
+# output is byte-identical on every platform. Hosts that genuinely require
+# CRLF are pinned individually below.
+* text=auto eol=lf
+
+# Windows executes these directly and requires CRLF.
+*.bat text eol=crlf
+*.cmd text eol=crlf
+
+# Gradle wrapper: the shell script must stay LF, its Windows twin CRLF.
+gradlew     text eol=lf
+gradlew.bat text eol=crlf
+
+# Generated Xcode project state. Text, but never useful to read as a diff.
+*.pbxproj text eol=lf -diff
+
+# Binary assets — never normalize, never diff.
+*.png      binary
+*.jpg      binary
+*.jpeg     binary
+*.gif      binary
+*.ico      binary
+*.webp     binary
+*.ttf      binary
+*.otf      binary
+*.woff     binary
+*.woff2    binary
+*.jar      binary
+*.keystore binary
+*.jks      binary
+
+# The design handoff bundle is an imported reference, not authored app code.
+# Excluding it from language statistics keeps the repository classified as
+# Dart rather than as the mockup's HTML/JavaScript.
+design_handoff_democracy_app/** linguist-vendored
