@@ -33,8 +33,9 @@ M0 완료 조건을 충족했다. 남은 미검증 항목은 실기기 빌드뿐
 - FVM은 설치하지 않았다. `bootstrap.ps1`은 PATH에 `fvm`이 있으면 무조건 우선하는데, FVM 래퍼가 stdout에 배너를 출력하면 버전 확인의 `ConvertFrom-Json`이 깨진다.
 - Android Studio 2026.1.2.10: `C:\Program Files\Android\Android Studio`
 - JDK: Android Studio 동봉 OpenJDK 21.0.10. `flutter config --jdk-dir`로 연결했다.
-- Android SDK는 아직 없다. Android Studio를 처음 실행해 설정 마법사를 완료해야 하며, 이 과정에서 Google Android SDK 라이선스 동의가 필요하다.
-- `flutter analyze`와 `flutter test`는 Android SDK 없이 동작한다. 실기기·에뮬레이터 빌드에만 필요하다.
+- Android SDK: `C:\Users\29\AppData\Local\Android\Sdk`. platform android-36/36.1, build-tools 36.0.0, NDK 28.2.13676358, CMake 3.22.1. 라이선스 7종 수락 완료.
+- cmdline-tools는 설정 마법사가 설치하지 않아 리비전 15859902를 별도로 `cmdline-tools\latest`에 넣었다. 이것이 없으면 `flutter doctor`가 라이선스 상태를 확인하지 못한다.
+- `flutter analyze`와 `flutter test`는 Android SDK 없이도 동작한다. SDK는 실기기·에뮬레이터 빌드에만 필요하다.
 - Visual Studio 미설치는 Windows 데스크톱 타깃 전용 항목이라 이 프로젝트와 무관하다.
 
 ## bootstrap.ps1 수정
@@ -73,12 +74,11 @@ app/lib/
 
 ## 바로 할 일
 
-1. Android Studio를 한 번 실행해 설정 마법사로 Android SDK를 설치한다. 완료 후 `flutter doctor`로 Android toolchain이 √ 인지 확인한다.
-2. README의 “API 34+”가 minSdk 의미인지 확정한다. 현재 minSdk는 생성값 24다.
-3. iOS 최종 빌드는 macOS/Xcode 환경에서 검증한다.
-4. `SourceMetadata` 검증을 DTO 파싱/리포지토리 경계에도 적용한다. 현재는 생성자에서만 강제되고, 이를 통과하도록 강제되는 호출부가 없다.
-5. Fake repository와 JSON fixture로 온보딩 → 홈 → 공약 → 주민 평가 세로 흐름을 완성한다.
-6. 라우터에 `redirect` 가드를 넣는다. 현재 온보딩은 `initialLocation`으로만 도달하므로 딥링크로 우회할 수 있다.
+1. README의 “API 34+”가 minSdk 의미인지 확정한다. 현재 minSdk는 생성값 24다.
+2. iOS 최종 빌드는 macOS/Xcode 환경에서 검증한다.
+3. `SourceMetadata` 검증을 DTO 파싱/리포지토리 경계에도 적용한다. 현재는 생성자에서만 강제되고, 이를 통과하도록 강제되는 호출부가 없다.
+4. Fake repository와 JSON fixture로 온보딩 → 홈 → 공약 → 주민 평가 세로 흐름을 완성한다.
+5. 라우터에 `redirect` 가드를 넣는다. 현재 온보딩은 `initialLocation`으로만 도달하므로 딥링크로 우회할 수 있다.
 
 ## 백로그
 
@@ -129,7 +129,8 @@ app/lib/
 | `flutter test` | 완료 | 8개 통과 |
 | bootstrap 전체 체인 | 완료 | 종료 코드 0 |
 | 코드 생성 | 보류 | 해석된 analyzer 12.1.0. M1에서 호환 조합 spike |
-| Android 빌드 | 미실행 | JDK/Android SDK 필요 |
+| `flutter doctor` | 완료 | Android toolchain √. Visual Studio 항목은 Windows 데스크톱 전용이라 해당 없음 |
+| Android 빌드 | 완료 | `flutter build apk --debug` 성공. APK 패키지명 `com.democracy.kr` 확인 |
 | iOS 빌드 | 미실행 | macOS/Xcode 필요 |
 
 ### 복구한 결함
