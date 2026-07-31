@@ -131,7 +131,20 @@ app/lib/
 | 코드 생성 | 보류 | 해석된 analyzer 12.1.0. M1에서 호환 조합 spike |
 | `flutter doctor` | 완료 | Android toolchain √. Visual Studio 항목은 Windows 데스크톱 전용이라 해당 없음 |
 | Android 빌드 | 완료 | `flutter build apk --debug` 성공. APK 패키지명 `com.democracy.kr` 확인 |
+| 에뮬레이터 실행 | 완료 | AVD `democracy_api36` (Pixel 5, API 36). 온보딩 → 홈 → 커뮤니티 → 게이트 흐름 확인. logcat 오류 0건 |
 | iOS 빌드 | 미실행 | macOS/Xcode 필요 |
+
+### 에뮬레이터에서 확인한 완료 조건
+
+AVD는 `pixel_5` 프로파일(1080×2340 @440dpi = 393×851dp)로 만들었다. 목업 기준 390dp에 가장 가깝다.
+
+- 온보딩이 셸 밖에서 열린다. 게이트의 `인증하러 가기`로 복귀했을 때 하단 탭바가 없다.
+- `나중에 인증하기` → 홈이 `읽기 전용` 칩으로 진입한다.
+- 커뮤니티의 `평가 작성하기` 탭 시 `주민 인증이 필요합니다` 다이얼로그가 뜨고 작성이 차단된다.
+- 5탭 `NavigationBar`가 렌더링되고 탭 전환이 동작한다.
+- `Theme.of(context).extension<AppSurfaceTokens>()!`의 `!`가 실기기에서도 터지지 않는다.
+
+미확인: 탭별 스크롤 위치 보존은 placeholder 화면에 스크롤할 내용이 없어 행동으로 증명하지 못했다. `StatefulShellRoute.indexedStack` 구조상 보장되지만 M1에서 실제 콘텐츠로 재확인이 필요하다.
 
 ### 복구한 결함
 
