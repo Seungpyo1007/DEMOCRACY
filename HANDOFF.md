@@ -80,6 +80,29 @@ app/lib/
 4. Fake repository와 JSON fixture로 온보딩 → 홈 → 공약 → 주민 평가 세로 흐름을 완성한다.
 5. 라우터에 `redirect` 가드를 넣는다. 현재 온보딩은 `initialLocation`으로만 도달하므로 딥링크로 우회할 수 있다.
 
+## iOS 네이티브 탭바 조사 (2026-07-31)
+
+결론: **순수 Flutter 구현 유지.** 네이티브 패키지는 도입하지 않았다.
+
+하단 탭바는 두 플랫폼 모두 `PlatformAdaptiveTabBar` 안의 공유 `_FloatingBarFrame`으로 띄운다. iOS는 목업 규격인 radius 30 / margin 14를 쓰고, 분리감은 블러가 아니라 불투명 표면과 그림자로 낸다.
+
+### 후보와 기각 사유
+
+| 패키지 | 상태 | 판정 |
+|---|---|---|
+| `cupertino_native_better` 1.5.3 | 활발 (73 likes, 6.74k 다운로드) | 아래 두 사유로 보류 |
+| `native_tab_bar` 1.0.6 | 3년간 갱신 없음, 0 likes | 유지보수 중단으로 제외 |
+| `native_liquid_glass`, `adaptive_platform_ui` | Liquid Glass 전제 | 아래 1번 사유로 제외 |
+
+1. **네이티브와 "Liquid Glass 없음"은 iOS 26에서 양립하지 않는다.** iOS 26은 모든 네이티브 UIKit 컨트롤에 Liquid Glass 스타일을 자동 적용한다. 진짜 `UITabBar`를 쓰는 순간 강제로 따라온다.
+2. **`CNTabBarNative.enable()`은 하단 네비게이션 대체용이 아니다.** 위젯 트리 바깥에서 `UITabBarController`를 띄우는 네이티브 takeover이고 `currentIndex`/`onTap` 계약이 없다. 패키지 문서가 Flutter bottom navigation의 drop-in으로 쓰지 말라고, 상태 소스가 충돌해 "두 번 탭해야 하는" 동작과 화면 재빌드가 생긴다고 직접 경고한다. 채택하면 `StatefulShellRoute.indexedStack` 기반 탭 상태 보존을 재설계해야 한다.
+
+추가로 현재 워크스테이션에 macOS/Xcode가 없어 네이티브 의존성은 컴파일 검증조차 불가능하다.
+
+### 재검토 조건
+
+macOS 환경이 확보되고 M3에 진입한 뒤, `CLAUDE.md`의 규칙대로 인터페이스 뒤에서 한 패키지씩 성능·접근성 spike를 거쳐 결정한다. 탭 상태 보존을 어떻게 유지할지가 선결 과제다.
+
 ## 백로그
 
 ### MVP 1차
@@ -111,7 +134,7 @@ app/lib/
 - AI 모델, 가중치, 공개 범위, 비용 상한, 편향 감사 기준
 - 커뮤니티 moderation 및 신고 처리 정책
 - Archivo/Pretendard 폰트 파일·사용권과 후보 사진 사용권. 현재는 시스템 폴백 상태
-- iOS Liquid Glass 패키지 최종 선택
+- iOS Liquid Glass 패키지 최종 선택. M3까지 보류하기로 결정했다. 근거는 위 「iOS 네이티브 탭바 조사」 참고
 
 ## 검증 기록
 
@@ -126,7 +149,7 @@ app/lib/
 | `flutter pub get` | 완료 | `pubspec.lock` 생성 및 커밋 |
 | `dart format` | 완료 | 최초 19개 중 16개 재포맷, 이후 재실행 시 0 changed |
 | `flutter analyze` | 완료 | `No issues found!` |
-| `flutter test` | 완료 | 8개 통과 |
+| `flutter test` | 완료 | 12개 통과 |
 | bootstrap 전체 체인 | 완료 | 종료 코드 0 |
 | 코드 생성 | 보류 | 해석된 analyzer 12.1.0. M1에서 호환 조합 spike |
 | `flutter doctor` | 완료 | Android toolchain √. Visual Studio 항목은 Windows 데스크톱 전용이라 해당 없음 |
