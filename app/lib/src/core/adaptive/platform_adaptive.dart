@@ -1,3 +1,5 @@
+import 'dart:ui' show lerpDouble;
+
 import 'package:democracy/src/design/app_tokens.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -60,12 +62,17 @@ class PlatformAdaptiveTabBar extends StatelessWidget {
     required this.currentIndex,
     required this.items,
     required this.onTap,
+    this.minimized = false,
     super.key,
   });
 
   final int currentIndex;
   final List<AdaptiveTabItem> items;
   final ValueChanged<int> onTap;
+
+  /// Shrinks the capsule and drops the labels, matching the way the iOS 26
+  /// tab bar contracts while the user is scrolling down.
+  final bool minimized;
 
   @override
   Widget build(BuildContext context) {
@@ -86,6 +93,7 @@ class PlatformAdaptiveTabBar extends StatelessWidget {
         currentIndex: currentIndex,
         items: items,
         onTap: onTap,
+        minimized: minimized,
       ),
     );
   }
@@ -101,58 +109,82 @@ class _CapsuleTabStrip extends StatelessWidget {
     required this.currentIndex,
     required this.items,
     required this.onTap,
+    required this.minimized,
   });
 
-  static const _itemWidth = 64.0;
-  static const _itemHeight = 52.0;
+  static const _duration = Duration(milliseconds: 280);
+  static const _curve = Curves.easeOutCubic;
+
+  static const _expandedWidth = 64.0;
+  static const _expandedHeight = 52.0;
+  static const _minimizedWidth = 46.0;
+  static const _minimizedHeight = 38.0;
   static const _padding = 6.0;
+
+  /// The label has a fixed line height that cannot shrink with the capsule,
+  /// so it has to be gone well before the capsule reaches its minimum.
+  static const _labelFadeEnd = 0.35;
 
   final int currentIndex;
   final List<AdaptiveTabItem> items;
   final ValueChanged<int> onTap;
+  final bool minimized;
 
   @override
   Widget build(BuildContext context) {
     final colors = Theme.of(context).colorScheme;
 
-    return Padding(
-      padding: const EdgeInsets.all(_padding),
-      child: SizedBox(
-        width: _itemWidth * items.length,
-        height: _itemHeight,
-        child: Stack(
-          children: [
-            AnimatedPositioned(
-              duration: const Duration(milliseconds: 280),
-              curve: Curves.easeOutCubic,
-              left: _itemWidth * currentIndex,
-              top: 0,
-              bottom: 0,
-              width: _itemWidth,
-              child: DecoratedBox(
-                decoration: ShapeDecoration(
-                  color: colors.secondaryContainer,
-                  shape: const StadiumBorder(),
-                ),
-              ),
-            ),
-            Row(
-              mainAxisSize: MainAxisSize.min,
+    return TweenAnimationBuilder<double>(
+      duration: _duration,
+      curve: _curve,
+      tween: Tween(begin: 0, end: minimized ? 1 : 0),
+      builder: (context, t, _) {
+        final itemWidth = lerpDouble(_expandedWidth, _minimizedWidth, t)!;
+        final itemHeight = lerpDouble(_expandedHeight, _minimizedHeight, t)!;
+        final labelOpacity = (1 - t / _labelFadeEnd).clamp(0.0, 1.0);
+
+        return Padding(
+          padding: const EdgeInsets.all(_padding),
+          child: SizedBox(
+            width: itemWidth * items.length,
+            height: itemHeight,
+            child: Stack(
               children: [
-                for (var i = 0; i < items.length; i++)
-                  SizedBox(
-                    width: _itemWidth,
-                    child: _CapsuleTabItem(
-                      item: items[i],
-                      selected: i == currentIndex,
-                      onTap: () => onTap(i),
+                AnimatedPositioned(
+                  duration: _duration,
+                  curve: _curve,
+                  left: itemWidth * currentIndex,
+                  top: 0,
+                  bottom: 0,
+                  width: itemWidth,
+                  child: DecoratedBox(
+                    decoration: ShapeDecoration(
+                      color: colors.secondaryContainer,
+                      shape: const StadiumBorder(),
                     ),
                   ),
+                ),
+                Row(
+                  mainAxisSize: MainAxisSize.min,
+                  children: [
+                    for (var i = 0; i < items.length; i++)
+                      SizedBox(
+                        width: itemWidth,
+                        child: _CapsuleTabItem(
+                          item: items[i],
+                          selected: i == currentIndex,
+                          onTap: () => onTap(i),
+                          iconSize: lerpDouble(22, 20, t)!,
+                          labelOpacity: labelOpacity,
+                        ),
+                      ),
+                  ],
+                ),
               ],
             ),
-          ],
-        ),
-      ),
+          ),
+        );
+      },
     );
   }
 }
@@ -164,11 +196,15 @@ class _CapsuleTabItem extends StatelessWidget {
     required this.item,
     required this.selected,
     required this.onTap,
+    required this.iconSize,
+    required this.labelOpacity,
   });
 
   final AdaptiveTabItem item;
   final bool selected;
   final VoidCallback onTap;
+  final double iconSize;
+  final double labelOpacity;
 
   @override
   Widget build(BuildContext context) {
@@ -189,20 +225,27 @@ class _CapsuleTabItem extends StatelessWidget {
           children: [
             Icon(
               selected ? (item.activeIcon ?? item.icon) : item.icon,
-              size: 22,
+              size: iconSize,
               color: foreground,
             ),
-            const SizedBox(height: 3),
-            Text(
-              item.label,
-              maxLines: 1,
-              overflow: TextOverflow.ellipsis,
-              style: TextStyle(
-                fontSize: 11,
-                fontWeight: selected ? FontWeight.w600 : FontWeight.w500,
-                color: foreground,
+            // Dropped from the tree once faded out, so it stops reserving the
+            // height the shrinking capsule no longer has.
+            if (labelOpacity > 0) ...[
+              SizedBox(height: 3 * labelOpacity),
+              Opacity(
+                opacity: labelOpacity,
+                child: Text(
+                  item.label,
+                  maxLines: 1,
+                  overflow: TextOverflow.ellipsis,
+                  style: TextStyle(
+                    fontSize: 11,
+                    fontWeight: selected ? FontWeight.w600 : FontWeight.w500,
+                    color: foreground,
+                  ),
+                ),
               ),
-            ),
+            ],
           ],
         ),
       ),

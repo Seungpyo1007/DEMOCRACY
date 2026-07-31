@@ -18,6 +18,7 @@ void main() {
     TargetPlatform platform, {
     int currentIndex = 0,
     ValueChanged<int>? onTap,
+    bool minimized = false,
   }) {
     return MaterialApp(
       theme: AppTheme.light(platform),
@@ -25,6 +26,7 @@ void main() {
         bottomNavigationBar: PlatformAdaptiveTabBar(
           currentIndex: currentIndex,
           items: items,
+          minimized: minimized,
           onTap: onTap ?? (_) {},
         ),
       ),
@@ -74,5 +76,57 @@ void main() {
     for (final item in items) {
       expect(find.text(item.label), findsOneWidget);
     }
+  });
+
+  group('minimized', () {
+    Rect surfaceOf(WidgetTester tester) {
+      return tester.getRect(
+        find
+            .descendant(
+              of: find.byType(PlatformAdaptiveTabBar),
+              matching: find.byType(Material),
+            )
+            .first,
+      );
+    }
+
+    testWidgets('contracts the capsule and drops the labels', (tester) async {
+      await tester.pumpWidget(harness(TargetPlatform.android));
+      final expanded = surfaceOf(tester);
+      expect(find.text('지역구'), findsOneWidget);
+
+      await tester.pumpWidget(harness(TargetPlatform.android, minimized: true));
+      await tester.pumpAndSettle();
+      final contracted = surfaceOf(tester);
+
+      expect(contracted.height, lessThan(expanded.height));
+      expect(contracted.width, lessThan(expanded.width));
+      expect(find.text('지역구'), findsNothing);
+    });
+
+    testWidgets('expands again when restored', (tester) async {
+      await tester.pumpWidget(harness(TargetPlatform.android, minimized: true));
+      await tester.pumpAndSettle();
+      final contracted = surfaceOf(tester);
+
+      await tester.pumpWidget(harness(TargetPlatform.android));
+      await tester.pumpAndSettle();
+
+      expect(surfaceOf(tester).height, greaterThan(contracted.height));
+      expect(find.text('지역구'), findsOneWidget);
+    });
+
+    testWidgets('stays tappable while contracted', (tester) async {
+      final tapped = <int>[];
+      await tester.pumpWidget(
+        harness(TargetPlatform.android, minimized: true, onTap: tapped.add),
+      );
+      await tester.pumpAndSettle();
+
+      await tester.tap(find.byIcon(Icons.map_outlined));
+      await tester.pump();
+
+      expect(tapped, [4]);
+    });
   });
 }
