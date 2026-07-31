@@ -82,25 +82,83 @@ class PlatformAdaptiveTabBar extends StatelessWidget {
       // monochrome, so the mid container roles collapse onto the page
       // background and the capsule stops reading as detached.
       color: theme.colorScheme.surfaceContainerLowest,
-      child: Row(
-        mainAxisSize: MainAxisSize.min,
-        children: [
-          for (var i = 0; i < items.length; i++)
-            _CapsuleTabItem(
-              item: items[i],
-              selected: i == currentIndex,
-              onTap: () => onTap(i),
-            ),
-        ],
+      child: _CapsuleTabStrip(
+        currentIndex: currentIndex,
+        items: items,
+        onTap: onTap,
       ),
     );
   }
 }
 
-/// One destination in the capsule bar.
+/// The destinations, with a selection capsule that slides between them.
 ///
-/// Sized by its own content so the bar can hug rather than stretch. The
-/// selected state is a Material 3 indicator pill behind the icon.
+/// The capsule sits behind the whole destination rather than behind its icon,
+/// and it travels to the new index instead of reappearing there. Items are a
+/// fixed width because a sliding indicator has to know where each one starts.
+class _CapsuleTabStrip extends StatelessWidget {
+  const _CapsuleTabStrip({
+    required this.currentIndex,
+    required this.items,
+    required this.onTap,
+  });
+
+  static const _itemWidth = 64.0;
+  static const _itemHeight = 52.0;
+  static const _padding = 6.0;
+
+  final int currentIndex;
+  final List<AdaptiveTabItem> items;
+  final ValueChanged<int> onTap;
+
+  @override
+  Widget build(BuildContext context) {
+    final colors = Theme.of(context).colorScheme;
+
+    return Padding(
+      padding: const EdgeInsets.all(_padding),
+      child: SizedBox(
+        width: _itemWidth * items.length,
+        height: _itemHeight,
+        child: Stack(
+          children: [
+            AnimatedPositioned(
+              duration: const Duration(milliseconds: 280),
+              curve: Curves.easeOutCubic,
+              left: _itemWidth * currentIndex,
+              top: 0,
+              bottom: 0,
+              width: _itemWidth,
+              child: DecoratedBox(
+                decoration: ShapeDecoration(
+                  color: colors.secondaryContainer,
+                  shape: const StadiumBorder(),
+                ),
+              ),
+            ),
+            Row(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                for (var i = 0; i < items.length; i++)
+                  SizedBox(
+                    width: _itemWidth,
+                    child: _CapsuleTabItem(
+                      item: items[i],
+                      selected: i == currentIndex,
+                      onTap: () => onTap(i),
+                    ),
+                  ),
+              ],
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+}
+
+/// One destination. Draws no selection surface of its own; the strip slides a
+/// shared capsule behind it, so this only resolves foreground colours.
 class _CapsuleTabItem extends StatelessWidget {
   const _CapsuleTabItem({
     required this.item,
@@ -115,6 +173,9 @@ class _CapsuleTabItem extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final colors = Theme.of(context).colorScheme;
+    final foreground = selected
+        ? colors.onSecondaryContainer
+        : colors.onSurfaceVariant;
 
     return Semantics(
       button: true,
@@ -123,40 +184,26 @@ class _CapsuleTabItem extends StatelessWidget {
       child: InkWell(
         onTap: onTap,
         customBorder: const StadiumBorder(),
-        child: Padding(
-          padding: const EdgeInsets.fromLTRB(6, 8, 6, 8),
-          child: Column(
-            mainAxisSize: MainAxisSize.min,
-            children: [
-              Container(
-                width: 52,
-                height: 30,
-                alignment: Alignment.center,
-                decoration: selected
-                    ? ShapeDecoration(
-                        color: colors.secondaryContainer,
-                        shape: const StadiumBorder(),
-                      )
-                    : null,
-                child: Icon(
-                  selected ? (item.activeIcon ?? item.icon) : item.icon,
-                  size: 22,
-                  color: selected
-                      ? colors.onSecondaryContainer
-                      : colors.onSurfaceVariant,
-                ),
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            Icon(
+              selected ? (item.activeIcon ?? item.icon) : item.icon,
+              size: 22,
+              color: foreground,
+            ),
+            const SizedBox(height: 3),
+            Text(
+              item.label,
+              maxLines: 1,
+              overflow: TextOverflow.ellipsis,
+              style: TextStyle(
+                fontSize: 11,
+                fontWeight: selected ? FontWeight.w600 : FontWeight.w500,
+                color: foreground,
               ),
-              const SizedBox(height: 3),
-              Text(
-                item.label,
-                style: TextStyle(
-                  fontSize: 11,
-                  fontWeight: selected ? FontWeight.w600 : FontWeight.w500,
-                  color: selected ? colors.onSurface : colors.onSurfaceVariant,
-                ),
-              ),
-            ],
-          ),
+            ),
+          ],
         ),
       ),
     );
