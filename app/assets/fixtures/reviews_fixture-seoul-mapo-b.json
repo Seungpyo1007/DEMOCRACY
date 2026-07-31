@@ -1,0 +1,29 @@
+{
+  "_note": "Sample payload for local development. Not real resident opinion.",
+  "summary": {
+    "average": 3.8,
+    "respondents": 412,
+    "axes": [
+      { "label": "소통", "score": 4.1 },
+      { "label": "공약이행", "score": 3.5 },
+      { "label": "지역발전", "score": 3.9 },
+      { "label": "도덕성", "score": 3.7 }
+    ]
+  },
+  "reviews": [
+    {
+      "id": "fixture-review-1",
+      "author": "익명 주민",
+      "score": 4,
+      "verifiedResident": true,
+      "body": "임대주택 공약은 지켰지만 상가 공실 대책은 아직 체감이 없습니다."
+    },
+    {
+      "id": "fixture-review-2",
+      "author": "익명 주민",
+      "score": 3,
+      "verifiedResident": true,
+      "body": "숲길 확장 번복 건은 설명이 부족했습니다."
+    }
+  ]
+}

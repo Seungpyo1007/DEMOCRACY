@@ -1,0 +1,99 @@
+{
+  "_note": "Sample payload for local development. Not a live feed and not a real person.",
+  "district": {
+    "id": "fixture-seoul-mapo-b",
+    "displayName": "서울 마포구 을"
+  },
+  "source": {
+    "sourceUrl": "https://open.assembly.go.kr/portal/openapi/fixture-district",
+    "fetchedAt": "2026-07-30T09:00:00Z"
+  },
+  "incumbent": {
+    "id": "fixture-incumbent-1",
+    "name": "가상 의원",
+    "party": "가나당",
+    "summary": "재선",
+    "stats": [
+      {
+        "label": "출석률",
+        "unit": "%",
+        "value": {
+          "value": 92,
+          "sourceUrl": "https://open.assembly.go.kr/portal/openapi/fixture-attendance",
+          "fetchedAt": "2026-07-30T09:00:00Z"
+        }
+      },
+      {
+        "label": "발의 법안",
+        "unit": "건",
+        "value": {
+          "value": 31,
+          "sourceUrl": "https://open.assembly.go.kr/portal/openapi/fixture-bills",
+          "fetchedAt": "2026-07-30T09:00:00Z"
+        }
+      },
+      {
+        "label": "공약 이행",
+        "unit": "%",
+        "value": {
+          "value": 58,
+          "sourceUrl": "https://open.assembly.go.kr/portal/openapi/fixture-pledges",
+          "fetchedAt": "2026-07-30T09:00:00Z"
+        }
+      }
+    ]
+  },
+  "candidates": [
+    {
+      "id": "fixture-candidate-3",
+      "name": "가상 후보 다",
+      "party": "다라당",
+      "summary": "3선 도전",
+      "stats": [
+        {
+          "label": "등록 공약",
+          "unit": "건",
+          "value": {
+            "value": 15,
+            "sourceUrl": "https://info.nec.go.kr/fixture/candidate-3",
+            "fetchedAt": "2026-07-30T09:00:00Z"
+          }
+        }
+      ]
+    },
+    {
+      "id": "fixture-candidate-1",
+      "name": "가상 후보 가",
+      "party": "나다당",
+      "summary": "신인",
+      "stats": [
+        {
+          "label": "등록 공약",
+          "unit": "건",
+          "value": {
+            "value": 18,
+            "sourceUrl": "https://info.nec.go.kr/fixture/candidate-1",
+            "fetchedAt": "2026-07-30T09:00:00Z"
+          }
+        }
+      ]
+    },
+    {
+      "id": "fixture-candidate-2",
+      "name": "가상 후보 나",
+      "party": "무소속",
+      "summary": "구의원 출신",
+      "stats": [
+        {
+          "label": "등록 공약",
+          "unit": "건",
+          "value": {
+            "value": 12,
+            "sourceUrl": "https://info.nec.go.kr/fixture/candidate-2",
+            "fetchedAt": "2026-07-30T09:00:00Z"
+          }
+        }
+      ]
+    }
+  ]
+}

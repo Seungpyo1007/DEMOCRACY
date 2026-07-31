@@ -1,0 +1,50 @@
+{
+  "_note": "Sample payload for local development. Not a live feed.",
+  "source": {
+    "sourceUrl": "https://open.assembly.go.kr/portal/openapi/fixture-pledge-board",
+    "fetchedAt": "2026-07-30T09:00:00Z"
+  },
+  "pledges": [
+    {
+      "id": "fixture-pledge-1",
+      "title": "환승 개선 사업",
+      "category": "교통",
+      "status": "inProgress",
+      "source": {
+        "sourceUrl": "https://open.assembly.go.kr/portal/openapi/fixture-pledge-1",
+        "fetchedAt": "2026-07-30T09:00:00Z"
+      }
+    },
+    {
+      "id": "fixture-pledge-2",
+      "title": "청년 임대주택 공급",
+      "category": "주거",
+      "status": "fulfilled",
+      "source": {
+        "sourceUrl": "https://open.assembly.go.kr/portal/openapi/fixture-pledge-2",
+        "fetchedAt": "2026-07-30T09:00:00Z"
+      }
+    },
+    {
+      "id": "fixture-pledge-3",
+      "title": "숲길 확장",
+      "category": "환경",
+      "status": "reversed",
+      "evidenceUrl": "https://open.assembly.go.kr/portal/openapi/fixture-pledge-3-diff",
+      "source": {
+        "sourceUrl": "https://open.assembly.go.kr/portal/openapi/fixture-pledge-3",
+        "fetchedAt": "2026-07-30T09:00:00Z"
+      }
+    },
+    {
+      "id": "fixture-pledge-4",
+      "title": "노후 상가 정비",
+      "category": "지역경제",
+      "status": "unfulfilled",
+      "source": {
+        "sourceUrl": "https://open.assembly.go.kr/portal/openapi/fixture-pledge-4",
+        "fetchedAt": "2026-07-30T09:00:00Z"
+      }
+    }
+  ]
+}

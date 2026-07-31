@@ -1,15 +1,29 @@
 import 'package:democracy/src/app/app_routes.dart';
 import 'package:democracy/src/core/adaptive/platform_adaptive.dart';
-import 'package:democracy/src/features/district/district_home_screen.dart';
-import 'package:democracy/src/features/onboarding/onboarding_screen.dart';
-import 'package:democracy/src/features/shared/feature_placeholder_screen.dart';
-import 'package:democracy/src/features/shell/app_shell.dart';
+import 'package:democracy/src/core/auth/address_controller.dart';
+import 'package:democracy/src/features/district/presentation/district_home_screen.dart';
+import 'package:democracy/src/features/onboarding/presentation/onboarding_screen.dart';
+import 'package:democracy/src/features/reviews/presentation/resident_review_screen.dart';
+import 'package:democracy/src/features/shared/presentation/feature_placeholder_screen.dart';
+import 'package:democracy/src/features/shell/presentation/app_shell.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 
 final appRouterProvider = Provider<GoRouter>((ref) {
   final router = GoRouter(
     initialLocation: AppRoutes.onboarding,
+    // Onboarding is the only route reachable without a district. Without this
+    // the shell was open to any deep link, and initialLocation alone stopped
+    // nothing once a URL could be handed in from outside.
+    redirect: (context, state) {
+      final hasDistrict = ref.read(addressControllerProvider).district != null;
+      final atOnboarding = state.matchedLocation == AppRoutes.onboarding;
+
+      // Only the missing-district case redirects. Sending a user who already
+      // has one back out of onboarding would strand the verification prompt,
+      // which deliberately routes here to upgrade a read-only session.
+      return !hasDistrict && !atOnboarding ? AppRoutes.onboarding : null;
+    },
     routes: [
       GoRoute(
         path: AppRoutes.onboarding,
@@ -74,11 +88,7 @@ final appRouterProvider = Provider<GoRouter>((ref) {
                 pageBuilder: (context, state) => PlatformAdaptiveRoute.page(
                   context: context,
                   key: state.pageKey,
-                  child: const FeaturePlaceholderScreen(
-                    title: '주민 평가',
-                    description: '평가 읽기와 인증된 작성 흐름을 MVP 1차에서 연결합니다.',
-                    protectedActionLabel: '평가 작성하기',
-                  ),
+                  child: const ResidentReviewScreen(),
                 ),
               ),
             ],

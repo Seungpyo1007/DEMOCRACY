@@ -20,3 +20,8 @@ dev_dependencies:
 
 flutter:
   uses-material-design: true
+  assets:
+    # Sample payloads only. No fonts are declared: Archivo and Pretendard have
+    # no files or licence terms confirmed yet, so the app falls back to the
+    # system face on purpose.
+    - assets/fixtures/
