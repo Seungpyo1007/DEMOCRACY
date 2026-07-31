@@ -69,60 +69,84 @@ class PlatformAdaptiveTabBar extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    if (_isCupertino(context)) {
-      return CupertinoTabBar(
-        currentIndex: currentIndex,
-        activeColor: AppColors.signal,
-        inactiveColor: AppColors.neutral600,
-        onTap: onTap,
-        items: [
-          for (final item in items)
-            BottomNavigationBarItem(
-              icon: Icon(item.icon),
-              activeIcon: Icon(item.activeIcon ?? item.icon),
-              label: item.label,
-            ),
-        ],
-      );
-    }
-
     final theme = Theme.of(context);
     final surfaceTokens = theme.extension<AppSurfaceTokens>()!;
-    final borderRadius = BorderRadius.circular(surfaceTokens.navBarRadius);
 
-    // A detached bar: the Material 3 container roles carry the elevation, so
-    // the surface stays fully opaque. No blur, no translucency.
+    // Both platforms share one detached frame so the bar sits off the screen
+    // edge identically; only the control inside it differs.
+    return _FloatingBarFrame(
+      radius: surfaceTokens.navBarRadius,
+      inset: surfaceTokens.navBarInset,
+      color: theme.colorScheme.surfaceContainerLowest,
+      child: _isCupertino(context)
+          ? CupertinoTabBar(
+              // The frame already draws the surface and the separation, so the
+              // bar itself contributes no fill and no hairline border.
+              backgroundColor: Colors.transparent,
+              border: null,
+              currentIndex: currentIndex,
+              activeColor: AppColors.signal,
+              inactiveColor: AppColors.neutral600,
+              onTap: onTap,
+              items: [
+                for (final item in items)
+                  BottomNavigationBarItem(
+                    icon: Icon(item.icon),
+                    activeIcon: Icon(item.activeIcon ?? item.icon),
+                    label: item.label,
+                  ),
+              ],
+            )
+          : NavigationBar(
+              backgroundColor: Colors.transparent,
+              surfaceTintColor: Colors.transparent,
+              elevation: 0,
+              selectedIndex: currentIndex,
+              onDestinationSelected: onTap,
+              destinations: [
+                for (final item in items)
+                  NavigationDestination(
+                    icon: Icon(item.icon),
+                    selectedIcon: Icon(item.activeIcon ?? item.icon),
+                    label: item.label,
+                  ),
+              ],
+            ),
+    );
+  }
+}
+
+/// Lifts a navigation bar off the bottom edge on an opaque rounded surface.
+///
+/// The elevation comes from a real shadow rather than blur, so nothing here
+/// depends on a translucency or Liquid Glass implementation.
+class _FloatingBarFrame extends StatelessWidget {
+  const _FloatingBarFrame({
+    required this.radius,
+    required this.inset,
+    required this.color,
+    required this.child,
+  });
+
+  final double radius;
+  final double inset;
+  final Color color;
+  final Widget child;
+
+  @override
+  Widget build(BuildContext context) {
     return SafeArea(
       top: false,
       child: Padding(
-        padding: EdgeInsets.fromLTRB(
-          surfaceTokens.navBarInset,
-          0,
-          surfaceTokens.navBarInset,
-          surfaceTokens.navBarInset,
-        ),
+        padding: EdgeInsets.fromLTRB(inset, 0, inset, inset),
         child: Material(
-          color: theme.colorScheme.surfaceContainerLowest,
+          color: color,
           surfaceTintColor: Colors.transparent,
           shadowColor: AppColors.ink.withValues(alpha: 0.18),
           elevation: 3,
-          borderRadius: borderRadius,
+          borderRadius: BorderRadius.circular(radius),
           clipBehavior: Clip.antiAlias,
-          child: NavigationBar(
-            backgroundColor: Colors.transparent,
-            surfaceTintColor: Colors.transparent,
-            elevation: 0,
-            selectedIndex: currentIndex,
-            onDestinationSelected: onTap,
-            destinations: [
-              for (final item in items)
-                NavigationDestination(
-                  icon: Icon(item.icon),
-                  selectedIcon: Icon(item.activeIcon ?? item.icon),
-                  label: item.label,
-                ),
-            ],
-          ),
+          child: child,
         ),
       ),
     );
