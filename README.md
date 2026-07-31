@@ -1,6 +1,12 @@
 # DEMOCRACY
 
+[![verify](https://github.com/Seungpyo1007/DEMOCRACY/actions/workflows/verify.yml/badge.svg?branch=develop)](https://github.com/Seungpyo1007/DEMOCRACY/actions/workflows/verify.yml?query=branch%3Adevelop)
+[![Flutter 3.44.8](https://img.shields.io/badge/Flutter-3.44.8-02569B?logo=flutter&logoColor=white)](https://docs.flutter.dev/release/archive)
+[![license: AGPL-3.0](https://img.shields.io/github/license/Seungpyo1007/DEMOCRACY?color=blue)](LICENSE)
+
 정당색이나 감정 대신 검증 가능한 정치 데이터로 판단하도록 돕는 Flutter 앱의 초기 작업공간이다.
+
+빌드 상태는 통합 브랜치인 `develop` 기준이다. `main`은 마지막 릴리스(`v0.1.0`) 지점이라 대개 뒤처져 있으며, 그것이 정상이다.
 
 현재는 구현을 시작하기 위한 최소 골격만 포함한다.
 
