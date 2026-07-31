@@ -86,17 +86,45 @@ class PlatformAdaptiveTabBar extends StatelessWidget {
       );
     }
 
-    return NavigationBar(
-      selectedIndex: currentIndex,
-      onDestinationSelected: onTap,
-      destinations: [
-        for (final item in items)
-          NavigationDestination(
-            icon: Icon(item.icon),
-            selectedIcon: Icon(item.activeIcon ?? item.icon),
-            label: item.label,
+    final theme = Theme.of(context);
+    final surfaceTokens = theme.extension<AppSurfaceTokens>()!;
+    final borderRadius = BorderRadius.circular(surfaceTokens.navBarRadius);
+
+    // A detached bar: the Material 3 container roles carry the elevation, so
+    // the surface stays fully opaque. No blur, no translucency.
+    return SafeArea(
+      top: false,
+      child: Padding(
+        padding: EdgeInsets.fromLTRB(
+          surfaceTokens.navBarInset,
+          0,
+          surfaceTokens.navBarInset,
+          surfaceTokens.navBarInset,
+        ),
+        child: Material(
+          color: theme.colorScheme.surfaceContainerLowest,
+          surfaceTintColor: Colors.transparent,
+          shadowColor: AppColors.ink.withValues(alpha: 0.18),
+          elevation: 3,
+          borderRadius: borderRadius,
+          clipBehavior: Clip.antiAlias,
+          child: NavigationBar(
+            backgroundColor: Colors.transparent,
+            surfaceTintColor: Colors.transparent,
+            elevation: 0,
+            selectedIndex: currentIndex,
+            onDestinationSelected: onTap,
+            destinations: [
+              for (final item in items)
+                NavigationDestination(
+                  icon: Icon(item.icon),
+                  selectedIcon: Icon(item.activeIcon ?? item.icon),
+                  label: item.label,
+                ),
+            ],
           ),
-      ],
+        ),
+      ),
     );
   }
 }

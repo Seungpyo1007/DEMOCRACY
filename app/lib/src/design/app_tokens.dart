@@ -44,6 +44,16 @@ abstract final class AppRadii {
   static const androidChip = 8.0;
   static const androidButton = 24.0;
   static const androidSheet = 28.0;
+  static const androidNavBar = 28.0;
+}
+
+/// Insets that lift the navigation bar off the screen edges.
+///
+/// The mockup floats the iOS tab bar with a 14dp margin. Android uses the
+/// Material 3 container inset of 16dp.
+abstract final class AppNavBarInsets {
+  static const ios = 14.0;
+  static const android = 16.0;
 }
 
 @immutable
@@ -53,6 +63,8 @@ class AppSurfaceTokens extends ThemeExtension<AppSurfaceTokens> {
     required this.chipRadius,
     required this.buttonRadius,
     required this.sheetRadius,
+    required this.navBarRadius,
+    required this.navBarInset,
   });
 
   static const ios = AppSurfaceTokens(
@@ -60,6 +72,8 @@ class AppSurfaceTokens extends ThemeExtension<AppSurfaceTokens> {
     chipRadius: AppRadii.iosCard,
     buttonRadius: AppRadii.iosButton,
     sheetRadius: AppRadii.iosCard,
+    navBarRadius: AppRadii.iosTabBar,
+    navBarInset: AppNavBarInsets.ios,
   );
 
   static const android = AppSurfaceTokens(
@@ -67,12 +81,16 @@ class AppSurfaceTokens extends ThemeExtension<AppSurfaceTokens> {
     chipRadius: AppRadii.androidChip,
     buttonRadius: AppRadii.androidButton,
     sheetRadius: AppRadii.androidSheet,
+    navBarRadius: AppRadii.androidNavBar,
+    navBarInset: AppNavBarInsets.android,
   );
 
   final double cardRadius;
   final double chipRadius;
   final double buttonRadius;
   final double sheetRadius;
+  final double navBarRadius;
+  final double navBarInset;
 
   @override
   AppSurfaceTokens copyWith({
@@ -80,12 +98,16 @@ class AppSurfaceTokens extends ThemeExtension<AppSurfaceTokens> {
     double? chipRadius,
     double? buttonRadius,
     double? sheetRadius,
+    double? navBarRadius,
+    double? navBarInset,
   }) {
     return AppSurfaceTokens(
       cardRadius: cardRadius ?? this.cardRadius,
       chipRadius: chipRadius ?? this.chipRadius,
       buttonRadius: buttonRadius ?? this.buttonRadius,
       sheetRadius: sheetRadius ?? this.sheetRadius,
+      navBarRadius: navBarRadius ?? this.navBarRadius,
+      navBarInset: navBarInset ?? this.navBarInset,
     );
   }
 
@@ -103,6 +125,8 @@ class AppSurfaceTokens extends ThemeExtension<AppSurfaceTokens> {
       chipRadius: _lerp(chipRadius, other.chipRadius, t),
       buttonRadius: _lerp(buttonRadius, other.buttonRadius, t),
       sheetRadius: _lerp(sheetRadius, other.sheetRadius, t),
+      navBarRadius: _lerp(navBarRadius, other.navBarRadius, t),
+      navBarInset: _lerp(navBarInset, other.navBarInset, t),
     );
   }
 

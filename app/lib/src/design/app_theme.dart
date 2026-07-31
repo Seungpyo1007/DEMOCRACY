@@ -31,9 +31,13 @@ abstract final class AppTheme {
           ? AppColors.neutral100
           : AppColors.ground,
       textTheme: AppTypography.textTheme,
+      // The bar floats, so its colour comes from the Material wrapper in
+      // PlatformAdaptiveTabBar rather than from here. Height drops from the
+      // edge-to-edge 80 because the inset already provides breathing room.
       navigationBarTheme: NavigationBarThemeData(
-        height: 80,
-        backgroundColor: AppColors.neutral100,
+        height: 68,
+        backgroundColor: Colors.transparent,
+        surfaceTintColor: Colors.transparent,
         indicatorColor: AppColors.signal.withValues(alpha: 0.12),
         labelTextStyle: const WidgetStatePropertyAll(
           TextStyle(fontSize: 11, fontWeight: FontWeight.w600),

@@ -38,6 +38,9 @@ class AppShell extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      // Deliberately not extendBody. The bar is opaque, so letting content
+      // slide under it would only hide it, and every scrollable screen would
+      // then need its own bottom padding to compensate.
       body: navigationShell,
       bottomNavigationBar: PlatformAdaptiveTabBar(
         currentIndex: navigationShell.currentIndex,
