@@ -12,7 +12,22 @@ Git Flow를 따른다.
 | `release/*` | 출시 준비. 버전 확정과 마무리 수정만 한다 | `develop` | `main` + `develop` |
 | `hotfix/*` | 출시본 긴급 수정 | `main` | `main` + `develop` |
 
-`main`에 직접 push하지 않는다. `develop`도 PR을 거친다.
+`main`에 직접 push하지 않는다. `develop`도 PR을 거친다. 기본 브랜치는 `develop`이므로 PR은 별도 지정 없이 `develop`을 향한다.
+
+### 브랜치 보호 설정
+
+`main`과 `develop` 모두 다음이 걸려 있다.
+
+- PR 없이는 병합할 수 없다 (승인 필요 수는 0. 1인 작업을 막지 않으면서 흐름은 강제한다)
+- `analyze and test` 체크를 통과해야 한다
+- base 브랜치가 최신이어야 한다 (strict)
+- force push와 브랜치 삭제 금지
+
+`enforce_admins`는 **꺼져 있다.** 저장소 소유자는 CI가 고장 나거나 긴급 상황일 때 직접 push할 수 있다. 협업자에게는 그대로 강제된다. 완전히 잠그려면:
+
+```bash
+gh api -X POST repos/Seungpyo1007/DEMOCRACY/branches/main/protection/enforce_admins
+```
 
 ### 이름 규칙
 

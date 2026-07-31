@@ -51,6 +51,10 @@ MVP 1차의 세로 흐름이 네트워크 없이 동작한다. 온보딩 → 지
 
 Android는 디버그 빌드와 에뮬레이터 실행까지 확인했다. **iOS는 아직 빌드된 적이 없다** — macOS와 Xcode가 필요하다. 자세한 인계 사항은 `HANDOFF.md`를 참고한다.
 
+## 기여
+
+Git Flow를 따른다. 기본 브랜치는 `develop`이고, `main`은 출시된 상태만 담는다. 브랜치 규칙과 검증 절차는 [CONTRIBUTING.md](CONTRIBUTING.md)에 있다.
+
 ## 라이선스
 
 [GNU AGPL-3.0](LICENSE). 이 프로그램을 수정해 네트워크 서비스로 제공하는 경우에도 해당 소스를 공개해야 한다.
