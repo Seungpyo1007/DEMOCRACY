@@ -75,8 +75,10 @@ class PlatformAdaptiveTabBar extends StatelessWidget {
     // Both platforms share one detached frame so the bar sits off the screen
     // edge identically; only the control inside it differs.
     return _FloatingBarFrame(
-      radius: surfaceTokens.navBarRadius,
       inset: surfaceTokens.navBarInset,
+      // surfaceContainerLowest, not surfaceContainer: this scheme is seeded
+      // monochrome, so the mid container roles collapse onto the page
+      // background and the capsule stops reading as detached.
       color: theme.colorScheme.surfaceContainerLowest,
       child: _isCupertino(context)
           ? CupertinoTabBar(
@@ -85,8 +87,10 @@ class PlatformAdaptiveTabBar extends StatelessWidget {
               backgroundColor: Colors.transparent,
               border: null,
               currentIndex: currentIndex,
-              activeColor: AppColors.signal,
-              inactiveColor: AppColors.neutral600,
+              // Material 3 roles rather than the brand accent, so both
+              // platforms read from the same colour system.
+              activeColor: theme.colorScheme.onSurface,
+              inactiveColor: theme.colorScheme.onSurfaceVariant,
               onTap: onTap,
               items: [
                 for (final item in items)
@@ -116,19 +120,19 @@ class PlatformAdaptiveTabBar extends StatelessWidget {
   }
 }
 
-/// Lifts a navigation bar off the bottom edge on an opaque rounded surface.
+/// Lifts a navigation bar off the bottom edge as a detached capsule.
 ///
-/// The elevation comes from a real shadow rather than blur, so nothing here
-/// depends on a translucency or Liquid Glass implementation.
+/// [StadiumBorder] keeps the ends fully round at whatever height the bar
+/// resolves to, which is what makes it read as a capsule rather than a
+/// rounded rectangle. The elevation is a real shadow on an opaque surface,
+/// so nothing here depends on translucency or a Liquid Glass implementation.
 class _FloatingBarFrame extends StatelessWidget {
   const _FloatingBarFrame({
-    required this.radius,
     required this.inset,
     required this.color,
     required this.child,
   });
 
-  final double radius;
   final double inset;
   final Color color;
   final Widget child;
@@ -142,9 +146,9 @@ class _FloatingBarFrame extends StatelessWidget {
         child: Material(
           color: color,
           surfaceTintColor: Colors.transparent,
-          shadowColor: AppColors.ink.withValues(alpha: 0.18),
+          shadowColor: AppColors.ink.withValues(alpha: 0.20),
           elevation: 3,
-          borderRadius: BorderRadius.circular(radius),
+          shape: const StadiumBorder(),
           clipBehavior: Clip.antiAlias,
           child: child,
         ),

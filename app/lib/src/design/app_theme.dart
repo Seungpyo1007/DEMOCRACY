@@ -31,17 +31,35 @@ abstract final class AppTheme {
           ? AppColors.neutral100
           : AppColors.ground,
       textTheme: AppTypography.textTheme,
-      // The bar floats, so its colour comes from the Material wrapper in
-      // PlatformAdaptiveTabBar rather than from here. Height drops from the
-      // edge-to-edge 80 because the inset already provides breathing room.
+      // The bar floats as a capsule, so its surface comes from the wrapper in
+      // PlatformAdaptiveTabBar rather than from here. Colours are Material 3
+      // roles; 64 keeps the capsule compact while still clearing the 32dp
+      // indicator plus a 12sp label.
       navigationBarTheme: NavigationBarThemeData(
-        height: 68,
+        height: 64,
         backgroundColor: Colors.transparent,
         surfaceTintColor: Colors.transparent,
-        indicatorColor: AppColors.signal.withValues(alpha: 0.12),
-        labelTextStyle: const WidgetStatePropertyAll(
-          TextStyle(fontSize: 11, fontWeight: FontWeight.w600),
-        ),
+        indicatorColor: colorScheme.secondaryContainer,
+        indicatorShape: const StadiumBorder(),
+        labelTextStyle: WidgetStateProperty.resolveWith((states) {
+          final selected = states.contains(WidgetState.selected);
+          return TextStyle(
+            fontSize: 12,
+            fontWeight: selected ? FontWeight.w600 : FontWeight.w500,
+            color: selected
+                ? colorScheme.onSurface
+                : colorScheme.onSurfaceVariant,
+          );
+        }),
+        iconTheme: WidgetStateProperty.resolveWith((states) {
+          final selected = states.contains(WidgetState.selected);
+          return IconThemeData(
+            size: 24,
+            color: selected
+                ? colorScheme.onSecondaryContainer
+                : colorScheme.onSurfaceVariant,
+          );
+        }),
       ),
       filledButtonTheme: FilledButtonThemeData(
         style: FilledButton.styleFrom(
