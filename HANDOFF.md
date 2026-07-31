@@ -1,21 +1,49 @@
-# DEMOCRACY 초기 인계
+# DEMOCRACY 인계
 
-기준 시각: 2026-07-30 Asia/Seoul
+기준 시각: 2026-07-31 Asia/Seoul
+작업 환경: Windows 11. **다음 작업자는 macOS로 이어받는다.**
+
+## 이 문서를 읽는 순서
+
+Windows에서 할 수 있는 범위는 전부 끝났다. 남은 작업은 대부분 macOS를 요구한다. 「macOS에서 할 일」과 「macOS 없이도 할 수 있는 일」을 먼저 보면 된다.
 
 ## 현재 상태
 
-- 원본 디자인 번들은 `design_handoff_democracy_app/`에 그대로 보존했다.
-- Flutter 앱 골격은 `app/`에 추가했다.
-- 온보딩 외부 라우트와 5탭 `StatefulShellRoute.indexedStack` 구조를 잡았다.
-- 디자인 토큰, 지역구 식별자·검증 증거를 포함한 주소 상태, 출처 메타데이터, `VerifiedGate`를 추가했다.
-- 라우트·앱바·탭바·다이얼로그·햅틱은 표준 플랫폼 폴백을 구현했고, 네이티브 인증은 경계 인터페이스만 정의했다.
-- 트래커, AI 분석, 커뮤니티, 개표는 의도적으로 placeholder다.
-- Git 저장소를 초기화했고 bootstrap 이전 상태를 첫 커밋으로 남겼다.
-- Flutter 3.44.8을 `C:\src\flutter`에 설치하고 사용자 PATH에 등록했다.
-- bootstrap을 실행해 Android/iOS 네이티브 프로젝트를 생성했다.
-- 골격의 컴파일 오류를 복구했고 `flutter analyze`와 `flutter test`가 통과한다.
+M0(재현 가능한 기반)과 M1(Fake 데이터 세로 슬라이스)의 Windows 가능 범위를 완료했다.
 
-M0 완료 조건을 충족했다. 남은 미검증 항목은 실기기 빌드뿐이다. Android 빌드는 JDK와 Android SDK, iOS 빌드는 macOS와 Xcode가 필요하다.
+- 원본 디자인 번들은 `design_handoff_democracy_app/`에 그대로 보존했다.
+- Flutter 3.44.8을 설치하고 bootstrap으로 Android/iOS 네이티브 프로젝트를 생성했다.
+- 온보딩 외부 라우트와 5탭 `StatefulShellRoute.indexedStack`, redirect 가드까지 동작한다.
+- 온보딩 → 지역구 홈 → 공약 → 주민 평가 세로 흐름이 네트워크 없이 완결된다.
+- 기능별 `{data,domain,application,presentation}` 계층을 갖췄고, 화면은 repository 계약에만 의존한다.
+- 출처 없는 외부 수치는 파싱 경계에서 거부된다. 이제 선언이 아니라 강제다.
+- 중립성 규칙이 위젯으로 강제된다. 정당색을 넣을 자리가 타입에 없고, 인물 사진은 grayscale이 내장이며, 상태는 색·아이콘·텍스트가 함께 나가고, 수치는 출처 없이 렌더링될 수 없다.
+- 하단 탭바는 iOS 26 형태의 떠 있는 캡슐이다. 유리 효과는 없고 색은 Material 3 롤이며, 스크롤 시 축소된다.
+- 트래커, AI 분석, 개표는 의도적으로 placeholder다.
+- `flutter analyze` 무결, 테스트 41개 통과, Android 디버그 빌드와 에뮬레이터 실행까지 확인했다.
+
+## macOS에서 할 일
+
+이 항목들은 Windows에서 시도할 수 없다. 순서대로 진행하면 된다.
+
+1. **저장소 클론과 기준 확인.** `flutter --version`이 정확히 3.44.8 / Dart 3.12.2인지 본다. `bootstrap.ps1`은 PowerShell 전용이므로 macOS에서는 `cd app && flutter pub get && dart format lib test && flutter analyze && flutter test`를 직접 실행한다. 필요하면 같은 순서의 `tool/bootstrap.sh`를 추가한다.
+2. **iOS 빌드 검증.** `cd app/ios && pod install` 후 `flutter build ios --debug --no-codesign`. CocoaPods는 한 번도 실행된 적이 없어 `Podfile`과 `Podfile.lock`이 아직 없다.
+3. **Bundle ID 확인.** `ios/Runner.xcodeproj`의 `PRODUCT_BUNDLE_IDENTIFIER`가 `com.democracy.kr`, 테스트 타깃이 `com.democracy.kr.RunnerTests`인지 Xcode에서 확인한다. 서명 계정은 아직 미정이다.
+4. **iOS 실기기·시뮬레이터 확인.** 특히 `PlatformAdaptiveRoute`의 스와이프 백, `PlatformAdaptiveAppBar`의 `CupertinoNavigationBar`, `PlatformAdaptiveHaptics`. 현재 iOS 분기는 위젯 테스트로만 검증돼 있다.
+5. **390dp 골든 테스트.** `docs/INITIAL_PLAN.md`의 필수 테스트 8개 중 유일한 미구현 항목이다. 폰트가 시스템 폴백이라 렌더링이 플랫폼마다 달라, 골든은 생성 환경을 macOS로 고정해야 안정적이다.
+6. **iOS Liquid Glass 패키지 spike.** 「iOS 네이티브 탭바 조사」에 후보와 기각 사유를 정리해 뒀다. 탭 상태 보존을 어떻게 유지할지가 선결 과제다.
+
+## macOS 없이도 할 수 있는 일
+
+Mac이 손에 없을 때 이어서 할 수 있는 작업이다.
+
+- 온보딩 3단계 분리와 주소 검색·GPS 권한 거부 폴백. 현재 온보딩은 단일 화면이고 주소 검색 필드는 `readOnly`다.
+- 공약 상세와 `/pledges/:id` 딥링크. 지금은 목록까지만 있다.
+- 평가 작성 화면. 게이트는 완성됐고 통과 후 진입할 화면이 아직 없다.
+- Freezed/Riverpod generator 호환 조합 spike와 codegen 도입 결정.
+- 셸 스크롤 축소 배선의 테스트. 실제 스크롤 가능한 화면이 생기면 붙일 수 있다.
+
+## 도구 기준
 
 ## 도구 기준
 
@@ -66,19 +94,33 @@ app/lib/
    │  └─ provenance/        # 출처 메타데이터
    ├─ design/               # 색상, 간격, 타이포, 테마
    └─ features/
-      ├─ onboarding/
-      ├─ district/
-      ├─ shell/
-      └─ shared/            # 후속 화면 placeholder
+      ├─ onboarding/presentation/
+      ├─ district/{data,domain,application,presentation}
+      ├─ pledges/{data,domain,application}
+      ├─ reviews/{data,domain,application,presentation}
+      ├─ shell/presentation/
+      └─ shared/presentation/   # 출처·중립성 위젯, 비동기 섹션, placeholder
+
+app/assets/fixtures/         # 샘플 payload. 실서비스 데이터가 아니다
 ```
 
-## 바로 할 일
+`pledges`에는 `presentation`이 없다. 공약은 아직 지역구 홈 카드로만 표시되고 전용 화면이 없어서다.
 
-1. README의 “API 34+”가 minSdk 의미인지 확정한다. 현재 minSdk는 생성값 24다.
-2. iOS 최종 빌드는 macOS/Xcode 환경에서 검증한다.
-3. `SourceMetadata` 검증을 DTO 파싱/리포지토리 경계에도 적용한다. 현재는 생성자에서만 강제되고, 이를 통과하도록 강제되는 호출부가 없다.
-4. Fake repository와 JSON fixture로 온보딩 → 홈 → 공약 → 주민 평가 세로 흐름을 완성한다.
-5. 라우터에 `redirect` 가드를 넣는다. 현재 온보딩은 `initialLocation`으로만 도달하므로 딥링크로 우회할 수 있다.
+## 아키텍처에서 지켜지는 것
+
+다음은 규약이 아니라 타입과 구조로 강제된다. 새 화면을 붙일 때 우회하지 않도록 유의한다.
+
+- **출처 없는 수치는 도메인에 못 들어온다.** 외부 수치는 전부 `SourcedValue<T>`이고, 파싱이 `sourceUrl`·`fetchedAt`을 요구하며 실패 시 어느 필드가 문제인지 담아 던진다. `SourceBadge`는 `SourceMetadata`를 받으므로 출처 없이 수치를 그릴 방법이 없다.
+- **정당색을 넣을 자리가 없다.** `PartyRef`에는 색 필드가 없고 `PartyTag`에도 색 인자가 없다.
+- **인물 사진은 grayscale이 내장이다.** `GrayscalePortrait`가 필터를 스스로 적용한다.
+- **공약 상태는 색 단독으로 못 나간다.** `PledgeStatus`가 glyph와 label을 함께 들고 다닌다.
+- **후보 정렬은 도메인 연산이다.** `DistrictProfile.sortedByName`이 파싱 시점에 적용하고, `sortLabel`을 화면이 표시한다.
+- **번복 판정은 근거 링크 없이 못 만든다.** `evidenceUrl`이 없으면 파싱이 거부한다.
+
+## 확인된 제품 미결 사항
+
+- README의 “API 34+”가 minSdk 의미인지 미확정. 현재 minSdk는 생성값 24다.
+- 거주지 인증 백엔드 계약과 opaque verification token 저장 방식.
 
 ## iOS 네이티브 탭바 조사 (2026-07-31)
 
@@ -105,15 +147,16 @@ macOS 환경이 확보되고 M3에 진입한 뒤, `CLAUDE.md`의 규칙대로 �
 
 ## 백로그
 
-### MVP 1차
+### MVP 1차 (남은 것)
+
+완료: 지역구 홈의 의원·후보·공약 카드, 모든 수치의 출처 뱃지와 기준일, 주민 평가 읽기, 미인증 작성 차단.
 
 - 온보딩 3단계와 주소 검색/GPS 실패 폴백
+- 평가 작성 화면. 게이트 통과 후 진입할 대상이 아직 없다
+- 공약 상세와 `/pledges/:id` 딥링크
 - Freezed/Riverpod generator 호환 버전 spike 후 codegen 도입 여부 결정
 - 거주지 인증 백엔드 계약과 opaque verification token 저장
-- 지역구 홈의 의원·후보·공약 카드
-- 모든 수치의 출처 뱃지와 기준일
-- 주민 평가 읽기/작성, 미인증 작성 차단
-- 390dp iOS/Android 골든 테스트
+- 390dp iOS/Android 골든 테스트 — **macOS 필요**
 
 ### MVP 2차
 
@@ -149,25 +192,41 @@ macOS 환경이 확보되고 M3에 진입한 뒤, `CLAUDE.md`의 규칙대로 �
 | `flutter pub get` | 완료 | `pubspec.lock` 생성 및 커밋 |
 | `dart format` | 완료 | 최초 19개 중 16개 재포맷, 이후 재실행 시 0 changed |
 | `flutter analyze` | 완료 | `No issues found!` |
-| `flutter test` | 완료 | 12개 통과 |
+| `flutter test` | 완료 | 41개 통과 |
 | bootstrap 전체 체인 | 완료 | 종료 코드 0 |
-| 코드 생성 | 보류 | 해석된 analyzer 12.1.0. M1에서 호환 조합 spike |
+| 코드 생성 | 보류 | 해석된 analyzer 12.1.0. 호환 조합 spike 필요 |
 | `flutter doctor` | 완료 | Android toolchain √. Visual Studio 항목은 Windows 데스크톱 전용이라 해당 없음 |
 | Android 빌드 | 완료 | `flutter build apk --debug` 성공. APK 패키지명 `com.democracy.kr` 확인 |
-| 에뮬레이터 실행 | 완료 | AVD `democracy_api36` (Pixel 5, API 36). 온보딩 → 홈 → 커뮤니티 → 게이트 흐름 확인. logcat 오류 0건 |
-| iOS 빌드 | 미실행 | macOS/Xcode 필요 |
+| 에뮬레이터 실행 | 완료 | AVD `democracy_api36` (Pixel 5, API 36). fixture 기반 세로 흐름 확인. logcat 오류 0건 |
+| iOS 빌드 | **미실행** | macOS/Xcode 필요. CocoaPods도 미실행 |
+| 390dp 골든 | **미구현** | macOS에서 생성 환경 고정 필요 |
 
-### 에뮬레이터에서 확인한 완료 조건
+### 필수 테스트 이행 현황
+
+`docs/INITIAL_PLAN.md`의 8개 기준이다.
+
+| 항목 | 상태 |
+|---|---|
+| 출처 URL이 상대 경로이거나 스킴이 HTTP(S)가 아니면 거부 | 완료 |
+| 미인증 쓰기 액션은 실행되지 않고 인증 안내가 표시 | 완료 |
+| 인증된 쓰기 액션은 한 번만 실행 | 완료 |
+| 읽기 전용 온보딩 종료 후 홈 진입 | 완료 |
+| 후보 가나다순 및 동일 정보 순서 | 완료 |
+| 상태 색상에 아이콘과 텍스트가 항상 병기 | 완료 |
+| 5탭 전환과 각 탭 상태 보존 | 부분. 전환은 확인, 스크롤 위치 보존은 미검증 |
+| 390dp Android/iOS 골든 | 미구현. macOS 필요 |
+
+### 에뮬레이터에서 확인한 것
 
 AVD는 `pixel_5` 프로파일(1080×2340 @440dpi = 393×851dp)로 만들었다. 목업 기준 390dp에 가장 가깝다.
 
 - 온보딩이 셸 밖에서 열린다. 게이트의 `인증하러 가기`로 복귀했을 때 하단 탭바가 없다.
 - `나중에 인증하기` → 홈이 `읽기 전용` 칩으로 진입한다.
-- 커뮤니티의 `평가 작성하기` 탭 시 `주민 인증이 필요합니다` 다이얼로그가 뜨고 작성이 차단된다.
-- 5탭 `NavigationBar`가 렌더링되고 탭 전환이 동작한다.
-- `Theme.of(context).extension<AppSurfaceTokens>()!`의 `!`가 실기기에서도 터지지 않는다.
+- 홈이 fixture에서 의원 카드, 출처 뱃지가 붙은 지표 3종, 3중 부호화된 공약 상태를 렌더링한다.
+- `평가 작성하기` 탭 시 `주민 인증이 필요합니다`가 뜨고 작성이 차단된다.
+- 떠 있는 캡슐 탭바가 스크롤에 따라 축소·복원된다.
 
-미확인: 탭별 스크롤 위치 보존은 placeholder 화면에 스크롤할 내용이 없어 행동으로 증명하지 못했다. `StatefulShellRoute.indexedStack` 구조상 보장되지만 M1에서 실제 콘텐츠로 재확인이 필요하다.
+미확인 두 가지. **탭별 스크롤 위치 보존**은 아직 화면이 짧아 행동으로 증명하지 못했다. **셸의 스크롤 축소 배선**은 테스트가 없고 임시 필러로 수동 확인만 했다. 둘 다 스크롤 가능한 실제 화면이 생기면 함께 닫을 수 있다.
 
 ### 복구한 결함
 
@@ -178,9 +237,12 @@ AVD는 `pixel_5` 프로파일(1080×2340 @440dpi = 393×851dp)로 만들었다. 
 | `app_router.dart` | 미사용 `material.dart` import |
 | `address_state.dart` | `prefer_initializing_formals` 2건. 타입 지정 initializing formal로 교체해 non-null 좁힘 유지 |
 | `tool/bootstrap.ps1` | Windows에서 `Get-Command`가 두 개를 반환하는 문제 |
+| `app_shell.dart` | 스크롤 축소를 `UserScrollNotification.direction`으로 판단하면 드래그를 놓는 순간 `forward`가 한 번 튀어 바가 다시 펴진다. 누적 이동량 임계값 방식으로 교체 |
 
-### 미충족 항목
+### 남은 구조적 부채
 
-`docs/INITIAL_PLAN.md`의 필수 테스트 8개 중 3개만 구현돼 있다. 출처 URL 거부, 미인증 쓰기 차단, 인증된 쓰기 1회 실행은 통과한다. 5탭 상태 보존, 후보 가나다순, 상태 색상 3중 부호화, 390dp 골든은 M1 이후 작업이다.
-
-`SourceMetadata`는 생성자에서 `ArgumentError`를 던지는 실제 런타임 검증이며 release에서도 유효하다. 다만 리포지토리와 DTO가 아직 없어 이 경계를 통과하도록 강제되는 코드 경로가 없다.
+- `pledges`에 `presentation`이 없다. 공약 전용 화면을 만들 때 채운다.
+- 평가 작성 화면이 없어 `VerifiedGate` 통과 후 SnackBar만 띄운다.
+- 출처 뱃지가 원문 URL을 열지 않는다. `url_launcher` 도입 결정이 필요해 표시까지만 했다.
+- 인물 사진 자산이 없어 `GrayscalePortrait`가 자리표시자를 그린다. 실제 사진이 들어와도 grayscale은 위젯이 보장한다.
+- `districtProvider`(`address_controller.dart`)는 선언만 있고 사용처가 없다. 각 feature의 provider가 `addressControllerProvider`를 직접 select 한다.

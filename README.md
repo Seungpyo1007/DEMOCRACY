@@ -23,23 +23,33 @@
 
 ## 시작
 
+Windows:
+
 ```powershell
 .\tool\bootstrap.ps1 -Organization "com.democracy.kr"
 ```
 
-이 스크립트는 멱등하다. `app/android`와 `app/ios`가 이미 있으면 생성을 건너뛰고 `pub get → format → analyze → test`만 수행한다.
+이 스크립트는 멱등하다. `app/android`와 `app/ios`가 이미 있으면 생성을 건너뛰고 `pub get → format → analyze → test`만 수행한다. 네이티브 프로젝트는 이미 커밋돼 있으므로 재생성은 일어나지 않는다.
 
-개별 실행:
+macOS·Linux에는 아직 대응 스크립트가 없다. 같은 검증 순서를 직접 실행한다:
 
-```powershell
-cd app; flutter analyze; flutter test
+```bash
+cd app && flutter pub get && dart format lib test && flutter analyze && flutter test
+```
+
+iOS는 CocoaPods가 한 번도 실행된 적이 없다. macOS에서 처음 빌드할 때:
+
+```bash
+cd app/ios && pod install
 ```
 
 ## 상태
 
-MVP 1차의 기반 골격까지 구현돼 있다. 온보딩 외부 라우트, 상태 보존 5탭 셸, 디자인 토큰, 플랫폼 폴백, 주소 인증 게이트, 출처 메타데이터 런타임 검증이 동작하며 `flutter analyze`와 `flutter test`가 통과한다.
+MVP 1차의 세로 흐름이 네트워크 없이 동작한다. 온보딩 → 지역구 홈 → 공약 → 주민 평가가 번들된 샘플 payload 위에서 이어지고, 모든 외부 수치는 원문 주소와 취득 시각을 통과한 경우에만 화면에 오른다.
 
-트래커, AI 분석, 커뮤니티, 개표는 라우트와 명시적 placeholder만 존재한다. 실제 API, 지도, LLM, 실시간 채널은 아직 구현하지 않았다. 자세한 내용은 `HANDOFF.md`를 참고한다.
+트래커, AI 분석, 개표는 라우트와 명시적 placeholder만 존재한다. 실제 API, 지도, LLM, 실시간 채널은 아직 구현하지 않았다.
+
+Android는 디버그 빌드와 에뮬레이터 실행까지 확인했다. **iOS는 아직 빌드된 적이 없다** — macOS와 Xcode가 필요하다. 자세한 인계 사항은 `HANDOFF.md`를 참고한다.
 
 ## 라이선스
 
