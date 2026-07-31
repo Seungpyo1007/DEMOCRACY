@@ -23,11 +23,26 @@ Git Flow를 따른다.
 - base 브랜치가 최신이어야 한다 (strict)
 - force push와 브랜치 삭제 금지
 
-`enforce_admins`는 **꺼져 있다.** 저장소 소유자는 CI가 고장 나거나 긴급 상황일 때 직접 push할 수 있다. 협업자에게는 그대로 강제된다. 완전히 잠그려면:
+`enforce_admins`가 **켜져 있다.** 저장소 소유자에게도 예외가 없다. `main`과 `develop`에 직접 push하면 거부된다.
+
+```
+! [remote rejected] develop -> develop (protected branch hook declined)
+remote: - Changes must be made through a pull request.
+```
+
+이 문서를 포함해 모든 변경은 브랜치를 따고 PR로 들어와야 한다.
+
+### 막혔을 때
+
+CI 자체가 고장 나서 아무것도 병합할 수 없는 상황이라면, 고치는 변경도 PR로 올려야 하지만 그 PR 역시 같은 CI에 막힌다. 이때만 일시적으로 해제한다.
 
 ```bash
+gh api -X DELETE repos/Seungpyo1007/DEMOCRACY/branches/main/protection/enforce_admins
+# 수습 후 곧바로 되돌린다
 gh api -X POST repos/Seungpyo1007/DEMOCRACY/branches/main/protection/enforce_admins
 ```
+
+해제한 채로 두지 않는다. 켜 두는 이유는 규율이 아니라, 검증되지 않은 커밋이 `main`에 닿는 경로를 없애기 위해서다.
 
 ### 이름 규칙
 
