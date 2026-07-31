@@ -8,12 +8,12 @@
 
 빌드 상태는 통합 브랜치인 `develop` 기준이다. `main`은 마지막 릴리스(`v0.1.0`) 지점이라 대개 뒤처져 있으며, 그것이 정상이다.
 
-현재는 구현을 시작하기 위한 최소 골격만 포함한다.
-
 - `design_handoff_democracy_app/`: 원본 제품 명세와 HTML 디자인 레퍼런스. 앱 코드로 복사하지 않는다.
-- `app/`: Flutter 앱. 골격과 생성된 Android/iOS 프로젝트.
+- `app/`: Flutter 앱. 기능별 `{data,domain,application,presentation}` 계층과 생성된 Android/iOS 프로젝트.
+- `app/assets/fixtures/`: 샘플 payload. 실서비스 데이터가 아니다.
 - `docs/INITIAL_PLAN.md`: MVP 범위, 순서, 완료 조건.
-- `HANDOFF.md`: 현재 상태와 다음 실행자용 체크리스트.
+- `HANDOFF.md`: 현재 상태와 다음 실행자용 인계 사항.
+- `CONTRIBUTING.md`: 브랜치 전략과 검증 절차.
 - `tool/bootstrap.ps1`: Flutter 네이티브 프로젝트 생성과 기본 검증을 재현하는 스크립트.
 
 ## 요구 사항
