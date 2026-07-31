@@ -72,60 +72,104 @@ class PlatformAdaptiveTabBar extends StatelessWidget {
     final theme = Theme.of(context);
     final surfaceTokens = theme.extension<AppSurfaceTokens>()!;
 
-    // Both platforms share one detached frame so the bar sits off the screen
-    // edge identically; only the control inside it differs.
+    // One control on both platforms. NavigationBar and CupertinoTabBar both
+    // stretch to the full width, and the shape this product wants is the
+    // iOS 26 one: a capsule only as wide as its own items. Only the inset
+    // still varies by platform.
     return _FloatingBarFrame(
       inset: surfaceTokens.navBarInset,
       // surfaceContainerLowest, not surfaceContainer: this scheme is seeded
       // monochrome, so the mid container roles collapse onto the page
       // background and the capsule stops reading as detached.
       color: theme.colorScheme.surfaceContainerLowest,
-      child: _isCupertino(context)
-          ? CupertinoTabBar(
-              // The frame already draws the surface and the separation, so the
-              // bar itself contributes no fill and no hairline border.
-              backgroundColor: Colors.transparent,
-              border: null,
-              currentIndex: currentIndex,
-              // Material 3 roles rather than the brand accent, so both
-              // platforms read from the same colour system.
-              activeColor: theme.colorScheme.onSurface,
-              inactiveColor: theme.colorScheme.onSurfaceVariant,
-              onTap: onTap,
-              items: [
-                for (final item in items)
-                  BottomNavigationBarItem(
-                    icon: Icon(item.icon),
-                    activeIcon: Icon(item.activeIcon ?? item.icon),
-                    label: item.label,
-                  ),
-              ],
-            )
-          : NavigationBar(
-              backgroundColor: Colors.transparent,
-              surfaceTintColor: Colors.transparent,
-              elevation: 0,
-              selectedIndex: currentIndex,
-              onDestinationSelected: onTap,
-              destinations: [
-                for (final item in items)
-                  NavigationDestination(
-                    icon: Icon(item.icon),
-                    selectedIcon: Icon(item.activeIcon ?? item.icon),
-                    label: item.label,
-                  ),
-              ],
+      child: Row(
+        mainAxisSize: MainAxisSize.min,
+        children: [
+          for (var i = 0; i < items.length; i++)
+            _CapsuleTabItem(
+              item: items[i],
+              selected: i == currentIndex,
+              onTap: () => onTap(i),
             ),
+        ],
+      ),
+    );
+  }
+}
+
+/// One destination in the capsule bar.
+///
+/// Sized by its own content so the bar can hug rather than stretch. The
+/// selected state is a Material 3 indicator pill behind the icon.
+class _CapsuleTabItem extends StatelessWidget {
+  const _CapsuleTabItem({
+    required this.item,
+    required this.selected,
+    required this.onTap,
+  });
+
+  final AdaptiveTabItem item;
+  final bool selected;
+  final VoidCallback onTap;
+
+  @override
+  Widget build(BuildContext context) {
+    final colors = Theme.of(context).colorScheme;
+
+    return Semantics(
+      button: true,
+      selected: selected,
+      label: item.label,
+      child: InkWell(
+        onTap: onTap,
+        customBorder: const StadiumBorder(),
+        child: Padding(
+          padding: const EdgeInsets.fromLTRB(6, 8, 6, 8),
+          child: Column(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              Container(
+                width: 52,
+                height: 30,
+                alignment: Alignment.center,
+                decoration: selected
+                    ? ShapeDecoration(
+                        color: colors.secondaryContainer,
+                        shape: const StadiumBorder(),
+                      )
+                    : null,
+                child: Icon(
+                  selected ? (item.activeIcon ?? item.icon) : item.icon,
+                  size: 22,
+                  color: selected
+                      ? colors.onSecondaryContainer
+                      : colors.onSurfaceVariant,
+                ),
+              ),
+              const SizedBox(height: 3),
+              Text(
+                item.label,
+                style: TextStyle(
+                  fontSize: 11,
+                  fontWeight: selected ? FontWeight.w600 : FontWeight.w500,
+                  color: selected ? colors.onSurface : colors.onSurfaceVariant,
+                ),
+              ),
+            ],
+          ),
+        ),
+      ),
     );
   }
 }
 
 /// Lifts a navigation bar off the bottom edge as a detached capsule.
 ///
-/// [StadiumBorder] keeps the ends fully round at whatever height the bar
-/// resolves to, which is what makes it read as a capsule rather than a
-/// rounded rectangle. The elevation is a real shadow on an opaque surface,
-/// so nothing here depends on translucency or a Liquid Glass implementation.
+/// [Center] lets the capsule take only the width its items need, which is the
+/// part that makes it read as an iOS 26 tab bar rather than a bar with rounded
+/// ends. [StadiumBorder] keeps the ends fully round at whatever height the bar
+/// resolves to. The elevation is a real shadow on an opaque surface, so
+/// nothing here depends on translucency or a Liquid Glass implementation.
 class _FloatingBarFrame extends StatelessWidget {
   const _FloatingBarFrame({
     required this.inset,
@@ -143,14 +187,19 @@ class _FloatingBarFrame extends StatelessWidget {
       top: false,
       child: Padding(
         padding: EdgeInsets.fromLTRB(inset, 0, inset, inset),
-        child: Material(
-          color: color,
-          surfaceTintColor: Colors.transparent,
-          shadowColor: AppColors.ink.withValues(alpha: 0.20),
-          elevation: 3,
-          shape: const StadiumBorder(),
-          clipBehavior: Clip.antiAlias,
-          child: child,
+        child: Center(
+          // The bottom slot hands down an unbounded height, so the frame must
+          // take its height from the child rather than try to fill.
+          heightFactor: 1,
+          child: Material(
+            color: color,
+            surfaceTintColor: Colors.transparent,
+            shadowColor: AppColors.ink.withValues(alpha: 0.20),
+            elevation: 3,
+            shape: const StadiumBorder(),
+            clipBehavior: Clip.antiAlias,
+            child: child,
+          ),
         ),
       ),
     );

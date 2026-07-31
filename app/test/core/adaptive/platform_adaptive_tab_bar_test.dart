@@ -1,60 +1,78 @@
 import 'package:democracy/src/core/adaptive/platform_adaptive.dart';
 import 'package:democracy/src/design/app_theme.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 
 /// The iOS branch cannot be exercised on a device from a Windows workstation,
-/// so these tests are the only check that it is wired up at all.
+/// so these tests are the only check that it behaves like the Android one.
 void main() {
   const items = [
     AdaptiveTabItem(label: '지역구', icon: Icons.location_on_outlined),
+    AdaptiveTabItem(label: '트래커', icon: Icons.donut_large_outlined),
+    AdaptiveTabItem(label: 'AI 분석', icon: Icons.auto_awesome_outlined),
+    AdaptiveTabItem(label: '커뮤니티', icon: Icons.forum_outlined),
     AdaptiveTabItem(label: '개표', icon: Icons.map_outlined),
   ];
 
-  Widget harness(TargetPlatform platform) {
+  Widget harness(
+    TargetPlatform platform, {
+    int currentIndex = 0,
+    ValueChanged<int>? onTap,
+  }) {
     return MaterialApp(
       theme: AppTheme.light(platform),
       home: Scaffold(
         bottomNavigationBar: PlatformAdaptiveTabBar(
-          currentIndex: 0,
+          currentIndex: currentIndex,
           items: items,
-          onTap: (_) {},
+          onTap: onTap ?? (_) {},
         ),
       ),
     );
   }
 
-  testWidgets('iOS uses the Cupertino bar', (tester) async {
-    await tester.pumpWidget(harness(TargetPlatform.iOS));
-
-    expect(find.byType(CupertinoTabBar), findsOneWidget);
-    expect(find.byType(NavigationBar), findsNothing);
-  });
-
-  testWidgets('Android uses the Material bar', (tester) async {
-    await tester.pumpWidget(harness(TargetPlatform.android));
-
-    expect(find.byType(NavigationBar), findsOneWidget);
-    expect(find.byType(CupertinoTabBar), findsNothing);
-  });
-
+  // The bar takes only the width its items need instead of stretching edge to
+  // edge. This is the property that distinguishes the intended shape from a
+  // full-width bar with rounded ends, so it is worth asserting directly.
   for (final platform in [TargetPlatform.iOS, TargetPlatform.android]) {
-    testWidgets('$platform lifts the bar off every screen edge', (
+    testWidgets('$platform hugs its content and clears every edge', (
       tester,
     ) async {
       await tester.pumpWidget(harness(platform));
 
       final screen = tester.getRect(find.byType(MaterialApp));
-      final bar = tester.getRect(
-        find.byType(
-          platform == TargetPlatform.iOS ? CupertinoTabBar : NavigationBar,
-        ),
+      final capsule = tester.getRect(find.byType(PlatformAdaptiveTabBar));
+      final surface = tester.getRect(
+        find
+            .descendant(
+              of: find.byType(PlatformAdaptiveTabBar),
+              matching: find.byType(Material),
+            )
+            .first,
       );
 
-      expect(bar.bottom, lessThan(screen.bottom));
-      expect(bar.left, greaterThan(screen.left));
-      expect(bar.right, lessThan(screen.right));
+      expect(surface.width, lessThan(capsule.width));
+      expect(surface.bottom, lessThan(screen.bottom));
+      expect(surface.left, greaterThan(screen.left));
+      expect(surface.right, lessThan(screen.right));
+    });
+
+    testWidgets('$platform reports the tapped destination', (tester) async {
+      final tapped = <int>[];
+      await tester.pumpWidget(harness(platform, onTap: tapped.add));
+
+      await tester.tap(find.text('커뮤니티'));
+      await tester.pump();
+
+      expect(tapped, [3]);
     });
   }
+
+  testWidgets('every destination is labelled', (tester) async {
+    await tester.pumpWidget(harness(TargetPlatform.android));
+
+    for (final item in items) {
+      expect(find.text(item.label), findsOneWidget);
+    }
+  });
 }
