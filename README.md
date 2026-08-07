@@ -37,17 +37,13 @@ Windows:
 
 이 스크립트는 멱등하다. `app/android`와 `app/ios`가 이미 있으면 생성을 건너뛰고 `pub get → format → analyze → test`만 수행한다. 네이티브 프로젝트는 이미 커밋돼 있으므로 재생성은 일어나지 않는다.
 
-macOS·Linux에는 아직 대응 스크립트가 없다. 같은 검증 순서를 직접 실행한다:
+macOS·Linux:
 
 ```bash
-cd app && flutter pub get && dart format lib test && flutter analyze && flutter test
+./tool/bootstrap.sh
 ```
 
-iOS는 CocoaPods가 한 번도 실행된 적이 없다. macOS에서 처음 빌드할 때:
-
-```bash
-cd app/ios && pod install
-```
+같은 버전 가드와 같은 검증 순서를 쓴다. macOS에서는 `pod install`과 `flutter build ios --no-codesign`까지 이어서 수행한다. iOS는 아직 한 번도 컴파일된 적이 없으므로 이 단계가 처음 실행되는 순간이다.
 
 ## 상태
 
