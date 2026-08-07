@@ -26,8 +26,9 @@ M0(재현 가능한 기반)과 M1(Fake 데이터 세로 슬라이스)의 Windows
 
 이 항목들은 Windows에서 시도할 수 없다. 순서대로 진행하면 된다.
 
-1. **저장소 클론과 기준 확인.** `flutter --version`이 정확히 3.44.8 / Dart 3.12.2인지 본다. `bootstrap.ps1`은 PowerShell 전용이므로 macOS에서는 `cd app && flutter pub get && dart format lib test && flutter analyze && flutter test`를 직접 실행한다. 필요하면 같은 순서의 `tool/bootstrap.sh`를 추가한다.
-2. **iOS 빌드 검증.** `cd app/ios && pod install` 후 `flutter build ios --debug --no-codesign`. CocoaPods는 한 번도 실행된 적이 없어 `Podfile`과 `Podfile.lock`이 아직 없다.
+0. **`CLAUDE.md`는 클론에 없다.** 의도적으로 추적 제외했으므로 Windows 머신에서 직접 복사해 와야 한다. 없으면 작업 규칙 없이 시작하게 된다.
+1. **사전 준비.** Xcode(App Store) → `sudo xcode-select --switch /Applications/Xcode.app` → `sudo xcodebuild -license accept` → `xcodebuild -runFirstLaunch`. CocoaPods는 `brew install cocoapods`. Flutter는 정확히 3.44.8이어야 한다.
+2. **`./tool/bootstrap.sh` 실행.** 버전 가드부터 `pod install`, `flutter build ios --no-codesign`까지 한 번에 돈다. `Podfile`과 `Podfile.lock`은 이때 처음 생성되므로 커밋 대상이다.
 3. **Bundle ID 확인.** `ios/Runner.xcodeproj`의 `PRODUCT_BUNDLE_IDENTIFIER`가 `com.democracy.kr`, 테스트 타깃이 `com.democracy.kr.RunnerTests`인지 Xcode에서 확인한다. 서명 계정은 아직 미정이다.
 4. **iOS 실기기·시뮬레이터 확인.** 특히 `PlatformAdaptiveRoute`의 스와이프 백, `PlatformAdaptiveAppBar`의 `CupertinoNavigationBar`, `PlatformAdaptiveHaptics`. 현재 iOS 분기는 위젯 테스트로만 검증돼 있다.
 5. **390dp 골든 테스트.** `docs/INITIAL_PLAN.md`의 필수 테스트 8개 중 유일한 미구현 항목이다. 폰트가 시스템 폴백이라 렌더링이 플랫폼마다 달라, 골든은 생성 환경을 macOS로 고정해야 안정적이다.
