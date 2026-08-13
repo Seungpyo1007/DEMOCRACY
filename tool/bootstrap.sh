@@ -61,17 +61,29 @@ dart format lib test
 flutter analyze
 flutter test
 
-# iOS has never been compiled. These steps are the whole reason a Mac is
-# needed, so they run automatically rather than waiting to be remembered.
+# The iOS build is the whole reason a Mac is needed, so it runs automatically
+# rather than waiting to be remembered.
 if [ "$(uname -s)" = "Darwin" ]; then
   if [ ! -d ios ]; then
     echo "No ios/ directory; skipping the iOS steps." >&2
-  elif ! command -v pod >/dev/null 2>&1; then
-    echo "CocoaPods is not installed. Run 'sudo gem install cocoapods'," >&2
-    echo "or 'brew install cocoapods', then re-run this script." >&2
-    exit 1
   else
-    ( cd ios && pod install )
+    # CocoaPods is conditional, not mandatory. Every direct dependency is pure
+    # Dart, so the Flutter tool never sets up a CocoaPods integration and no
+    # Podfile exists to install from -- running `pod install` unconditionally
+    # aborted the script here before it ever reached the build. The moment a
+    # plugin with iOS platform code is added, Flutter writes ios/Podfile and
+    # this branch starts doing the work again on its own.
+    if [ -f ios/Podfile ]; then
+      if ! command -v pod >/dev/null 2>&1; then
+        echo "ios/Podfile exists but CocoaPods is not installed." >&2
+        echo "Run 'brew install cocoapods', then re-run this script." >&2
+        exit 1
+      fi
+      ( cd ios && pod install )
+    else
+      echo "No ios/Podfile: no plugin needs CocoaPods. Skipping pod install."
+    fi
+
     flutter build ios --no-codesign
   fi
 else
