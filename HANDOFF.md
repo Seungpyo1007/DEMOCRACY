@@ -47,9 +47,7 @@ macOS 여부와 무관하다. 전부 기능 구현이다.
 
 ## 도구 기준
 
-## 도구 기준
-
-- 고정 버전: Flutter 3.44.8 / Dart 3.12.2. `app/.fvmrc`와 `bootstrap.ps1`의 가드가 동일한 값을 사용한다.
+- 고정 버전: Flutter 3.44.8 / Dart 3.12.2. `app/.fvmrc`, `bootstrap.ps1`, `bootstrap.sh`, `verify.yml` 네 곳의 가드가 동일한 값을 사용한다. 올릴 때는 네 곳을 함께 바꿔야 한다.
 - 해석된 직접 의존성: `flutter_riverpod 3.4.2`, `go_router 17.3.0`, `flutter_lints 6.0.0`.
 - `app/pubspec.lock`을 커밋했다.
 - Android: compileSdk 36, targetSdk 36, minSdk 24, NDK 28.2.13676358, JVM target 17. 값은 Flutter Gradle 플러그인 기본값이며 `build.gradle.kts`에 하드코딩돼 있지 않다.
@@ -159,14 +157,15 @@ macOS 환경이 확보되고 M3에 진입한 뒤, `CLAUDE.md`의 규칙대로 �
 
 ### MVP 1차 (남은 것)
 
-완료: 지역구 홈의 의원·후보·공약 카드, 모든 수치의 출처 뱃지와 기준일, 주민 평가 읽기, 미인증 작성 차단.
+완료: 지역구 홈의 의원·후보·공약 카드, 모든 수치의 출처 뱃지와 기준일, 주민 평가 읽기, 미인증 작성 차단, iOS 빌드와 시뮬레이터 검증, 390dp 골든.
 
 - 온보딩 3단계와 주소 검색/GPS 실패 폴백
 - 평가 작성 화면. 게이트 통과 후 진입할 대상이 아직 없다
 - 공약 상세와 `/pledges/:id` 딥링크
 - Freezed/Riverpod generator 호환 버전 spike 후 codegen 도입 여부 결정
 - 거주지 인증 백엔드 계약과 opaque verification token 저장
-- 390dp iOS/Android 골든 테스트 — **macOS 필요**
+
+위 셋 중 **푸시되는 화면이 처음 생기는 것**(공약 상세 또는 평가 작성)에서 `PlatformAdaptiveRoute`의 스와이프 백을 함께 검증해야 한다. 지금은 검증 대상 자체가 없다.
 
 ### MVP 2차
 
@@ -288,3 +287,7 @@ iPhone 17 Pro / iOS 27.0. 위젯 테스트로만 검증돼 있던 iOS 분기를 
 - 출처 뱃지가 원문 URL을 열지 않는다. `url_launcher` 도입 결정이 필요해 표시까지만 했다.
 - 인물 사진 자산이 없어 `GrayscalePortrait`가 자리표시자를 그린다. 실제 사진이 들어와도 grayscale은 위젯이 보장한다.
 - `districtProvider`(`address_controller.dart`)는 선언만 있고 사용처가 없다. 각 feature의 provider가 `addressControllerProvider`를 직접 select 한다.
+- **실행 중인 앱에서 `VerifiedGate`가 통과 불가.** 위 「실행 중인 앱에서 게이트가 통과 불가」 참고. 인증된 작성 경로는 위젯 테스트로만 도달한다.
+- **축소된 탭바가 placeholder 탭에서 펴지지 않는다.** 셸이 `ScrollUpdateNotification`에서만 재확장하는데(`app_shell.dart:65-68`) 스크롤할 것이 없는 화면은 알림을 보내지 않는다. `app_shell_test.dart`가 현재 동작으로 고정해 뒀다. 오프셋 0인 브랜치에서 바를 펼지 여부는 제품 결정이라 바꾸지 않았다.
+- 골든이 정확 일치가 아니라 0.5% 허용 오차로 비교된다(`test/golden/flutter_test_config.dart`). macOS 버전이 다르면 안티에일리어싱만으로 0.04%가 어긋나 CI가 러너 이미지에 따라 깨지기 때문이다.
+- `app_router.dart`의 redirect 가드는 `ref.read`를 쓰고 `refreshListenable`이 없어 네비게이션 시점에만 평가된다. 주소 상태가 바뀌어도 현재 화면은 그대로다.
