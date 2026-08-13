@@ -1,15 +1,15 @@
 # DEMOCRACY 인계
 
-기준 시각: 2026-07-31 Asia/Seoul
-작업 환경: Windows 11. **다음 작업자는 macOS로 이어받는다.**
+기준 시각: 2026-08-13 Asia/Seoul
+작업 환경: macOS 27.0 / Xcode 26.6. 이전 구간은 Windows 11에서 진행했다.
 
 ## 이 문서를 읽는 순서
 
-Windows에서 할 수 있는 범위는 전부 끝났다. 남은 작업은 대부분 macOS를 요구한다. 「macOS에서 할 일」과 「macOS 없이도 할 수 있는 일」을 먼저 보면 된다.
+**macOS를 요구하던 작업은 전부 끝났다.** iOS가 컴파일되고, 시뮬레이터에서 돌고, 390dp 골든이 붙었다. 남은 것은 기능 구현이므로 「남은 작업」과 「백로그」를 보면 된다.
 
 ## 현재 상태
 
-M0(재현 가능한 기반)과 M1(Fake 데이터 세로 슬라이스)의 Windows 가능 범위를 완료했다.
+M0(재현 가능한 기반)과 M1(Fake 데이터 세로 슬라이스)을 완료했다. M1의 완료 조건인 「네트워크 없이 온보딩 → 홈 → 공약 → 평가 흐름 + 390dp 골든 통과」를 충족한다.
 
 - 원본 디자인 번들은 `design_handoff_democracy_app/`에 그대로 보존했다.
 - Flutter 3.44.8을 설치하고 bootstrap으로 Android/iOS 네이티브 프로젝트를 생성했다.
@@ -20,29 +20,30 @@ M0(재현 가능한 기반)과 M1(Fake 데이터 세로 슬라이스)의 Windows
 - 중립성 규칙이 위젯으로 강제된다. 정당색을 넣을 자리가 타입에 없고, 인물 사진은 grayscale이 내장이며, 상태는 색·아이콘·텍스트가 함께 나가고, 수치는 출처 없이 렌더링될 수 없다.
 - 하단 탭바는 iOS 26 형태의 떠 있는 캡슐이다. 유리 효과는 없고 색은 Material 3 롤이며, 스크롤 시 축소된다.
 - 트래커, AI 분석, 개표는 의도적으로 placeholder다.
-- `flutter analyze` 무결, 테스트 41개 통과, Android 디버그 빌드와 에뮬레이터 실행까지 확인했다.
+- `flutter analyze` 무결, 테스트 54개 통과. Android는 디버그 빌드와 에뮬레이터 실행, iOS는 디바이스 빌드와 시뮬레이터 실행까지 확인했다.
+- 390dp Android/iOS 골든 6장이 붙었다. 필수 테스트 8개가 전부 이행됐다.
 
-## macOS에서 할 일
+## macOS 구간에서 끝낸 것 (2026-08-13)
 
-이 항목들은 Windows에서 시도할 수 없다. 순서대로 진행하면 된다.
+이전 인계가 「macOS에서 할 일」로 남긴 항목의 결과다.
 
-0. **`CLAUDE.md`는 클론에 없다.** 의도적으로 추적 제외했으므로 Windows 머신에서 직접 복사해 와야 한다. 없으면 작업 규칙 없이 시작하게 된다.
-1. **사전 준비.** Xcode(App Store) → `sudo xcode-select --switch /Applications/Xcode.app` → `sudo xcodebuild -license accept` → `xcodebuild -runFirstLaunch`. CocoaPods는 `brew install cocoapods`. Flutter는 정확히 3.44.8이어야 한다.
-2. **`./tool/bootstrap.sh` 실행.** 버전 가드부터 `pod install`, `flutter build ios --no-codesign`까지 한 번에 돈다. `Podfile`과 `Podfile.lock`은 이때 처음 생성되므로 커밋 대상이다.
-3. **Bundle ID 확인.** `ios/Runner.xcodeproj`의 `PRODUCT_BUNDLE_IDENTIFIER`가 `com.democracy.kr`, 테스트 타깃이 `com.democracy.kr.RunnerTests`인지 Xcode에서 확인한다. 서명 계정은 아직 미정이다.
-4. **iOS 실기기·시뮬레이터 확인.** 특히 `PlatformAdaptiveRoute`의 스와이프 백, `PlatformAdaptiveAppBar`의 `CupertinoNavigationBar`, `PlatformAdaptiveHaptics`. 현재 iOS 분기는 위젯 테스트로만 검증돼 있다.
-5. **390dp 골든 테스트.** `docs/INITIAL_PLAN.md`의 필수 테스트 8개 중 유일한 미구현 항목이다. 폰트가 시스템 폴백이라 렌더링이 플랫폼마다 달라, 골든은 생성 환경을 macOS로 고정해야 안정적이다.
-6. **iOS Liquid Glass 패키지 spike.** 「iOS 네이티브 탭바 조사」에 후보와 기각 사유를 정리해 뒀다. 탭 상태 보존을 어떻게 유지할지가 선결 과제다.
+- **iOS 최초 컴파일.** `flutter build ios --no-codesign` 성공. `bootstrap.sh` 전체 체인 종료 코드 0.
+- **`bootstrap.sh` 결함 수정.** 아래 「bootstrap.sh의 CocoaPods 분기」 참고. 이전 인계의 Podfile 서술이 틀렸다.
+- **Bundle ID 확인 완료.** `project.pbxproj`에서 직접 확인했다. Runner는 `com.democracy.kr`(`:385`, `:564`, `:586`), 테스트 타깃은 `com.democracy.kr.RunnerTests`(`:401`, `:418`, `:433`). Xcode를 열 필요가 없었다. `IPHONEOS_DEPLOYMENT_TARGET`은 생성 기본값 13.0 그대로다. 서명 계정은 여전히 미정이다.
+- **iOS 시뮬레이터 실측.** iPhone 17 Pro / iOS 27.0. 결과는 「검증 기록」에 있다.
+- **390dp 골든.** Android/iOS 각 3화면. ubuntu CI와 충돌하지 않도록 macOS job으로 분리했다.
 
-## macOS 없이도 할 수 있는 일
+**iOS Liquid Glass 패키지 spike는 이 구간에서 하지 않았다.** 「iOS 네이티브 탭바 조사」의 결론대로 M3까지 보류가 이미 결정된 사항이라, 환경이 생겼다는 이유만으로 앞당기지 않았다.
 
-Mac이 손에 없을 때 이어서 할 수 있는 작업이다.
+## 남은 작업
 
-- 온보딩 3단계 분리와 주소 검색·GPS 권한 거부 폴백. 현재 온보딩은 단일 화면이고 주소 검색 필드는 `readOnly`다.
+macOS 여부와 무관하다. 전부 기능 구현이다.
+
+- 온보딩 3단계 분리와 주소 검색·GPS 권한 거부 폴백. 현재 온보딩은 단일 화면이고 주소 검색 필드는 `readOnly`다. `LinearProgressIndicator(value: 1/3)`이 3단계를 암시하지만 나머지 2단계가 없다.
 - 공약 상세와 `/pledges/:id` 딥링크. 지금은 목록까지만 있다.
 - 평가 작성 화면. 게이트는 완성됐고 통과 후 진입할 화면이 아직 없다.
 - Freezed/Riverpod generator 호환 조합 spike와 codegen 도입 결정.
-- 셸 스크롤 축소 배선의 테스트. 실제 스크롤 가능한 화면이 생기면 붙일 수 있다.
+- 거주지 인증 백엔드 계약. 아래 「실행 중인 앱에서 게이트가 통과 불가」 참고.
 
 ## 도구 기준
 
@@ -66,6 +67,14 @@ Mac이 손에 없을 때 이어서 할 수 있는 작업이다.
 - cmdline-tools는 설정 마법사가 설치하지 않아 리비전 15859902를 별도로 `cmdline-tools\latest`에 넣었다. 이것이 없으면 `flutter doctor`가 라이선스 상태를 확인하지 못한다.
 - `flutter analyze`와 `flutter test`는 Android SDK 없이도 동작한다. SDK는 실기기·에뮬레이터 빌드에만 필요하다.
 - Visual Studio 미설치는 Windows 데스크톱 타깃 전용 항목이라 이 프로젝트와 무관하다.
+
+## bootstrap.sh의 CocoaPods 분기
+
+이전 인계는 「`Podfile`과 `Podfile.lock`은 이때 처음 생성되므로 커밋 대상이다」라고 적었다. **틀렸다.**
+
+`bootstrap.sh`는 Darwin 분기에서 `pod install`을 무조건 실행했는데, 이 저장소에는 `Podfile`이 존재한 적이 없다. 직접 의존성이 `flutter_riverpod`와 `go_router`뿐이고 둘 다 순수 Dart라, Flutter 툴이 CocoaPods 통합 자체를 건너뛰고 `Podfile`을 만들지 않는다. `set -euo pipefail` 아래에서 `No Podfile found in the project directory`가 스크립트를 중단시켜 `flutter build ios`에 도달하지 못했다.
+
+이제 `ios/Podfile` 존재 여부로 분기한다. 없으면 알리고 넘어가며, `pod` 미설치 하드 실패도 Podfile이 실제로 있는 경우로 한정했다. iOS 네이티브 코드를 가진 플러그인이 추가돼 Flutter가 `Podfile`을 생성하면 이 분기가 스스로 되살아난다. 그때는 `Podfile`과 `Podfile.lock`이 커밋 대상이 맞다(`.gitignore`는 `app/ios/Pods/`만 무시한다).
 
 ## bootstrap.ps1 수정
 
@@ -182,7 +191,7 @@ macOS 환경이 확보되고 M3에 진입한 뒤, `CLAUDE.md`의 규칙대로 �
 
 ## 검증 기록
 
-기준: Flutter 3.44.8 / Dart 3.12.2, Windows 11.
+기준: Flutter 3.44.8 / Dart 3.12.2. Windows 11에서 시작해 macOS 27.0 / Xcode 26.6에서 마무리했다.
 
 | 항목 | 상태 | 비고 |
 |---|---|---|
@@ -193,14 +202,16 @@ macOS 환경이 확보되고 M3에 진입한 뒤, `CLAUDE.md`의 규칙대로 �
 | `flutter pub get` | 완료 | `pubspec.lock` 생성 및 커밋 |
 | `dart format` | 완료 | 최초 19개 중 16개 재포맷, 이후 재실행 시 0 changed |
 | `flutter analyze` | 완료 | `No issues found!` |
-| `flutter test` | 완료 | 41개 통과 |
-| bootstrap 전체 체인 | 완료 | 종료 코드 0 |
+| `flutter test` | 완료 | 54개 통과 (골든 7 포함) |
+| bootstrap 전체 체인 | 완료 | 종료 코드 0. macOS에서 iOS 빌드까지 포함해 재확인 |
 | 코드 생성 | 보류 | 해석된 analyzer 12.1.0. 호환 조합 spike 필요 |
-| `flutter doctor` | 완료 | Android toolchain √. Visual Studio 항목은 Windows 데스크톱 전용이라 해당 없음 |
+| `flutter doctor` | 완료 | macOS에서 `No issues found!`. Android·Xcode 툴체인 모두 √ |
 | Android 빌드 | 완료 | `flutter build apk --debug` 성공. APK 패키지명 `com.democracy.kr` 확인 |
 | 에뮬레이터 실행 | 완료 | AVD `democracy_api36` (Pixel 5, API 36). fixture 기반 세로 흐름 확인. logcat 오류 0건 |
-| iOS 빌드 | **미실행** | macOS/Xcode 필요. CocoaPods도 미실행 |
-| 390dp 골든 | **미구현** | macOS에서 생성 환경 고정 필요 |
+| iOS 빌드 | 완료 | `flutter build ios --no-codesign` → `Runner.app` 16.4MB. **저장소 최초 컴파일** |
+| CocoaPods | 해당 없음 | 순수 Dart 의존성뿐이라 Flutter가 통합을 생성하지 않는다. 위 「bootstrap.sh의 CocoaPods 분기」 참고 |
+| iOS 시뮬레이터 실행 | 완료 | iPhone 17 Pro / iOS 27.0. 아래 「iOS 시뮬레이터에서 확인한 것」 |
+| 390dp 골든 | 완료 | Android/iOS 각 3화면, 390×844px. macOS CI job에서 검증 |
 
 ### 필수 테스트 이행 현황
 
@@ -214,8 +225,10 @@ macOS 환경이 확보되고 M3에 진입한 뒤, `CLAUDE.md`의 규칙대로 �
 | 읽기 전용 온보딩 종료 후 홈 진입 | 완료 |
 | 후보 가나다순 및 동일 정보 순서 | 완료 |
 | 상태 색상에 아이콘과 텍스트가 항상 병기 | 완료 |
-| 5탭 전환과 각 탭 상태 보존 | 부분. 전환은 확인, 스크롤 위치 보존은 미검증 |
-| 390dp Android/iOS 골든 | 미구현. macOS 필요 |
+| 5탭 전환과 각 탭 상태 보존 | 완료. `app_shell_test.dart`가 브랜치별 스크롤 오프셋 보존을 증명한다 |
+| 390dp Android/iOS 골든 | 완료 |
+
+**8/8.** `docs/INITIAL_PLAN.md`가 요구하는 필수 테스트가 전부 이행됐다.
 
 ### 에뮬레이터에서 확인한 것
 
@@ -227,7 +240,35 @@ AVD는 `pixel_5` 프로파일(1080×2340 @440dpi = 393×851dp)로 만들었다. 
 - `평가 작성하기` 탭 시 `주민 인증이 필요합니다`가 뜨고 작성이 차단된다.
 - 떠 있는 캡슐 탭바가 스크롤에 따라 축소·복원된다.
 
-미확인 두 가지. **탭별 스크롤 위치 보존**은 아직 화면이 짧아 행동으로 증명하지 못했다. **셸의 스크롤 축소 배선**은 테스트가 없고 임시 필러로 수동 확인만 했다. 둘 다 스크롤 가능한 실제 화면이 생기면 함께 닫을 수 있다.
+이전 인계가 남긴 미확인 두 가지는 닫혔다. **탭별 스크롤 위치 보존**과 **셸의 스크롤 축소 배선**은 실제 화면이 자라기를 기다리는 대신 `app/test/features/shell/app_shell_test.dart`가 자체 브랜치로 증명한다. 실제 화면 높이에 단언을 묶으면 콘텐츠가 바뀔 때마다 셸과 무관하게 깨지기 때문이다.
+
+### iOS 시뮬레이터에서 확인한 것
+
+iPhone 17 Pro / iOS 27.0. 위젯 테스트로만 검증돼 있던 iOS 분기를 행동으로 확인했다.
+
+- `CupertinoNavigationBar`가 중앙 정렬 타이틀로 렌더링된다. `preferredSize`가 `kToolbarHeight` 고정이지만 레이아웃이 밀리지 않는다.
+- 떠 있는 캡슐 탭바가 홈 인디케이터 위에 정상 안착한다.
+- 스크롤 시 캡슐이 축소되고 라벨이 사라진다. 선택 캡슐이 목적지 사이를 슬라이드한다.
+- 미인증 상태로 `평가 작성하기`를 누르면 `CupertinoAlertDialog`가 뜨고 작성이 차단된다.
+- `인증하러 가기`로 온보딩에 복귀하면 하단 탭바가 없다. Android와 동일하다.
+- 출처 뱃지, 후보 가나다순, 3중 부호화된 공약 상태가 모두 정상이다.
+
+**미검증 2건:**
+
+- `PlatformAdaptiveHaptics` — 시뮬레이터에 햅틱 하드웨어가 없다. 실기기가 필요하고, 실기기 설치에는 아직 미정인 서명 계정이 필요하다.
+- `PlatformAdaptiveRoute`의 스와이프 백 — **검증 대상이 아직 존재하지 않는다.** 아래 항목 참고.
+
+### 스와이프 백은 아직 검증할 수 없다
+
+`lib/` 전체에 `context.push`가 없다. 모든 네비게이션이 `context.go`(스택 교체)이고, 탭 전환은 `StatefulNavigationShell.goBranch`다. 즉 **푸시된 라우트가 하나도 없어서** `PlatformAdaptiveRoute`가 만드는 `CupertinoPage`의 스와이프 백 제스처는 작용할 대상이 없다.
+
+백로그의 공약 상세(`/pledges/:id`)나 평가 작성 화면처럼 실제로 푸시되는 첫 화면이 생기는 시점에 함께 검증해야 한다.
+
+### 실행 중인 앱에서 게이트가 통과 불가
+
+`AddressState.isVerified`는 `status == verified && verification != null`을 요구한다(`address_state.dart:56-57`). 그런데 온보딩은 `requestVerification`(pending)과 `continueReadOnly`(unverified)만 호출하고, **`acceptVerification`을 호출하는 코드가 앱에 없다.** 테스트에만 있다.
+
+따라서 실행 중인 앱에서 `VerifiedGate`는 절대 통과할 수 없고, 인증된 작성 경로는 위젯 테스트로만 도달한다. 게이트의 결함이 아니라 거주지 인증 백엔드 계약(M2)이 아직 없기 때문이다. 그 계약이 정해지기 전에는 평가 작성 화면을 붙여도 실기기에서 열리지 않는다.
 
 ### 복구한 결함
 
