@@ -50,5 +50,41 @@ jobs:
       - name: Analyze
         run: flutter analyze
 
+      # The goldens are generated on macOS and compared byte for byte, so this
+      # runner cannot judge them. The golden job below does.
       - name: Test
-        run: flutter test
+        run: flutter test --exclude-tags golden
+
+  golden:
+    name: golden (macOS)
+    runs-on: macos-latest
+    defaults:
+      run:
+        working-directory: app
+
+    steps:
+      - uses: actions/checkout@v7
+
+      - uses: subosito/flutter-action@v2
+        with:
+          flutter-version: 3.44.8
+          channel: stable
+          cache: true
+
+      - name: Confirm the pinned toolchain
+        working-directory: .
+        run: |
+          flutter --version --machine > version.json
+          cat version.json
+          jq -e '.frameworkVersion == "3.44.8"' version.json > /dev/null
+          jq -e '.dartSdkVersion | startswith("3.12.2")' version.json > /dev/null
+
+      - name: Resolve dependencies
+        run: flutter pub get
+
+      # Rasterisation differs between macOS and Linux, which is why this job
+      # exists at all. TZ is fixed for the same reason the images are: the
+      # source badges render "○월 ○일 기준" in local time, so a runner in
+      # another zone would disagree with the committed pixels.
+      - name: Golden
+        run: TZ=UTC flutter test --tags golden
