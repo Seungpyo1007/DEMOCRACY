@@ -43,7 +43,9 @@ macOS·Linux:
 ./tool/bootstrap.sh
 ```
 
-같은 버전 가드와 같은 검증 순서를 쓴다. macOS에서는 `pod install`과 `flutter build ios --no-codesign`까지 이어서 수행한다. iOS는 아직 한 번도 컴파일된 적이 없으므로 이 단계가 처음 실행되는 순간이다.
+같은 버전 가드와 같은 검증 순서를 쓴다. macOS에서는 `flutter build ios --no-codesign`까지 이어서 수행한다.
+
+`pod install`은 `ios/Podfile`이 있을 때만 돈다. 현재 직접 의존성이 모두 순수 Dart라 Flutter가 CocoaPods 통합을 생성하지 않으므로 이 단계는 건너뛴다. iOS 네이티브 코드를 가진 플러그인이 추가되면 자동으로 되살아난다.
 
 ## 상태
 
@@ -51,7 +53,7 @@ MVP 1차의 세로 흐름이 네트워크 없이 동작한다. 온보딩 → 지
 
 트래커, AI 분석, 개표는 라우트와 명시적 placeholder만 존재한다. 실제 API, 지도, LLM, 실시간 채널은 아직 구현하지 않았다.
 
-Android는 디버그 빌드와 에뮬레이터 실행까지 확인했다. **iOS는 아직 빌드된 적이 없다** — macOS와 Xcode가 필요하다. 자세한 인계 사항은 `HANDOFF.md`를 참고한다.
+Android는 디버그 빌드와 에뮬레이터, iOS는 디바이스 빌드와 시뮬레이터에서 확인했다. 390dp Android/iOS 골든이 두 화면 규격을 고정한다. 자세한 인계 사항은 `HANDOFF.md`를 참고한다.
 
 ## 기여
 
