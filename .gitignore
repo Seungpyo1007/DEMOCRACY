@@ -31,6 +31,10 @@ app/ios/.symlinks/
 app/ios/Flutter/ephemeral/
 app/macos/Flutter/ephemeral/
 
+# Diff images flutter_test writes next to a failing golden. Debugging output,
+# not a reference: the reference images live in test/golden/goldens/.
+app/test/golden/failures/
+
 # Code generation
 app/lib/**/*.freezed.dart
 app/lib/**/*.g.dart
