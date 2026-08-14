@@ -220,10 +220,12 @@ class _WriteNotice extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final surface = Theme.of(context).extension<AppSurfaceTokens>()!;
+
     return DecoratedBox(
       decoration: BoxDecoration(
         border: Border.all(color: AppColors.neutral400),
-        borderRadius: BorderRadius.circular(AppRadii.androidCard),
+        borderRadius: BorderRadius.circular(surface.cardRadius),
       ),
       child: Padding(
         padding: const EdgeInsets.all(AppSpacing.x3),
