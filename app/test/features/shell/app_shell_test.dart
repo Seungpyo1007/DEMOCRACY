@@ -165,15 +165,13 @@ void main() {
     });
   });
 
-  // Observed on an iOS 27.0 simulator before it was pinned down here: the
-  // contracted bar follows the user into a placeholder tab and stays that way,
-  // because the shell only ever reopens the bar on a scroll notification and a
-  // screen with nothing to scroll never sends one. Recorded as the behaviour
-  // that exists, not the behaviour that is wanted -- reopening the bar on a
-  // branch whose offset is zero is a product decision, not a test fix.
-  testWidgets('a branch with nothing to scroll cannot reopen the bar', (
-    tester,
-  ) async {
+  // This test used to pin the opposite. The contracted bar followed the reader
+  // into the next tab and stayed contracted, because the only thing that
+  // reopens it is a scroll to the top and arriving at a branch is not a
+  // scroll. It was recorded as the behaviour that existed while reopening was
+  // still a product question; it is not a question -- a bar contracted over
+  // content the reader has not scrolled is lying about where they are.
+  testWidgets('reopens when the reader changes tab', (tester) async {
     await pumpShell(tester, TargetPlatform.iOS, staticBranches: {1});
 
     await tester.drag(
@@ -188,8 +186,34 @@ void main() {
     expect(find.text('Bstatic'), findsOneWidget);
     expect(
       find.text('지역구'),
-      findsNothing,
-      reason: 'the bar stays contracted with no scrollable to reopen it',
+      findsOneWidget,
+      reason: 'a branch nobody has scrolled must not look scrolled',
     );
+  });
+
+  // Coming back is the same question in reverse: the branch kept its offset,
+  // so the bar should not claim the reader is at the top of it.
+  testWidgets('a scrolled branch does not pretend to be at the top', (
+    tester,
+  ) async {
+    await pumpShell(tester, TargetPlatform.iOS);
+
+    await tester.drag(
+      find.byKey(const ValueKey('list-A')),
+      const Offset(0, -400),
+    );
+    await tester.pumpAndSettle();
+
+    await tapDestination(tester, Icons.donut_large_outlined);
+    expect(find.text('지역구'), findsOneWidget);
+
+    await tapDestination(tester, Icons.location_on_outlined);
+    await tester.drag(
+      find.byKey(const ValueKey('list-A')),
+      const Offset(0, -60),
+    );
+    await tester.pumpAndSettle();
+
+    expect(find.text('지역구'), findsNothing);
   });
 }

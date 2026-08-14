@@ -9,9 +9,7 @@ final resultsRepositoryProvider = Provider<ResultsRepository>(
 );
 
 final electionResultsProvider = StreamProvider<ElectionResults>((ref) {
-  final district = ref.watch(
-    addressControllerProvider.select((state) => state.district),
-  );
+  final district = ref.watch(districtProvider);
 
   if (district == null) {
     return const Stream.empty();

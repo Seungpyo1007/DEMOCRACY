@@ -51,6 +51,21 @@ class _AppShellState extends State<AppShell> {
   bool _minimized = false;
   double _travel = 0;
 
+  /// A new branch is showing its own scroll position, which starts at the top
+  /// unless the reader left it somewhere else -- and either way it sends no
+  /// notification for arriving. Without this the bar stayed contracted after a
+  /// tab change, because the only thing that reopens it is a scroll to the top
+  /// and nobody scrolled.
+  @override
+  void didUpdateWidget(AppShell oldWidget) {
+    super.didUpdateWidget(oldWidget);
+    if (widget.navigationShell.currentIndex !=
+        oldWidget.navigationShell.currentIndex) {
+      _travel = 0;
+      _apply(minimized: false);
+    }
+  }
+
   /// Listening for notifications keeps the scroll coupling in the shell. The
   /// alternative, a ScrollController owned by every screen and threaded down
   /// here, would put shell concerns inside each feature.

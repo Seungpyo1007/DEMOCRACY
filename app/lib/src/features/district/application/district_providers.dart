@@ -14,9 +14,7 @@ final districtRepositoryProvider = Provider<DistrictRepository>(
 /// Watching addressControllerProvider is what makes a district change refresh
 /// every screen at once, without any of them subscribing to the change.
 final districtProfileProvider = FutureProvider<DistrictProfile>((ref) async {
-  final district = ref.watch(
-    addressControllerProvider.select((state) => state.district),
-  );
+  final district = ref.watch(districtProvider);
 
   if (district == null) {
     throw StateError('No district has been selected yet.');

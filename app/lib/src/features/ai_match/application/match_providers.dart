@@ -9,9 +9,7 @@ final matchRepositoryProvider = Provider<MatchRepository>(
 );
 
 final matchReportProvider = FutureProvider<MatchReport>((ref) async {
-  final district = ref.watch(
-    addressControllerProvider.select((state) => state.district),
-  );
+  final district = ref.watch(districtProvider);
 
   if (district == null) {
     throw StateError('No district has been selected yet.');
@@ -25,9 +23,7 @@ final matchReasoningProvider = StreamProvider.family<String, String>((
   ref,
   candidateId,
 ) {
-  final district = ref.watch(
-    addressControllerProvider.select((state) => state.district),
-  );
+  final district = ref.watch(districtProvider);
 
   if (district == null) {
     return const Stream.empty();
