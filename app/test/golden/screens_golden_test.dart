@@ -2,6 +2,7 @@
 library;
 
 import 'package:democracy/src/features/district/presentation/district_home_screen.dart';
+import 'package:democracy/src/features/onboarding/application/onboarding_providers.dart';
 import 'package:democracy/src/features/onboarding/presentation/onboarding_screen.dart';
 import 'package:democracy/src/features/reviews/presentation/resident_review_screen.dart';
 import 'package:flutter/material.dart';
@@ -37,20 +38,27 @@ void main() {
   );
 
   goldenPlatforms.forEach((name, platform) {
-    testWidgets('onboarding at 390dp on $name', (tester) async {
-      await pumpGolden(
-        tester,
-        screen: const OnboardingScreen(),
-        platform: platform,
-        // Onboarding is the screen a user reaches before having a district.
-        withDistrict: false,
-      );
+    // All three steps, because they are three different screens sharing a
+    // frame and only the first was ever pinned.
+    for (final step in OnboardingStep.values) {
+      testWidgets('onboarding ${step.name} at 390dp on $name', (tester) async {
+        await pumpGolden(
+          tester,
+          screen: const OnboardingScreen(),
+          platform: platform,
+          // Onboarding is the screen a resident reaches before having one.
+          withDistrict: false,
+          onboardingStep: step,
+        );
 
-      await expectLater(
-        find.byType(MaterialApp),
-        matchesGoldenFile('goldens/onboarding_${name}_390dp.png'),
-      );
-    });
+        await expectLater(
+          find.byType(MaterialApp),
+          matchesGoldenFile(
+            'goldens/onboarding_${step.name}_${name}_390dp.png',
+          ),
+        );
+      });
+    }
 
     testWidgets('district home at 390dp on $name', (tester) async {
       await pumpGolden(
