@@ -9,6 +9,7 @@ import 'package:democracy/src/features/district/presentation/district_home_scree
 import 'package:democracy/src/features/pledges/application/pledge_providers.dart';
 import 'package:democracy/src/features/pledges/domain/pledge.dart';
 import 'package:democracy/src/features/pledges/domain/pledge_repository.dart';
+import 'package:democracy/src/features/shared/presentation/provenance_widgets.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_test/flutter_test.dart';
@@ -21,9 +22,12 @@ const _source = {
 };
 
 class FakeProfileRepository implements DistrictRepository {
-  const FakeProfileRepository({this.failure});
+  const FakeProfileRepository({this.failure, this.withRecord = true});
 
   final Object? failure;
+
+  /// A district whose activity feed is not wired yet still has to render.
+  final bool withRecord;
 
   @override
   Future<DistrictProfile> loadProfile(String districtId) async {
@@ -44,6 +48,36 @@ class FakeProfileRepository implements DistrictRepository {
             'value': {'value': 92, ..._source},
           },
         ],
+        if (withRecord)
+          'record': {
+            'bills': {
+              'source': _source,
+              'items': [
+                {
+                  'id': 'fixture-bill-1',
+                  'title': '가상 법안',
+                  'stage': '소위 심사',
+                  'stamp': '6월 3일',
+                },
+              ],
+            },
+            'attendance': {
+              'unit': '%',
+              'source': _source,
+              'points': [
+                {'label': '6월', 'value': 92},
+                {'label': '7월', 'value': 95},
+              ],
+            },
+            'votes': {
+              'unit': '%',
+              'source': _source,
+              'points': [
+                {'label': '6월', 'value': 87},
+                {'label': '7월', 'value': 88},
+              ],
+            },
+          },
       },
       'candidates': [
         {
@@ -172,5 +206,72 @@ void main() {
     // rejected payload surfaces in each of them.
     expect(find.textContaining('출처가 확인되지 않아'), findsWidgets);
     expect(find.text('92%'), findsNothing);
+  });
+
+  group('the record tabs', () {
+    testWidgets('open the bill, attendance and vote panes', (tester) async {
+      await pumpHome(tester);
+
+      for (final tab in ['법안', '출석', '표결']) {
+        await tester.tap(find.text(tab));
+        await tester.pumpAndSettle();
+      }
+
+      expect(find.text('월별 표결 참여율'), findsOneWidget);
+      expect(find.text('88%'), findsOneWidget);
+    });
+
+    // A sparkline says nothing to a screen reader, so the shape is spelled
+    // out beside it rather than left as decoration.
+    testWidgets('describe the sparkline for a screen reader', (tester) async {
+      final handle = tester.ensureSemantics();
+      await pumpHome(tester);
+
+      await tester.tap(find.text('출석'));
+      await tester.pumpAndSettle();
+
+      expect(
+        find.bySemanticsLabel(RegExp(r'최저 92%, 최고 95%, 최근 95%')),
+        findsOneWidget,
+      );
+      handle.dispose();
+    });
+
+    // A district whose activity feed is not wired must still render.
+    testWidgets('say so when there is no record behind them', (tester) async {
+      await pumpHome(
+        tester,
+        profileRepository: const FakeProfileRepository(withRecord: false),
+      );
+
+      await tester.tap(find.text('법안'));
+      await tester.pumpAndSettle();
+
+      expect(find.textContaining('아직 연결되지 않았습니다'), findsOneWidget);
+    });
+  });
+
+  group('the source badge', () {
+    // An attribution the reader cannot follow is an assertion. N-4 is about
+    // being checkable, not about printing a hostname.
+    testWidgets('opens the original it names', (tester) async {
+      final opened = <Uri>[];
+      await tester.pumpWidget(
+        MaterialApp(
+          theme: AppTheme.light(TargetPlatform.android),
+          home: Scaffold(
+            body: SourceBadge(
+              source: SourceMetadata.fromJson(_source, field: 'test'),
+              onOpen: (url) async => opened.add(url),
+            ),
+          ),
+        ),
+      );
+
+      await tester.tap(find.byType(SourceBadge));
+      await tester.pump();
+
+      expect(opened, [Uri.parse('https://open.assembly.go.kr/fixture')]);
+    });
   });
 }

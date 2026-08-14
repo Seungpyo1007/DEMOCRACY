@@ -70,28 +70,25 @@ class StatCell extends StatelessWidget {
 
 /// The green tick that marks a verified thing.
 ///
+/// `인증 가능` before verification, `주민 인증됨` after, `인증` on a review.
 /// Green here is a status, not a brand colour, and it is always paired with a
 /// tick and a word for the same reason pledge status is.
+///
+/// Affirmative only. A state that is *not* a verification -- read-only,
+/// awaiting review -- gets a [StatusChip] instead: putting a tick on
+/// `읽기 전용` would mark the absence of verification as verified.
 class VerifiedBadge extends StatelessWidget {
-  const VerifiedBadge({required this.label, this.verified = true, super.key});
+  const VerifiedBadge({required this.label, super.key});
 
-  /// `인증 가능` before verification, `주민 인증됨` after, `인증` on a review.
   final String label;
-
-  /// A pending or read-only state keeps the shape and drops the colour, so
-  /// the badge never disappears and change its meaning by absence.
-  final bool verified;
 
   @override
   Widget build(BuildContext context) {
     final surface = Theme.of(context).extension<AppSurfaceTokens>()!;
-    final color = verified ? AppColors.fulfilled : AppColors.neutral600;
 
     return DecoratedBox(
       decoration: BoxDecoration(
-        color: verified
-            ? AppColors.fulfilledChipBackground
-            : AppColors.neutral200,
+        color: AppColors.fulfilledChipBackground,
         borderRadius: BorderRadius.circular(surface.chipRadius),
       ),
       child: Padding(
@@ -102,8 +99,40 @@ class VerifiedBadge extends StatelessWidget {
         child: Text(
           '✓ $label',
           style: AppTextStyles.badge.copyWith(
-            color: verified ? AppColors.fulfilledChipForeground : color,
+            color: AppColors.fulfilledChipForeground,
           ),
+        ),
+      ),
+    );
+  }
+}
+
+/// A neutral state, worn in the same place a [VerifiedBadge] would be.
+///
+/// Same shape and position so the header never reflows between states, and no
+/// colour that implies approval or fault.
+class StatusChip extends StatelessWidget {
+  const StatusChip({required this.label, super.key});
+
+  final String label;
+
+  @override
+  Widget build(BuildContext context) {
+    final surface = Theme.of(context).extension<AppSurfaceTokens>()!;
+
+    return DecoratedBox(
+      decoration: BoxDecoration(
+        color: AppColors.neutral200,
+        borderRadius: BorderRadius.circular(surface.chipRadius),
+      ),
+      child: Padding(
+        padding: const EdgeInsets.symmetric(
+          horizontal: AppSpacing.x2,
+          vertical: 3,
+        ),
+        child: Text(
+          label,
+          style: AppTextStyles.badge.copyWith(color: AppColors.neutral700),
         ),
       ),
     );

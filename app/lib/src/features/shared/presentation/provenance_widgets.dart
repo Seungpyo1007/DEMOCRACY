@@ -3,35 +3,57 @@ import 'package:democracy/src/design/app_tokens.dart';
 import 'package:democracy/src/features/district/domain/district_profile.dart';
 import 'package:democracy/src/features/pledges/domain/pledge.dart';
 import 'package:flutter/material.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 /// The attribution that has to accompany every external figure.
 ///
 /// Takes [SourceMetadata] rather than loose strings, so it is impossible to
 /// render a badge for a figure that never carried provenance.
+///
+/// Tapping opens the original. That is the point of the rule rather than a
+/// convenience: an attribution the reader cannot follow is an assertion, and
+/// the whole design turns on figures being checkable.
 class SourceBadge extends StatelessWidget {
-  const SourceBadge({required this.source, super.key});
+  const SourceBadge({required this.source, this.onOpen, super.key});
 
   final SourceMetadata source;
+
+  /// Injected so tests can assert what would be opened without launching a
+  /// browser. Defaults to [launchUrl].
+  final Future<void> Function(Uri url)? onOpen;
+
+  Future<void> _open() async {
+    final open = onOpen ?? _launch;
+    await open(source.sourceUrl);
+  }
+
+  static Future<void> _launch(Uri url) async {
+    await launchUrl(url, mode: LaunchMode.externalApplication);
+  }
 
   @override
   Widget build(BuildContext context) {
     final caption = Theme.of(context).textTheme.bodySmall;
 
     return Semantics(
+      link: true,
       label: '출처 ${source.sourceUrl}',
-      child: Row(
-        children: [
-          const Icon(Icons.link, size: 14, color: AppColors.neutral600),
-          const SizedBox(width: AppSpacing.x1),
-          Expanded(
-            child: Text(
-              '출처: ${source.publisher} · ${source.asOfLabel}',
-              maxLines: 1,
-              overflow: TextOverflow.ellipsis,
-              style: caption?.copyWith(color: AppColors.neutral600),
+      child: InkWell(
+        onTap: _open,
+        child: Row(
+          children: [
+            const Icon(Icons.link, size: 14, color: AppColors.neutral600),
+            const SizedBox(width: AppSpacing.x1),
+            Expanded(
+              child: Text(
+                '출처: ${source.publisher} · ${source.asOfLabel}',
+                maxLines: 1,
+                overflow: TextOverflow.ellipsis,
+                style: caption?.copyWith(color: AppColors.neutral600),
+              ),
             ),
-          ),
-        ],
+          ],
+        ),
       ),
     );
   }
