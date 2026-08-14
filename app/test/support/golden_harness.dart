@@ -2,19 +2,21 @@ import 'dart:io';
 
 import 'package:democracy/src/core/auth/address_controller.dart';
 import 'package:democracy/src/core/auth/address_state.dart';
-import 'package:democracy/src/core/fixtures/fixture_loader.dart';
 import 'package:democracy/src/design/app_page_background.dart';
 import 'package:democracy/src/design/app_theme.dart';
 import 'package:democracy/src/features/district/application/district_providers.dart';
 import 'package:democracy/src/features/district/data/fake_district_repository.dart';
+import 'package:democracy/src/features/onboarding/application/onboarding_providers.dart';
+import 'package:democracy/src/features/onboarding/data/fake_address_repositories.dart';
 import 'package:democracy/src/features/pledges/application/pledge_providers.dart';
 import 'package:democracy/src/features/pledges/data/fake_pledge_repository.dart';
 import 'package:democracy/src/features/reviews/application/review_providers.dart';
 import 'package:democracy/src/features/reviews/data/fake_review_repository.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_test/flutter_test.dart';
+
+import 'fixture_bundle.dart';
 
 /// The mockup viewport. `design_handoff_democracy_app` is drawn at 390dp wide,
 /// and the golden required by `docs/INITIAL_PLAN.md` is defined at that width.
@@ -38,27 +40,6 @@ const goldenPlatforms = {
   'ios': TargetPlatform.iOS,
 };
 
-/// Serves the real fixture files straight off disk.
-///
-/// The screens must show the payload that actually ships, so this reads the
-/// same JSON through the same `*.fromJson` the app uses rather than swapping in
-/// data shaped to please the test.
-///
-/// It exists because `rootBundle` does not: asset loads go out over the test
-/// binding's message channel, and only the first test in a file gets that
-/// round-trip resolved by a plain `pump`. Every later test sat on a spinner and
-/// `pumpAndSettle` timed out -- an ordering bug that looked like a platform
-/// one, since whichever platform ran second was the one that failed. Reading
-/// the file synchronously removes the round-trip and with it the ordering.
-class _FixtureFileBundle extends CachingAssetBundle {
-  @override
-  Future<ByteData> load(String key) async {
-    // `flutter test` runs with the package root as its working directory, so
-    // the asset key is already the path.
-    return ByteData.sublistView(File(key).readAsBytesSync());
-  }
-}
-
 /// Pins the surface to [goldenSize] for one test and restores it afterwards.
 ///
 /// `tester.view` is shared across a test file, so leaving it changed would
@@ -76,12 +57,19 @@ Future<void> pumpGolden(
   required TargetPlatform platform,
   bool withDistrict = true,
   bool verified = false,
+  OnboardingStep? onboardingStep,
 }) async {
   useGoldenViewport(tester);
 
-  final loader = FixtureLoader(bundle: _FixtureFileBundle());
+  final loader = fixtureLoaderFromDisk();
   final container = ProviderContainer(
     overrides: [
+      addressSearchRepositoryProvider.overrideWithValue(
+        FakeAddressSearchRepository(loader: loader),
+      ),
+      locationRepositoryProvider.overrideWithValue(
+        FakeLocationRepository(loader: loader),
+      ),
       districtRepositoryProvider.overrideWithValue(
         FakeDistrictRepository(loader: loader),
       ),
@@ -94,6 +82,20 @@ Future<void> pumpGolden(
     ],
   );
   addTearDown(container.dispose);
+
+  // Onboarding is three screens in one frame, so a golden has to say which.
+  // Steps past the first need a district, since the flow cannot reach them
+  // without one.
+  if (onboardingStep != null) {
+    final onboarding = container.read(onboardingControllerProvider.notifier);
+    if (onboardingStep != OnboardingStep.address) {
+      onboarding.selectDistrict(goldenDistrict, address: '서울 마포구 월드컵북로 400');
+      onboarding.next();
+      if (onboardingStep == OnboardingStep.done) {
+        onboarding.next();
+      }
+    }
+  }
 
   if (withDistrict) {
     final controller = container.read(addressControllerProvider.notifier);
