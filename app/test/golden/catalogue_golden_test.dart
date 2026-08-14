@@ -66,7 +66,7 @@ class _Catalogue extends StatelessWidget {
             runSpacing: AppSpacing.x2,
             children: [
               VerifiedBadge(label: '주민 인증됨'),
-              VerifiedBadge(label: '인증 대기', verified: false),
+              StatusChip(label: '인증 대기'),
             ],
           ),
           const SizedBox(height: AppSpacing.x3),

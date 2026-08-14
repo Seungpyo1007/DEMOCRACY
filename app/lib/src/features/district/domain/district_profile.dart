@@ -1,5 +1,6 @@
 import 'package:democracy/src/core/auth/address_state.dart';
 import 'package:democracy/src/core/provenance/source_metadata.dart';
+import 'package:democracy/src/features/district/domain/legislator_record.dart';
 
 /// A party as the product is allowed to show it: a name only.
 ///
@@ -55,6 +56,7 @@ class Politician {
     required this.summary,
     required this.stats,
     this.portraitUrl,
+    this.record,
   });
 
   factory Politician.fromJson(Map<String, Object?> json) {
@@ -74,6 +76,12 @@ class Politician {
       party: PartyRef(name: json['party'] as String? ?? '무소속'),
       summary: json['summary'] as String? ?? '',
       portraitUrl: json['portraitUrl'] as String?,
+      // Only an incumbent has one, and even then only once the feed behind it
+      // is wired -- so its absence is a shape, not a failure.
+      record: LegislatorRecord.fromJson(
+        json['record'],
+        field: 'politician.$id',
+      ),
       stats: [
         if (rawStats is List)
           for (final stat in rawStats)
@@ -88,6 +96,9 @@ class Politician {
   final String summary;
   final List<DistrictStat> stats;
   final String? portraitUrl;
+
+  /// Bills, attendance and votes. Null for a candidate.
+  final LegislatorRecord? record;
 }
 
 /// The district home payload.

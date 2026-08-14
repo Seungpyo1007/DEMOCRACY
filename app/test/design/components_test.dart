@@ -290,14 +290,18 @@ void main() {
       expect(find.text('✓ 주민 인증됨'), findsOneWidget);
     });
 
-    testWidgets('keeps its shape when not verified', (tester) async {
+    // A tick on a state that is not a verification would read as one.
+    testWidgets('a neutral state gets a StatusChip, not a tick', (
+      tester,
+    ) async {
       await pump(
         tester,
         TargetPlatform.android,
-        const VerifiedBadge(label: '인증 대기', verified: false),
+        const StatusChip(label: '읽기 전용'),
       );
 
-      expect(find.text('✓ 인증 대기'), findsOneWidget);
+      expect(find.text('읽기 전용'), findsOneWidget);
+      expect(find.textContaining('✓'), findsNothing);
     });
   });
 
