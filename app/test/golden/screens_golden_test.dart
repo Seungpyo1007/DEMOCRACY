@@ -4,6 +4,8 @@ library;
 import 'package:democracy/src/features/district/presentation/district_home_screen.dart';
 import 'package:democracy/src/features/onboarding/application/onboarding_providers.dart';
 import 'package:democracy/src/features/onboarding/presentation/onboarding_screen.dart';
+import 'package:democracy/src/features/pledges/presentation/pledge_detail_screen.dart';
+import 'package:democracy/src/features/pledges/presentation/pledge_tracker_screen.dart';
 import 'package:democracy/src/features/reviews/presentation/resident_review_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
@@ -70,6 +72,34 @@ void main() {
       await expectLater(
         find.byType(MaterialApp),
         matchesGoldenFile('goldens/district_home_${name}_390dp.png'),
+      );
+    });
+
+    testWidgets('pledge tracker at 390dp on $name', (tester) async {
+      await pumpGolden(
+        tester,
+        screen: const PledgeTrackerScreen(),
+        platform: platform,
+      );
+
+      await expectLater(
+        find.byType(MaterialApp),
+        matchesGoldenFile('goldens/tracker_${name}_390dp.png'),
+      );
+    });
+
+    testWidgets('pledge detail at 390dp on $name', (tester) async {
+      await pumpGolden(
+        tester,
+        // The reversed one, since it is the only status whose detail carries
+        // a required extra block.
+        screen: const PledgeDetailScreen(pledgeId: 'fixture-pledge-19'),
+        platform: platform,
+      );
+
+      await expectLater(
+        find.byType(MaterialApp),
+        matchesGoldenFile('goldens/pledge_detail_${name}_390dp.png'),
       );
     });
 
