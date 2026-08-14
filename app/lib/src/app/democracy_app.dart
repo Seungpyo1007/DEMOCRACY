@@ -1,4 +1,5 @@
 import 'package:democracy/src/app/app_router.dart';
+import 'package:democracy/src/design/app_page_background.dart';
 import 'package:democracy/src/design/app_theme.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
@@ -15,6 +16,7 @@ class DemocracyApp extends ConsumerWidget {
       title: 'DEMOCRACY',
       debugShowCheckedModeBanner: false,
       theme: AppTheme.light(defaultTargetPlatform),
+      builder: AppPageBackground.builder,
       routerConfig: router,
     );
   }

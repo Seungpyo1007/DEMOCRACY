@@ -49,23 +49,23 @@ class PartyTag extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final surface = Theme.of(context).extension<AppSurfaceTokens>()!;
+
     return DecoratedBox(
       decoration: BoxDecoration(
         border: Border.all(color: AppColors.neutral400),
-        borderRadius: BorderRadius.circular(AppRadii.androidChip),
+        borderRadius: BorderRadius.circular(surface.chipRadius),
       ),
       child: Padding(
         padding: const EdgeInsets.symmetric(
           horizontal: AppSpacing.x2,
-          vertical: 2,
+          vertical: 3,
         ),
         child: Text(
           party.name,
           maxLines: 1,
           overflow: TextOverflow.ellipsis,
-          style: Theme.of(
-            context,
-          ).textTheme.bodySmall?.copyWith(color: AppColors.neutral600),
+          style: AppTextStyles.tag.copyWith(color: AppColors.neutral700),
         ),
       ),
     );
@@ -93,6 +93,11 @@ class GrayscalePortrait extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final surface = Theme.of(context).extension<AppSurfaceTokens>()!;
+    final radius = surface.isGlass
+        ? AppRadii.iosPortrait
+        : AppRadii.androidThumbnail;
+
     return Semantics(
       label: '$name 사진',
       image: true,
@@ -107,11 +112,11 @@ class GrayscalePortrait extends StatelessWidget {
           width: width,
           height: height,
           decoration: BoxDecoration(
-            borderRadius: BorderRadius.circular(AppRadii.androidCard),
+            borderRadius: BorderRadius.circular(radius),
             gradient: const LinearGradient(
               begin: Alignment.topLeft,
               end: Alignment.bottomRight,
-              colors: [AppColors.neutral200, AppColors.neutral400],
+              colors: [AppColors.neutral300, AppColors.neutral500],
             ),
           ),
           alignment: Alignment.center,
@@ -135,28 +140,56 @@ class PledgeStatusChip extends StatelessWidget {
 
   final PledgeStatus status;
 
-  Color get _color => switch (status) {
+  /// The outline, which is also the colour the status carries elsewhere --
+  /// legend swatches, donut segments, category bars.
+  Color get _outline => switch (status) {
     PledgeStatus.fulfilled => AppColors.fulfilled,
     PledgeStatus.inProgress => AppColors.inProgress,
-    PledgeStatus.unfulfilled => AppColors.neutral600,
+    PledgeStatus.unfulfilled => AppColors.unfulfilled,
     PledgeStatus.reversed => AppColors.reversed,
+  };
+
+  /// The chip tints itself. The guide gives each status a background and a
+  /// foreground of its own, both darker or lighter than the outline, so the
+  /// label stays legible on the fill rather than inheriting the bar colour.
+  (Color, Color) get _tint => switch (status) {
+    PledgeStatus.fulfilled => (
+      AppColors.fulfilledChipBackground,
+      AppColors.fulfilledChipForeground,
+    ),
+    PledgeStatus.inProgress => (
+      AppColors.inProgressChipBackground,
+      AppColors.inProgressChipForeground,
+    ),
+    PledgeStatus.unfulfilled => (
+      AppColors.unfulfilledChipBackground,
+      AppColors.unfulfilledChipForeground,
+    ),
+    PledgeStatus.reversed => (
+      AppColors.reversedChipBackground,
+      AppColors.reversedChipForeground,
+    ),
   };
 
   @override
   Widget build(BuildContext context) {
+    final surface = Theme.of(context).extension<AppSurfaceTokens>()!;
+    final (background, foreground) = _tint;
+
     return DecoratedBox(
       decoration: BoxDecoration(
-        border: Border.all(color: _color),
-        borderRadius: BorderRadius.circular(AppRadii.androidChip),
+        color: background,
+        border: Border.all(color: _outline),
+        borderRadius: BorderRadius.circular(surface.chipRadius),
       ),
       child: Padding(
         padding: const EdgeInsets.symmetric(
           horizontal: AppSpacing.x2,
-          vertical: 2,
+          vertical: 3,
         ),
         child: Text(
           status.display,
-          style: Theme.of(context).textTheme.bodySmall?.copyWith(color: _color),
+          style: AppTextStyles.badge.copyWith(color: foreground),
         ),
       ),
     );

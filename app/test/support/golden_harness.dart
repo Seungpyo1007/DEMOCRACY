@@ -3,6 +3,7 @@ import 'dart:io';
 import 'package:democracy/src/core/auth/address_controller.dart';
 import 'package:democracy/src/core/auth/address_state.dart';
 import 'package:democracy/src/core/fixtures/fixture_loader.dart';
+import 'package:democracy/src/design/app_page_background.dart';
 import 'package:democracy/src/design/app_theme.dart';
 import 'package:democracy/src/features/district/application/district_providers.dart';
 import 'package:democracy/src/features/district/data/fake_district_repository.dart';
@@ -114,6 +115,10 @@ Future<void> pumpGolden(
       container: container,
       child: MaterialApp(
         theme: AppTheme.light(platform),
+        // Same builder DemocracyApp uses. Without it the iOS scaffold is
+        // transparent by design and the goldens would capture a screen with
+        // no page behind it.
+        builder: AppPageBackground.builder,
         // Otherwise the debug banner is baked into the corner of every image.
         debugShowCheckedModeBanner: false,
         home: screen,

@@ -50,10 +50,12 @@ class _SectionError extends StatelessWidget {
         ? '원문 주소와 취득 시각이 확인된 자료만 표시합니다.'
         : '연결 상태를 확인한 뒤 다시 시도해 주세요.';
 
+    final surface = Theme.of(context).extension<AppSurfaceTokens>()!;
+
     return DecoratedBox(
       decoration: BoxDecoration(
         border: Border.all(color: AppColors.neutral400),
-        borderRadius: BorderRadius.circular(AppRadii.androidCard),
+        borderRadius: BorderRadius.circular(surface.cardRadius),
       ),
       child: Padding(
         padding: const EdgeInsets.all(AppSpacing.x4),

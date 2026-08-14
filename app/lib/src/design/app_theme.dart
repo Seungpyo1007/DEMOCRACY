@@ -15,10 +15,16 @@ abstract final class AppTheme {
           dynamicSchemeVariant: DynamicSchemeVariant.monochrome,
         ).copyWith(
           primary: AppColors.signal,
-          onPrimary: Colors.white,
-          surface: isCupertino ? AppColors.neutral100 : AppColors.ground,
+          onPrimary: AppColors.white,
+          // iOS paints its own gradient page, so this is only the fallback a
+          // Material surface resolves to underneath the glass. Android draws
+          // on white rather than on Ground: its cards are white too, and the
+          // neutral-300 border is what separates them.
+          surface: isCupertino ? AppColors.neutral100 : AppColors.white,
           onSurface: AppColors.ink,
+          onSurfaceVariant: AppColors.neutral600,
           outline: AppColors.neutral400,
+          outlineVariant: AppColors.neutral300,
           error: AppColors.systemError,
         );
 
@@ -27,9 +33,11 @@ abstract final class AppTheme {
       platform: platform,
       colorScheme: colorScheme,
       extensions: [surfaceTokens],
+      // Left transparent on iOS so AppPageBackground's gradient shows through;
+      // painting a flat colour here would sit on top of it.
       scaffoldBackgroundColor: isCupertino
-          ? AppColors.neutral100
-          : AppColors.ground,
+          ? Colors.transparent
+          : AppColors.androidBackground,
       textTheme: AppTypography.textTheme,
       // The bar floats as a capsule, so its surface comes from the wrapper in
       // PlatformAdaptiveTabBar rather than from here. Colours are Material 3
