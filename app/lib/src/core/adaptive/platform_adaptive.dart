@@ -215,6 +215,9 @@ class _CapsuleTabItem extends StatelessWidget {
     required this.labelOpacity,
   });
 
+  /// How far the label may grow before the fixed capsule would clip it.
+  static const _maxLabelScale = 1.3;
+
   final AdaptiveTabItem item;
   final bool selected;
   final VoidCallback onTap;
@@ -249,14 +252,22 @@ class _CapsuleTabItem extends StatelessWidget {
               SizedBox(height: 3 * labelOpacity),
               Opacity(
                 opacity: labelOpacity,
-                child: Text(
-                  item.label,
-                  maxLines: 1,
-                  overflow: TextOverflow.ellipsis,
-                  style: TextStyle(
-                    fontSize: 11,
-                    fontWeight: selected ? FontWeight.w600 : FontWeight.w500,
-                    color: foreground,
+                // The capsule's height is fixed by the guide, so the label
+                // cannot grow without clipping: at 2x it overflowed. Capping
+                // the label rather than the bar keeps the shape the design
+                // specifies while everything else in the app still scales --
+                // the same trade Material's own NavigationBar makes.
+                child: MediaQuery.withClampedTextScaling(
+                  maxScaleFactor: _maxLabelScale,
+                  child: Text(
+                    item.label,
+                    maxLines: 1,
+                    overflow: TextOverflow.ellipsis,
+                    style: TextStyle(
+                      fontSize: 11,
+                      fontWeight: selected ? FontWeight.w600 : FontWeight.w500,
+                      color: foreground,
+                    ),
                   ),
                 ),
               ),

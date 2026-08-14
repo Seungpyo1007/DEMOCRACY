@@ -175,7 +175,11 @@ class _LiveDotState extends State<_LiveDot>
         const SizedBox(width: AppSpacing.x1),
         Text(
           'LIVE',
-          style: AppTextStyles.badge.copyWith(color: AppColors.signal),
+          // accent700, not Signal. The design system tunes Signal against the
+          // page to 3:1 -- enough for the dot beside this, which is chrome --
+          // and says outright to use a deep ramp step for text at paragraph
+          // size. This label is 10px.
+          style: AppTextStyles.badge.copyWith(color: AppColors.accent700),
         ),
       ],
     );
