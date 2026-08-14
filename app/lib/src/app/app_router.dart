@@ -7,7 +7,7 @@ import 'package:democracy/src/features/district/presentation/district_home_scree
 import 'package:democracy/src/features/onboarding/presentation/onboarding_screen.dart';
 import 'package:democracy/src/features/pledges/presentation/pledge_detail_screen.dart';
 import 'package:democracy/src/features/pledges/presentation/pledge_tracker_screen.dart';
-import 'package:democracy/src/features/reviews/presentation/resident_review_screen.dart';
+import 'package:democracy/src/features/reviews/presentation/community_screen.dart';
 import 'package:democracy/src/features/shared/presentation/feature_placeholder_screen.dart';
 import 'package:democracy/src/features/shell/presentation/app_shell.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -107,7 +107,7 @@ final appRouterProvider = Provider<GoRouter>((ref) {
                 pageBuilder: (context, state) => PlatformAdaptiveRoute.page(
                   context: context,
                   key: state.pageKey,
-                  child: const ResidentReviewScreen(),
+                  child: const CommunityScreen(),
                 ),
               ),
             ],

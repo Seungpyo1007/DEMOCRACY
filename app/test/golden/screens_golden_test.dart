@@ -7,7 +7,7 @@ import 'package:democracy/src/features/onboarding/application/onboarding_provide
 import 'package:democracy/src/features/onboarding/presentation/onboarding_screen.dart';
 import 'package:democracy/src/features/pledges/presentation/pledge_detail_screen.dart';
 import 'package:democracy/src/features/pledges/presentation/pledge_tracker_screen.dart';
-import 'package:democracy/src/features/reviews/presentation/resident_review_screen.dart';
+import 'package:democracy/src/features/reviews/presentation/community_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 
@@ -117,16 +117,19 @@ void main() {
       );
     });
 
-    testWidgets('resident review at 390dp on $name', (tester) async {
+    testWidgets('community at 390dp on $name', (tester) async {
       await pumpGolden(
         tester,
-        screen: const ResidentReviewScreen(),
+        screen: const CommunityScreen(),
         platform: platform,
+        // Verified, so the write action is drawn live rather than gated --
+        // the gated state is covered by the widget tests.
+        verified: true,
       );
 
       await expectLater(
         find.byType(MaterialApp),
-        matchesGoldenFile('goldens/resident_review_${name}_390dp.png'),
+        matchesGoldenFile('goldens/community_${name}_390dp.png'),
       );
     });
   });
