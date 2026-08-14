@@ -18,18 +18,22 @@ abstract final class PlatformAdaptiveRoute {
   }
 }
 
-class PlatformAdaptiveAppBar extends StatelessWidget
-    implements PreferredSizeWidget {
-  const PlatformAdaptiveAppBar({required this.title, this.trailing, super.key});
-
-  final String title;
-  final Widget? trailing;
-
-  @override
-  Size get preferredSize => const Size.fromHeight(kToolbarHeight);
-
-  @override
-  Widget build(BuildContext context) {
+/// The screen title bar.
+///
+/// This is a builder rather than a widget because [PreferredSizeWidget] has to
+/// report its height from a getter that runs without a [BuildContext], so a
+/// wrapper widget cannot know which platform it is on when [Scaffold] asks.
+/// Wrapping one anyway meant reporting Material's 56 on both, and a Cupertino
+/// navigation bar is 44 -- every iOS screen started 12pt lower than the mockup.
+///
+/// Returning the platform's own bar hands that question back to the widget
+/// that can actually answer it.
+abstract final class PlatformAdaptiveAppBar {
+  static PreferredSizeWidget of(
+    BuildContext context, {
+    required String title,
+    Widget? trailing,
+  }) {
     if (_isCupertino(context)) {
       return CupertinoNavigationBar(
         middle: Text(title),
@@ -40,7 +44,7 @@ class PlatformAdaptiveAppBar extends StatelessWidget
 
     return AppBar(
       title: Text(title),
-      actions: trailing == null ? null : [trailing!],
+      actions: trailing == null ? null : [trailing],
     );
   }
 }
@@ -341,8 +345,88 @@ abstract final class PlatformAdaptiveDialog {
   }
 }
 
+/// Touch feedback, which the two platforms scale differently.
+///
+/// iOS reserves its heavier impacts for events with consequence, so a tab
+/// change and a filter change should not feel the same as a judgement landing.
+/// Android's selection click is quiet enough that the guide asks for a medium
+/// impact where iOS would use a light one.
 abstract final class PlatformAdaptiveHaptics {
+  /// Moving between things: tabs, segments, chart segments.
   static Future<void> selection() => HapticFeedback.selectionClick();
+
+  /// A value being committed: a report filed, a rating submitted, a judgement
+  /// shown as final.
+  static Future<void> impact(BuildContext context) {
+    return _isCupertino(context)
+        ? HapticFeedback.lightImpact()
+        : HapticFeedback.mediumImpact();
+  }
+}
+
+/// The modal sheet the guide reaches for five times: address autocomplete,
+/// the verification prompt, profile editing, review composing, and the sort
+/// selector.
+///
+/// Android gets the drag handle and the 28dp top radius Material 3 specifies;
+/// iOS gets its own rounded card. Both are the framework's sheet underneath,
+/// so dismissal, scrolling and the back gesture keep working.
+abstract final class PlatformAdaptiveSheet {
+  static Future<T?> show<T>({
+    required BuildContext context,
+    required WidgetBuilder builder,
+    bool isScrollControlled = true,
+  }) {
+    final surface = Theme.of(context).extension<AppSurfaceTokens>()!;
+    final radius = BorderRadius.vertical(
+      top: Radius.circular(surface.sheetRadius),
+    );
+
+    return showModalBottomSheet<T>(
+      context: context,
+      isScrollControlled: isScrollControlled,
+      backgroundColor: surface.isGlass ? AppColors.neutral100 : AppColors.white,
+      shape: RoundedRectangleBorder(borderRadius: radius),
+      builder: (context) => SafeArea(
+        top: false,
+        child: Column(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            if (!surface.isGlass) const _DragHandle(),
+            Flexible(child: builder(context)),
+          ],
+        ),
+      ),
+    );
+  }
+}
+
+class _DragHandle extends StatelessWidget {
+  const _DragHandle();
+
+  @override
+  Widget build(BuildContext context) {
+    return Padding(
+      padding: const EdgeInsets.only(top: AppSpacing.x1),
+      child: Container(
+        width: 36,
+        height: 4,
+        decoration: BoxDecoration(
+          color: AppColors.neutral300,
+          borderRadius: BorderRadius.circular(AppRadii.androidProgress),
+        ),
+      ),
+    );
+  }
+}
+
+/// The busy indicator, so a Material spinner does not appear mid-iOS.
+abstract final class PlatformAdaptiveProgress {
+  static Widget circular(BuildContext context) {
+    return _isCupertino(context)
+        ? const CupertinoActivityIndicator()
+        : const CircularProgressIndicator();
+  }
 }
 
 abstract interface class PlatformAdaptiveAuth {

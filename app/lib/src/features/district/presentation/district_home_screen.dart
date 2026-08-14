@@ -2,6 +2,7 @@ import 'package:democracy/src/core/adaptive/platform_adaptive.dart';
 import 'package:democracy/src/core/auth/address_controller.dart';
 import 'package:democracy/src/core/auth/address_state.dart';
 import 'package:democracy/src/design/app_tokens.dart';
+import 'package:democracy/src/design/components/app_card.dart';
 import 'package:democracy/src/features/district/application/district_providers.dart';
 import 'package:democracy/src/features/district/domain/district_profile.dart';
 import 'package:democracy/src/features/pledges/application/pledge_providers.dart';
@@ -31,7 +32,7 @@ class DistrictHomeScreen extends ConsumerWidget {
     };
 
     return Scaffold(
-      appBar: const PlatformAdaptiveAppBar(title: '내 지역구'),
+      appBar: PlatformAdaptiveAppBar.of(context, title: '내 지역구'),
       body: address.district == null
           ? const _NoDistrictYet()
           : ListView(
@@ -131,7 +132,7 @@ class _IncumbentCard extends StatelessWidget {
   Widget build(BuildContext context) {
     final incumbent = profile.incumbent;
 
-    return _Card(
+    return AppCard(
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
@@ -218,7 +219,7 @@ class _PledgeCard extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     if (board.pledges.isEmpty) {
-      return _Card(
+      return AppCard(
         child: Text(
           '등록된 공약이 없습니다.',
           style: Theme.of(
@@ -228,7 +229,7 @@ class _PledgeCard extends StatelessWidget {
       );
     }
 
-    return _Card(
+    return AppCard(
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
@@ -317,7 +318,7 @@ class _CandidateCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return _Card(
+    return AppCard(
       child: Row(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
@@ -364,29 +365,6 @@ class _CandidateCard extends StatelessWidget {
             ),
           ),
         ],
-      ),
-    );
-  }
-}
-
-class _Card extends StatelessWidget {
-  const _Card({required this.child});
-
-  final Widget child;
-
-  @override
-  Widget build(BuildContext context) {
-    final surfaceTokens = Theme.of(context).extension<AppSurfaceTokens>()!;
-
-    return DecoratedBox(
-      decoration: BoxDecoration(
-        color: Theme.of(context).colorScheme.surfaceContainerLowest,
-        border: Border.all(color: AppColors.neutral200),
-        borderRadius: BorderRadius.circular(surfaceTokens.cardRadius),
-      ),
-      child: Padding(
-        padding: const EdgeInsets.all(AppSpacing.x4),
-        child: child,
       ),
     );
   }

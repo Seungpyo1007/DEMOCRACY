@@ -2,6 +2,7 @@ import 'package:democracy/src/app/app_routes.dart';
 import 'package:democracy/src/core/adaptive/platform_adaptive.dart';
 import 'package:democracy/src/core/auth/verified_gate.dart';
 import 'package:democracy/src/design/app_tokens.dart';
+import 'package:democracy/src/design/components/app_card.dart';
 import 'package:democracy/src/features/reviews/application/review_providers.dart';
 import 'package:democracy/src/features/reviews/domain/resident_review.dart';
 import 'package:democracy/src/features/shared/presentation/async_section.dart';
@@ -16,7 +17,7 @@ class ResidentReviewScreen extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     return Scaffold(
-      appBar: const PlatformAdaptiveAppBar(title: '주민 평가'),
+      appBar: PlatformAdaptiveAppBar.of(context, title: '주민 평가'),
       body: ListView(
         padding: const EdgeInsets.all(AppSpacing.screen),
         children: [
@@ -74,45 +75,35 @@ class _SummaryCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final surfaceTokens = Theme.of(context).extension<AppSurfaceTokens>()!;
-
-    return DecoratedBox(
-      decoration: BoxDecoration(
-        color: Theme.of(context).colorScheme.surfaceContainerLowest,
-        border: Border.all(color: AppColors.neutral200),
-        borderRadius: BorderRadius.circular(surfaceTokens.cardRadius),
-      ),
-      child: Padding(
-        padding: const EdgeInsets.all(AppSpacing.x4),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            Row(
-              crossAxisAlignment: CrossAxisAlignment.end,
-              children: [
-                Text(
-                  summary.averageDisplay,
-                  style: Theme.of(context).textTheme.displaySmall,
+    return AppCard(
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Row(
+            crossAxisAlignment: CrossAxisAlignment.end,
+            children: [
+              Text(
+                summary.averageDisplay,
+                style: Theme.of(context).textTheme.displaySmall,
+              ),
+              const SizedBox(width: AppSpacing.x2),
+              Padding(
+                padding: const EdgeInsets.only(bottom: AppSpacing.x1),
+                child: Text(
+                  summary.respondentsDisplay,
+                  style: Theme.of(
+                    context,
+                  ).textTheme.bodySmall?.copyWith(color: AppColors.neutral600),
                 ),
-                const SizedBox(width: AppSpacing.x2),
-                Padding(
-                  padding: const EdgeInsets.only(bottom: AppSpacing.x1),
-                  child: Text(
-                    summary.respondentsDisplay,
-                    style: Theme.of(context).textTheme.bodySmall?.copyWith(
-                      color: AppColors.neutral600,
-                    ),
-                  ),
-                ),
-              ],
-            ),
-            const SizedBox(height: AppSpacing.x4),
-            for (final axis in summary.axes) ...[
-              _AxisRow(axis: axis),
-              const SizedBox(height: AppSpacing.x2),
+              ),
             ],
+          ),
+          const SizedBox(height: AppSpacing.x4),
+          for (final axis in summary.axes) ...[
+            _AxisRow(axis: axis),
+            const SizedBox(height: AppSpacing.x2),
           ],
-        ),
+        ],
       ),
     );
   }
@@ -163,53 +154,43 @@ class _ReviewCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final surfaceTokens = Theme.of(context).extension<AppSurfaceTokens>()!;
-
-    return DecoratedBox(
-      decoration: BoxDecoration(
-        color: Theme.of(context).colorScheme.surfaceContainerLowest,
-        border: Border.all(color: AppColors.neutral200),
-        borderRadius: BorderRadius.circular(surfaceTokens.cardRadius),
-      ),
-      child: Padding(
-        padding: const EdgeInsets.all(AppSpacing.x4),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            Row(
-              children: [
-                Text(
-                  review.author,
-                  style: Theme.of(context).textTheme.bodyMedium,
+    return AppCard(
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Row(
+            children: [
+              Text(
+                review.author,
+                style: Theme.of(context).textTheme.bodyMedium,
+              ),
+              if (review.verifiedResident) ...[
+                const SizedBox(width: AppSpacing.x2),
+                const Icon(
+                  Icons.verified_user_outlined,
+                  size: 14,
+                  color: AppColors.fulfilled,
                 ),
-                if (review.verifiedResident) ...[
-                  const SizedBox(width: AppSpacing.x2),
-                  const Icon(
-                    Icons.verified_user_outlined,
-                    size: 14,
-                    color: AppColors.fulfilled,
-                  ),
-                  const SizedBox(width: 2),
-                  Text(
-                    '인증 주민',
-                    style: Theme.of(
-                      context,
-                    ).textTheme.bodySmall?.copyWith(color: AppColors.fulfilled),
-                  ),
-                ],
-                const Spacer(),
+                const SizedBox(width: 2),
                 Text(
-                  '${review.score.toStringAsFixed(0)} / 5',
+                  '인증 주민',
                   style: Theme.of(
                     context,
-                  ).textTheme.bodySmall?.copyWith(color: AppColors.neutral600),
+                  ).textTheme.bodySmall?.copyWith(color: AppColors.fulfilled),
                 ),
               ],
-            ),
-            const SizedBox(height: AppSpacing.x2),
-            Text(review.body, style: Theme.of(context).textTheme.bodyMedium),
-          ],
-        ),
+              const Spacer(),
+              Text(
+                '${review.score.toStringAsFixed(0)} / 5',
+                style: Theme.of(
+                  context,
+                ).textTheme.bodySmall?.copyWith(color: AppColors.neutral600),
+              ),
+            ],
+          ),
+          const SizedBox(height: AppSpacing.x2),
+          Text(review.body, style: Theme.of(context).textTheme.bodyMedium),
+        ],
       ),
     );
   }
