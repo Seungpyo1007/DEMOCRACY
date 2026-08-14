@@ -1,6 +1,7 @@
 @Tags(['golden'])
 library;
 
+import 'package:democracy/src/features/ai_match/presentation/ai_match_screen.dart';
 import 'package:democracy/src/features/district/presentation/district_home_screen.dart';
 import 'package:democracy/src/features/onboarding/application/onboarding_providers.dart';
 import 'package:democracy/src/features/onboarding/presentation/onboarding_screen.dart';
@@ -100,6 +101,19 @@ void main() {
       await expectLater(
         find.byType(MaterialApp),
         matchesGoldenFile('goldens/pledge_detail_${name}_390dp.png'),
+      );
+    });
+
+    testWidgets('ai match at 390dp on $name', (tester) async {
+      await pumpGolden(
+        tester,
+        screen: const AiMatchScreen(),
+        platform: platform,
+      );
+
+      await expectLater(
+        find.byType(MaterialApp),
+        matchesGoldenFile('goldens/ai_match_${name}_390dp.png'),
       );
     });
 

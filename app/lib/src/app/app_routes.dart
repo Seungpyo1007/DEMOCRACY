@@ -14,4 +14,13 @@ abstract final class AppRoutes {
   static const pledgeDetailSegment = 'pledges/:id';
 
   static String pledgeDetail(String id) => '$tracker/pledges/$id';
+
+  /// The weights and inputs a match ran on.
+  ///
+  /// Nested under the match screen so the disclosure's link keeps the reader
+  /// in the tab they were reading, and back returns to the score they were
+  /// questioning.
+  static const algorithmLogSegment = 'log';
+
+  static const algorithmLog = '$aiMatch/log';
 }

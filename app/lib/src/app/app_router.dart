@@ -1,6 +1,8 @@
 import 'package:democracy/src/app/app_routes.dart';
 import 'package:democracy/src/core/adaptive/platform_adaptive.dart';
 import 'package:democracy/src/core/auth/address_controller.dart';
+import 'package:democracy/src/features/ai_match/presentation/ai_match_screen.dart';
+import 'package:democracy/src/features/ai_match/presentation/algorithm_log_screen.dart';
 import 'package:democracy/src/features/district/presentation/district_home_screen.dart';
 import 'package:democracy/src/features/onboarding/presentation/onboarding_screen.dart';
 import 'package:democracy/src/features/pledges/presentation/pledge_detail_screen.dart';
@@ -83,12 +85,18 @@ final appRouterProvider = Provider<GoRouter>((ref) {
                 pageBuilder: (context, state) => PlatformAdaptiveRoute.page(
                   context: context,
                   key: state.pageKey,
-                  child: const FeaturePlaceholderScreen(
-                    title: 'AI 분석',
-                    description: '공약 원문과 공개된 가중치 계약 확정 후 구현합니다.',
-                    notice: '공약 원문 기반 참고 자료 · 공인 평가 아님 · 알고리즘 검증 필요',
-                  ),
+                  child: const AiMatchScreen(),
                 ),
+                routes: [
+                  GoRoute(
+                    path: AppRoutes.algorithmLogSegment,
+                    pageBuilder: (context, state) => PlatformAdaptiveRoute.page(
+                      context: context,
+                      key: state.pageKey,
+                      child: const AlgorithmLogScreen(),
+                    ),
+                  ),
+                ],
               ),
             ],
           ),

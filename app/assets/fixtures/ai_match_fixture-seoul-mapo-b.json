@@ -1,0 +1,149 @@
+{
+  "_note": "Sample match output. Not a real model run, not a real evaluation, and not an endorsement.",
+  "generatedAt": "2026-07-30T09:00:00Z",
+  "comparedPledges": 42,
+  "weights": {
+    "model": "fixture-match-v0",
+    "axisWeights": {
+      "세금": 0.3,
+      "부동산": 0.25,
+      "복지": 0.2,
+      "교육": 0.15,
+      "청년": 0.1
+    },
+    "inputs": {
+      "tags": [
+        "30대",
+        "자영업",
+        "1인 가구",
+        "세금"
+      ],
+      "interest": 3
+    },
+    "normalisation": "min-max over district candidates",
+    "disclaimer": "공약 원문 기반 참고 자료이며 공인 평가가 아닙니다."
+  },
+  "matches": [
+    {
+      "candidateId": "fixture-candidate-1",
+      "name": "가상 후보 가",
+      "party": "나다당",
+      "score": 87,
+      "headline": "자영업 세제 공약 4건 · 1인 가구 주거 공약 3건",
+      "axes": [
+        {
+          "label": "세금",
+          "score": 92
+        },
+        {
+          "label": "부동산",
+          "score": 88
+        },
+        {
+          "label": "복지",
+          "score": 74
+        },
+        {
+          "label": "교육",
+          "score": 61
+        },
+        {
+          "label": "청년",
+          "score": 70
+        }
+      ],
+      "reasons": [
+        {
+          "text": "간이과세 기준 상향 공약이 자영업 소득 구간과 직접 연관됩니다.",
+          "source": {
+            "sourceUrl": "https://info.nec.go.kr/fixture/candidate-1-pledge-4",
+            "fetchedAt": "2026-07-30T09:00:00Z"
+          }
+        },
+        {
+          "text": "1인 가구 대상 주거비 지원을 별도 항목으로 제시했습니다.",
+          "source": {
+            "sourceUrl": "https://info.nec.go.kr/fixture/candidate-1-pledge-7",
+            "fetchedAt": "2026-07-30T09:00:00Z"
+          }
+        }
+      ]
+    },
+    {
+      "candidateId": "fixture-candidate-2",
+      "name": "가상 후보 나",
+      "party": "무소속",
+      "score": 73,
+      "headline": "지역 상권 공약 3건 · 세제 공약 1건",
+      "axes": [
+        {
+          "label": "세금",
+          "score": 64
+        },
+        {
+          "label": "부동산",
+          "score": 71
+        },
+        {
+          "label": "복지",
+          "score": 82
+        },
+        {
+          "label": "교육",
+          "score": 77
+        },
+        {
+          "label": "청년",
+          "score": 68
+        }
+      ],
+      "reasons": [
+        {
+          "text": "전통시장 시설 개선을 우선 과제로 제시했습니다.",
+          "source": {
+            "sourceUrl": "https://info.nec.go.kr/fixture/candidate-2-pledge-2",
+            "fetchedAt": "2026-07-30T09:00:00Z"
+          }
+        }
+      ]
+    },
+    {
+      "candidateId": "fixture-candidate-3",
+      "name": "가상 후보 다",
+      "party": "다라당",
+      "score": 61,
+      "headline": "교육 공약 5건 · 세제 공약 없음",
+      "axes": [
+        {
+          "label": "세금",
+          "score": 41
+        },
+        {
+          "label": "부동산",
+          "score": 55
+        },
+        {
+          "label": "복지",
+          "score": 66
+        },
+        {
+          "label": "교육",
+          "score": 89
+        },
+        {
+          "label": "청년",
+          "score": 58
+        }
+      ],
+      "reasons": [
+        {
+          "text": "돌봄교실 확대를 핵심 공약으로 제시했습니다.",
+          "source": {
+            "sourceUrl": "https://info.nec.go.kr/fixture/candidate-3-pledge-1",
+            "fetchedAt": "2026-07-30T09:00:00Z"
+          }
+        }
+      ]
+    }
+  ]
+}
