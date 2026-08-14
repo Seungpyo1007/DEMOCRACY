@@ -4,8 +4,14 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 final addressControllerProvider =
     NotifierProvider<AddressController, AddressState>(AddressController.new);
 
+/// The district everything else is keyed to.
+///
+/// Every feature provider watches this rather than selecting the district out
+/// of [addressControllerProvider] itself. Six copies of the same select is six
+/// places to forget one when the address state grows a field -- and this is the
+/// seam the spec names for refreshing every screen at once.
 final districtProvider = Provider<DistrictRef?>(
-  (ref) => ref.watch(addressControllerProvider).district,
+  (ref) => ref.watch(addressControllerProvider.select((s) => s.district)),
 );
 
 class AddressController extends Notifier<AddressState> {

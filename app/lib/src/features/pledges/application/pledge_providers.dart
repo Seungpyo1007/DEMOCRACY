@@ -9,9 +9,7 @@ final pledgeRepositoryProvider = Provider<PledgeRepository>(
 );
 
 final pledgeBoardProvider = FutureProvider<PledgeBoard>((ref) async {
-  final district = ref.watch(
-    addressControllerProvider.select((state) => state.district),
-  );
+  final district = ref.watch(districtProvider);
 
   if (district == null) {
     throw StateError('No district has been selected yet.');

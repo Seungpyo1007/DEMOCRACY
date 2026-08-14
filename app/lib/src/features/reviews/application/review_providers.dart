@@ -14,9 +14,7 @@ final communityRepositoryProvider = Provider<CommunityRepository>(
 );
 
 final reviewBoardProvider = FutureProvider<ReviewBoard>((ref) async {
-  final district = ref.watch(
-    addressControllerProvider.select((state) => state.district),
-  );
+  final district = ref.watch(districtProvider);
 
   if (district == null) {
     throw StateError('No district has been selected yet.');
@@ -55,9 +53,7 @@ class ReviewSubmissionController extends Notifier<AsyncValue<void>> {
 }
 
 final channelProvider = StreamProvider<List<ChatMessage>>((ref) {
-  final district = ref.watch(
-    addressControllerProvider.select((state) => state.district),
-  );
+  final district = ref.watch(districtProvider);
 
   if (district == null) {
     return const Stream.empty();
@@ -69,9 +65,7 @@ final channelProvider = StreamProvider<List<ChatMessage>>((ref) {
 final discussionThreadsProvider = FutureProvider<List<DiscussionThread>>((
   ref,
 ) async {
-  final district = ref.watch(
-    addressControllerProvider.select((state) => state.district),
-  );
+  final district = ref.watch(districtProvider);
 
   if (district == null) {
     return const [];
