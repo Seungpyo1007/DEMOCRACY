@@ -14,7 +14,7 @@
 - `docs/INITIAL_PLAN.md`: MVP 범위, 순서, 완료 조건.
 - `HANDOFF.md`: 현재 상태와 다음 실행자용 인계 사항.
 - `CONTRIBUTING.md`: 브랜치 전략과 검증 절차.
-- `tool/bootstrap.ps1`: Flutter 네이티브 프로젝트 생성과 기본 검증을 재현하는 스크립트.
+- `tool/bootstrap.sh` · `tool/bootstrap.ps1`: 툴체인 가드와 기본 검증을 재현하는 스크립트. macOS에서는 iOS 빌드까지 이어진다.
 
 ## 요구 사항
 
@@ -49,9 +49,11 @@ macOS·Linux:
 
 ## 상태
 
-MVP 1차의 세로 흐름이 네트워크 없이 동작한다. 온보딩 → 지역구 홈 → 공약 → 주민 평가가 번들된 샘플 payload 위에서 이어지고, 모든 외부 수치는 원문 주소와 취득 시각을 통과한 경우에만 화면에 오른다.
+**명세서의 6화면이 전부 구현됐다.** 온보딩(3스텝) · 지역구 홈 · 공약 트래커 · AI 분석 · 커뮤니티 · 개표. placeholder는 남아 있지 않다.
 
-트래커, AI 분석, 개표는 라우트와 명시적 placeholder만 존재한다. 실제 API, 지도, LLM, 실시간 채널은 아직 구현하지 않았다.
+데이터는 전부 번들된 샘플 payload와 fake repository 뒤에 있다. 화면은 repository 계약에만 의존하므로, 실제 API·LLM·SSE·WebSocket이 생기면 DI 교체로 들어온다. 모든 외부 수치는 원문 주소와 취득 시각을 통과한 경우에만 화면에 오르고, 출처 뱃지를 탭하면 원문이 열린다.
+
+지도 타일은 Google Maps 키가 없어 목업과 같은 회색 격자다. 개표율 농도 채색·선택·내 지역구 아웃라인은 실제로 동작한다.
 
 Android는 디버그 빌드와 에뮬레이터, iOS는 디바이스 빌드와 시뮬레이터에서 확인했다. 390dp Android/iOS 골든이 두 화면 규격을 고정한다. 자세한 인계 사항은 `HANDOFF.md`를 참고한다.
 

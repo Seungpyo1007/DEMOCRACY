@@ -1,15 +1,15 @@
 # DEMOCRACY 인계
 
-기준 시각: 2026-08-13 Asia/Seoul
+기준 시각: 2026-08-14 Asia/Seoul
 작업 환경: macOS 27.0 / Xcode 26.6. 이전 구간은 Windows 11에서 진행했다.
 
 ## 이 문서를 읽는 순서
 
-**macOS를 요구하던 작업은 전부 끝났다.** iOS가 컴파일되고, 시뮬레이터에서 돌고, 390dp 골든이 붙었다. 남은 것은 기능 구현이므로 「남은 작업」과 「백로그」를 보면 된다.
+**명세서의 6화면이 전부 구현됐다.** placeholder는 하나도 남아 있지 않다. 남은 것은 fake 뒤에 있는 것을 실제 서버로 바꾸는 일이므로, 「지금 fake인 것」과 「미결정 사항」을 먼저 보면 된다.
 
 ## 현재 상태
 
-M0(재현 가능한 기반)과 M1(Fake 데이터 세로 슬라이스)을 완료했다. M1의 완료 조건인 「네트워크 없이 온보딩 → 홈 → 공약 → 평가 흐름 + 390dp 골든 통과」를 충족한다.
+`design_handoff_democracy_app/`의 6화면을 전부 구현했다. 데이터는 전부 fixture와 fake repository 뒤에 있고, 화면은 repository 계약에만 의존한다 — `docs/INITIAL_PLAN.md:70`의 M2 완료 조건(「Fake/실제 repository를 DI로 교체할 수 있고, 화면 코드가 전송 계층을 직접 참조하지 않는다」)을 충족한다.
 
 - 원본 디자인 번들은 `design_handoff_democracy_app/`에 그대로 보존했다.
 - Flutter 3.44.8을 설치하고 bootstrap으로 Android/iOS 네이티브 프로젝트를 생성했다.
@@ -19,9 +19,10 @@ M0(재현 가능한 기반)과 M1(Fake 데이터 세로 슬라이스)을 완료�
 - 출처 없는 외부 수치는 파싱 경계에서 거부된다. 이제 선언이 아니라 강제다.
 - 중립성 규칙이 위젯으로 강제된다. 정당색을 넣을 자리가 타입에 없고, 인물 사진은 grayscale이 내장이며, 상태는 색·아이콘·텍스트가 함께 나가고, 수치는 출처 없이 렌더링될 수 없다.
 - 하단 탭바는 iOS 26 형태의 떠 있는 캡슐이다. 유리 효과는 없고 색은 Material 3 롤이며, 스크롤 시 축소된다.
-- 트래커, AI 분석, 개표는 의도적으로 placeholder다.
-- `flutter analyze` 무결, 테스트 54개 통과. Android는 디버그 빌드와 에뮬레이터 실행, iOS는 디바이스 빌드와 시뮬레이터 실행까지 확인했다.
-- 390dp Android/iOS 골든 6장이 붙었다. 필수 테스트 8개가 전부 이행됐다.
+- 하단 탭바는 실제 Liquid Glass다. `liquid_glass_widgets`가 카드·바 서피스를 그리고, 스크롤 시 축소는 그대로 유지된다.
+- **6화면 전부 구현.** 온보딩 3스텝 / 지역구 홈(내부 4탭 + 스파크라인) / 트래커(도넛·카테고리 바·판정 타임라인) / AI 분석(고정 고지·레이더·스트리밍) / 커뮤니티(평가·채팅·토론 3탭 + 작성 시트) / 개표(농도 지도·득표 바·여론조사 비교).
+- `flutter analyze` 무결, 테스트 **155개** 통과. lib 59파일 9,518줄.
+- 390dp Android/iOS 골든 **20장**. 필수 테스트 8개가 전부 이행됐다.
 
 ## macOS 구간에서 끝낸 것 (2026-08-13)
 
@@ -33,17 +34,47 @@ M0(재현 가능한 기반)과 M1(Fake 데이터 세로 슬라이스)을 완료�
 - **iOS 시뮬레이터 실측.** iPhone 17 Pro / iOS 27.0. 결과는 「검증 기록」에 있다.
 - **390dp 골든.** Android/iOS 각 3화면. ubuntu CI와 충돌하지 않도록 macOS job으로 분리했다.
 
-**iOS Liquid Glass 패키지 spike는 이 구간에서 하지 않았다.** 「iOS 네이티브 탭바 조사」의 결론대로 M3까지 보류가 이미 결정된 사항이라, 환경이 생겼다는 이유만으로 앞당기지 않았다.
+**iOS Liquid Glass 패키지 spike는 이 구간에서 하지 않았다.** 「iOS 네이티브 탭바 조사」의 결론대로 M3까지 보류가 이미 결정된 사항이라, 환경이 생겼다는 이유만으로 앞당기지 않았다. **명세 구현 구간(2026-08-14)에서 이 결정을 뒤집었다** — 아래 「Liquid Glass 도입과 명세를 따르지 않은 한 곳」 참고.
+
+## 명세 구현 구간에서 끝낸 것 (2026-08-14)
+
+`design_handoff_democracy_app/`의 6화면 전부. 토큰 → 컴포넌트 → 유리 → 화면 6개 순서로 PR 9개.
+
+| PR | 내용 |
+|---|---|
+| #10 | 디자인 토큰 전체 이식 (neutral·accent 9단, oklch 상태 색, `AppElevation`, 타이포 전체) |
+| #11 | 공용 컴포넌트 16종 + `platform_adaptive` 미완 래퍼 보완 |
+| #12 | Liquid Glass 3종 도입, iOS 배포 타깃 15.0 |
+| #13 | 온보딩 3스텝 |
+| #14 | 지역구 홈 재구성 |
+| #15 | 공약 트래커 + `/tracker/pledges/:id` |
+| #16 | AI 분석 + `/ai-match/log` |
+| #17 | 커뮤니티 3탭 + 작성 시트 |
+| #18 | 개표 지도·패널 |
+
+## 지금 fake인 것
+
+전부 repository 계약 뒤에 있다. 실제 구현으로 교체할 때 화면은 건드리지 않는다.
+
+| 영역 | 계약 | 막고 있는 것 |
+|---|---|---|
+| 주소 검색 | `AddressSearchRepository` | 카카오/도로명 API 계약과 키 |
+| 위치 → 지역구 | `LocationRepository` | `geolocator` 도입 + 역지오코딩 계약 |
+| 거주지 인증 | `AddressController.acceptVerification` | **BFF 계약.** 현재 opaque token을 클라이언트가 만든다 |
+| 의원·후보·공약 | `DistrictRepository` · `PledgeRepository` | 열린국회정보·선관위 API 계약과 키 |
+| AI 매칭 | `MatchRepository` | LLM 공급자, 가중치 정책, 비용 상한, 편향 감사 기준 |
+| 평가 쓰기 | `ReviewRepository.submit` | 조작 방지 정책, 서버 저장 |
+| 채팅 | `CommunityRepository` | WebSocket 엔드포인트, moderation 정책 |
+| 혐오·허위 감지 | `ContentGuard` | **클라이언트 전용이라 편집으로 무력화 가능.** BFF로 옮겨야 한다 |
+| 개표 | `ResultsRepository` | SSE 엔드포인트, 폴링 주기 헤더 |
+| 지도 타일 | `CountMap` | Google Maps 키. 현재 목업과 같은 회색 격자 |
+| 프리미엄 | — | 결제. 버튼은 비활성이고 그렇다고 표시한다 |
 
 ## 남은 작업
 
-macOS 여부와 무관하다. 전부 기능 구현이다.
-
-- 온보딩 3단계 분리와 주소 검색·GPS 권한 거부 폴백. 현재 온보딩은 단일 화면이고 주소 검색 필드는 `readOnly`다. `LinearProgressIndicator(value: 1/3)`이 3단계를 암시하지만 나머지 2단계가 없다.
-- 공약 상세와 `/pledges/:id` 딥링크. 지금은 목록까지만 있다.
-- 평가 작성 화면. 게이트는 완성됐고 통과 후 진입할 화면이 아직 없다.
-- Freezed/Riverpod generator 호환 조합 spike와 codegen 도입 결정.
-- 거주지 인증 백엔드 계약. 아래 「실행 중인 앱에서 게이트가 통과 불가」 참고.
+- Freezed/Riverpod generator 호환 조합 spike와 codegen 도입 결정. **`riverpod_generator`는 여전히 해결 불가**(flutter_riverpod 3.4.2 + flutter_test 충돌), `freezed`는 프리릴리스 `3.2.6-dev.1`로만 해결된다.
+- 위 표의 계약 확정과 실제 연동 (M2).
+- 네이티브 위젯·Live Activities·FCM (M3).
 
 ## 도구 기준
 
@@ -130,6 +161,39 @@ app/assets/fixtures/         # 샘플 payload. 실서비스 데이터가 아니�
 - README의 “API 34+”가 minSdk 의미인지 미확정. 현재 minSdk는 생성값 24다.
 - 거주지 인증 백엔드 계약과 opaque verification token 저장 방식.
 
+## Liquid Glass 도입과 명세를 따르지 않은 한 곳 (2026-08-14)
+
+아래 「iOS 네이티브 탭바 조사」는 세 패키지를 기각하고 M3까지 보류하기로 결정했다. **명세서가 이 셋을 필수로 지정하므로 그 결정을 뒤집었다.**
+
+- `liquid_glass_widgets` — `AppSurface`(카드)와 떠 있는 바의 재질. 셰이더 기반이라 `flutter test`에서도 렌더되므로 골든이 잡는다.
+- `cupertino_native_better` — 스위치·세그먼티드 컨트롤. 플랫폼 뷰라 테스트에서 그려지지 않으므로 `AppCapabilities.nativeControls` 뒤에 두었고, 실행 중인 앱만 이 능력을 켠다.
+- `native_liquid_glass` — 의존성 편입.
+
+**`CNTabBarNative`는 쓰지 않는다. 명세를 문자 그대로 따르지 않은 유일한 곳이다.** 위젯 트리 밖에서 `UITabBarController`를 띄우는 takeover라 `currentIndex`/`onTap` 계약이 없고, 패키지 문서 자체가 Flutter bottom navigation 대체로 쓰지 말라고 경고한다. 채택하면 `StatefulShellRoute` 기반 탭 상태 보존을 재설계해야 하는데, 그건 지금 통과하는 필수 테스트다.
+
+`GlassTabBar`도 쓰지 않았다. 더 작은 이유인데, 그쪽 `collapseConfig`는 외부 `ScrollController`를 받아 extraButton 방향으로 접히는 동작이라 목업이 요구하는 축소가 아니다. **바는 자기 스트립·슬라이딩 인디케이터·스크롤 계약을 유지하고 그 아래 재질만 바뀌었다.**
+
+부수 효과로 iOS 배포 타깃을 13.0 → **15.0**으로 올렸다(`cupertino_native_better` 요구).
+
+## 명세 모순 해소 규칙 (2026-08-14)
+
+UI Guide HTML과 README가 14곳에서 어긋난다. 아래 규칙으로 일괄 해소했다.
+
+| 모순 | 채택 | 근거 |
+|---|---|---|
+| `미이행 #B8B4B1` vs `#bab6b6`, `번복 #A82310` vs `#ae1800` | CSS 토큰값 | README가 `≈`로 근사값임을 자인. 실제로 다르다 — 이행 완료는 `#249057`이지 `#3D9A63`이 아니다 |
+| HTML §01 `radius 0 전면` vs 목업의 플랫폼 셰이프 | 플랫폼 셰이프 | README가 명시적으로 조정. §01은 *문서* 디자인 시스템 기술 |
+| Android 배경 Ground vs `#fff` | `#fff` | 목업 전 프레임이 흰색이고 카드도 흰색이다. Ground 위에서는 카드가 전부 떠 있는 타일이 된다 |
+| 홈 앱바 `SliverAppBar` vs `CupertinoSliverNavigationBar` | 플랫폼 분기 | §09가 더 구체적 |
+| 스텝 프로그레스 h2 / h4+radius2 / iOS 미표시 | 높이 2(iOS) / 4+radius 2(Android) | README가 두 플랫폼 차이를 명시 |
+| 하단 네비 `radius 0·인디케이터 없음` vs pill | pill | README와 목업 2:1 |
+| 레이더 차트 iOS 전용 vs 공유 | 공유 | README §4가 MatchCard 구성요소로 규정 |
+| 익명/실명 스위치 기본 상태 상반 | **익명 = 기본** | 게시 후 변경 불가이므로, 되돌릴 수 없는 쪽이 기본이면 안 된다 |
+| 온보딩 칩 8개 vs 7개 | 8개 공유 | README가 `청년` 포함 |
+| N-3 grayscale이 Android 목업에 없음 | **항상 grayscale** | N-3는 기능 요구사항 수준 규칙. 목업 누락이 규칙을 이기지 못한다 |
+| 공약 행 3개 vs 2개 | 동일 | 목업 지면 절약 |
+| Android 카피 축약 다수 | iOS 카피를 정본으로 공유 | 축약에 대한 설명이 어디에도 없다 |
+
 ## iOS 네이티브 탭바 조사 (2026-07-31)
 
 결론: **순수 Flutter 구현 유지.** 네이티브 패키지는 도입하지 않았다.
@@ -201,16 +265,18 @@ macOS 환경이 확보되고 M3에 진입한 뒤, `CLAUDE.md`의 규칙대로 �
 | `flutter pub get` | 완료 | `pubspec.lock` 생성 및 커밋 |
 | `dart format` | 완료 | 최초 19개 중 16개 재포맷, 이후 재실행 시 0 changed |
 | `flutter analyze` | 완료 | `No issues found!` |
-| `flutter test` | 완료 | 54개 통과 (골든 7 포함) |
+| `flutter test` | 완료 | **155개** 통과 (골든 21 포함) |
 | bootstrap 전체 체인 | 완료 | 종료 코드 0. macOS에서 iOS 빌드까지 포함해 재확인 |
 | 코드 생성 | 보류 | 해석된 analyzer 12.1.0. 호환 조합 spike 필요 |
 | `flutter doctor` | 완료 | macOS에서 `No issues found!`. Android·Xcode 툴체인 모두 √ |
 | Android 빌드 | 완료 | `flutter build apk --debug` 성공. APK 패키지명 `com.democracy.kr` 확인 |
 | 에뮬레이터 실행 | 완료 | AVD `democracy_api36` (Pixel 5, API 36). fixture 기반 세로 흐름 확인. logcat 오류 0건 |
-| iOS 빌드 | 완료 | `flutter build ios --no-codesign` → `Runner.app` 16.4MB. **저장소 최초 컴파일** |
-| CocoaPods | 해당 없음 | 순수 Dart 의존성뿐이라 Flutter가 통합을 생성하지 않는다. 위 「bootstrap.sh의 CocoaPods 분기」 참고 |
+| iOS 빌드 | 완료 | `flutter build ios --no-codesign` → `Runner.app` **22.8MB**. 배포 타깃 15.0 |
+| CocoaPods | 해당 없음 | 네이티브 플러그인 3종을 넣어도 Flutter가 **Swift Package Manager**로 해결한다. 위 「bootstrap.sh의 CocoaPods 분기」 참고 |
 | iOS 시뮬레이터 실행 | 완료 | iPhone 17 Pro / iOS 27.0. 아래 「iOS 시뮬레이터에서 확인한 것」 |
-| 390dp 골든 | 완료 | Android/iOS 각 3화면, 390×844px. macOS CI job에서 검증 |
+| 390dp 골든 | 완료 | **20장** (6화면 + 온보딩 3스텝 + 컴포넌트 카탈로그), 390×844px. macOS CI job에서 0.5% 허용 오차로 비교 |
+| 6화면 구현 | 완료 | placeholder 없음. `FeaturePlaceholderScreen`은 삭제됐다 |
+| 스와이프 백 | 완료 | `/tracker/pledges/:id`가 앱 최초의 푸시 라우트다. iOS 26.5에서 실측 |
 
 ### 필수 테스트 이행 현황
 
@@ -257,17 +323,17 @@ iPhone 17 Pro / iOS 27.0. 위젯 테스트로만 검증돼 있던 iOS 분기를 
 - `PlatformAdaptiveHaptics` — 시뮬레이터에 햅틱 하드웨어가 없다. 실기기가 필요하고, 실기기 설치에는 아직 미정인 서명 계정이 필요하다.
 - `PlatformAdaptiveRoute`의 스와이프 백 — **검증 대상이 아직 존재하지 않는다.** 아래 항목 참고.
 
-### 스와이프 백은 아직 검증할 수 없다
+### 스와이프 백 (2026-08-14 갱신)
 
-`lib/` 전체에 `context.push`가 없다. 모든 네비게이션이 `context.go`(스택 교체)이고, 탭 전환은 `StatefulNavigationShell.goBranch`다. 즉 **푸시된 라우트가 하나도 없어서** `PlatformAdaptiveRoute`가 만드는 `CupertinoPage`의 스와이프 백 제스처는 작용할 대상이 없다.
+이전 인계는 「검증 대상이 아직 존재하지 않는다」로 적었다. `lib/`에 `context.push`가 없어 푸시된 라우트가 하나도 없었기 때문이다.
 
-백로그의 공약 상세(`/pledges/:id`)나 평가 작성 화면처럼 실제로 푸시되는 첫 화면이 생기는 시점에 함께 검증해야 한다.
+`/tracker/pledges/:id`가 앱 최초의 푸시 라우트가 되면서 **해소됐다.** iOS 26.5 시뮬레이터에서 왼쪽 가장자리 스와이프 → 트래커 복귀, 탭바 유지를 확인했다.
 
-### 실행 중인 앱에서 게이트가 통과 불가
+### 인증 경로 (2026-08-14 갱신)
 
-`AddressState.isVerified`는 `status == verified && verification != null`을 요구한다(`address_state.dart:56-57`). 그런데 온보딩은 `requestVerification`(pending)과 `continueReadOnly`(unverified)만 호출하고, **`acceptVerification`을 호출하는 코드가 앱에 없다.** 테스트에만 있다.
+이전 인계는 「실행 중인 앱에서 `VerifiedGate`가 통과 불가」로 적었다. 온보딩 3스텝이 `acceptVerification`을 호출하면서 **해소됐다.**
 
-따라서 실행 중인 앱에서 `VerifiedGate`는 절대 통과할 수 없고, 인증된 작성 경로는 위젯 테스트로만 도달한다. 게이트의 결함이 아니라 거주지 인증 백엔드 계약(M2)이 아직 없기 때문이다. 그 계약이 정해지기 전에는 평가 작성 화면을 붙여도 실기기에서 열리지 않는다.
+다만 그 증명은 여전히 fake다. `fixture-residency-token-<districtId>`를 **클라이언트가 만든다.** 실제 계약은 서버가 주소를 확인하고 opaque token을 발급하는 것이고, 그때까지 이 앱의 `verified`는 「인증 흐름을 끝까지 걸었다」는 뜻이지 「거주가 확인됐다」는 뜻이 아니다.
 
 ### 복구한 결함
 
@@ -282,12 +348,12 @@ iPhone 17 Pro / iOS 27.0. 위젯 테스트로만 검증돼 있던 iOS 분기를 
 
 ### 남은 구조적 부채
 
-- `pledges`에 `presentation`이 없다. 공약 전용 화면을 만들 때 채운다.
-- 평가 작성 화면이 없어 `VerifiedGate` 통과 후 SnackBar만 띄운다.
-- 출처 뱃지가 원문 URL을 열지 않는다. `url_launcher` 도입 결정이 필요해 표시까지만 했다.
 - 인물 사진 자산이 없어 `GrayscalePortrait`가 자리표시자를 그린다. 실제 사진이 들어와도 grayscale은 위젯이 보장한다.
 - `districtProvider`(`address_controller.dart`)는 선언만 있고 사용처가 없다. 각 feature의 provider가 `addressControllerProvider`를 직접 select 한다.
-- **실행 중인 앱에서 `VerifiedGate`가 통과 불가.** 위 「실행 중인 앱에서 게이트가 통과 불가」 참고. 인증된 작성 경로는 위젯 테스트로만 도달한다.
+- **`ContentGuard`가 클라이언트 전용이다.** 혐오·허위 감지가 앱 안에 있으면 편집으로 무력화된다. BFF로 옮겨야 한다 — 지금 만든 것은 인터셉트 지점이지 분류기가 아니다.
+- **거주지 인증 증명을 클라이언트가 만든다.** 온보딩 완료가 opaque token을 직접 생성한다. 실제 계약은 서버가 주소를 확인하고 발급해야 한다.
+- 지도 타일이 없다. `google_maps_flutter` 키가 없어 목업과 같은 회색 격자다. 농도·선택·아웃라인은 실제로 동작하므로, 키가 생기면 셀 렌더링만 Polygon으로 바꾸면 된다.
+- 프리미엄 리포트는 비활성 버튼이다. 결제 계약이 없다.
 - **축소된 탭바가 placeholder 탭에서 펴지지 않는다.** 셸이 `ScrollUpdateNotification`에서만 재확장하는데(`app_shell.dart:65-68`) 스크롤할 것이 없는 화면은 알림을 보내지 않는다. `app_shell_test.dart`가 현재 동작으로 고정해 뒀다. 오프셋 0인 브랜치에서 바를 펼지 여부는 제품 결정이라 바꾸지 않았다.
 - 골든이 정확 일치가 아니라 0.5% 허용 오차로 비교된다(`test/golden/flutter_test_config.dart`). macOS 버전이 다르면 안티에일리어싱만으로 0.04%가 어긋나 CI가 러너 이미지에 따라 깨지기 때문이다.
 - `app_router.dart`의 redirect 가드는 `ref.read`를 쓰고 `refreshListenable`이 없어 네비게이션 시점에만 평가된다. 주소 상태가 바뀌어도 현재 화면은 그대로다.
