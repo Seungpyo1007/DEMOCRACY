@@ -22,7 +22,7 @@ class FeaturePlaceholderScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: PlatformAdaptiveAppBar(title: title),
+      appBar: PlatformAdaptiveAppBar.of(context, title: title),
       body: ListView(
         padding: const EdgeInsets.all(AppSpacing.screen),
         children: [

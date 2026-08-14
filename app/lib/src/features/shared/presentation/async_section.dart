@@ -1,3 +1,4 @@
+import 'package:democracy/src/core/adaptive/platform_adaptive.dart';
 import 'package:democracy/src/core/provenance/source_metadata.dart';
 import 'package:democracy/src/design/app_tokens.dart';
 import 'package:flutter/material.dart';
@@ -25,9 +26,9 @@ class AsyncSection<T> extends StatelessWidget {
   Widget build(BuildContext context) {
     return value.when(
       data: (data) => builder(context, data),
-      loading: () => const Padding(
-        padding: EdgeInsets.symmetric(vertical: AppSpacing.x8),
-        child: Center(child: CircularProgressIndicator()),
+      loading: () => Padding(
+        padding: const EdgeInsets.symmetric(vertical: AppSpacing.x8),
+        child: Center(child: PlatformAdaptiveProgress.circular(context)),
       ),
       error: (error, _) => _SectionError(error: error, onRetry: onRetry),
     );
