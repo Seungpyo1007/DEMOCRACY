@@ -45,12 +45,7 @@ void main() {
       final screen = tester.getRect(find.byType(MaterialApp));
       final capsule = tester.getRect(find.byType(PlatformAdaptiveTabBar));
       final surface = tester.getRect(
-        find
-            .descendant(
-              of: find.byType(PlatformAdaptiveTabBar),
-              matching: find.byType(Material),
-            )
-            .first,
+        find.byKey(PlatformAdaptiveTabBar.surfaceKey),
       );
 
       expect(surface.width, lessThan(capsule.width));
@@ -80,14 +75,7 @@ void main() {
 
   group('minimized', () {
     Rect surfaceOf(WidgetTester tester) {
-      return tester.getRect(
-        find
-            .descendant(
-              of: find.byType(PlatformAdaptiveTabBar),
-              matching: find.byType(Material),
-            )
-            .first,
-      );
+      return tester.getRect(find.byKey(PlatformAdaptiveTabBar.surfaceKey));
     }
 
     testWidgets('contracts the capsule and drops the labels', (tester) async {

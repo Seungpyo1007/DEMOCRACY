@@ -1,3 +1,4 @@
+import 'package:cupertino_native_better/cupertino_native.dart';
 import 'package:democracy/src/design/app_tokens.dart';
 import 'package:flutter/material.dart';
 
@@ -95,8 +96,24 @@ class AppSwitch extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final surface = Theme.of(context).extension<AppSurfaceTokens>()!;
+    final theme = Theme.of(context);
+    final surface = theme.extension<AppSurfaceTokens>()!;
     final width = surface.isGlass ? 28.0 : 30.0;
+
+    // On a real iOS process the system switch is the right control: it carries
+    // the platform's own Liquid Glass treatment, its animation curve and its
+    // accessibility behaviour, none of which are worth re-deriving.
+    if (theme.extension<AppCapabilities>()?.nativeControls ?? false) {
+      return Semantics(
+        toggled: value,
+        label: semanticLabel,
+        child: SizedBox(
+          width: 52,
+          height: 32,
+          child: CNSwitch(value: value, onChanged: onChanged, height: 32),
+        ),
+      );
+    }
 
     return Semantics(
       toggled: value,
@@ -152,7 +169,20 @@ class AppSegmentedControl extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final surface = Theme.of(context).extension<AppSurfaceTokens>()!;
+    final theme = Theme.of(context);
+    final surface = theme.extension<AppSurfaceTokens>()!;
+
+    if (theme.extension<AppCapabilities>()?.nativeControls ?? false) {
+      return SizedBox(
+        height: 32,
+        child: CNSegmentedControl(
+          labels: segments,
+          selectedIndex: selectedIndex,
+          onValueChanged: onSelected,
+          shrinkWrap: true,
+        ),
+      );
+    }
 
     if (surface.isGlass) {
       return Wrap(

@@ -2,7 +2,13 @@ import 'package:democracy/src/design/app_tokens.dart';
 import 'package:flutter/material.dart';
 
 abstract final class AppTheme {
-  static ThemeData light(TargetPlatform platform) {
+  /// [nativeControls] declares that this process can host UIKit views. It
+  /// defaults to off so that tests and goldens resolve to the Flutter
+  /// controls; only the running app turns it on.
+  static ThemeData light(
+    TargetPlatform platform, {
+    bool nativeControls = false,
+  }) {
     final isCupertino =
         platform == TargetPlatform.iOS || platform == TargetPlatform.macOS;
     final surfaceTokens = isCupertino
@@ -32,7 +38,10 @@ abstract final class AppTheme {
       useMaterial3: true,
       platform: platform,
       colorScheme: colorScheme,
-      extensions: [surfaceTokens],
+      extensions: [
+        surfaceTokens,
+        nativeControls ? AppCapabilities.uiKit : AppCapabilities.none,
+      ],
       // Left transparent on iOS so AppPageBackground's gradient shows through;
       // painting a flat colour here would sit on top of it.
       scaffoldBackgroundColor: isCupertino

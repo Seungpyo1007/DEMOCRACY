@@ -1,7 +1,6 @@
-import 'dart:ui' show ImageFilter;
-
 import 'package:democracy/src/design/app_tokens.dart';
 import 'package:flutter/material.dart';
+import 'package:liquid_glass_widgets/liquid_glass_widgets.dart';
 
 /// The surface every block of content sits on.
 ///
@@ -69,6 +68,19 @@ class AppSurface extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    // Glass is a material, not a tint over a blur. `liquid_glass_widgets`
+    // renders the refraction, the specular edge and the shadow together, and
+    // it drops to an opaque surface on its own when the system asks for
+    // Reduce Transparency -- which a hand-rolled BackdropFilter would not.
+    if (blurSigma > 0) {
+      return GlassCard(
+        padding: EdgeInsets.zero,
+        clipBehavior: Clip.antiAlias,
+        shape: LiquidRoundedSuperellipse(borderRadius: borderRadius.topLeft.x),
+        child: child,
+      );
+    }
+
     final surface = DecoratedBox(
       decoration: BoxDecoration(
         color: fill,
@@ -78,29 +90,15 @@ class AppSurface extends StatelessWidget {
       child: child,
     );
 
-    // A BackdropFilter samples whatever is painted behind it, so it has to be
-    // clipped to the card or it blurs the whole layer. Zero sigma means the
-    // platform does not use glass, and paying for a filter that resolves to
-    // the identity is worse than a branch.
-    final body = blurSigma == 0
-        ? surface
-        : ClipRRect(
-            borderRadius: borderRadius,
-            child: BackdropFilter(
-              filter: ImageFilter.blur(sigmaX: blurSigma, sigmaY: blurSigma),
-              child: surface,
-            ),
-          );
-
     if (shadow.isEmpty) {
-      return body;
+      return surface;
     }
 
     // Outside the clip: a shadow drawn inside its own rounded rectangle is
     // clipped away by it.
     return DecoratedBox(
       decoration: BoxDecoration(borderRadius: borderRadius, boxShadow: shadow),
-      child: body,
+      child: surface,
     );
   }
 }
