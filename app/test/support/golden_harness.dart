@@ -4,6 +4,8 @@ import 'package:democracy/src/core/auth/address_controller.dart';
 import 'package:democracy/src/core/auth/address_state.dart';
 import 'package:democracy/src/design/app_page_background.dart';
 import 'package:democracy/src/design/app_theme.dart';
+import 'package:democracy/src/features/ai_match/application/match_providers.dart';
+import 'package:democracy/src/features/ai_match/data/fake_match_repository.dart';
 import 'package:democracy/src/features/district/application/district_providers.dart';
 import 'package:democracy/src/features/district/data/fake_district_repository.dart';
 import 'package:democracy/src/features/onboarding/application/onboarding_providers.dart';
@@ -69,6 +71,9 @@ Future<void> pumpGolden(
       ),
       locationRepositoryProvider.overrideWithValue(
         FakeLocationRepository(loader: loader),
+      ),
+      matchRepositoryProvider.overrideWithValue(
+        FakeMatchRepository(loader: loader, tokenDelay: Duration.zero),
       ),
       districtRepositoryProvider.overrideWithValue(
         FakeDistrictRepository(loader: loader),
