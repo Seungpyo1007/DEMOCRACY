@@ -67,12 +67,17 @@ if [ "$(uname -s)" = "Darwin" ]; then
   if [ ! -d ios ]; then
     echo "No ios/ directory; skipping the iOS steps." >&2
   else
-    # CocoaPods is conditional, not mandatory. Every direct dependency is pure
-    # Dart, so the Flutter tool never sets up a CocoaPods integration and no
-    # Podfile exists to install from -- running `pod install` unconditionally
-    # aborted the script here before it ever reached the build. The moment a
-    # plugin with iOS platform code is added, Flutter writes ios/Podfile and
-    # this branch starts doing the work again on its own.
+    # CocoaPods is conditional, not mandatory. Running `pod install`
+    # unconditionally aborted the script before it ever reached the build,
+    # because no Podfile existed to install from.
+    #
+    # The first version of this comment predicted a Podfile would appear as
+    # soon as a plugin with iOS platform code was added. Three of them were
+    # added -- the Liquid Glass packages -- and none did: Flutter resolved
+    # them through Swift Package Manager instead, which needs no Podfile and
+    # no pod install. The guard is still right, for a wider reason than the
+    # one it was written for. Only a plugin that is CocoaPods-only will bring
+    # a Podfile back, and this branch is waiting if one does.
     if [ -f ios/Podfile ]; then
       if ! command -v pod >/dev/null 2>&1; then
         echo "ios/Podfile exists but CocoaPods is not installed." >&2

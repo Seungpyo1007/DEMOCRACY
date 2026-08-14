@@ -4,6 +4,7 @@ import 'package:democracy/src/design/app_tokens.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:liquid_glass_widgets/liquid_glass_widgets.dart';
 
 abstract final class PlatformAdaptiveRoute {
   static Page<T> page<T>({
@@ -70,6 +71,14 @@ class PlatformAdaptiveTabBar extends StatelessWidget {
     super.key,
   });
 
+  /// The bar's visible surface, whatever it is made of.
+  ///
+  /// The material behind the strip changed once already -- an opaque Material
+  /// became a glass container on iOS -- and a test that finds the surface by
+  /// its widget type breaks on that change while the thing it is checking
+  /// (does the bar hug its content and clear the edges) has not moved.
+  static const surfaceKey = ValueKey('platform-adaptive-tab-bar-surface');
+
   final int currentIndex;
   final List<AdaptiveTabItem> items;
   final ValueChanged<int> onTap;
@@ -83,12 +92,14 @@ class PlatformAdaptiveTabBar extends StatelessWidget {
     final theme = Theme.of(context);
     final surfaceTokens = theme.extension<AppSurfaceTokens>()!;
 
-    // One control on both platforms. NavigationBar and CupertinoTabBar both
+    // One layout on both platforms. NavigationBar and CupertinoTabBar both
     // stretch to the full width, and the shape this product wants is the
-    // iOS 26 one: a capsule only as wide as its own items. Only the inset
-    // still varies by platform.
+    // iOS 26 one: a capsule only as wide as its own items. The material
+    // underneath does differ -- iOS gets real glass, Android an opaque
+    // surface -- but that is [_FloatingBarFrame]'s business, not this one's.
     return _FloatingBarFrame(
       inset: surfaceTokens.navBarInset,
+      surfaceTokens: surfaceTokens,
       // surfaceContainerLowest, not surfaceContainer: this scheme is seeded
       // monochrome, so the mid container roles collapse onto the page
       // background and the capsule stops reading as detached.
@@ -267,16 +278,43 @@ class _CapsuleTabItem extends StatelessWidget {
 class _FloatingBarFrame extends StatelessWidget {
   const _FloatingBarFrame({
     required this.inset,
+    required this.surfaceTokens,
     required this.color,
     required this.child,
   });
 
   final double inset;
+  final AppSurfaceTokens surfaceTokens;
   final Color color;
   final Widget child;
 
   @override
   Widget build(BuildContext context) {
+    // The bar is the surface the guide most wants to be glass -- it floats
+    // over content, so anything opaque behind it is content the user loses.
+    // Only the material changes here; the strip inside keeps its own layout,
+    // its sliding indicator and its scroll contract.
+    final Widget surface = surfaceTokens.isGlass
+        ? GlassContainer(
+            key: PlatformAdaptiveTabBar.surfaceKey,
+            padding: EdgeInsets.zero,
+            // The guide gives the bar radius 30 outright. At the expanded
+            // height that is a capsule; at the contracted one it stays a
+            // capsule, because the strip never gets shorter than 60.
+            shape: LiquidRoundedSuperellipse(borderRadius: AppRadii.iosTabBar),
+            child: child,
+          )
+        : Material(
+            key: PlatformAdaptiveTabBar.surfaceKey,
+            color: color,
+            surfaceTintColor: Colors.transparent,
+            shadowColor: AppColors.ink.withValues(alpha: 0.20),
+            elevation: 3,
+            shape: const StadiumBorder(),
+            clipBehavior: Clip.antiAlias,
+            child: child,
+          );
+
     return SafeArea(
       top: false,
       child: Padding(
@@ -285,15 +323,7 @@ class _FloatingBarFrame extends StatelessWidget {
           // The bottom slot hands down an unbounded height, so the frame must
           // take its height from the child rather than try to fill.
           heightFactor: 1,
-          child: Material(
-            color: color,
-            surfaceTintColor: Colors.transparent,
-            shadowColor: AppColors.ink.withValues(alpha: 0.20),
-            elevation: 3,
-            shape: const StadiumBorder(),
-            clipBehavior: Clip.antiAlias,
-            child: child,
-          ),
+          child: surface,
         ),
       ),
     );

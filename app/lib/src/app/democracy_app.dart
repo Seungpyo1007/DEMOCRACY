@@ -15,7 +15,12 @@ class DemocracyApp extends ConsumerWidget {
     return MaterialApp.router(
       title: 'DEMOCRACY',
       debugShowCheckedModeBanner: false,
-      theme: AppTheme.light(defaultTargetPlatform),
+      // The one place native controls are switched on: a real iOS process,
+      // where a platform view has something to embed.
+      theme: AppTheme.light(
+        defaultTargetPlatform,
+        nativeControls: defaultTargetPlatform == TargetPlatform.iOS,
+      ),
       builder: AppPageBackground.builder,
       routerConfig: router,
     );

@@ -328,6 +328,43 @@ class AppSurfaceTokens extends ThemeExtension<AppSurfaceTokens> {
   }
 }
 
+/// What the process this build is running in can actually do.
+///
+/// Separate from [AppSurfaceTokens] because these are not design decisions.
+/// Native controls are UIKit views embedded through a platform view, and a
+/// platform view draws nothing under `flutter test` -- so a theme built for
+/// iOS in a test must still resolve to the Flutter controls, or every widget
+/// test and golden covering a switch would assert against an empty rectangle.
+///
+/// Defaults to off, and only [DemocracyApp] turns it on, on a real iOS
+/// process. Anything that reads this is claiming "I have a native equivalent",
+/// not "I look different on iOS" -- the latter is a surface token.
+@immutable
+class AppCapabilities extends ThemeExtension<AppCapabilities> {
+  const AppCapabilities({required this.nativeControls});
+
+  static const none = AppCapabilities(nativeControls: false);
+  static const uiKit = AppCapabilities(nativeControls: true);
+
+  final bool nativeControls;
+
+  @override
+  AppCapabilities copyWith({bool? nativeControls}) {
+    return AppCapabilities(
+      nativeControls: nativeControls ?? this.nativeControls,
+    );
+  }
+
+  @override
+  AppCapabilities lerp(
+    covariant ThemeExtension<AppCapabilities>? other,
+    double t,
+  ) {
+    // A capability is present or it is not; there is no halfway.
+    return t < 0.5 ? this : (other is AppCapabilities ? other : this);
+  }
+}
+
 abstract final class AppTypography {
   static const _fallback = <String>['Pretendard'];
 

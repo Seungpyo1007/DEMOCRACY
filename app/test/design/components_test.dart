@@ -1,3 +1,4 @@
+import 'package:cupertino_native_better/cupertino_native.dart';
 import 'package:democracy/src/design/app_theme.dart';
 import 'package:democracy/src/design/app_tokens.dart';
 import 'package:democracy/src/design/components/app_card.dart';
@@ -7,6 +8,7 @@ import 'package:democracy/src/design/components/app_timeline.dart';
 import 'package:democracy/src/design/components/labeled_bar.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
+import 'package:liquid_glass_widgets/liquid_glass_widgets.dart';
 
 void main() {
   Future<void> pump(
@@ -28,37 +30,30 @@ void main() {
   }
 
   group('AppCard', () {
-    // The whole reason the card exists: one caller, two materials.
-    testWidgets('blurs on iOS and does not on Android', (tester) async {
+    // The whole reason the card exists: one caller, two materials. iOS gets
+    // the real Liquid Glass renderer, Android an opaque fill -- and neither
+    // caller has to know which.
+    testWidgets('is glass on iOS and a plain surface on Android', (
+      tester,
+    ) async {
       await pump(tester, TargetPlatform.iOS, const AppCard(child: Text('x')));
-      expect(find.byType(BackdropFilter), findsOneWidget);
+      expect(find.byType(GlassCard), findsOneWidget);
 
       await pump(
         tester,
         TargetPlatform.android,
         const AppCard(child: Text('x')),
       );
-      expect(find.byType(BackdropFilter), findsNothing);
+      expect(find.byType(GlassCard), findsNothing);
     });
 
-    testWidgets('is translucent on iOS and opaque on Android', (tester) async {
-      await pump(tester, TargetPlatform.iOS, const AppCard(child: Text('x')));
-      final glass = decorationOf(
-        tester,
-        find
-            .descendant(
-              of: find.byType(AppCard),
-              matching: find.byType(DecoratedBox),
-            )
-            .last,
-      );
-      expect(glass.color!.a, lessThan(1.0));
-
+    testWidgets('Android draws an opaque fill with a border', (tester) async {
       await pump(
         tester,
         TargetPlatform.android,
         const AppCard(child: Text('x')),
       );
+
       final opaque = decorationOf(
         tester,
         find
@@ -69,6 +64,47 @@ void main() {
             .last,
       );
       expect(opaque.color!.a, 1.0);
+      expect(opaque.border, isNotNull);
+    });
+
+    testWidgets('takes the glass radius from the platform tokens', (
+      tester,
+    ) async {
+      await pump(tester, TargetPlatform.iOS, const AppCard(child: Text('x')));
+
+      final shape = tester.widget<GlassCard>(find.byType(GlassCard)).shape;
+      expect(
+        (shape as LiquidRoundedSuperellipse).borderRadius,
+        AppSurfaceTokens.ios.cardRadius,
+      );
+    });
+  });
+
+  group('native controls', () {
+    // A platform view draws nothing under `flutter test`, so a theme built for
+    // iOS in a test has to keep resolving to the Flutter controls. Only the
+    // running app declares the capability.
+    testWidgets('are off unless the process declares it can host them', (
+      tester,
+    ) async {
+      expect(
+        AppTheme.light(TargetPlatform.iOS).extension<AppCapabilities>(),
+        AppCapabilities.none,
+      );
+      expect(
+        AppTheme.light(
+          TargetPlatform.iOS,
+          nativeControls: true,
+        ).extension<AppCapabilities>(),
+        AppCapabilities.uiKit,
+      );
+
+      await pump(
+        tester,
+        TargetPlatform.iOS,
+        AppSwitch(value: false, onChanged: (_) {}, semanticLabel: '실명'),
+      );
+      expect(find.byType(CNSwitch), findsNothing);
     });
   });
 
