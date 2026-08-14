@@ -84,6 +84,9 @@ Future<void> pumpGolden(
       reviewRepositoryProvider.overrideWithValue(
         FakeReviewRepository(loader: loader),
       ),
+      communityRepositoryProvider.overrideWithValue(
+        FakeCommunityRepository(loader: loader),
+      ),
     ],
   );
   addTearDown(container.dispose);
