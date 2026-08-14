@@ -12,6 +12,8 @@ import 'package:democracy/src/features/onboarding/application/onboarding_provide
 import 'package:democracy/src/features/onboarding/data/fake_address_repositories.dart';
 import 'package:democracy/src/features/pledges/application/pledge_providers.dart';
 import 'package:democracy/src/features/pledges/data/fake_pledge_repository.dart';
+import 'package:democracy/src/features/results/application/results_providers.dart';
+import 'package:democracy/src/features/results/data/fake_results_repository.dart';
 import 'package:democracy/src/features/reviews/application/review_providers.dart';
 import 'package:democracy/src/features/reviews/data/fake_review_repository.dart';
 import 'package:flutter/material.dart';
@@ -60,6 +62,10 @@ Future<void> pumpGolden(
   bool withDistrict = true,
   bool verified = false,
   OnboardingStep? onboardingStep,
+
+  /// A screen with a deliberately perpetual animation -- the LIVE dot on the
+  /// results screen -- can never settle. Pump it a fixed distance instead.
+  bool settle = true,
 }) async {
   useGoldenViewport(tester);
 
@@ -71,6 +77,13 @@ Future<void> pumpGolden(
       ),
       locationRepositoryProvider.overrideWithValue(
         FakeLocationRepository(loader: loader),
+      ),
+      resultsRepositoryProvider.overrideWithValue(
+        FakeResultsRepository(
+          loader: loader,
+          interval: Duration.zero,
+          ticks: 0,
+        ),
       ),
       matchRepositoryProvider.overrideWithValue(
         FakeMatchRepository(loader: loader, tokenDelay: Duration.zero),
@@ -135,7 +148,12 @@ Future<void> pumpGolden(
       ),
     ),
   );
-  await tester.pumpAndSettle();
+  if (settle) {
+    await tester.pumpAndSettle();
+  } else {
+    await tester.pump();
+    await tester.pump(const Duration(milliseconds: 400));
+  }
 }
 
 /// Guards the assumption the disk bundle rests on: the fixture keys the app
