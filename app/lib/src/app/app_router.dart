@@ -3,6 +3,8 @@ import 'package:democracy/src/core/adaptive/platform_adaptive.dart';
 import 'package:democracy/src/core/auth/address_controller.dart';
 import 'package:democracy/src/features/district/presentation/district_home_screen.dart';
 import 'package:democracy/src/features/onboarding/presentation/onboarding_screen.dart';
+import 'package:democracy/src/features/pledges/presentation/pledge_detail_screen.dart';
+import 'package:democracy/src/features/pledges/presentation/pledge_tracker_screen.dart';
 import 'package:democracy/src/features/reviews/presentation/resident_review_screen.dart';
 import 'package:democracy/src/features/shared/presentation/feature_placeholder_screen.dart';
 import 'package:democracy/src/features/shell/presentation/app_shell.dart';
@@ -57,11 +59,20 @@ final appRouterProvider = Provider<GoRouter>((ref) {
                 pageBuilder: (context, state) => PlatformAdaptiveRoute.page(
                   context: context,
                   key: state.pageKey,
-                  child: const FeaturePlaceholderScreen(
-                    title: '공약 트래커',
-                    description: '공약 분포와 판정 타임라인은 MVP 2차에서 구현합니다.',
-                  ),
+                  child: const PledgeTrackerScreen(),
                 ),
+                routes: [
+                  GoRoute(
+                    path: AppRoutes.pledgeDetailSegment,
+                    pageBuilder: (context, state) => PlatformAdaptiveRoute.page(
+                      context: context,
+                      key: state.pageKey,
+                      child: PledgeDetailScreen(
+                        pledgeId: state.pathParameters['id'] ?? '',
+                      ),
+                    ),
+                  ),
+                ],
               ),
             ],
           ),

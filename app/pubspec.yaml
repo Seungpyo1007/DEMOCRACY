@@ -8,6 +8,7 @@ environment:
   flutter: ">=3.44.0"
 
 dependencies:
+  cupertino_icons: ^1.0.9
   cupertino_native_better: ^1.5.4
   fl_chart: ^1.2.0
   flutter:
