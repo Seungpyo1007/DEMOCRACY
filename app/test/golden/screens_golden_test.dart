@@ -7,6 +7,7 @@ import 'package:democracy/src/features/onboarding/application/onboarding_provide
 import 'package:democracy/src/features/onboarding/presentation/onboarding_screen.dart';
 import 'package:democracy/src/features/pledges/presentation/pledge_detail_screen.dart';
 import 'package:democracy/src/features/pledges/presentation/pledge_tracker_screen.dart';
+import 'package:democracy/src/features/results/presentation/election_results_screen.dart';
 import 'package:democracy/src/features/reviews/presentation/community_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
@@ -114,6 +115,22 @@ void main() {
       await expectLater(
         find.byType(MaterialApp),
         matchesGoldenFile('goldens/ai_match_${name}_390dp.png'),
+      );
+    });
+
+    testWidgets('election results at 390dp on $name', (tester) async {
+      await pumpGolden(
+        tester,
+        screen: const ElectionResultsScreen(),
+        platform: platform,
+        // The LIVE dot never settles, so this one is pumped rather than
+        // settled -- see the note in pumpGolden.
+        settle: false,
+      );
+
+      await expectLater(
+        find.byType(MaterialApp),
+        matchesGoldenFile('goldens/results_${name}_390dp.png'),
       );
     });
 

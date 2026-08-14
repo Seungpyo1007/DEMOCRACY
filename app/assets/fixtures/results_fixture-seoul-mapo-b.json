@@ -1,0 +1,250 @@
+{
+  "_note": "Sample count. Not a real election, not real candidates, not real numbers.",
+  "electionName": "제23대 총선",
+  "overallCountedShare": 67.2,
+  "live": true,
+  "districts": [
+    {
+      "districtId": "fixture-seoul-mapo-b",
+      "districtName": "서울 마포구 을",
+      "countedShare": 71,
+      "source": {
+        "sourceUrl": "https://info.nec.go.kr/fixture/count",
+        "fetchedAt": "2026-07-30T09:00:00Z"
+      },
+      "tallies": [
+        {
+          "name": "박서연",
+          "party": "나다당",
+          "share": 48.2
+        },
+        {
+          "name": "김민준",
+          "party": "가나당",
+          "share": 44.7
+        },
+        {
+          "name": "이도현",
+          "party": "무소속",
+          "share": 7.1
+        }
+      ]
+    },
+    {
+      "districtId": "fixture-seoul-mapo-a",
+      "districtName": "서울 마포구 갑",
+      "countedShare": 64,
+      "source": {
+        "sourceUrl": "https://info.nec.go.kr/fixture/count",
+        "fetchedAt": "2026-07-30T09:00:00Z"
+      },
+      "tallies": [
+        {
+          "name": "정하윤",
+          "party": "다라당",
+          "share": 51.3
+        },
+        {
+          "name": "최우진",
+          "party": "가나당",
+          "share": 41.0
+        },
+        {
+          "name": "한지호",
+          "party": "무소속",
+          "share": 7.7
+        }
+      ]
+    },
+    {
+      "districtId": "fixture-seoul-seodaemun-a",
+      "districtName": "서울 서대문구 갑",
+      "countedShare": 82,
+      "source": {
+        "sourceUrl": "https://info.nec.go.kr/fixture/count",
+        "fetchedAt": "2026-07-30T09:00:00Z"
+      },
+      "tallies": [
+        {
+          "name": "오세림",
+          "party": "가나당",
+          "share": 46.9
+        },
+        {
+          "name": "배준영",
+          "party": "나다당",
+          "share": 45.5
+        },
+        {
+          "name": "윤태경",
+          "party": "무소속",
+          "share": 7.6
+        }
+      ]
+    },
+    {
+      "districtId": "fixture-seoul-seodaemun-b",
+      "districtName": "서울 서대문구 을",
+      "countedShare": 39,
+      "source": {
+        "sourceUrl": "https://info.nec.go.kr/fixture/count",
+        "fetchedAt": "2026-07-30T09:00:00Z"
+      },
+      "tallies": [
+        {
+          "name": "문가온",
+          "party": "나다당",
+          "share": 49.8
+        },
+        {
+          "name": "서다인",
+          "party": "다라당",
+          "share": 42.2
+        },
+        {
+          "name": "장현우",
+          "party": "무소속",
+          "share": 8.0
+        }
+      ]
+    },
+    {
+      "districtId": "fixture-seoul-eunpyeong-a",
+      "districtName": "서울 은평구 갑",
+      "countedShare": 55,
+      "source": {
+        "sourceUrl": "https://info.nec.go.kr/fixture/count",
+        "fetchedAt": "2026-07-30T09:00:00Z"
+      },
+      "tallies": [
+        {
+          "name": "남시우",
+          "party": "가나당",
+          "share": 47.4
+        },
+        {
+          "name": "도예린",
+          "party": "나다당",
+          "share": 44.1
+        },
+        {
+          "name": "류지환",
+          "party": "무소속",
+          "share": 8.5
+        }
+      ]
+    },
+    {
+      "districtId": "fixture-seoul-yongsan",
+      "districtName": "서울 용산구",
+      "countedShare": 91,
+      "source": {
+        "sourceUrl": "https://info.nec.go.kr/fixture/count",
+        "fetchedAt": "2026-07-30T09:00:00Z"
+      },
+      "tallies": [
+        {
+          "name": "백가람",
+          "party": "다라당",
+          "share": 50.6
+        },
+        {
+          "name": "신유나",
+          "party": "가나당",
+          "share": 42.9
+        },
+        {
+          "name": "조민석",
+          "party": "무소속",
+          "share": 6.5
+        }
+      ]
+    }
+  ],
+  "historical": [
+    {
+      "year": 2016,
+      "share": 44.1
+    },
+    {
+      "year": 2020,
+      "share": 46.8
+    },
+    {
+      "year": 2024,
+      "share": 45.2
+    },
+    {
+      "year": 2026,
+      "share": 48.2
+    }
+  ],
+  "polls": [
+    {
+      "label": "한국갤럽",
+      "accredited": true,
+      "points": [
+        {
+          "year": 1,
+          "share": 43.0
+        },
+        {
+          "year": 2,
+          "share": 45.5
+        },
+        {
+          "year": 3,
+          "share": 46.9
+        },
+        {
+          "year": 4,
+          "share": 47.8
+        }
+      ]
+    },
+    {
+      "label": "리얼미터",
+      "accredited": true,
+      "points": [
+        {
+          "year": 1,
+          "share": 41.8
+        },
+        {
+          "year": 2,
+          "share": 44.2
+        },
+        {
+          "year": 3,
+          "share": 46.1
+        },
+        {
+          "year": 4,
+          "share": 47.0
+        }
+      ]
+    },
+    {
+      "label": "앱 내 조사",
+      "accredited": false,
+      "points": [
+        {
+          "year": 1,
+          "share": 47.5
+        },
+        {
+          "year": 2,
+          "share": 49.0
+        },
+        {
+          "year": 3,
+          "share": 50.2
+        },
+        {
+          "year": 4,
+          "share": 51.4
+        }
+      ]
+    }
+  ]
+}
