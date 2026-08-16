@@ -1,6 +1,7 @@
 import 'package:democracy/src/app/app_routes.dart';
 import 'package:democracy/src/core/auth/address_controller.dart';
 import 'package:democracy/src/core/auth/address_state.dart';
+import 'package:democracy/src/core/auth/address_store.dart';
 import 'package:democracy/src/design/app_theme.dart';
 import 'package:democracy/src/features/onboarding/application/onboarding_providers.dart';
 import 'package:democracy/src/features/onboarding/data/fake_address_repositories.dart';
@@ -23,6 +24,7 @@ void main() {
     final loader = fixtureLoaderFromDisk();
     final container = ProviderContainer(
       overrides: [
+        addressStoreProvider.overrideWithValue(InMemoryAddressStore()),
         addressSearchRepositoryProvider.overrideWithValue(
           FakeAddressSearchRepository(loader: loader),
         ),

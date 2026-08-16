@@ -1,5 +1,6 @@
 import 'package:democracy/src/core/auth/address_controller.dart';
 import 'package:democracy/src/core/auth/address_state.dart';
+import 'package:democracy/src/core/auth/address_store.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_test/flutter_test.dart';
 
@@ -11,7 +12,11 @@ const _seodaemun = DistrictRef(
 
 void main() {
   test('starts empty and follows the address state', () {
-    final container = ProviderContainer();
+    final container = ProviderContainer(
+      overrides: [
+        addressStoreProvider.overrideWithValue(InMemoryAddressStore()),
+      ],
+    );
     addTearDown(container.dispose);
 
     expect(container.read(districtProvider), isNull);
@@ -31,7 +36,11 @@ void main() {
   // everywhere. Verification changing without the district changing must not
   // trigger one, or every screen refetches when someone finishes onboarding.
   test('does not rebuild when only the verification changes', () {
-    final container = ProviderContainer();
+    final container = ProviderContainer(
+      overrides: [
+        addressStoreProvider.overrideWithValue(InMemoryAddressStore()),
+      ],
+    );
     addTearDown(container.dispose);
 
     container

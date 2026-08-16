@@ -2,6 +2,7 @@ import 'dart:io';
 
 import 'package:democracy/src/core/auth/address_controller.dart';
 import 'package:democracy/src/core/auth/address_state.dart';
+import 'package:democracy/src/core/auth/address_store.dart';
 import 'package:democracy/src/design/app_page_background.dart';
 import 'package:democracy/src/design/app_theme.dart';
 import 'package:democracy/src/features/ai_match/application/match_providers.dart';
@@ -72,6 +73,7 @@ Future<void> pumpGolden(
   final loader = fixtureLoaderFromDisk();
   final container = ProviderContainer(
     overrides: [
+      addressStoreProvider.overrideWithValue(InMemoryAddressStore()),
       addressSearchRepositoryProvider.overrideWithValue(
         FakeAddressSearchRepository(loader: loader),
       ),
