@@ -1,5 +1,6 @@
 import 'package:democracy/src/core/provenance/source_metadata.dart';
 import 'package:democracy/src/features/results/domain/election_schedule.dart';
+import 'package:democracy/src/features/results/domain/poll_disclosure.dart';
 import 'package:democracy/src/features/results/domain/publication_gate.dart';
 
 /// One candidate's share in a district.
@@ -125,27 +126,35 @@ class HistoricalPoint {
   final double share;
 }
 
-/// A poll series.
+/// A poll series, with the disclosure the law makes inseparable from it.
 ///
-/// [accredited] is the whole point of the type. An in-app poll and a
-/// registered pollster's are not the same kind of number, and the guide
-/// requires the difference to be visible at all times -- so it is a field
-/// rather than a styling choice made at the call site.
+/// [accredited] draws the distinction the guide asks to be visible at all
+/// times, but it is no longer the whole disclosure: 제108조제5항 requires the
+/// nine items in [PollDisclosure] to accompany any published result, and this
+/// was the one political figure in the app that rendered without provenance of
+/// any kind. It now fails to parse rather than fails to disclose.
 class PollSeries {
   const PollSeries({
     required this.label,
     required this.accredited,
     required this.points,
+    required this.disclosure,
   });
 
   factory PollSeries.fromJson(Object? json) {
     if (json is! Map) {
-      throw const FormatException('A poll series must be an object.');
+      throw const MissingDisclosureException(
+        pollLabel: '(무명)',
+        missing: ['조사 자체'],
+      );
     }
 
     final label = json['label'];
     if (label is! String || label.isEmpty) {
-      throw const FormatException('A poll series needs a label.');
+      throw const MissingDisclosureException(
+        pollLabel: '(무명)',
+        missing: ['조사기관'],
+      );
     }
 
     final raw = json['points'];
@@ -157,15 +166,18 @@ class PollSeries {
             ? raw.map(HistoricalPoint.fromJson)
             : const <HistoricalPoint>[],
       ),
+      disclosure: PollDisclosure.fromJson(json['disclosure'], pollLabel: label),
     );
   }
 
   final String label;
 
-  /// True for 갤럽 and 리얼미터; false for anything this app collected.
+  /// True for a pollster registered with the 중앙선거여론조사심의위원회.
+  /// It changes how the series is drawn, not whether it must disclose.
   final bool accredited;
 
   final List<HistoricalPoint> points;
+  final PollDisclosure disclosure;
 
   String get caption => accredited ? '$label · 공인 조사' : '$label · 공인 조사 아님';
 }

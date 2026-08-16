@@ -135,6 +135,26 @@ void main() {
       );
     });
 
+    // The poll tab, because the disclosure is dense two-line text at 390dp and
+    // is the layout in this screen most likely to overflow.
+    testWidgets('election poll disclosure at 390dp on $name', (tester) async {
+      await pumpGolden(
+        tester,
+        screen: const ElectionResultsScreen(),
+        platform: platform,
+        settle: false,
+      );
+
+      await tester.tap(find.text('여론조사 비교'));
+      await tester.pump();
+      await tester.pump(const Duration(milliseconds: 400));
+
+      await expectLater(
+        find.byType(MaterialApp),
+        matchesGoldenFile('goldens/results_polls_${name}_390dp.png'),
+      );
+    });
+
     // The state nobody looks at by hand and the one that must never regress
     // quietly. A clock an hour before the fixture's close puts both embargoes
     // on at once: no map, no count, and the poll tab replaced by its notice.
