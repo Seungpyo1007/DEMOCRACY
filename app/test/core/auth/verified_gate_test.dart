@@ -1,5 +1,6 @@
 import 'package:democracy/src/core/auth/address_controller.dart';
 import 'package:democracy/src/core/auth/address_state.dart';
+import 'package:democracy/src/core/auth/address_store.dart';
 import 'package:democracy/src/core/auth/verified_gate.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -12,6 +13,9 @@ void main() {
 
     await tester.pumpWidget(
       ProviderScope(
+        overrides: [
+          addressStoreProvider.overrideWithValue(InMemoryAddressStore()),
+        ],
         child: MaterialApp(
           home: Scaffold(
             body: VerifiedGate(
@@ -42,7 +46,11 @@ void main() {
   });
 
   testWidgets('runs a verified write action once', (tester) async {
-    final container = ProviderContainer();
+    final container = ProviderContainer(
+      overrides: [
+        addressStoreProvider.overrideWithValue(InMemoryAddressStore()),
+      ],
+    );
     addTearDown(container.dispose);
     container
         .read(addressControllerProvider.notifier)

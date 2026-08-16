@@ -1,6 +1,7 @@
 import 'package:democracy/src/app/app_routes.dart';
 import 'package:democracy/src/core/auth/address_controller.dart';
 import 'package:democracy/src/core/auth/address_state.dart';
+import 'package:democracy/src/core/auth/address_store.dart';
 import 'package:democracy/src/design/app_theme.dart';
 import 'package:democracy/src/features/reviews/application/review_providers.dart';
 import 'package:democracy/src/features/reviews/data/fake_review_repository.dart';
@@ -31,6 +32,7 @@ void main() {
     final loader = fixtureLoaderFromDisk();
     final container = ProviderContainer(
       overrides: [
+        addressStoreProvider.overrideWithValue(InMemoryAddressStore()),
         reviewRepositoryProvider.overrideWithValue(
           FakeReviewRepository(loader: loader),
         ),

@@ -1,6 +1,7 @@
 import 'package:democracy/src/app/app_routes.dart';
 import 'package:democracy/src/core/auth/address_controller.dart';
 import 'package:democracy/src/core/auth/address_state.dart';
+import 'package:democracy/src/core/auth/address_store.dart';
 import 'package:democracy/src/core/provenance/source_metadata.dart';
 import 'package:democracy/src/design/app_theme.dart';
 import 'package:democracy/src/features/ai_match/application/match_providers.dart';
@@ -32,6 +33,7 @@ void main() {
 
     final container = ProviderContainer(
       overrides: [
+        addressStoreProvider.overrideWithValue(InMemoryAddressStore()),
         matchRepositoryProvider.overrideWithValue(
           FakeMatchRepository(
             loader: fixtureLoaderFromDisk(),

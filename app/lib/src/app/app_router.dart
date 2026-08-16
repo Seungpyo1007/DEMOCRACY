@@ -15,7 +15,20 @@ import 'package:go_router/go_router.dart';
 
 final appRouterProvider = Provider<GoRouter>((ref) {
   final router = GoRouter(
-    initialLocation: AppRoutes.onboarding,
+    // Where a launch opens is decided by whether a district survived the last
+    // one. The guard cannot do this on its own: it deliberately lets a
+    // resident who has a district visit onboarding, because the verification
+    // prompt routes here to upgrade a read-only session -- so a fixed
+    // onboarding start would be allowed to stand, and a returning resident
+    // would open on a screen they finished with once.
+    //
+    // Read, not watched: this is the location the router is built with, and
+    // rebuilding a router to change it would discard the navigation stack.
+    // `addressRestoreProvider` is what makes the read here meaningful, by
+    // finishing before this provider is first built.
+    initialLocation: ref.read(addressControllerProvider).district == null
+        ? AppRoutes.onboarding
+        : AppRoutes.home,
     // Onboarding is the only route reachable without a district. Without this
     // the shell was open to any deep link, and initialLocation alone stopped
     // nothing once a URL could be handed in from outside.
