@@ -6,7 +6,9 @@ import 'package:democracy/src/design/components/app_labels.dart';
 import 'package:democracy/src/design/components/labeled_bar.dart';
 import 'package:democracy/src/features/results/application/results_providers.dart';
 import 'package:democracy/src/features/results/domain/election_results.dart';
+import 'package:democracy/src/features/results/domain/publication_gate.dart';
 import 'package:democracy/src/features/results/presentation/count_map.dart';
+import 'package:democracy/src/features/shared/presentation/embargo_notice.dart';
 import 'package:democracy/src/features/shared/presentation/provenance_widgets.dart';
 import 'package:fl_chart/fl_chart.dart';
 import 'package:flutter/material.dart';
@@ -36,21 +38,34 @@ class _ElectionResultsScreenState extends ConsumerState<ElectionResultsScreen> {
         loading: () => const Center(child: CircularProgressIndicator()),
         error: (error, _) => const Center(child: Text('개표 정보를 불러오지 못했습니다.')),
         data: (data) {
+          // Exhaustive over a sealed type: deleting the withheld arm is a
+          // compile error, not a screen that quietly publishes a count before
+          // the polls close.
+          final counts = switch (data.counts) {
+            Published(:final value) => value,
+            Withheld() => null,
+          };
           final selectedId =
-              _selectedId ?? home ?? data.districts.firstOrNull?.districtId;
-          final selected = selectedId == null ? null : data.byId(selectedId);
+              _selectedId ?? home ?? counts?.districts.firstOrNull?.districtId;
+          final selected = selectedId == null ? null : counts?.byId(selectedId);
 
           return ListView(
             padding: EdgeInsets.zero,
             children: [
               _Header(results: data),
-              CountMap(
-                districts: data.districts,
-                selectedId: selectedId,
-                homeId: home,
-                onSelected: (district) =>
-                    setState(() => _selectedId = district.districtId),
-              ),
+              switch (data.counts) {
+                Published(:final value) => CountMap(
+                  districts: value.districts,
+                  selectedId: selectedId,
+                  homeId: home,
+                  onSelected: (district) =>
+                      setState(() => _selectedId = district.districtId),
+                ),
+                Withheld(:final article, :final notice) => EmbargoNotice(
+                  article: article,
+                  notice: notice,
+                ),
+              },
               Transform.translate(
                 // The panel overlaps the map, as the guide draws it: the two
                 // are one object, not a map with a list under it.
@@ -74,7 +89,13 @@ class _ElectionResultsScreenState extends ConsumerState<ElectionResultsScreen> {
                         const SizedBox(height: AppSpacing.x4),
                         switch (_segment) {
                           1 => _HistoricalChart(points: data.historical),
-                          2 => _PollComparison(polls: data.polls),
+                          2 => switch (data.polls) {
+                            Published(:final value) => _PollComparison(
+                              polls: value,
+                            ),
+                            Withheld(:final article, :final notice) =>
+                              EmbargoNotice(article: article, notice: notice),
+                          },
                           _ => const SizedBox.shrink(),
                         },
                       ],
@@ -119,7 +140,11 @@ class _Header extends StatelessWidget {
                     color: AppColors.neutral600,
                   ),
                 ),
-                if (results.live) ...[
+                // The LIVE dot says counting is running, which is itself a
+                // statement about the count. It rides with the figures.
+                if (results.counts case Published(
+                  value: final counts,
+                ) when counts.live) ...[
                   const SizedBox(width: AppSpacing.x2),
                   const _LiveDot(),
                 ],

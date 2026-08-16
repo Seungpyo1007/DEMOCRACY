@@ -1,6 +1,7 @@
 @Tags(['golden'])
 library;
 
+import 'package:democracy/src/core/time/kst.dart';
 import 'package:democracy/src/features/ai_match/presentation/ai_match_screen.dart';
 import 'package:democracy/src/features/district/presentation/district_home_screen.dart';
 import 'package:democracy/src/features/onboarding/application/onboarding_providers.dart';
@@ -132,6 +133,31 @@ void main() {
         find.byType(MaterialApp),
         matchesGoldenFile('goldens/results_${name}_390dp.png'),
       );
+    });
+
+    // The state nobody looks at by hand and the one that must never regress
+    // quietly. A clock an hour before the fixture's close puts both embargoes
+    // on at once: no map, no count, and the poll tab replaced by its notice.
+    testWidgets('election results under an embargo at 390dp on $name', (
+      tester,
+    ) async {
+      final container = await pumpGolden(
+        tester,
+        screen: const ElectionResultsScreen(),
+        platform: platform,
+        now: KstInstant.seoul(2026, 4, 15, 17),
+        // Nothing here animates -- the LIVE dot rides with the count, and the
+        // count is withheld -- but the pump path is kept the same as the
+        // published golden's so the two stay comparable.
+        settle: false,
+      );
+
+      await expectLater(
+        find.byType(MaterialApp),
+        matchesGoldenFile('goldens/results_embargo_${name}_390dp.png'),
+      );
+
+      container.dispose();
     });
 
     testWidgets('community at 390dp on $name', (tester) async {

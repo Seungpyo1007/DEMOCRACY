@@ -22,9 +22,9 @@ class FakeResultsRepository implements ResultsRepository {
   final int ticks;
 
   @override
-  Stream<ElectionResults> watch(String districtId) async* {
+  Stream<RawElectionResults> watch(String districtId) async* {
     final payload = await loader.load('results_$districtId');
-    var results = ElectionResults.fromJson(payload);
+    var results = RawElectionResults.fromJson(payload);
     yield results;
 
     if (!results.live) {
@@ -38,7 +38,7 @@ class FakeResultsRepository implements ResultsRepository {
     }
   }
 
-  ElectionResults _advance(ElectionResults results) {
+  RawElectionResults _advance(RawElectionResults results) {
     DistrictCount advanceDistrict(DistrictCount district) {
       final counted = (district.countedShare + 6).clamp(0.0, 100.0);
       return DistrictCount(
@@ -58,7 +58,8 @@ class FakeResultsRepository implements ResultsRepository {
         districts.fold<double>(0, (sum, d) => sum + d.countedShare) /
         (districts.isEmpty ? 1 : districts.length);
 
-    return ElectionResults(
+    return RawElectionResults(
+      schedule: results.schedule,
       electionName: results.electionName,
       overallCountedShare: overall,
       districts: List.unmodifiable(districts),

@@ -1,4 +1,6 @@
 import 'package:democracy/src/core/provenance/source_metadata.dart';
+import 'package:democracy/src/features/results/domain/election_schedule.dart';
+import 'package:democracy/src/features/results/domain/publication_gate.dart';
 
 /// One candidate's share in a district.
 ///
@@ -168,24 +170,30 @@ class PollSeries {
   String get caption => accredited ? '$label · 공인 조사' : '$label · 공인 조사 아님';
 }
 
-/// The whole election view: the map, the selected district, and the two
-/// comparisons the guide puts behind a segmented control.
-class ElectionResults {
-  const ElectionResults({
+/// The payload as it arrived, before any embargo is applied.
+///
+/// This is what a repository yields. It is a separate type from
+/// [ElectionResults] so that "parsed" and "publishable" cannot be confused:
+/// the figures here are ungated, and the only way to get a publishable view is
+/// through [PublicationGate].
+class RawElectionResults {
+  const RawElectionResults({
     required this.electionName,
     required this.overallCountedShare,
     required this.districts,
     required this.historical,
     required this.polls,
     required this.live,
+    required this.schedule,
   });
 
-  factory ElectionResults.fromJson(Map<String, Object?> json) {
+  factory RawElectionResults.fromJson(Map<String, Object?> json) {
     final rawDistricts = json['districts'];
     final rawHistorical = json['historical'];
     final rawPolls = json['polls'];
 
-    return ElectionResults(
+    return RawElectionResults(
+      schedule: ElectionSchedule.read(json),
       electionName: json['electionName'] as String? ?? '',
       overallCountedShare: json['overallCountedShare'] is num
           ? (json['overallCountedShare']! as num).toDouble()
@@ -219,21 +227,74 @@ class ElectionResults {
   /// the numbers say the same thing either way.
   final bool live;
 
-  String get header =>
-      '$electionName · 개표율 ${overallCountedShare.toStringAsFixed(1)}%';
+  /// Null only when the payload said so explicitly. A payload that stayed
+  /// silent never reaches here -- [ElectionSchedule.read] throws.
+  final ElectionSchedule? schedule;
+}
 
-  DistrictCount? byId(String id) {
-    for (final district in districts) {
-      if (district.districtId == id) {
-        return district;
-      }
-    }
-    return null;
-  }
+/// What a screen is allowed to draw.
+///
+/// The counting figures and the polls are wrapped in [Restricted] because
+/// 공직선거법 forbids publishing them at certain times. The constructors are
+/// private to this library so [PublicationGate] is the only thing that can
+/// make one -- there is no route from a repository to a screen that skips the
+/// check.
+class ElectionResults {
+  const ElectionResults._({
+    required this.electionName,
+    required this.counts,
+    required this.historical,
+    required this.polls,
+  });
+
+  /// The shape when no election is pending and nothing is embargoed.
+  factory ElectionResults.published({
+    required String electionName,
+    required CountView counts,
+    required List<HistoricalPoint> historical,
+    required List<PollSeries> polls,
+  }) => ElectionResults._(
+    electionName: electionName,
+    counts: Published(counts),
+    historical: historical,
+    polls: Published(polls),
+  );
+
+  factory ElectionResults.gated({
+    required String electionName,
+    required Restricted<CountView> counts,
+    required List<HistoricalPoint> historical,
+    required Restricted<List<PollSeries>> polls,
+  }) => ElectionResults._(
+    electionName: electionName,
+    counts: counts,
+    historical: historical,
+    polls: polls,
+  );
+
+  final String electionName;
+  final Restricted<CountView> counts;
+
+  /// Not restricted. A past election's published outcome is not covered by
+  /// either provision, and hiding it would be the app inventing a rule.
+  final List<HistoricalPoint> historical;
+
+  final Restricted<List<PollSeries>> polls;
+
+  /// The header can only state a counted share once counting may be shown.
+  String get header => switch (counts) {
+    Published(:final value) =>
+      '$electionName · 개표율 ${value.overallCountedShare.toStringAsFixed(1)}%',
+    Withheld() => electionName,
+  };
 }
 
 abstract interface class ResultsRepository {
   /// A stream because on election day this is SSE, and off it a slow poll.
   /// The screen should not know which it is getting.
-  Stream<ElectionResults> watch(String districtId);
+  ///
+  /// It yields the ungated payload: withholding is a decision about *now*, and
+  /// a repository that made it at fetch time would be answering a question
+  /// whose answer changes while the value sits in a stream.
+  Stream<RawElectionResults> watch(String districtId);
 }

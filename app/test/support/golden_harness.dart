@@ -3,6 +3,9 @@ import 'dart:io';
 import 'package:democracy/src/core/auth/address_controller.dart';
 import 'package:democracy/src/core/auth/address_state.dart';
 import 'package:democracy/src/core/auth/address_store.dart';
+import 'package:democracy/src/core/time/clock.dart';
+import 'package:democracy/src/core/time/clock_providers.dart';
+import 'package:democracy/src/core/time/kst.dart';
 import 'package:democracy/src/design/app_page_background.dart';
 import 'package:democracy/src/design/app_theme.dart';
 import 'package:democracy/src/features/ai_match/application/match_providers.dart';
@@ -40,6 +43,17 @@ const goldenDistrict = DistrictRef(
 /// The two platforms the required test names. Both are captured from the same
 /// widget tree, so a difference between the files is a real difference in the
 /// platform-adaptive layer rather than in the screen.
+/// The one canonical "now" the goldens are taken at.
+///
+/// Deliberately the same Korean calendar day as every fixture's `fetchedAt`
+/// (2026-07-30T09:00:00Z), and deliberately far from the fixture's election
+/// day, so nothing is embargoed and the committed pictures keep meaning what
+/// they meant when they were taken.
+final goldenNow = KstInstant.parse(
+  '2026-07-30T18:00:00+09:00',
+  field: 'goldenNow',
+);
+
 const goldenPlatforms = {
   'android': TargetPlatform.android,
   'ios': TargetPlatform.iOS,
@@ -56,7 +70,11 @@ void useGoldenViewport(WidgetTester tester) {
 }
 
 /// Builds the app frame a screen sits in, at the golden viewport.
-Future<void> pumpGolden(
+/// Returns the container so a test inside an embargo can dispose it in the
+/// body. Inside one there is a deadline ahead, so the results provider arms a
+/// timer for it, and the framework checks for pending timers before teardowns
+/// run.
+Future<ProviderContainer> pumpGolden(
   WidgetTester tester, {
   required Widget screen,
   required TargetPlatform platform,
@@ -67,6 +85,16 @@ Future<void> pumpGolden(
   /// A screen with a deliberately perpetual animation -- the LIVE dot on the
   /// results screen -- can never settle. Pump it a fixed distance instead.
   bool settle = true,
+
+  /// The moment the goldens are taken at.
+  ///
+  /// It defaults rather than being required, and it is applied here rather
+  /// than by each test, because the harness owns the container: a golden that
+  /// forgot to pin the clock cannot be written. Without this, the results
+  /// golden would start rendering an embargo notice the week of an election
+  /// and go back afterwards -- a picture that means something different
+  /// depending on the day it is compared.
+  KstInstant? now,
 }) async {
   useGoldenViewport(tester);
 
@@ -74,6 +102,7 @@ Future<void> pumpGolden(
   final container = ProviderContainer(
     overrides: [
       addressStoreProvider.overrideWithValue(InMemoryAddressStore()),
+      clockProvider.overrideWithValue(FixedClock(now ?? goldenNow)),
       addressSearchRepositoryProvider.overrideWithValue(
         FakeAddressSearchRepository(loader: loader),
       ),
@@ -156,6 +185,7 @@ Future<void> pumpGolden(
     await tester.pump();
     await tester.pump(const Duration(milliseconds: 400));
   }
+  return container;
 }
 
 /// Guards the assumption the disk bundle rests on: the fixture keys the app
