@@ -12,6 +12,7 @@
 - `app/`: Flutter 앱. 기능별 `{data,domain,application,presentation}` 계층과 생성된 Android/iOS 프로젝트.
 - `app/assets/fixtures/`: 샘플 payload. 실서비스 데이터가 아니다.
 - `docs/INITIAL_PLAN.md`: MVP 범위, 순서, 완료 조건.
+- `docs/ELECTION_LAW.md`: 공직선거법 조문과 코드의 강제 지점, BFF 책임, 추가하면 안 되는 것.
 - `HANDOFF.md`: 현재 상태와 다음 실행자용 인계 사항.
 - `CONTRIBUTING.md`: 브랜치 전략과 검증 절차.
 - `tool/bootstrap.sh` · `tool/bootstrap.ps1`: 툴체인 가드와 기본 검증을 재현하는 스크립트. macOS에서는 iOS 빌드까지 이어진다.
