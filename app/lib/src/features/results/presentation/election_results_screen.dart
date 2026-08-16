@@ -8,6 +8,7 @@ import 'package:democracy/src/features/results/application/results_providers.dar
 import 'package:democracy/src/features/results/domain/election_results.dart';
 import 'package:democracy/src/features/results/domain/publication_gate.dart';
 import 'package:democracy/src/features/results/presentation/count_map.dart';
+import 'package:democracy/src/features/results/presentation/poll_disclosure_sheet.dart';
 import 'package:democracy/src/features/shared/presentation/embargo_notice.dart';
 import 'package:democracy/src/features/shared/presentation/provenance_widgets.dart';
 import 'package:fl_chart/fl_chart.dart';
@@ -374,31 +375,79 @@ class _PollComparison extends StatelessWidget {
         ),
         const SizedBox(height: AppSpacing.x3),
         for (final series in polls) ...[
-          Row(
-            children: [
-              SizedBox(
-                width: 22,
-                child: CustomPaint(
-                  size: const Size(22, 2),
-                  painter: _LegendLine(accredited: series.accredited),
-                ),
-              ),
-              const SizedBox(width: AppSpacing.x2),
-              Text(
-                series.caption,
-                style: AppTextStyles.statLabel.copyWith(
-                  color: AppColors.neutral700,
-                ),
-              ),
-            ],
-          ),
-          const SizedBox(height: 3),
+          _PollLegendRow(series: series),
+          const SizedBox(height: AppSpacing.x2),
         ],
         const SizedBox(height: AppSpacing.x2),
         const DisclaimerBox(
           text: '앱 내 조사는 공인 조사가 아닙니다. 표본과 방법이 공개된 공인 조사와 같은 무게로 읽지 마세요.',
         ),
       ],
+    );
+  }
+}
+
+/// A series, with the disclosure the law makes inseparable from it.
+///
+/// 제108조제5항 asks the required items to accompany the published result, so
+/// the headline ones are drawn here rather than only behind the tap: a sheet
+/// the reader never opens does not accompany anything.
+class _PollLegendRow extends StatelessWidget {
+  const _PollLegendRow({required this.series});
+
+  final PollSeries series;
+
+  @override
+  Widget build(BuildContext context) {
+    return Semantics(
+      button: true,
+      label: '${series.caption}, ${series.disclosure.inlineNotice}, 표기사항 보기',
+      excludeSemantics: true,
+      child: GestureDetector(
+        onTap: () => PollDisclosureSheet.show(context, series.disclosure),
+        behavior: HitTestBehavior.opaque,
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Row(
+              children: [
+                SizedBox(
+                  width: 22,
+                  child: CustomPaint(
+                    size: const Size(22, 2),
+                    painter: _LegendLine(accredited: series.accredited),
+                  ),
+                ),
+                const SizedBox(width: AppSpacing.x2),
+                Expanded(
+                  child: Text(
+                    series.caption,
+                    style: AppTextStyles.statLabel.copyWith(
+                      color: AppColors.neutral700,
+                    ),
+                  ),
+                ),
+                Text(
+                  '표기사항',
+                  style: AppTextStyles.badge.copyWith(
+                    color: AppColors.accent700,
+                  ),
+                ),
+              ],
+            ),
+            const SizedBox(height: 2),
+            Padding(
+              padding: const EdgeInsets.only(left: 22 + AppSpacing.x2),
+              child: Text(
+                series.disclosure.inlineNotice,
+                style: AppTextStyles.badge.copyWith(
+                  color: AppColors.neutral600,
+                ),
+              ),
+            ),
+          ],
+        ),
+      ),
     );
   }
 }

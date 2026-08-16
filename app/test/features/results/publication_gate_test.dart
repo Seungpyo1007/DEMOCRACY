@@ -34,6 +34,24 @@ Map<String, Object?> _payload({Object? schedule = _unset}) => {
       'points': [
         {'year': 1, 'share': 43.0},
       ],
+      'disclosure': {
+        'client': '가상일보',
+        'pollster': '한국갤럽',
+        'fieldStart': '2026-07-27T10:00:00+09:00',
+        'fieldEnd': '2026-07-29T18:00:00+09:00',
+        'sampleSize': 1004,
+        'samplingMethod': '무선 가상번호 무작위추출',
+        'surveyMethod': '전화면접(무선 100%)',
+        'marginOfError': 3.1,
+        'confidenceLevel': 95.0,
+        'responseRate': 14.2,
+        'questionnaire': 'https://www.nesdc.go.kr/fixture/g/questionnaire',
+        'nesdcRegistration': 'https://www.nesdc.go.kr/fixture/g',
+        'source': {
+          'sourceUrl': 'https://www.nesdc.go.kr/fixture/g',
+          'fetchedAt': '2026-07-30T09:00:00Z',
+        },
+      },
     },
   ],
 };

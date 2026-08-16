@@ -136,7 +136,7 @@ void main() {
 
     // The guide requires the distinction to be visible at all times, so it is
     // a field on the series rather than a styling choice at the call site.
-    testWidgets('marks the app poll as not accredited, every time', (
+    testWidgets('marks every series with whether it is accredited', (
       tester,
     ) async {
       await pumpResults(tester);
@@ -145,8 +145,56 @@ void main() {
       await settle(tester);
 
       expect(find.text('한국갤럽 · 공인 조사'), findsOneWidget);
-      expect(find.text('앱 내 조사 · 공인 조사 아님'), findsOneWidget);
       expect(find.textContaining('공인 조사가 아닙니다'), findsOneWidget);
+    });
+
+    // 제108조제5항 asks the required items to accompany the published result.
+    // A sheet the reader never opens does not accompany anything, so the
+    // headline items are on the legend itself.
+    testWidgets('states the required items beside the figures', (tester) async {
+      await pumpResults(tester);
+
+      await tester.tap(find.text('여론조사 비교'));
+      await settle(tester);
+
+      expect(find.textContaining('표본 1004명'), findsOneWidget);
+      // 3.5 rather than 3.1: two of the three fixture series share a 3.1%p
+      // margin, as real polls of a similar sample do.
+      expect(find.textContaining('±3.5%p'), findsOneWidget);
+      expect(find.textContaining('응답률 14.2%'), findsOneWidget);
+      expect(find.text('표기사항'), findsNWidgets(3));
+    });
+
+    testWidgets('opens the full disclosure, registration link and all', (
+      tester,
+    ) async {
+      await pumpResults(tester);
+
+      await tester.tap(find.text('여론조사 비교'));
+      await settle(tester);
+      await tester.tap(find.text('한국갤럽 · 공인 조사'));
+      await settle(tester);
+
+      expect(find.text('공직선거법 제108조제5항'), findsOneWidget);
+      for (final item in const [
+        '조사기관',
+        '조사의뢰자',
+        '조사일시',
+        '표본크기',
+        '피조사자 선정방법',
+        '조사방법',
+        '표본오차',
+        '응답률',
+      ]) {
+        expect(find.text(item), findsOneWidget, reason: '$item is mandatory');
+      }
+      expect(find.text('질문내용 원문'), findsOneWidget);
+      expect(find.text('중앙선거여론조사심의위원회 등록현황'), findsOneWidget);
+      expect(
+        find.textContaining('nesdc.go.kr'),
+        findsNWidgets(2),
+        reason: 'both links are readable, not hidden behind their labels',
+      );
     });
   });
 
@@ -201,10 +249,32 @@ void main() {
   });
 
   group('the poll series', () {
+    // The fixture no longer ships an unaccredited series -- the app has no
+    // lawful way to publish its own survey -- so the caption for one is
+    // pinned against a synthetic payload instead. It still has to disclose:
+    // 제108조제5항 exempts nobody.
     test('defaults to not accredited when the payload is silent', () {
-      final series = PollSeries.fromJson(const {
-        'label': '출처 미상 조사',
-        'points': <Object?>[],
+      final series = PollSeries.fromJson({
+        'label': '가상 비공인 조사',
+        'points': const <Object?>[],
+        'disclosure': {
+          'client': '가상일보',
+          'pollster': '한국갤럽',
+          'fieldStart': '2026-07-27T10:00:00+09:00',
+          'fieldEnd': '2026-07-29T18:00:00+09:00',
+          'sampleSize': 1004,
+          'samplingMethod': '무선 가상번호 무작위추출',
+          'surveyMethod': '전화면접(무선 100%)',
+          'marginOfError': 3.1,
+          'confidenceLevel': 95.0,
+          'responseRate': 14.2,
+          'questionnaire': 'https://www.nesdc.go.kr/fixture/g/questionnaire',
+          'nesdcRegistration': 'https://www.nesdc.go.kr/fixture/g',
+          'source': {
+            'sourceUrl': 'https://www.nesdc.go.kr/fixture/g',
+            'fetchedAt': '2026-07-30T09:00:00Z',
+          },
+        },
       });
 
       expect(series.accredited, isFalse);

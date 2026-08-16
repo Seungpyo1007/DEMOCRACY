@@ -1,5 +1,5 @@
 {
-  "_note": "Sample count. Not a real election, not real candidates, not real numbers.",
+  "_note": "Sample count. Not a real election, not real candidates, not real numbers. 앱 자체 여론조사는 담지 않는다: 공직선거법 제108조제5항은 앱 조사를 면제하지 않고, 클라이언트는 중앙선거여론조사심의위원회에 조사를 등록할 수 없다.",
   "electionName": "제23대 총선",
   "electionSchedule": {
     "electionName": "제23대 국회의원선거",
@@ -208,7 +208,25 @@
           "year": 4,
           "share": 47.8
         }
-      ]
+      ],
+      "disclosure": {
+        "client": "가상일보",
+        "pollster": "한국갤럽",
+        "fieldStart": "2026-07-27T10:00:00+09:00",
+        "fieldEnd": "2026-07-29T18:00:00+09:00",
+        "sampleSize": 1004,
+        "samplingMethod": "무선 가상번호 무작위추출",
+        "surveyMethod": "전화면접(무선 100%)",
+        "marginOfError": 3.1,
+        "confidenceLevel": 95.0,
+        "responseRate": 14.2,
+        "questionnaire": "https://www.nesdc.go.kr/fixture/gallup-2607/questionnaire",
+        "nesdcRegistration": "https://www.nesdc.go.kr/fixture/gallup-2607",
+        "source": {
+          "sourceUrl": "https://www.nesdc.go.kr/fixture/gallup-2607",
+          "fetchedAt": "2026-07-30T09:00:00Z"
+        }
+      }
     },
     {
       "label": "리얼미터",
@@ -230,11 +248,29 @@
           "year": 4,
           "share": 47.0
         }
-      ]
+      ],
+      "disclosure": {
+        "client": "가상방송",
+        "pollster": "리얼미터",
+        "fieldStart": "2026-07-26T09:00:00+09:00",
+        "fieldEnd": "2026-07-28T17:00:00+09:00",
+        "sampleSize": 1010,
+        "samplingMethod": "무선 가상번호 무작위추출",
+        "surveyMethod": "자동응답(무선 90%·유선 10%)",
+        "marginOfError": 3.1,
+        "confidenceLevel": 95.0,
+        "responseRate": 4.7,
+        "questionnaire": "https://www.nesdc.go.kr/fixture/realmeter-2607/questionnaire",
+        "nesdcRegistration": "https://www.nesdc.go.kr/fixture/realmeter-2607",
+        "source": {
+          "sourceUrl": "https://www.nesdc.go.kr/fixture/realmeter-2607",
+          "fetchedAt": "2026-07-30T09:00:00Z"
+        }
+      }
     },
     {
-      "label": "앱 내 조사",
-      "accredited": false,
+      "label": "가상리서치",
+      "accredited": true,
       "points": [
         {
           "year": 1,
@@ -252,7 +288,25 @@
           "year": 4,
           "share": 51.4
         }
-      ]
+      ],
+      "disclosure": {
+        "client": "마포구민연합회",
+        "pollster": "가상리서치",
+        "fieldStart": "2026-07-24T10:00:00+09:00",
+        "fieldEnd": "2026-07-25T18:00:00+09:00",
+        "sampleSize": 803,
+        "samplingMethod": "무선 가상번호 무작위추출",
+        "surveyMethod": "전화면접(무선 100%)",
+        "marginOfError": 3.5,
+        "confidenceLevel": 95.0,
+        "responseRate": 11.8,
+        "questionnaire": "https://www.nesdc.go.kr/fixture/garesearch-2607/questionnaire",
+        "nesdcRegistration": "https://www.nesdc.go.kr/fixture/garesearch-2607",
+        "source": {
+          "sourceUrl": "https://www.nesdc.go.kr/fixture/garesearch-2607",
+          "fetchedAt": "2026-07-30T09:00:00Z"
+        }
+      }
     }
   ]
 }
