@@ -1,6 +1,14 @@
 {
   "_note": "Sample count. Not a real election, not real candidates, not real numbers.",
   "electionName": "제23대 총선",
+  "electionSchedule": {
+    "electionName": "제23대 국회의원선거",
+    "pollsClose": "2026-04-15T18:00:00+09:00",
+    "source": {
+      "sourceUrl": "https://info.nec.go.kr/fixture/schedule",
+      "fetchedAt": "2026-07-30T09:00:00Z"
+    }
+  },
   "overallCountedShare": 67.2,
   "live": true,
   "districts": [
