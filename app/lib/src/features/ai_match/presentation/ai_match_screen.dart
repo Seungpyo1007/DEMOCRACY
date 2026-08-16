@@ -7,6 +7,7 @@ import 'package:democracy/src/design/components/labeled_bar.dart';
 import 'package:democracy/src/design/components/match_radar.dart';
 import 'package:democracy/src/features/ai_match/application/match_providers.dart';
 import 'package:democracy/src/features/ai_match/domain/candidate_match.dart';
+import 'package:democracy/src/features/ai_match/presentation/ai_disclosure.dart';
 import 'package:democracy/src/features/onboarding/application/onboarding_providers.dart';
 import 'package:democracy/src/features/shared/presentation/provenance_widgets.dart';
 import 'package:flutter/material.dart';
@@ -30,8 +31,14 @@ class AiMatchScreen extends ConsumerWidget {
 
     return Scaffold(
       backgroundColor: Colors.transparent,
-      body: CustomScrollView(
-        slivers: [
+      // The disclosure and the scores are produced by one call. Deleting the
+      // banner deletes the results with it, and every widget that draws a
+      // score asks for the scope this installs -- so N-6 now fails loudly
+      // instead of silently, the way provenance already did.
+      body: DisclosedSlivers.scrollView(
+        disclosure: disclosure,
+        banner: const _DisclosureBanner(),
+        above: [
           SliverAppBar(
             pinned: false,
             elevation: 0,
@@ -61,14 +68,8 @@ class AiMatchScreen extends ConsumerWidget {
               ],
             ),
           ),
-
-          // Pinned, not scrolled past. N-6 is a standing disclosure: it has to
-          // still be on screen at the moment a reader is looking at a score.
-          const SliverPersistentHeader(
-            pinned: true,
-            delegate: _DisclosureHeader(),
-          ),
-
+        ],
+        content: [
           report.when(
             loading: () =>
                 const SliverToBoxAdapter(child: _AnalysingSkeleton()),
@@ -110,51 +111,32 @@ class AiMatchScreen extends ConsumerWidget {
   }
 }
 
-class _DisclosureHeader extends SliverPersistentHeaderDelegate {
-  const _DisclosureHeader();
-
-  // Two lines of disclosure plus the verification link. Measured rather than
-  // guessed: the box overflowed at 66 and the banner is the one thing on this
-  // screen that must never be clipped.
-  static const _height = 88.0;
+/// The N-6 banner. Pinned by [DisclosedSlivers], not by this widget: it has to
+/// still be on screen at the moment a reader is looking at a score.
+class _DisclosureBanner extends StatelessWidget {
+  const _DisclosureBanner();
 
   @override
-  double get minExtent => _height;
-
-  @override
-  double get maxExtent => _height;
-
-  @override
-  Widget build(
-    BuildContext context,
-    double shrinkOffset,
-    bool overlapsContent,
-  ) {
-    // The sliver expects its delegate to fill the extent exactly. Returning a
-    // widget that sizes to its content leaves paintExtent short of
-    // layoutExtent, which is a layout error rather than a smaller banner.
-    return SizedBox(
-      height: _height,
-      child: Padding(
-        padding: const EdgeInsets.fromLTRB(
-          AppSpacing.screen,
-          0,
-          AppSpacing.screen,
-          AppSpacing.x2,
-        ),
-        child: DisclaimerBox(
-          text: AiMatchScreen.disclosure,
-          tone: DisclaimerTone.pinned,
-          action: Semantics(
-            link: true,
-            child: InkWell(
-              onTap: () => context.push(AppRoutes.algorithmLog),
-              child: Text(
-                '오픈소스 알고리즘 검증 →',
-                style: AppTextStyles.badge.copyWith(
-                  color: AppColors.ink,
-                  decoration: TextDecoration.underline,
-                ),
+  Widget build(BuildContext context) {
+    return Padding(
+      padding: const EdgeInsets.fromLTRB(
+        AppSpacing.screen,
+        0,
+        AppSpacing.screen,
+        AppSpacing.x2,
+      ),
+      child: DisclaimerBox(
+        text: AiMatchScreen.disclosure,
+        tone: DisclaimerTone.pinned,
+        action: Semantics(
+          link: true,
+          child: InkWell(
+            onTap: () => context.push(AppRoutes.algorithmLog),
+            child: Text(
+              '오픈소스 알고리즘 검증 →',
+              style: AppTextStyles.badge.copyWith(
+                color: AppColors.ink,
+                decoration: TextDecoration.underline,
               ),
             ),
           ),
@@ -162,9 +144,6 @@ class _DisclosureHeader extends SliverPersistentHeaderDelegate {
       ),
     );
   }
-
-  @override
-  bool shouldRebuild(_DisclosureHeader oldDelegate) => false;
 }
 
 /// What a run in progress looks like.
@@ -232,6 +211,10 @@ class _TopMatchCardState extends State<_TopMatchCard> {
 
   @override
   Widget build(BuildContext context) {
+    // Deleting the disclosure banner takes this widget's ability to build
+    // with it. The notice is not a convention any more.
+    AiDisclosureScope.require(context, widget: '_TopMatchCard');
+
     final match = widget.match;
 
     return AppCard(
@@ -465,6 +448,10 @@ class _RunnerUpRow extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    // Deleting the disclosure banner takes this widget's ability to build
+    // with it. The notice is not a convention any more.
+    AiDisclosureScope.require(context, widget: '_RunnerUpRow');
+
     return AppCard(
       padding: const EdgeInsets.symmetric(
         horizontal: AppSpacing.x4,

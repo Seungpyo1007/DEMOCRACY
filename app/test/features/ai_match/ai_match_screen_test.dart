@@ -7,6 +7,7 @@ import 'package:democracy/src/design/app_theme.dart';
 import 'package:democracy/src/features/ai_match/application/match_providers.dart';
 import 'package:democracy/src/features/ai_match/data/fake_match_repository.dart';
 import 'package:democracy/src/features/ai_match/domain/candidate_match.dart';
+import 'package:democracy/src/features/ai_match/presentation/ai_disclosure.dart';
 import 'package:democracy/src/features/ai_match/presentation/ai_match_screen.dart';
 import 'package:democracy/src/features/ai_match/presentation/algorithm_log_screen.dart';
 import 'package:democracy/src/features/shared/presentation/provenance_widgets.dart';
@@ -203,5 +204,62 @@ void main() {
       );
       expect(MatchAxis.fromJson(const {'label': '세금', 'score': -5}).score, 0);
     });
+  });
+
+  // N-6 used to be the weakest of the six rules in practice: provenance throws
+  // when it is missing and a party colour has no field to live in, but the
+  // disclosure was a sliver anyone could delete while the screen went on
+  // compiling. These pin the two halves of the fix.
+  group('the disclosure cannot be dropped', () {
+    testWidgets('a widget that draws a score refuses to build without it', (
+      tester,
+    ) async {
+      Object? caught;
+
+      await tester.pumpWidget(
+        MaterialApp(
+          home: Builder(
+            builder: (context) {
+              try {
+                AiDisclosureScope.require(context, widget: '_TopMatchCard');
+              } on Object catch (error) {
+                caught = error;
+              }
+              return const SizedBox.shrink();
+            },
+          ),
+        ),
+      );
+
+      expect(caught, isA<MissingDisclosureScopeException>());
+    });
+
+    testWidgets('and builds happily inside one', (tester) async {
+      Object? caught;
+
+      await tester.pumpWidget(
+        MaterialApp(
+          home: AiDisclosureScope(
+            disclosure: AiMatchScreen.disclosure,
+            child: Builder(
+              builder: (context) {
+                try {
+                  AiDisclosureScope.require(context, widget: '_TopMatchCard');
+                } on Object catch (error) {
+                  caught = error;
+                }
+                return const SizedBox.shrink();
+              },
+            ),
+          ),
+        ),
+      );
+
+      expect(caught, isNull);
+    });
+
+    // The residue a type cannot express -- that the banner is still on screen
+    // at the moment a reader is looking at a score -- is already pinned by
+    // 'stays on screen while the results scroll under it' above.
   });
 }
