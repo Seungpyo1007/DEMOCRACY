@@ -2,8 +2,10 @@
 library;
 
 import 'package:democracy/src/core/time/kst.dart';
+import 'package:democracy/src/features/ai_match/presentation/ai_direction_screen.dart';
 import 'package:democracy/src/features/ai_match/presentation/ai_match_screen.dart';
 import 'package:democracy/src/features/district/presentation/district_home_screen.dart';
+import 'package:democracy/src/features/history/presentation/history_screen.dart';
 import 'package:democracy/src/features/onboarding/application/onboarding_providers.dart';
 import 'package:democracy/src/features/onboarding/presentation/onboarding_screen.dart';
 import 'package:democracy/src/features/pledges/presentation/pledge_detail_screen.dart';
@@ -21,10 +23,12 @@ import '../support/golden_harness.dart';
 /// Two things about what these images actually contain:
 ///
 /// `flutter test` substitutes a deterministic test font for the system face and
-/// disables shadows, so the text renders as blocks. That is expected. These
-/// goldens pin layout and geometry, not typography -- which is the most they
-/// could pin anyway, since `pubspec.yaml` deliberately declares no fonts while
-/// Archivo and Pretendard have no confirmed licence.
+/// disables shadows, so body text renders as blocks. That is expected: body
+/// text is the platform face, which the test engine does not have. The
+/// bundled serif and pen faces are registered by `flutter_test_config.dart`,
+/// so titles, figures and margin notes render as themselves. Every entrance
+/// animation is settled before the picture is taken, so these are the end
+/// state a reader sees.
 ///
 /// Rasterisation still differs between macOS and Linux, so generation and
 /// verification are pinned to macOS. The ubuntu CI job excludes the `golden`
@@ -78,6 +82,19 @@ void main() {
       );
     });
 
+    testWidgets('history at 390dp on $name', (tester) async {
+      await pumpGolden(
+        tester,
+        screen: const HistoryScreen(),
+        platform: platform,
+      );
+
+      await expectLater(
+        find.byType(MaterialApp),
+        matchesGoldenFile('goldens/history_${name}_390dp.png'),
+      );
+    });
+
     testWidgets('pledge tracker at 390dp on $name', (tester) async {
       await pumpGolden(
         tester,
@@ -119,14 +136,24 @@ void main() {
       );
     });
 
+    testWidgets('ai direction at 390dp on $name', (tester) async {
+      await pumpGolden(
+        tester,
+        screen: const AiDirectionScreen(),
+        platform: platform,
+      );
+
+      await expectLater(
+        find.byType(MaterialApp),
+        matchesGoldenFile('goldens/ai_direction_${name}_390dp.png'),
+      );
+    });
+
     testWidgets('election results at 390dp on $name', (tester) async {
       await pumpGolden(
         tester,
         screen: const ElectionResultsScreen(),
         platform: platform,
-        // The LIVE dot never settles, so this one is pumped rather than
-        // settled -- see the note in pumpGolden.
-        settle: false,
       );
 
       await expectLater(
@@ -142,12 +169,10 @@ void main() {
         tester,
         screen: const ElectionResultsScreen(),
         platform: platform,
-        settle: false,
       );
 
       await tester.tap(find.text('여론조사 비교'));
-      await tester.pump();
-      await tester.pump(const Duration(milliseconds: 400));
+      await tester.pumpAndSettle();
 
       await expectLater(
         find.byType(MaterialApp),
@@ -166,10 +191,6 @@ void main() {
         screen: const ElectionResultsScreen(),
         platform: platform,
         now: KstInstant.seoul(2026, 4, 15, 17),
-        // Nothing here animates -- the LIVE dot rides with the count, and the
-        // count is withheld -- but the pump path is kept the same as the
-        // published golden's so the two stay comparable.
-        settle: false,
       );
 
       await expectLater(

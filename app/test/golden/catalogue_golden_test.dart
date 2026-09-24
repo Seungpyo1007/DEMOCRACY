@@ -6,6 +6,7 @@ import 'package:democracy/src/design/components/app_card.dart';
 import 'package:democracy/src/design/components/app_controls.dart';
 import 'package:democracy/src/design/components/app_labels.dart';
 import 'package:democracy/src/design/components/app_timeline.dart';
+import 'package:democracy/src/design/components/editorial.dart';
 import 'package:democracy/src/design/components/labeled_bar.dart';
 import 'package:democracy/src/features/pledges/domain/pledge.dart';
 import 'package:democracy/src/features/shared/presentation/provenance_widgets.dart';
@@ -70,62 +71,47 @@ class _Catalogue extends StatelessWidget {
             ],
           ),
           const SizedBox(height: AppSpacing.x3),
-          const Row(
+          const FigureRow(
             children: [
-              Expanded(
-                child: StatCell(value: '92%', label: '출석률'),
-              ),
-              Expanded(
-                child: StatCell(value: '31', label: '발의 법안'),
-              ),
-              Expanded(
-                child: StatCell(value: '58%', label: '공약 이행'),
-              ),
+              FigureStat(value: 92, unit: '%', label: '출석률'),
+              FigureStat(value: 31, unit: '건', label: '발의 법안'),
+              FigureStat(value: 58, unit: '%', label: '공약 이행'),
             ],
           ),
           const SizedBox(height: AppSpacing.x6),
 
           const SectionLabel('바'),
           const SizedBox(height: AppSpacing.x2),
-          const LabeledBar(
-            label: '교통',
-            fraction: 0.72,
-            valueText: '72%',
-            fillColor: AppColors.fulfilled,
-          ),
+          const LabeledBar(label: '교통', fraction: 0.72, valueText: '72%'),
           const SizedBox(height: AppSpacing.x2),
-          const LabeledBar(
-            label: '주거',
-            fraction: 0.55,
-            valueText: '55%',
-            fillColor: AppColors.inProgress,
-          ),
+          const LabeledBar(label: '주거', fraction: 0.55, valueText: '55%'),
           const SizedBox(height: AppSpacing.x2),
           const MonotonicBar(label: '박서연', fraction: 0.482, valueText: '48.2%'),
           const SizedBox(height: AppSpacing.x6),
 
-          const SectionLabel('카드'),
+          const SectionLabel('지면'),
           const SizedBox(height: AppSpacing.x2),
-          AppCard(
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
+          SectionHeader(
+            number: '01',
+            label: '현직 의원',
+            trailing: TextLink(label: '출처 ↗', small: true, onTap: () {}),
+          ),
+          RuledRow(
+            onTap: () {},
+            child: const Row(
               children: [
-                const MicroLabel('감지된 지역구'),
-                const SizedBox(height: 3),
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [
-                    Text(
-                      '서울 마포구 을',
-                      style: AppTextStyles.statValue.copyWith(
-                        color: AppColors.ink,
-                      ),
-                    ),
-                    const VerifiedBadge(label: '인증 가능'),
-                  ],
-                ),
+                Expanded(child: Text('심야버스 노선 확대')),
+                PledgeStatusChip(status: PledgeStatus.fulfilled),
               ],
             ),
+          ),
+          const SizedBox(height: AppSpacing.x3),
+          const MarginNote('2020년 첫 당선 · 2024년 재선'),
+          const SizedBox(height: AppSpacing.x3),
+          InlineTabs(
+            labels: const ['공약', '법안', '출석', '표결'],
+            selectedIndex: 0,
+            onSelected: (_) {},
           ),
           const SizedBox(height: AppSpacing.x6),
 

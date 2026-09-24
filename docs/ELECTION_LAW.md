@@ -20,7 +20,7 @@
 | **제108조제5항** 여론조사 공표 시 표기사항 | 조사의뢰자·조사기관·조사일시·표본크기·피조사자 선정방법·조사방법·표본오차(신뢰수준)·응답률·질문내용 + 심의위 등록 | `PollDisclosure.fromJson` — 13개 필드 non-nullable, 하나라도 빠지면 `MissingDisclosureException`. 누락 항목을 **전부 모아** 보고한다. `PollSeries`는 이걸 없이 만들어질 수 없다. |
 | **제108조제1항** 공표 금지 기간 | 선거일 전 6일 00:00 ~ 투표마감시각 | `ElectionSchedule.blocksPollsAt` → `PublicationGate` → `Restricted<List<PollSeries>>` |
 | **제167조제2항** 개표·출구조사 공표 제한 | 투표마감시각 전 공표 금지 | `ElectionSchedule.blocksCountAt` → `PublicationGate` → `Restricted<CountView>` |
-| **제82조의8** 맥락 · AI 생성물 고지 | AI 산출물임을 알림 | `AiDisclosureScope.require` + `DisclosedSlivers.scrollView` — 배너를 지우면 점수 위젯이 운영에서 던진다 |
+| **제82조의8** 맥락 · AI 생성물 고지 | AI 산출물임을 알림 | `AiTabScaffold`가 `AiDisclosureScope`를 설치하고, 모든 점수·위치 위젯과 그 옆의 `AI 참고 자료` 라벨(`AiReferenceLabel`)이 `AiDisclosureScope.require`로 이를 요구한다 — 스코프를 지우면 점수와 라벨 모두 운영에서 던진다. 전문 고지(「공약 원문 기반 참고 자료이며 공인 평가가 아닙니다.」 + 산출 방식)는 AI 탭 첫 방문 때 네이티브 대화상자로 한 번(`TipIds.aiDisclosure`), 이후 ⓘ 툴바 버튼이나 라벨을 누르면 다시 열리며 「알고리즘 검증」으로 이어진다 |
 
 ### 왜 `Restricted<T>`가 sealed인가
 

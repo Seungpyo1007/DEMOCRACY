@@ -7,7 +7,9 @@ import 'package:democracy/src/features/onboarding/application/onboarding_provide
 import 'package:democracy/src/features/onboarding/data/fake_address_repositories.dart';
 import 'package:democracy/src/features/onboarding/domain/address_search.dart';
 import 'package:democracy/src/features/onboarding/domain/resident_profile.dart';
+import 'package:democracy/src/features/onboarding/presentation/address_search_screen.dart';
 import 'package:democracy/src/features/onboarding/presentation/onboarding_screen.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_test/flutter_test.dart';
@@ -46,6 +48,10 @@ void main() {
           builder: (context, state) => const OnboardingScreen(),
         ),
         GoRoute(
+          path: AppRoutes.addressSearch,
+          builder: (context, state) => const AddressSearchScreen(),
+        ),
+        GoRoute(
           path: AppRoutes.home,
           builder: (context, state) => const Scaffold(body: Text('홈')),
         ),
@@ -66,8 +72,27 @@ void main() {
     return container;
   }
 
+  // The page's own field: the only text field once the page is up.
+  final pageField = find.descendant(
+    of: find.byType(AddressSearchScreen),
+    matching: find.byType(EditableText),
+  );
+
+  Future<void> openSearch(WidgetTester tester) async {
+    await tester.tap(find.text('도로명 주소 검색'));
+    await tester.pumpAndSettle();
+  }
+
+  Future<void> searchAndPick(WidgetTester tester) async {
+    await openSearch(tester);
+    await tester.enterText(pageField, '월드컵북로');
+    await tester.pumpAndSettle();
+    await tester.tap(find.text('서울 마포구 월드컵북로 400'));
+    await tester.pumpAndSettle();
+  }
+
   Future<void> resolveDistrict(WidgetTester tester) async {
-    await tester.tap(find.text('현재 위치(GPS)로 자동 설정'));
+    await tester.tap(find.text('현재 위치로 자동 설정'));
     await tester.pumpAndSettle();
   }
 
@@ -75,9 +100,11 @@ void main() {
     testWidgets('cannot be advanced before a district is chosen', (
       tester,
     ) async {
-      await pumpOnboarding(tester);
+      final container = await pumpOnboarding(tester);
+      OnboardingStep step() =>
+          container.read(onboardingControllerProvider).step;
 
-      expect(find.text('1 / 3'), findsOneWidget);
+      expect(step(), OnboardingStep.address);
       expect(
         tester.widget<TextButton>(find.byType(TextButton)).onPressed,
         isNull,
@@ -86,7 +113,7 @@ void main() {
 
       await tester.tap(find.text('다음'));
       await tester.pumpAndSettle();
-      expect(find.text('1 / 3'), findsOneWidget);
+      expect(step(), OnboardingStep.address);
     });
 
     testWidgets('resolves a district from the device location', (tester) async {
@@ -113,18 +140,22 @@ void main() {
       });
     }
 
-    testWidgets('finds a district through the search sheet', (tester) async {
+    testWidgets('finds a district on the address search page', (tester) async {
       await pumpOnboarding(tester, locationOutcome: LocationFailure.failed);
 
-      await tester.tap(find.text('도로명 주소 검색'));
-      await tester.pumpAndSettle();
+      await openSearch(tester);
+      expect(find.byType(AddressSearchScreen), findsOneWidget);
+      expect(find.text('도로명을 입력하면 지역구를 찾아 드립니다.'), findsOneWidget);
+      expect(find.text('주소는 지역구 설정과 주민 인증에만 사용되며 암호화 저장됩니다.'), findsOneWidget);
 
-      await tester.enterText(find.byType(TextField), '월드컵북로');
+      await tester.enterText(pageField, '월드컵북로');
       await tester.pumpAndSettle();
+      expect(find.text('서울 마포구 을'), findsWidgets);
 
       await tester.tap(find.text('서울 마포구 월드컵북로 400'));
       await tester.pumpAndSettle();
 
+      expect(find.byType(AddressSearchScreen), findsNothing);
       expect(find.text('감지된 지역구'), findsOneWidget);
       expect(find.text('서울 마포구 을'), findsOneWidget);
     });
@@ -132,12 +163,102 @@ void main() {
     testWidgets('says so when nothing matches', (tester) async {
       await pumpOnboarding(tester);
 
-      await tester.tap(find.text('도로명 주소 검색'));
-      await tester.pumpAndSettle();
-      await tester.enterText(find.byType(TextField), '없는주소');
+      await openSearch(tester);
+      await tester.enterText(pageField, '없는주소');
       await tester.pumpAndSettle();
 
       expect(find.textContaining('검색 결과가 없습니다'), findsOneWidget);
+    });
+
+    testWidgets('the search page opens as a page, not a sheet', (tester) async {
+      await pumpOnboarding(tester);
+
+      expect(find.byType(SearchBar), findsNothing);
+      expect(
+        find.widgetWithText(OutlinedButton, '현재 위치로 자동 설정'),
+        findsOneWidget,
+      );
+
+      await openSearch(tester);
+      expect(find.byType(BottomSheet), findsNothing);
+      expect(
+        find.descendant(
+          of: find.byType(AddressSearchScreen),
+          matching: find.byType(SearchBar),
+        ),
+        findsOneWidget,
+      );
+      expect(find.byTooltip('뒤로'), findsOneWidget);
+
+      await tester.tap(find.byTooltip('뒤로'));
+      await tester.pumpAndSettle();
+      expect(find.byType(AddressSearchScreen), findsNothing);
+      expect(find.text('내 지역구부터\n찾아드릴게요'), findsOneWidget);
+    });
+
+    testWidgets('the search page finds a district from the location', (
+      tester,
+    ) async {
+      final container = await pumpOnboarding(tester);
+
+      await openSearch(tester);
+      await tester.tap(find.text('현재 위치로 찾기'));
+      await tester.pumpAndSettle();
+
+      expect(find.byType(AddressSearchScreen), findsNothing);
+      expect(
+        container.read(onboardingControllerProvider).district?.id,
+        'fixture-seoul-mapo-b',
+      );
+    });
+
+    testWidgets('the search page explains a location failure and stays', (
+      tester,
+    ) async {
+      await pumpOnboarding(tester, locationOutcome: LocationFailure.failed);
+
+      await openSearch(tester);
+      await tester.tap(find.text('현재 위치로 찾기'));
+      await tester.pumpAndSettle();
+
+      expect(find.byType(AddressSearchScreen), findsOneWidget);
+      expect(
+        find.textContaining(LocationFailure.failed.message),
+        findsOneWidget,
+      );
+    });
+
+    testWidgets('shows the chosen address on the launcher', (tester) async {
+      await pumpOnboarding(tester, locationOutcome: LocationFailure.failed);
+
+      await searchAndPick(tester);
+
+      expect(find.text('서울 마포구 월드컵북로 400'), findsOneWidget);
+      final launcher = tester.widget<Semantics>(
+        find.byWidgetPredicate(
+          (widget) => widget is Semantics && widget.properties.label == '주소 검색',
+        ),
+      );
+      expect(launcher.properties.button, isTrue);
+      expect(launcher.properties.value, '서울 마포구 월드컵북로 400');
+    });
+
+    testWidgets('iOS takes the Cupertino field and a plain text action', (
+      tester,
+    ) async {
+      await pumpOnboarding(tester, platform: TargetPlatform.iOS);
+
+      expect(find.widgetWithText(CupertinoButton, '나중에 인증하기'), findsOneWidget);
+      expect(find.byType(TextButton), findsNothing);
+
+      await openSearch(tester);
+      expect(find.byType(CupertinoSearchTextField), findsOneWidget);
+      expect(find.bySemanticsLabel('뒤로'), findsOneWidget);
+      await tester.enterText(pageField, '월드컵북로');
+      await tester.pumpAndSettle();
+      await tester.tap(find.text('서울 마포구 월드컵북로 400'));
+      await tester.pumpAndSettle();
+      expect(find.text('서울 마포구 을'), findsOneWidget);
     });
   });
 
@@ -145,18 +266,20 @@ void main() {
     testWidgets('is optional -- the CTA stays live with nothing chosen', (
       tester,
     ) async {
-      await pumpOnboarding(tester);
+      final container = await pumpOnboarding(tester);
+      OnboardingStep step() =>
+          container.read(onboardingControllerProvider).step;
       await resolveDistrict(tester);
       await tester.tap(find.text('다음'));
       await tester.pumpAndSettle();
 
-      expect(find.text('2 / 3'), findsOneWidget);
-      expect(find.text('프로필 (AI 분석용 · 선택)'), findsOneWidget);
+      expect(step(), OnboardingStep.profile);
+      expect(find.textContaining('프로필 (AI 분석용 · 선택)'), findsOneWidget);
       expect(find.text('설정하지 않음 · 나중에 바꿀 수 있습니다'), findsNothing);
 
       await tester.tap(find.text('다음'));
       await tester.pumpAndSettle();
-      expect(find.text('3 / 3'), findsOneWidget);
+      expect(step(), OnboardingStep.done);
       expect(find.text('설정하지 않음 · 나중에 바꿀 수 있습니다'), findsOneWidget);
     });
 
@@ -176,6 +299,29 @@ void main() {
       await tester.pumpAndSettle();
 
       expect(container.read(residentProfileProvider).tags, contains('세금'));
+    });
+
+    testWidgets('sets the interest on a five-stop slider', (tester) async {
+      final container = await pumpOnboarding(tester);
+      await resolveDistrict(tester);
+      await tester.tap(find.text('다음'));
+      await tester.pumpAndSettle();
+
+      final slider = tester.widget<Slider>(find.byType(Slider));
+      expect(slider.divisions, ResidentProfile.interestSteps);
+      expect(
+        slider.label,
+        container.read(residentProfileProvider).interestLabel,
+      );
+
+      slider.onChanged!(ResidentProfile.interestSteps.toDouble());
+      await tester.pumpAndSettle();
+
+      expect(
+        container.read(residentProfileProvider).interest,
+        ResidentProfile.interestSteps,
+      );
+      expect(find.text('매우 높음'), findsWidgets);
     });
   });
 
@@ -225,17 +371,86 @@ void main() {
       await resolveDistrict(tester);
       await tester.tap(find.text('다음'));
       await tester.pumpAndSettle();
-      expect(find.text('2 / 3'), findsOneWidget);
+      expect(find.text('관심사를 알려주시면\n분석이 정확해져요'), findsOneWidget);
 
       container.read(onboardingControllerProvider.notifier).back();
       await tester.pumpAndSettle();
 
-      expect(find.text('1 / 3'), findsOneWidget);
+      expect(find.text('내 지역구부터\n찾아드릴게요'), findsOneWidget);
+      expect(
+        find.text('관심사를 알려주시면\n분석이 정확해져요'),
+        findsNothing,
+        reason: 'the outgoing step must be gone once the transition settles',
+      );
       expect(
         container.read(onboardingControllerProvider).district,
         isNotNull,
         reason: 'stepping back must not discard the district',
       );
+    });
+  });
+
+  group('the redesigned flow', () {
+    testWidgets('announces the step the segments show', (tester) async {
+      final handle = tester.ensureSemantics();
+      await pumpOnboarding(tester);
+      expect(find.bySemanticsLabel('3단계 중 1단계'), findsOneWidget);
+
+      await resolveDistrict(tester);
+      await tester.tap(find.text('다음'));
+      await tester.pumpAndSettle();
+      expect(find.bySemanticsLabel('3단계 중 2단계'), findsOneWidget);
+      handle.dispose();
+    });
+
+    testWidgets('the profile step can be skipped to the confirmation', (
+      tester,
+    ) async {
+      final container = await pumpOnboarding(tester);
+      await resolveDistrict(tester);
+      await tester.tap(find.text('다음'));
+      await tester.pumpAndSettle();
+
+      await tester.tap(find.text('건너뛰기'));
+      await tester.pumpAndSettle();
+
+      expect(
+        container.read(onboardingControllerProvider).step,
+        OnboardingStep.done,
+      );
+      expect(find.text('서울 마포구 을'), findsOneWidget);
+      expect(
+        container.read(addressControllerProvider).district,
+        isNull,
+        reason: 'skipping the profile is not leaving the flow',
+      );
+    });
+
+    testWidgets('the address step carries its margin note', (tester) async {
+      await pumpOnboarding(tester, platform: TargetPlatform.iOS);
+
+      expect(find.text('당이 아닌 인물로, 감정이 아닌 데이터로'), findsOneWidget);
+      expect(find.text('내 지역구부터\n찾아드릴게요'), findsOneWidget);
+    });
+
+    testWidgets('steps change without animating under reduced motion', (
+      tester,
+    ) async {
+      tester.platformDispatcher.accessibilityFeaturesTestValue =
+          const FakeAccessibilityFeatures(disableAnimations: true);
+      addTearDown(
+        tester.platformDispatcher.clearAccessibilityFeaturesTestValue,
+      );
+
+      await pumpOnboarding(tester);
+      await resolveDistrict(tester);
+
+      await tester.tap(find.text('다음'));
+      await tester.pump();
+
+      // One frame, and the old step is already gone.
+      expect(find.text('내 지역구부터\n찾아드릴게요'), findsNothing);
+      expect(find.text('관심사를 알려주시면\n분석이 정확해져요'), findsOneWidget);
     });
   });
 }

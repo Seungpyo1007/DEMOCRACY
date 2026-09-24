@@ -33,26 +33,26 @@ class SourceBadge extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final caption = Theme.of(context).textTheme.bodySmall;
-
     return Semantics(
       link: true,
       label: '출처 ${source.sourceUrl}',
       child: InkWell(
         onTap: _open,
-        child: Row(
-          children: [
-            const Icon(Icons.link, size: 14, color: AppColors.neutral600),
-            const SizedBox(width: AppSpacing.x1),
-            Expanded(
-              child: Text(
-                '출처: ${source.publisher} · ${source.asOfLabel}',
-                maxLines: 1,
-                overflow: TextOverflow.ellipsis,
-                style: caption?.copyWith(color: AppColors.neutral600),
+        child: ConstrainedBox(
+          constraints: const BoxConstraints(minHeight: 24),
+          child: Align(
+            alignment: AlignmentDirectional.centerStart,
+            child: Text(
+              '출처 ${source.publisher} · ${source.asOfLabel} ↗',
+              maxLines: 1,
+              overflow: TextOverflow.ellipsis,
+              style: AppTextStyles.disclaimer.copyWith(
+                color: AppColors.neutral600,
+                decoration: TextDecoration.underline,
+                decorationColor: AppColors.neutral400,
               ),
             ),
-          ],
+          ),
         ),
       ),
     );
@@ -75,13 +75,15 @@ class PartyTag extends StatelessWidget {
 
     return DecoratedBox(
       decoration: BoxDecoration(
-        border: Border.all(color: AppColors.neutral400),
-        borderRadius: BorderRadius.circular(surface.chipRadius),
+        border: Border.all(color: AppColors.neutral500),
+        borderRadius: BorderRadius.circular(
+          surface.isGlass ? 999 : AppRadii.androidChip,
+        ),
       ),
       child: Padding(
         padding: const EdgeInsets.symmetric(
           horizontal: AppSpacing.x2,
-          vertical: 3,
+          vertical: 2,
         ),
         child: Text(
           party.name,
@@ -116,9 +118,8 @@ class GrayscalePortrait extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final surface = Theme.of(context).extension<AppSurfaceTokens>()!;
-    final radius = surface.isGlass
-        ? AppRadii.iosPortrait
-        : AppRadii.androidThumbnail;
+    // Small radii: a portrait is a photograph on the page, not a control.
+    final radius = surface.isGlass ? 6.0 : 4.0;
 
     return Semantics(
       label: '$name 사진',
@@ -155,65 +156,45 @@ class GrayscalePortrait extends StatelessWidget {
 
 /// A pledge status shown as colour, glyph and word together.
 ///
-/// Colour alone would be unreadable for a colour-blind reader and is barred by
-/// the design rules, so the glyph and the label are not optional.
+/// Set as a label, not a filled chip: three of the four statuses are a
+/// lightness ramp of ink, and only 번복 carries the accent. Colour alone would
+/// be unreadable for a colour-blind reader and is barred by the design rules,
+/// so the glyph and the label are not optional.
 class PledgeStatusChip extends StatelessWidget {
-  const PledgeStatusChip({required this.status, super.key});
+  const PledgeStatusChip({required this.status, this.large = false, super.key});
 
   final PledgeStatus status;
 
-  /// The outline, which is also the colour the status carries elsewhere --
-  /// legend swatches, donut segments, category bars.
-  Color get _outline => switch (status) {
+  /// The serif display size used at the top of a pledge's own page.
+  final bool large;
+
+  /// The colour the status carries as a bar or swatch.
+  static Color barColor(PledgeStatus status) => switch (status) {
     PledgeStatus.fulfilled => AppColors.fulfilled,
     PledgeStatus.inProgress => AppColors.inProgress,
     PledgeStatus.unfulfilled => AppColors.unfulfilled,
     PledgeStatus.reversed => AppColors.reversed,
   };
 
-  /// The chip tints itself. The guide gives each status a background and a
-  /// foreground of its own, both darker or lighter than the outline, so the
-  /// label stays legible on the fill rather than inheriting the bar colour.
-  (Color, Color) get _tint => switch (status) {
-    PledgeStatus.fulfilled => (
-      AppColors.fulfilledChipBackground,
-      AppColors.fulfilledChipForeground,
-    ),
-    PledgeStatus.inProgress => (
-      AppColors.inProgressChipBackground,
-      AppColors.inProgressChipForeground,
-    ),
-    PledgeStatus.unfulfilled => (
-      AppColors.unfulfilledChipBackground,
-      AppColors.unfulfilledChipForeground,
-    ),
-    PledgeStatus.reversed => (
-      AppColors.reversedChipBackground,
-      AppColors.reversedChipForeground,
-    ),
+  /// The colour the status carries as text, which the lighter bar colours
+  /// are not dark enough to be.
+  static Color textColor(PledgeStatus status) => switch (status) {
+    PledgeStatus.fulfilled => AppColors.fulfilledText,
+    PledgeStatus.inProgress => AppColors.inProgressText,
+    PledgeStatus.unfulfilled => AppColors.unfulfilledText,
+    PledgeStatus.reversed => AppColors.reversedText,
   };
 
   @override
   Widget build(BuildContext context) {
-    final surface = Theme.of(context).extension<AppSurfaceTokens>()!;
-    final (background, foreground) = _tint;
+    final style = large
+        ? Theme.of(context).textTheme.headlineSmall!.copyWith(fontSize: 24)
+        : AppTextStyles.badge;
 
-    return DecoratedBox(
-      decoration: BoxDecoration(
-        color: background,
-        border: Border.all(color: _outline),
-        borderRadius: BorderRadius.circular(surface.chipRadius),
-      ),
-      child: Padding(
-        padding: const EdgeInsets.symmetric(
-          horizontal: AppSpacing.x2,
-          vertical: 3,
-        ),
-        child: Text(
-          status.display,
-          style: AppTextStyles.badge.copyWith(color: foreground),
-        ),
-      ),
+    return Text(
+      status.display,
+      maxLines: 1,
+      style: style.copyWith(color: textColor(status)),
     );
   }
 }

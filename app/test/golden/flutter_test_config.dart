@@ -1,6 +1,8 @@
 import 'dart:async';
+import 'dart:io';
 
 import 'package:flutter/foundation.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_test/flutter_test.dart';
 
 /// Applies only to `test/golden/`. `flutter_test` picks the nearest
@@ -9,7 +11,36 @@ import 'package:flutter_test/flutter_test.dart';
 Future<void> testExecutable(FutureOr<void> Function() testMain) async {
   final existing = goldenFileComparator as LocalFileComparator;
   goldenFileComparator = _AntialiasTolerantComparator(existing.basedir);
+  await _loadBundledFonts();
   await testMain();
+}
+
+/// Registers the app's bundled families with the test engine.
+///
+/// `flutter test` draws every family it has not been handed as the Ahem block
+/// font. That was fine while the app shipped no fonts; now titles, figures and
+/// margin notes are the serif and the pen face, and a golden of blocks would
+/// not notice if they fell back. Body text stays on the platform face, which
+/// the test engine does not have, so it still renders as blocks.
+Future<void> _loadBundledFonts() async {
+  const families = {
+    'GowunBatang': [
+      'assets/fonts/gowun_batang/GowunBatang-Regular.ttf',
+      'assets/fonts/gowun_batang/GowunBatang-Bold.ttf',
+    ],
+    'NanumPenScript': [
+      'assets/fonts/nanum_pen_script/NanumPenScript-Regular.ttf',
+    ],
+  };
+
+  for (final MapEntry(key: family, value: paths) in families.entries) {
+    final loader = FontLoader(family);
+    for (final path in paths) {
+      final bytes = File(path).readAsBytesSync();
+      loader.addFont(Future.value(ByteData.sublistView(bytes)));
+    }
+    await loader.load();
+  }
 }
 
 /// Passes a comparison whose only difference is rasteriser noise.

@@ -13,7 +13,7 @@ import 'package:go_router/go_router.dart';
 /// the day that screen's content changes height, which is not what is under
 /// test here.
 void main() {
-  const branchPrefixes = ['A', 'B', 'C', 'D', 'E'];
+  const branchPrefixes = ['A', 'B', 'C', 'D', 'E', 'F'];
   const rowsPerBranch = 40;
 
   Widget branchList(String prefix) {
@@ -27,7 +27,7 @@ void main() {
     );
   }
 
-  /// A branch with nothing scrollable, standing in for the tracker, AI and
+  /// A branch with nothing scrollable, standing in for the history, tracker, AI and
   /// election placeholders.
   Widget staticBranch(String prefix) {
     return Scaffold(body: Center(child: Text('${prefix}static')));
@@ -96,7 +96,7 @@ void main() {
 
       // Second branch, scrolled to a different offset so a shared position
       // would show up as one of them landing on the other's row.
-      await tapDestination(tester, Icons.donut_large_outlined);
+      await tapDestination(tester, Icons.menu_book_outlined);
       expect(find.text('B0'), findsOneWidget);
       await tester.drag(
         find.byKey(const ValueKey('list-B')),
@@ -111,7 +111,7 @@ void main() {
         reason: 'returning to a branch must not reset it to the top',
       );
 
-      await tapDestination(tester, Icons.donut_large_outlined);
+      await tapDestination(tester, Icons.menu_book_outlined);
       expect(find.text('B0'), findsNothing);
       expect(find.text('B4'), findsOneWidget);
     });
@@ -181,7 +181,7 @@ void main() {
     await tester.pumpAndSettle();
     expect(find.text('지역구'), findsNothing);
 
-    await tapDestination(tester, Icons.donut_large_outlined);
+    await tapDestination(tester, Icons.menu_book_outlined);
 
     expect(find.text('Bstatic'), findsOneWidget);
     expect(
@@ -204,7 +204,7 @@ void main() {
     );
     await tester.pumpAndSettle();
 
-    await tapDestination(tester, Icons.donut_large_outlined);
+    await tapDestination(tester, Icons.menu_book_outlined);
     expect(find.text('지역구'), findsOneWidget);
 
     await tapDestination(tester, Icons.location_on_outlined);

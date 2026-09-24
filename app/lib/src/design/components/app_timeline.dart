@@ -1,4 +1,5 @@
 import 'package:democracy/src/design/app_tokens.dart';
+import 'package:democracy/src/design/components/motion.dart';
 import 'package:flutter/material.dart';
 
 /// One step in a decision's history.
@@ -29,56 +30,63 @@ class TimelineStep {
 class AppTimeline extends StatelessWidget {
   const AppTimeline({required this.steps, super.key});
 
-  static const _node = 12.0;
-  static const _connector = 2.0;
+  static const _node = 28.0;
 
   final List<TimelineStep> steps;
 
   @override
   Widget build(BuildContext context) {
-    final surface = Theme.of(context).extension<AppSurfaceTokens>()!;
-
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         for (var i = 0; i < steps.length; i++)
-          IntrinsicHeight(
-            child: Row(
-              crossAxisAlignment: CrossAxisAlignment.stretch,
-              children: [
-                Column(
-                  children: [
-                    Container(
-                      width: _node,
-                      height: _node,
-                      decoration: BoxDecoration(
-                        color: AppColors.ink,
-                        // Square on iOS, round on Android -- the same
-                        // inversion the guide applies to bar tracks.
-                        shape: surface.isGlass
-                            ? BoxShape.rectangle
-                            : BoxShape.circle,
-                      ),
-                    ),
-                    if (i != steps.length - 1)
-                      const Expanded(
-                        child: SizedBox(
-                          width: _connector,
-                          child: ColoredBox(color: AppColors.neutral300),
+          RevealIn(
+            index: i,
+            child: IntrinsicHeight(
+              child: Row(
+                crossAxisAlignment: CrossAxisAlignment.stretch,
+                children: [
+                  Column(
+                    children: [
+                      // Numbered, because the order is the point: AI first,
+                      // then residents, then the committee.
+                      Container(
+                        width: _node,
+                        height: _node,
+                        alignment: Alignment.center,
+                        decoration: const BoxDecoration(
+                          color: AppColors.ink,
+                          shape: BoxShape.circle,
+                        ),
+                        child: Text(
+                          '${i + 1}',
+                          style: AppTextStyles.figureSmall.copyWith(
+                            fontSize: 14,
+                            color: AppColors.ground,
+                          ),
                         ),
                       ),
-                  ],
-                ),
-                const SizedBox(width: AppSpacing.x3),
-                Expanded(
-                  child: Padding(
-                    padding: EdgeInsets.only(
-                      bottom: i == steps.length - 1 ? 0 : AppSpacing.x3 + 2,
-                    ),
-                    child: _Step(step: steps[i]),
+                      if (i != steps.length - 1)
+                        const Expanded(
+                          child: SizedBox(
+                            width: 1,
+                            child: ColoredBox(color: AppColors.neutral300),
+                          ),
+                        ),
+                    ],
                   ),
-                ),
-              ],
+                  const SizedBox(width: AppSpacing.x3),
+                  Expanded(
+                    child: Padding(
+                      padding: EdgeInsets.only(
+                        top: 3,
+                        bottom: i == steps.length - 1 ? 0 : AppSpacing.x6,
+                      ),
+                      child: _Step(step: steps[i]),
+                    ),
+                  ),
+                ],
+              ),
             ),
           ),
       ],
@@ -97,16 +105,36 @@ class _Step extends StatelessWidget {
       crossAxisAlignment: CrossAxisAlignment.start,
       mainAxisSize: MainAxisSize.min,
       children: [
-        Text(
-          step.title,
-          style: AppTextStyles.cardBody.copyWith(
-            fontWeight: FontWeight.w700,
-            color: AppColors.ink,
-          ),
+        Row(
+          crossAxisAlignment: CrossAxisAlignment.baseline,
+          textBaseline: TextBaseline.alphabetic,
+          children: [
+            Expanded(
+              child: Text(
+                step.title,
+                style: AppTextStyles.cardBody.copyWith(
+                  fontSize: 16,
+                  fontWeight: FontWeight.w700,
+                  color: AppColors.ink,
+                ),
+              ),
+            ),
+            const SizedBox(width: AppSpacing.x2),
+            Text(
+              step.stamp,
+              style: AppTextStyles.disclaimer.copyWith(
+                color: AppColors.neutral600,
+              ),
+            ),
+          ],
         ),
+        const SizedBox(height: AppSpacing.x1),
         Text(
-          '${step.detail} · ${step.stamp}',
-          style: AppTextStyles.cardBody.copyWith(color: AppColors.neutral600),
+          step.detail,
+          style: AppTextStyles.cardBody.copyWith(
+            fontSize: 14,
+            color: AppColors.neutral700,
+          ),
         ),
         if (step.evidence != null) ...[
           const SizedBox(height: AppSpacing.x1),

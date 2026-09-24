@@ -5,7 +5,53 @@
 
 ## 이 문서를 읽는 순서
 
+**2026-09-24에 디자인을 전면 교체했다.** 먼저 아래 「디자인 전면 개편 (2026-09-24)」을 읽는다. 그 아래 절들의 색·타이포·레이더·도넛 서술은 개편 이전 기준이다.
+
 **명세서의 6화면이 전부 구현됐다.** placeholder는 하나도 남아 있지 않다. 남은 것은 fake 뒤에 있는 것을 실제 서버로 바꾸는 일이므로, 「지금 fake인 것」과 「미결정 사항」을 먼저 보면 된다.
+
+## 디자인 전면 개편 (2026-09-24)
+
+`design_handoff_democracy_app/`의 레드·Archivo 디자인을 **"파인 아카이브"**로 교체했다. 목업은 Claude Design 캔버스(비공개 아티팩트)에 iOS/Android 13화면으로 있고, 이제 그쪽이 정본이다. 원본 번들은 기록으로만 남는다.
+
+- **색.** 세이지 종이 `#EEF0EB`, 먹 `#1B2220`, 강조 소나무 `#2F5D50` 하나. 강조색은 주 CTA·손글씨 주석·번복 **세 곳에만** 쓴다. 적·주황 계열을 버린 이유는 N-1 — 한국에서 정당색으로 읽힌다. 공약 상태는 이행/진행/미이행이 먹의 명도 램프, 번복만 소나무라서 색맹 독자에게도 명도로 구분된다. Android도 흰색이 아니라 같은 종이 위에 그린다(모순 해소 규칙의 「Android 배경 `#fff`」 행을 대체).
+- **글꼴.** 제목·이름·수치는 Gowun Batang(OFL), 여백 주석은 Nanum Pen Script(OFL), 본문은 시스템 글꼴. Gowun Batang은 KS X 1001 2,350자+라틴으로 서브셋해 16MB → 2.8MB. Nanum은 라이선스가 수정본의 이름 사용을 막아 원본 그대로 싣는다. 라이선스는 `LicenseRegistry`에 등록된다(`lib/src/app/font_licenses.dart`).
+- **지면.** 콘텐츠 카드를 없앴다. 섹션은 2px 먹 룰 + 번호 키커, 행은 1px 헤어라인(`design/components/editorial.dart`). 유리·토널 서피스는 떠 있는 것(탭바, CTA 바, 시트, 개표 패널)에만.
+- **모션.** `design/app_motion.dart`와 `design/components/motion.dart`. 수치 카운트업, 막대 채움, 선 그리기, 손글씨 밑줄, 순차 등장. 전부 한 번 재생되고 멈추는 진입 모션이라 `pumpAndSettle`이 끝나며, 시스템 「동작 줄이기」면 첫 프레임에 최종 상태를 그린다. LIVE 점의 반복 펄스는 이 규칙 때문에 없앴다. `AnimatedSize`에 0 duration을 주면 레이아웃 assert가 나므로 `MotionSize`를 쓴다.
+- **탭 6개.** 지역구 / **역사(신규)** / 트래커 / AI / 커뮤니티 / 개표. iOS는 글라스 캡슐(항목 폭 56), Android는 M3 전폭 80dp 토널 바로 돌렸다. M3 가이드는 하단 바 5개 이하를 권하므로 개표 탭의 상시 노출은 제품 결정으로 남는다.
+- **신규 기능.** `features/history`(지역 연표·역대 선거·의원 연대기)와 AI 탭의 **방향 분석**(`/ai-match/direction`: 후보 정책 성향 2축, 의원 발의 비중 변화, 지역 쟁점 흐름). 둘 다 fixture 뒤에 있고 출처 없는 수치를 거부한다. 방향 분석도 AI 고지 스코프 안에서만 그려진다.
+- **AI 고지 방식 변경.** 고정 검은 띠(`DisclosedSlivers`/`bannerExtent`)를 없앴다. 대신 AI 탭 **첫 진입 시 시스템 대화상자**(「AI 분석 안내」, 확인 / 알고리즘 검증)가 한 번 뜨고 ⓘ로 다시 열리며, **모든 AI 점수·위치 옆에 작은 `AI 참고 자료` 라벨이 상시** 붙는다. 대화상자만으로는 닫는 순간 산출물의 AI 표시가 사라지므로 라벨이 법적 표시를 맡는다. `AiDisclosureScope.require`는 그대로 운영에서도 던진다. `docs/ELECTION_LAW.md` 제82조의8 행 갱신.
+- **튜토리얼.** 온보딩이 끝나면 한 번 뜨는 **전체 화면 워크스루**(`features/tutorial`, `/tutorial`) 6쪽: 표지 · 지역구(출처) · 역사 · 트래커(상태 4종) · AI(참고 자료) · 커뮤니티·개표. 각 쪽 그림은 실제 컴포넌트에 샘플 수치. 건너뛰기/다음/시작하기, 스와이프, 동작 줄이기면 슬라이드 없이 넘어감. 지역구 ⋯ 메뉴의 「튜토리얼 다시 보기」는 `?replay=1`로 열려 끝나면 제자리로 돌아간다. 본 기록은 `shared_preferences`(신규 의존성), 테스트·골든 기본값은 「본 것」. 화면 안 팁 방식은 폐기했다.
+- **내비게이션 정리(시뮬레이터로 확인).** `UITabBar`는 5개가 한계라(패키지 assert, 6개면 UIKit이 억지로 눌러 담아 너무 높고 어색했다) **탭 5개 + 개표는 탭바 옆 별도 유리 버튼**. 탭바를 SafeArea로 감싸 높이가 두 배(139pt)가 되던 것도 고쳤다. SF Symbol 크기는 탭바 `iconSize`가 아니라 심볼마다 지정해야 적용된다(15pt). 역사·AI의 모드/섹션 전환은 iOS에서 상단 도구 줄 가운데로 올렸고, 그 뒤는 단색 띠 대신 종이색 페이드. iOS 스캐폴드를 투명에서 종이색으로 바꿔 페이지와 띠 색이 달라지던 문제를 없앴다. 떠 있는 액션은 Scaffold FAB 슬롯(뷰 패딩 기준이라 탭바 아래로 갔다) 대신 `EditorialScrollView.floatingAction`이 탭바 위에 둔다. `test/app/chrome_layout_test.dart`가 모든 탭에서 마지막 내용과 액션이 탭바 위에 있는지 잰다.
+- **삭제.** 레이더(`match_radar.dart`), 도넛(`status_donut.dart`), `fl_chart` 의존성.
+- **골든.** 테스트 엔진에 번들 글꼴을 등록하도록 바꿨다(`test/golden/flutter_test_config.dart`). 제목·수치·주석은 실제 글꼴로, 본문은 여전히 블록으로 찍힌다. 29장.
+
+### 네이티브 크롬 (같은 날 후속)
+
+본문(지면)은 앱이 그리고, **독자가 조작하는 것은 전부 플랫폼 컨트롤**로 바꿨다. `design/components/native_controls.dart`, `EditorialScrollView`(`editorial.dart`).
+
+| 역할 | iOS 26 (UIKit, `cupertino_native_better`) | Android (Material 3) |
+|---|---|---|
+| 하단 탭 | `CNTabBar` = 실제 `UITabBar`, SF Symbols | `NavigationBar` |
+| 상단 | 페이지 위 세리프 대제목 + 떠 있는 Liquid Glass 버튼(`CNButton.icon`) | `SliverAppBar.large` |
+| 주 액션 | `CNButton` prominentGlass(소나무 틴트) | `FilledButton` / `FloatingActionButton.extended` |
+| 보조 액션 | `CNButton` glass | `OutlinedButton` |
+| 선택·탭 | `CNSegmentedControl` | `SegmentedButton` / `TabBar` |
+| 메뉴 | `CNPopupMenuButton` (`UIMenu`) | `MenuAnchor` |
+| 검색 | `CNSearchBar` | `SearchBar` |
+| 스위치·슬라이더 | `CNSwitch`·`CNSlider` | `Switch`·`Slider` |
+| 시트 | `CNBottomSheet.showCupertino` | `showModalBottomSheet` + 드래그 핸들 |
+
+- **`CNTabBar`를 골랐다(`CNTabBarNative` 아님).** 트리 안에 있어 `StatefulShellRoute`가 인덱스를 계속 소유한다. 대가로 **스크롤 시 탭바 축소가 사라졌다** — 그건 앱 전체를 넘기는 takeover에서만 된다.
+- `CNTabBarRouteObserver`를 루트와 모든 브랜치 navigator에 등록했다. 없으면 네이티브 뷰가 시트 위로 뚫고 그려진다.
+- 플랫폼 뷰는 `flutter test`에서 그려지지 않으므로 iOS 네이티브 경로는 `AppCapabilities.nativeControls` 뒤에 있다. 테스트·골든의 iOS는 같은 계약의 Flutter 대역을, Android는 **실제 M3 위젯**을 찍는다.
+- 유리는 "판 위에 판"을 만들지 않는다: 네이티브 유리 버튼이 올라가는 `AppFloatingBar`는 뒤에 표면을 그리지 않는다.
+
+### 개편 후 남은 것
+
+- 역사·방향 분석 데이터 원천: 선관위 역대선거정보, 열린국회정보, 구청 구정 연혁. fixture의 `[연도]` 항목은 확인 전까지 연도 미상으로 표시된다.
+- 후보 정책 성향 지도는 이념 배치 자체가 판단으로 읽힐 수 있다. 출시 전 선관위 유권해석 확인이 필요하다.
+- 역대 결과 점들에 도메인 수준 출처가 없다. 전국 개표율은 첫 지역구의 출처를 빌려 쓴다.
+- 트래커의 이행률(fulfilled 비율)과 지역구 홈의 「공약 이행」 수치가 서로 다른 fixture에서 와서 값이 다르다.
 
 ## 현재 상태
 

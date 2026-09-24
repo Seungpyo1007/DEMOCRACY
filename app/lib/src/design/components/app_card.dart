@@ -1,18 +1,19 @@
+import 'package:cupertino_native_better/cupertino_native_better.dart';
 import 'package:democracy/src/design/app_tokens.dart';
+import 'package:democracy/src/design/components/native_controls.dart';
 import 'package:flutter/material.dart';
 import 'package:liquid_glass_widgets/liquid_glass_widgets.dart';
 
-/// The surface every block of content sits on.
+/// A block of content on the page.
 ///
-/// The two platforms build a card out of different materials, not just
-/// different corner radii: iOS is a translucent tint with the page blurred
-/// behind it and a white highlight for an edge, Android is an opaque fill with
-/// a hairline border and no shadow at all. Callers should not have to know
-/// which they are on, so this is the only place that does.
+/// In the redesign content does not sit on cards: it sits on the paper,
+/// divided by rules (see `editorial.dart`). This stays as the padded block a
+/// screen can still ask for, and draws no surface of its own. Floating things
+/// -- a CTA bar, the results panel -- use [AppSurface] directly.
 class AppCard extends StatelessWidget {
   const AppCard({
     required this.child,
-    this.padding = const EdgeInsets.all(AppSpacing.x4),
+    this.padding = EdgeInsets.zero,
     this.radius,
     this.shadow,
     super.key,
@@ -21,28 +22,15 @@ class AppCard extends StatelessWidget {
   final Widget child;
   final EdgeInsetsGeometry padding;
 
-  /// Overrides the platform card radius. The guide uses a family of glass
-  /// radii by surface size, so a small row inside a card can ask for a
-  /// tighter one.
+  /// Kept for callers that still pass it; a flat block has no corners.
   final double? radius;
 
-  /// Overrides the platform shadow, for the surfaces the guide lifts further
-  /// off the page than a plain card.
+  /// Kept for callers that still pass it; a flat block has no elevation.
   final List<BoxShadow>? shadow;
 
   @override
   Widget build(BuildContext context) {
-    final surface = Theme.of(context).extension<AppSurfaceTokens>()!;
-    final borderRadius = BorderRadius.circular(radius ?? surface.cardRadius);
-
-    return AppSurface(
-      borderRadius: borderRadius,
-      fill: surface.cardFill,
-      border: surface.cardBorder,
-      shadow: shadow ?? surface.cardShadow,
-      blurSigma: surface.blurSigma,
-      child: Padding(padding: padding, child: child),
-    );
+    return Padding(padding: padding, child: child);
   }
 }
 
@@ -116,6 +104,24 @@ class AppFloatingBar extends StatelessWidget {
   Widget build(BuildContext context) {
     final surface = Theme.of(context).extension<AppSurfaceTokens>()!;
 
+    // Glass is a platter, not a wrapper: native glass buttons float on the
+    // content by themselves, and a glass bar behind them would be glass on
+    // glass. The bar surface is only for the Flutter stand-ins.
+    if (usesNativeIosControls(context)) {
+      return SafeArea(
+        top: false,
+        child: Padding(
+          padding: EdgeInsets.fromLTRB(
+            surface.navBarInset,
+            0,
+            surface.navBarInset,
+            surface.navBarInset,
+          ),
+          child: child,
+        ),
+      );
+    }
+
     return SafeArea(
       top: false,
       child: Padding(
@@ -141,7 +147,7 @@ class AppFloatingBar extends StatelessWidget {
   }
 }
 
-/// Material's extended FAB, in the accent, at the guide's radius.
+/// Material 3's extended FAB, for Android's primary action.
 class AppExtendedFab extends StatelessWidget {
   const AppExtendedFab({
     required this.label,
@@ -153,121 +159,143 @@ class AppExtendedFab extends StatelessWidget {
   final String label;
   final IconData icon;
 
-  /// Null disables the action. The write gate uses this rather than hiding
-  /// the button, so an unverified reader can still see what is on offer.
+  /// Null draws the FAB disabled. The write gate uses this rather than
+  /// hiding the button, so an unverified reader can still see what is on
+  /// offer.
   final VoidCallback? onPressed;
 
   @override
   Widget build(BuildContext context) {
     final enabled = onPressed != null;
-
-    return DecoratedBox(
-      decoration: BoxDecoration(
-        borderRadius: BorderRadius.circular(AppRadii.androidFab),
-        boxShadow: enabled ? AppElevation.androidFab : AppElevation.none,
-      ),
-      child: Material(
-        color: enabled ? AppColors.signal : AppColors.neutral300,
-        borderRadius: BorderRadius.circular(AppRadii.androidFab),
-        child: InkWell(
-          onTap: onPressed,
-          borderRadius: BorderRadius.circular(AppRadii.androidFab),
-          child: Padding(
-            padding: const EdgeInsets.symmetric(
-              horizontal: 18,
-              vertical: AppSpacing.x3 + 2,
-            ),
-            child: Row(
-              mainAxisSize: MainAxisSize.min,
-              children: [
-                Icon(
-                  icon,
-                  size: 18,
-                  color: enabled ? AppColors.white : AppColors.neutral600,
-                ),
-                const SizedBox(width: AppSpacing.x2),
-                Text(
-                  label,
-                  style: AppTextStyles.ctaSmall.copyWith(
-                    color: enabled ? AppColors.white : AppColors.neutral600,
-                  ),
-                ),
-              ],
-            ),
-          ),
-        ),
-      ),
+    return FloatingActionButton.extended(
+      heroTag: null,
+      onPressed: onPressed,
+      icon: Icon(icon),
+      label: Text(label),
+      backgroundColor: enabled ? null : AppColors.neutral200,
+      foregroundColor: enabled ? null : AppColors.neutral600,
+      elevation: enabled ? null : 0,
     );
   }
 }
 
-/// The accent capsule that carries a primary action.
+/// Overrides the accent a primary button fills with, for as long as it is in
+/// the tree. The floating action's entrance uses it to warm the button from
+/// grey to pine as it arrives.
+class ActionTint extends InheritedWidget {
+  const ActionTint({required this.color, required super.child, super.key});
+
+  final Color color;
+
+  static Color? maybeOf(BuildContext context) =>
+      context.dependOnInheritedWidgetOfExactType<ActionTint>()?.color;
+
+  @override
+  bool updateShouldNotify(ActionTint oldWidget) => oldWidget.color != color;
+}
+
+/// The primary action: a prominent Liquid Glass button tinted pine on iOS,
+/// a Material 3 filled button on Android.
 class AppPrimaryButton extends StatelessWidget {
   const AppPrimaryButton({
     required this.label,
     required this.onPressed,
     this.trailingArrow = false,
     this.expand = true,
+    this.icon,
     super.key,
   });
 
   final String label;
   final VoidCallback? onPressed;
 
-  /// iOS pushes the label left and sets an arrow on the right; Android
-  /// centres the label with nothing beside it.
+  /// Kept for callers that pass it. The system buttons centre their label.
   final bool trailingArrow;
   final bool expand;
+  final AppIcon? icon;
 
   @override
   Widget build(BuildContext context) {
     final surface = Theme.of(context).extension<AppSurfaceTokens>()!;
     final enabled = onPressed != null;
-    final radius = BorderRadius.circular(
-      surface.isGlass ? AppRadii.iosButtonWide : AppRadii.androidButton,
-    );
+    final accent = ActionTint.maybeOf(context) ?? AppColors.signal;
 
-    final label_ = Text(
-      label,
-      textAlign: trailingArrow ? TextAlign.start : TextAlign.center,
-      style: AppTextStyles.cta.copyWith(
-        color: enabled ? AppColors.white : AppColors.neutral600,
-      ),
-    );
+    if (!surface.isGlass) {
+      final style = accent == AppColors.signal
+          ? null
+          : FilledButton.styleFrom(backgroundColor: accent);
+      final button = icon == null
+          ? FilledButton(onPressed: onPressed, style: style, child: Text(label))
+          : FilledButton.icon(
+              onPressed: onPressed,
+              style: style,
+              icon: Icon(icon!.material),
+              label: Text(label),
+            );
+      return expand ? SizedBox(width: double.infinity, child: button) : button;
+    }
 
+    if (usesNativeIosControls(context)) {
+      return SizedBox(
+        width: expand ? double.infinity : null,
+        height: 52,
+        child: CNButton(
+          label: label,
+          icon: icon == null ? null : CNSymbol(icon!.sfSymbol, size: 15),
+          onPressed: onPressed,
+          enabled: enabled,
+          tint: accent,
+          config: CNButtonConfig(
+            style: CNButtonStyle.prominentGlass,
+            minHeight: 52,
+            shrinkWrap: !expand,
+            labelFontWeight: FontWeight.w700,
+          ),
+        ),
+      );
+    }
+
+    // The stand-in for tests and older systems: a pine capsule with a glass
+    // sheen, the same size as the native one.
+    final radius = BorderRadius.circular(999);
     return DecoratedBox(
       decoration: BoxDecoration(
         borderRadius: radius,
-        boxShadow: enabled && surface.isGlass
-            ? AppElevation.ctaWide
-            : AppElevation.none,
+        boxShadow: enabled ? AppElevation.ctaWide : AppElevation.none,
       ),
       child: Material(
-        color: enabled ? AppColors.signal : AppColors.neutral300,
+        color: enabled ? accent : AppColors.neutral300,
         borderRadius: radius,
         child: InkWell(
           onTap: onPressed,
           borderRadius: radius,
-          child: Padding(
-            padding: const EdgeInsets.symmetric(
-              horizontal: 22,
-              vertical: AppSpacing.x3 + 3,
-            ),
-            child: Row(
-              mainAxisSize: expand ? MainAxisSize.max : MainAxisSize.min,
-              children: [
-                if (trailingArrow) ...[
-                  Expanded(child: label_),
-                  Icon(
-                    Icons.arrow_forward,
-                    size: 18,
-                    color: enabled ? AppColors.white : AppColors.neutral600,
+          child: ConstrainedBox(
+            constraints: const BoxConstraints(minHeight: 52),
+            child: Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 22),
+              child: Row(
+                mainAxisSize: expand ? MainAxisSize.max : MainAxisSize.min,
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  if (icon != null) ...[
+                    Icon(
+                      icon!.material,
+                      size: 18,
+                      color: enabled ? AppColors.white : AppColors.neutral600,
+                    ),
+                    const SizedBox(width: AppSpacing.x2),
+                  ],
+                  Flexible(
+                    child: Text(
+                      label,
+                      textAlign: TextAlign.center,
+                      style: AppTextStyles.cta.copyWith(
+                        color: enabled ? AppColors.white : AppColors.neutral600,
+                      ),
+                    ),
                   ),
-                ] else if (expand)
-                  Expanded(child: label_)
-                else
-                  label_,
-              ],
+                ],
+              ),
             ),
           ),
         ),

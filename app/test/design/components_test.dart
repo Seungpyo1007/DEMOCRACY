@@ -5,7 +5,9 @@ import 'package:democracy/src/design/components/app_card.dart';
 import 'package:democracy/src/design/components/app_controls.dart';
 import 'package:democracy/src/design/components/app_labels.dart';
 import 'package:democracy/src/design/components/app_timeline.dart';
+import 'package:democracy/src/design/components/editorial.dart';
 import 'package:democracy/src/design/components/labeled_bar.dart';
+import 'package:democracy/src/design/components/motion.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:liquid_glass_widgets/liquid_glass_widgets.dart';
@@ -25,58 +27,22 @@ void main() {
     await tester.pumpAndSettle();
   }
 
-  BoxDecoration decorationOf(WidgetTester tester, Finder finder) {
-    return tester.widget<DecoratedBox>(finder).decoration as BoxDecoration;
-  }
-
   group('AppCard', () {
-    // The whole reason the card exists: one caller, two materials. iOS gets
-    // the real Liquid Glass renderer, Android an opaque fill -- and neither
-    // caller has to know which.
-    testWidgets('is glass on iOS and a plain surface on Android', (
-      tester,
-    ) async {
-      await pump(tester, TargetPlatform.iOS, const AppCard(child: Text('x')));
-      expect(find.byType(GlassCard), findsOneWidget);
-
-      await pump(
-        tester,
-        TargetPlatform.android,
-        const AppCard(child: Text('x')),
-      );
-      expect(find.byType(GlassCard), findsNothing);
-    });
-
-    testWidgets('Android draws an opaque fill with a border', (tester) async {
-      await pump(
-        tester,
-        TargetPlatform.android,
-        const AppCard(child: Text('x')),
-      );
-
-      final opaque = decorationOf(
-        tester,
-        find
-            .descendant(
-              of: find.byType(AppCard),
-              matching: find.byType(DecoratedBox),
-            )
-            .last,
-      );
-      expect(opaque.color!.a, 1.0);
-      expect(opaque.border, isNotNull);
-    });
-
-    testWidgets('takes the glass radius from the platform tokens', (
-      tester,
-    ) async {
-      await pump(tester, TargetPlatform.iOS, const AppCard(child: Text('x')));
-
-      final shape = tester.widget<GlassCard>(find.byType(GlassCard)).shape;
-      expect(
-        (shape as LiquidRoundedSuperellipse).borderRadius,
-        AppSurfaceTokens.ios.cardRadius,
-      );
+    // Content sits on the paper in the redesign; glass is kept for what
+    // floats. A card that quietly turned back into a surface would bring the
+    // card-grid look back one screen at a time.
+    testWidgets('draws no surface on either platform', (tester) async {
+      for (final platform in [TargetPlatform.iOS, TargetPlatform.android]) {
+        await pump(tester, platform, const AppCard(child: Text('x')));
+        expect(find.byType(GlassCard), findsNothing);
+        expect(
+          find.descendant(
+            of: find.byType(AppCard),
+            matching: find.byType(DecoratedBox),
+          ),
+          findsNothing,
+        );
+      }
     });
   });
 
@@ -147,24 +113,20 @@ void main() {
       expect(box.widthFactor, 1.0);
     });
 
-    testWidgets('draws a square track on iOS and a round one on Android', (
+    testWidgets('is square on both platforms: a quantity, not a control', (
       tester,
     ) async {
       const bar = LabeledBar(label: '교통', fraction: 0.72, valueText: '72%');
-
-      await pump(tester, TargetPlatform.iOS, bar);
-      final ios = tester
-          .widgetList<ClipRRect>(find.byType(ClipRRect))
-          .last
-          .borderRadius;
-      expect(ios, BorderRadius.zero);
-
-      await pump(tester, TargetPlatform.android, bar);
-      final android = tester
-          .widgetList<ClipRRect>(find.byType(ClipRRect))
-          .last
-          .borderRadius;
-      expect(android, isNot(BorderRadius.zero));
+      for (final platform in [TargetPlatform.iOS, TargetPlatform.android]) {
+        await pump(tester, platform, bar);
+        expect(
+          find.descendant(
+            of: find.byType(LabeledBar),
+            matching: find.byType(ClipRRect),
+          ),
+          findsNothing,
+        );
+      }
     });
   });
 
@@ -209,12 +171,27 @@ void main() {
 
   group('AppFilterChip', () {
     // Selection carried by fill alone is a state some readers cannot see.
-    testWidgets('Android marks selection with a tick as well as a fill', (
+    // Android is Material 3's own chip, which draws the tick itself.
+    testWidgets('Android is the Material filter chip, selected', (
       tester,
     ) async {
       await pump(
         tester,
         TargetPlatform.android,
+        AppFilterChip(label: '30대', selected: true, onSelected: (_) {}),
+      );
+
+      final chip = tester.widget<FilterChip>(find.byType(FilterChip));
+      expect(chip.selected, isTrue);
+      expect(chip.showCheckmark, isNot(isFalse));
+    });
+
+    testWidgets('iOS marks selection with a tick as well as a fill', (
+      tester,
+    ) async {
+      await pump(
+        tester,
+        TargetPlatform.iOS,
         AppFilterChip(label: '30대', selected: true, onSelected: (_) {}),
       );
 
@@ -359,6 +336,155 @@ void main() {
             .first,
       );
       expect(material.color, isNot(AppColors.signal));
+    });
+  });
+
+  group('motion', () {
+    testWidgets('a count-up lands on its value and announces only that', (
+      tester,
+    ) async {
+      await pump(
+        tester,
+        TargetPlatform.iOS,
+        const CountUp(value: 58, unit: '%', style: TextStyle(fontSize: 20)),
+      );
+
+      expect(find.text('58%', findRichText: true), findsOneWidget);
+      expect(find.bySemanticsLabel('58%'), findsOneWidget);
+    });
+
+    testWidgets('starts from zero and is still moving part-way through', (
+      tester,
+    ) async {
+      await tester.pumpWidget(
+        MaterialApp(
+          theme: AppTheme.light(TargetPlatform.iOS),
+          home: const Scaffold(
+            body: CountUp(value: 90, style: TextStyle(fontSize: 20)),
+          ),
+        ),
+      );
+      expect(find.text('0', findRichText: true), findsOneWidget);
+
+      await tester.pump(const Duration(milliseconds: 200));
+      expect(find.text('90', findRichText: true), findsNothing);
+
+      await tester.pumpAndSettle();
+      expect(find.text('90', findRichText: true), findsOneWidget);
+    });
+
+    // Reduce Motion is a promise that nothing moves. The end state has to be
+    // on the first frame, not arrive quickly.
+    testWidgets('reduced motion draws the end state on the first frame', (
+      tester,
+    ) async {
+      await tester.pumpWidget(
+        MediaQuery(
+          data: const MediaQueryData(disableAnimations: true),
+          child: MaterialApp(
+            theme: AppTheme.light(TargetPlatform.android),
+            home: const Scaffold(
+              body: Column(
+                children: [
+                  CountUp(value: 92, style: TextStyle(fontSize: 20)),
+                  SizedBox(width: 200, child: GrowBar(fraction: 0.5)),
+                ],
+              ),
+            ),
+          ),
+        ),
+      );
+      await tester.pump();
+
+      expect(find.text('92', findRichText: true), findsOneWidget);
+      final bar = tester.widget<FractionallySizedBox>(
+        find.byType(FractionallySizedBox),
+      );
+      expect(bar.widthFactor, 0.5);
+    });
+
+    testWidgets('a bar grows to its value and follows a later change', (
+      tester,
+    ) async {
+      Future<void> show(double fraction) => pump(
+        tester,
+        TargetPlatform.android,
+        SizedBox(width: 200, child: GrowBar(fraction: fraction)),
+      );
+
+      await show(0.3);
+      expect(
+        tester
+            .widget<FractionallySizedBox>(find.byType(FractionallySizedBox))
+            .widthFactor,
+        closeTo(0.3, 0.0001),
+      );
+
+      await show(0.6);
+      expect(
+        tester
+            .widget<FractionallySizedBox>(find.byType(FractionallySizedBox))
+            .widthFactor,
+        closeTo(0.6, 0.0001),
+      );
+    });
+  });
+
+  // It first shipped with a LayoutBuilder under IntrinsicWidth, which throws
+  // during layout -- every screen with a note fell over.
+  testWidgets('a margin note lays out with its underline', (tester) async {
+    await pump(tester, TargetPlatform.iOS, const MarginNote('2020년 첫 당선'));
+
+    expect(tester.takeException(), isNull);
+    expect(
+      tester.getSize(find.byType(HandUnderline)).width,
+      tester.getSize(find.text('2020년 첫 당선')).width,
+    );
+  });
+
+  group('system controls on Android', () {
+    testWidgets('the switch is Material 3 with its tick', (tester) async {
+      await pump(
+        tester,
+        TargetPlatform.android,
+        AppSwitch(value: true, onChanged: (_) {}, semanticLabel: '익명'),
+      );
+      expect(find.byType(Switch), findsOneWidget);
+    });
+
+    testWidgets('segments are a Material segmented button', (tester) async {
+      await pump(
+        tester,
+        TargetPlatform.android,
+        AppSegmentedControl(
+          segments: const ['실시간', '역대 결과'],
+          selectedIndex: 0,
+          onSelected: (_) {},
+        ),
+      );
+      expect(find.byType(SegmentedButton<int>), findsOneWidget);
+    });
+
+    testWidgets('in-page tabs are Material primary tabs', (tester) async {
+      await pump(
+        tester,
+        TargetPlatform.android,
+        InlineTabs(
+          labels: const ['공약', '법안'],
+          selectedIndex: 0,
+          onSelected: (_) {},
+        ),
+      );
+      expect(find.byType(TabBar), findsOneWidget);
+    });
+
+    testWidgets('the primary action is a filled button', (tester) async {
+      await pump(
+        tester,
+        TargetPlatform.android,
+        AppPrimaryButton(label: '다음', onPressed: () {}),
+      );
+      expect(find.byType(FilledButton), findsOneWidget);
     });
   });
 }

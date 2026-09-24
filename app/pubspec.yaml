@@ -10,7 +10,6 @@ environment:
 dependencies:
   cupertino_icons: ^1.0.9
   cupertino_native_better: ^1.5.4
-  fl_chart: ^1.2.0
   flutter:
     sdk: flutter
   flutter_riverpod: ^3.4.2
@@ -18,6 +17,7 @@ dependencies:
   go_router: ^17.3.0
   liquid_glass_widgets: ^0.29.5
   native_liquid_glass: ^0.2.14
+  shared_preferences: ^2.5.5
   url_launcher: ^6.3.2
 
 dev_dependencies:
@@ -28,7 +28,19 @@ dev_dependencies:
 flutter:
   uses-material-design: true
   assets:
-    # Sample payloads only. No fonts are declared: Archivo and Pretendard have
-    # no files or licence terms confirmed yet, so the app falls back to the
-    # system face on purpose.
+    # Sample payloads only.
     - assets/fixtures/
+    # Read by the licence registry at startup, not drawn.
+    - assets/fonts/gowun_batang/OFL.txt
+    - assets/fonts/nanum_pen_script/OFL.txt
+
+  # Both OFL. Body text stays on the system face; see AppFonts.
+  fonts:
+    - family: GowunBatang
+      fonts:
+        - asset: assets/fonts/gowun_batang/GowunBatang-Regular.ttf
+        - asset: assets/fonts/gowun_batang/GowunBatang-Bold.ttf
+          weight: 700
+    - family: NanumPenScript
+      fonts:
+        - asset: assets/fonts/nanum_pen_script/NanumPenScript-Regular.ttf
