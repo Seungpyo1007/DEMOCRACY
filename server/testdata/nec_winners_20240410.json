@@ -1,0 +1,69 @@
+{
+  "response": {
+    "header": {
+      "resultCode": "INFO-00",
+      "resultMsg": "NORMAL SERVICE"
+    },
+    "body": {
+      "items": {
+        "item": [
+          {
+            "num": 1,
+            "sgId": "20240410",
+            "sgTypecode": "2",
+            "huboid": "100150001",
+            "sggName": "마포구을",
+            "sdName": "서울특별시",
+            "wiwName": "마포구",
+            "giho": "1",
+            "gihoSangse": "",
+            "jdName": "가나당",
+            "name": "가상 의원",
+            "hanjaName": "假想",
+            "gender": "남",
+            "birthday": "19700101",
+            "age": "54",
+            "addr": "서울특별시 마포구 가상동",
+            "jobId": "72",
+            "job": "국회의원",
+            "eduId": "68",
+            "edu": "가상대학교 졸업",
+            "career1": "가상 경력",
+            "career2": "",
+            "dugsu": "61234",
+            "dugyul": "45.2"
+          },
+          {
+            "num": 1,
+            "sgId": "20240410",
+            "sgTypecode": "2",
+            "huboid": "100150002",
+            "sggName": "마포구갑",
+            "sdName": "서울특별시",
+            "wiwName": "마포구",
+            "giho": "1",
+            "gihoSangse": "",
+            "jdName": "가나당",
+            "name": "가상 의원 셋",
+            "hanjaName": "假想",
+            "gender": "남",
+            "birthday": "19700101",
+            "age": "54",
+            "addr": "서울특별시 마포구 가상동",
+            "jobId": "72",
+            "job": "국회의원",
+            "eduId": "68",
+            "edu": "가상대학교 졸업",
+            "career1": "가상 경력",
+            "career2": "",
+            "dugsu": "55000",
+            "dugyul": "50.3"
+          }
+        ]
+      },
+      "numOfRows": 100,
+      "pageNo": 1,
+      "totalCount": 2
+    }
+  }
+}

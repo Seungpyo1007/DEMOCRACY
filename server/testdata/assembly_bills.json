@@ -1,0 +1,125 @@
+{
+  "nzmimeepazxkubdpn": [
+    {
+      "head": [
+        {
+          "list_total_count": 4
+        },
+        {
+          "RESULT": {
+            "CODE": "INFO-000",
+            "MESSAGE": "정상 처리되었습니다."
+          }
+        }
+      ]
+    },
+    {
+      "row": [
+        {
+          "BILL_ID": "PRC_FAKE0001",
+          "BILL_NO": "2200001",
+          "BILL_NAME": "역세권 청년주택 공급 촉진법 일부개정법률안",
+          "COMMITTEE": "국토교통위원회",
+          "PROPOSE_DT": "2026-03-02",
+          "PROC_RESULT": "원안가결",
+          "AGE": "22",
+          "DETAIL_LINK": "http://likms.assembly.go.kr/bill/billDetail.do?billId=PRC_FAKE0001",
+          "PROPOSER": "가상 의원의원 등 10인",
+          "MEMBER_LIST": "",
+          "LAW_PROC_DT": null,
+          "LAW_PROC_RESULT_CD": null,
+          "RST_MONA_CD": "FAKE0001",
+          "LAW_PRESENT_DT": null,
+          "LAW_SUBMIT_DT": null,
+          "CMT_PROC_RESULT_CD": null,
+          "CMT_PROC_DT": "2026-04-20",
+          "CMT_PRESENT_DT": null,
+          "COMMITTEE_DT": "2026-03-05",
+          "PROC_DT": "2026-05-12",
+          "COMMITTEE_ID": "9700000",
+          "PUBL_MONA_CD": "",
+          "RST_PROPOSER": "가상 의원",
+          "PUBL_PROPOSER": ""
+        },
+        {
+          "BILL_ID": "PRC_FAKE0002",
+          "BILL_NO": "2200002",
+          "BILL_NAME": "소상공인 임대료 부담 완화 특별법안",
+          "COMMITTEE": "국토교통위원회",
+          "PROPOSE_DT": "2026-06-03",
+          "PROC_RESULT": null,
+          "AGE": "22",
+          "DETAIL_LINK": "http://likms.assembly.go.kr/bill/billDetail.do?billId=PRC_FAKE0002",
+          "PROPOSER": "가상 의원의원 등 10인",
+          "MEMBER_LIST": "",
+          "LAW_PROC_DT": null,
+          "LAW_PROC_RESULT_CD": null,
+          "RST_MONA_CD": "FAKE0001",
+          "LAW_PRESENT_DT": null,
+          "LAW_SUBMIT_DT": null,
+          "CMT_PROC_RESULT_CD": null,
+          "CMT_PROC_DT": null,
+          "CMT_PRESENT_DT": null,
+          "COMMITTEE_DT": "2026-06-10",
+          "PROC_DT": null,
+          "COMMITTEE_ID": "9700000",
+          "PUBL_MONA_CD": "",
+          "RST_PROPOSER": "가상 의원",
+          "PUBL_PROPOSER": ""
+        },
+        {
+          "BILL_ID": "PRC_FAKE0003",
+          "BILL_NO": "2200003",
+          "BILL_NAME": "도시공원 보전 및 이용에 관한 법률 일부개정법률안",
+          "COMMITTEE": "국토교통위원회",
+          "PROPOSE_DT": "2026-07-09",
+          "PROC_RESULT": null,
+          "AGE": "22",
+          "DETAIL_LINK": "http://likms.assembly.go.kr/bill/billDetail.do?billId=PRC_FAKE0003",
+          "PROPOSER": "가상 의원의원 등 10인",
+          "MEMBER_LIST": "",
+          "LAW_PROC_DT": null,
+          "LAW_PROC_RESULT_CD": null,
+          "RST_MONA_CD": "FAKE0001",
+          "LAW_PRESENT_DT": null,
+          "LAW_SUBMIT_DT": null,
+          "CMT_PROC_RESULT_CD": null,
+          "CMT_PROC_DT": null,
+          "CMT_PRESENT_DT": null,
+          "COMMITTEE_DT": null,
+          "PROC_DT": null,
+          "COMMITTEE_ID": "9700000",
+          "PUBL_MONA_CD": "",
+          "RST_PROPOSER": "가상 의원",
+          "PUBL_PROPOSER": ""
+        },
+        {
+          "BILL_ID": "PRC_FAKE0004",
+          "BILL_NO": "2200004",
+          "BILL_NAME": "가상 교육법 일부개정법률안",
+          "COMMITTEE": "국토교통위원회",
+          "PROPOSE_DT": "2026-07-10",
+          "PROC_RESULT": null,
+          "AGE": "22",
+          "DETAIL_LINK": "http://likms.assembly.go.kr/bill/billDetail.do?billId=PRC_FAKE0004",
+          "PROPOSER": "가상 의원의원 등 10인",
+          "MEMBER_LIST": "",
+          "LAW_PROC_DT": null,
+          "LAW_PROC_RESULT_CD": null,
+          "RST_MONA_CD": "FAKE0002",
+          "LAW_PRESENT_DT": null,
+          "LAW_SUBMIT_DT": null,
+          "CMT_PROC_RESULT_CD": null,
+          "CMT_PROC_DT": null,
+          "CMT_PRESENT_DT": null,
+          "COMMITTEE_DT": null,
+          "PROC_DT": null,
+          "COMMITTEE_ID": "9700000",
+          "PUBL_MONA_CD": "",
+          "RST_PROPOSER": "가상 의원",
+          "PUBL_PROPOSER": ""
+        }
+      ]
+    }
+  ]
+}

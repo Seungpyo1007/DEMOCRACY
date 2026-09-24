@@ -88,3 +88,23 @@ jobs:
       # another zone would disagree with the committed pixels.
       - name: Golden
         run: TZ=UTC flutter test --tags golden
+
+  # The BFF is written against the app's fixtures -- its contract tests read
+  # app/assets/fixtures -- so a fixture change that the server no longer
+  # matches fails here, in the same PR, rather than on a device.
+  server:
+    name: server (deno)
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: server
+
+    steps:
+      - uses: actions/checkout@v7
+
+      - uses: denoland/setup-deno@v2
+        with:
+          deno-version: v2.9.x
+
+      - name: Format, lint, type-check and test
+        run: deno task ci

@@ -1,0 +1,57 @@
+{
+  "response": {
+    "header": {
+      "resultCode": "INFO-00",
+      "resultMsg": "NORMAL SERVICE"
+    },
+    "body": {
+      "items": {
+        "item": [
+          {
+            "num": 1,
+            "sgId": "20240410",
+            "sgTypecode": "2",
+            "sggName": "종로구",
+            "sdName": "서울특별시",
+            "wiwName": "종로구",
+            "sggJungsu": "1",
+            "sOrder": "1"
+          },
+          {
+            "num": 2,
+            "sgId": "20240410",
+            "sgTypecode": "2",
+            "sggName": "마포구갑",
+            "sdName": "서울특별시",
+            "wiwName": "마포구",
+            "sggJungsu": "1",
+            "sOrder": "20"
+          },
+          {
+            "num": 3,
+            "sgId": "20240410",
+            "sgTypecode": "2",
+            "sggName": "마포구을",
+            "sdName": "서울특별시",
+            "wiwName": "마포구",
+            "sggJungsu": "1",
+            "sOrder": "21"
+          },
+          {
+            "num": 4,
+            "sgId": "20240410",
+            "sgTypecode": "2",
+            "sggName": "동구군위군을",
+            "sdName": "대구광역시",
+            "wiwName": "동구",
+            "sggJungsu": "1",
+            "sOrder": "30"
+          }
+        ]
+      },
+      "numOfRows": 100,
+      "pageNo": 1,
+      "totalCount": 4
+    }
+  }
+}
