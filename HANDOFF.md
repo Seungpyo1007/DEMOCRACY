@@ -99,9 +99,22 @@
 | #17 | 커뮤니티 3탭 + 작성 시트 |
 | #18 | 개표 지도·패널 |
 
+## 실데이터 연동 (2026-09-24)
+
+계획: `~/.claude/plans/streamed-moseying-nest.md`. 백엔드는 Supabase(`server/`), 앱은 BFF 하나만 부른다.
+
+- **fixture가 곧 계약이다.** BFF의 `data`는 `assets/fixtures/*.json`과 같은 모양이다(`_note`만 뺀다). `test/core/network/remote_repositories_test.dart`가 각 fixture를 envelope에 싸서 remote 리포지토리로 파싱한다. fixture 모양을 바꾸면 서버도 바꿔야 한다.
+- envelope: `{servedAt, data}` / `{servedAt, error:{code,message}}`. `not_found`·`not_curated`는 `NotAvailableException`이 되고 화면은 "준비 중"을 보인다(재시도 없음). 샘플 데이터로 대신 채우지 않는다.
+- 켜는 법: `flutter run --dart-define=BFF_URL=https://<ref>.supabase.co/functions/v1/bff --dart-define=BFF_ANON_KEY=<anon>`. 없으면 지금처럼 전부 fixture이고, 테스트·골든도 fixture로 돈다(`lib/src/app/live_data.dart`).
+- 실데이터: 지역구 프로필, 역사, 주소 검색, 위치 → 지역구, 공약(큐레이션된 지역구만). AI·개표·평가·채팅은 BFF 모드에서 "준비 중"이다.
+- 캐시: 프로필·역사·공약만 마지막 응답을 보관해 오프라인에 보여 준다. 각 수치의 `fetchedAt`이 배지에 찍히므로 별도 stale 표시는 두지 않았다. 주소 질의와 좌표는 캐시하지 않는다.
+- `LegislatorRecord.attendance`·`votes`는 선택 필드가 됐다. 본회의 출결은 API가 아니라 회기별 파일이라 없을 수 있다.
+- `servedAt`은 `BffResponse`까지 온다. `ServerAnchoredClock`은 아직 만들지 않았다.
+- 국회의원 공약은 API가 없다(선관위 공약 API는 대통령·단체장·교육감만). 선거공보 PDF에서 손으로 입력한다.
+
 ## 지금 fake인 것
 
-전부 repository 계약 뒤에 있다. 실제 구현으로 교체할 때 화면은 건드리지 않는다.
+전부 repository 계약 뒤에 있다. 실제 구현으로 교체할 때 화면은 건드리지 않는다. 아래 중 주소 검색·위치·의원·공약은 BFF 모드에서 실데이터로 바뀌었다(위 절).
 
 | 영역 | 계약 | 막고 있는 것 |
 |---|---|---|

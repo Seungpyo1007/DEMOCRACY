@@ -207,8 +207,14 @@ class _IncumbentSectionState extends State<_IncumbentSection> {
       ),
       _ when record == null => const _RecordMissing(),
       1 => _BillPane(bills: record.bills),
-      2 => _SeriesPane(series: record.attendance, title: '월별 출석률'),
-      _ => _SeriesPane(series: record.votes, title: '월별 표결 참여율'),
+      2 => switch (record.attendance) {
+        final series? => _SeriesPane(series: series, title: '월별 출석률'),
+        null => const _RecordMissing(message: '출석 기록이 아직 공개되지 않았습니다.'),
+      },
+      _ => switch (record.votes) {
+        final series? => _SeriesPane(series: series, title: '월별 표결 참여율'),
+        null => const _RecordMissing(message: '표결 기록이 아직 없습니다.'),
+      },
     };
   }
 
@@ -330,14 +336,16 @@ class _IncumbentSectionState extends State<_IncumbentSection> {
 }
 
 class _RecordMissing extends StatelessWidget {
-  const _RecordMissing();
+  const _RecordMissing({this.message = '의정 활동 기록이 아직 연결되지 않았습니다.'});
+
+  final String message;
 
   @override
   Widget build(BuildContext context) {
     return Padding(
       padding: const EdgeInsets.symmetric(vertical: AppSpacing.x8),
       child: Text(
-        '의정 활동 기록이 아직 연결되지 않았습니다.',
+        message,
         textAlign: TextAlign.center,
         style: AppTextStyles.cardBody.copyWith(color: AppColors.neutral600),
       ),

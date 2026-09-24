@@ -10,10 +10,12 @@ environment:
 dependencies:
   cupertino_icons: ^1.0.9
   cupertino_native_better: ^1.5.4
+  dio: ^5.11.1
   flutter:
     sdk: flutter
   flutter_riverpod: ^3.4.2
   flutter_secure_storage: ^11.0.0
+  geolocator: ^14.0.3
   go_router: ^17.3.0
   liquid_glass_widgets: ^0.29.5
   native_liquid_glass: ^0.2.14

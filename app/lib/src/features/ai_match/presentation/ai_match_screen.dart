@@ -1,5 +1,6 @@
 import 'package:democracy/src/app/app_routes.dart';
 import 'package:democracy/src/core/adaptive/platform_adaptive.dart';
+import 'package:democracy/src/core/network/not_available.dart';
 import 'package:democracy/src/core/time/kst.dart';
 import 'package:democracy/src/design/app_motion.dart';
 import 'package:democracy/src/design/app_tokens.dart';
@@ -48,7 +49,9 @@ class AiMatchScreen extends ConsumerWidget {
             child: Padding(
               padding: const EdgeInsets.all(AppSpacing.screen),
               child: Text(
-                '분석 결과를 불러오지 못했습니다.',
+                error is NotAvailableException
+                    ? '이 지역구의 AI 분석은 아직 준비 중입니다.'
+                    : '분석 결과를 불러오지 못했습니다.',
                 style: AppTextStyles.cardBody.copyWith(
                   color: AppColors.neutral700,
                 ),

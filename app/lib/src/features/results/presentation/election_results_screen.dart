@@ -1,5 +1,6 @@
 import 'package:democracy/src/core/adaptive/platform_adaptive.dart';
 import 'package:democracy/src/core/auth/address_controller.dart';
+import 'package:democracy/src/core/network/not_available.dart';
 import 'package:democracy/src/design/app_motion.dart';
 import 'package:democracy/src/design/app_tokens.dart';
 import 'package:democracy/src/design/components/app_controls.dart';
@@ -42,7 +43,13 @@ class _ElectionResultsScreenState extends ConsumerState<ElectionResultsScreen> {
       body: results.when(
         loading: () =>
             Center(child: PlatformAdaptiveProgress.circular(context)),
-        error: (error, _) => const Center(child: Text('개표 정보를 불러오지 못했습니다.')),
+        error: (error, _) => Center(
+          child: Text(
+            error is NotAvailableException
+                ? '개표 정보는 아직 준비 중입니다.'
+                : '개표 정보를 불러오지 못했습니다.',
+          ),
+        ),
         data: (data) {
           final reduced = AppMotion.reduced(context);
 

@@ -176,11 +176,7 @@ class ActivitySeries {
 /// feed has not been wired yet should degrade to the pledge tab rather than
 /// fail to parse.
 class LegislatorRecord {
-  const LegislatorRecord({
-    required this.bills,
-    required this.attendance,
-    required this.votes,
-  });
+  const LegislatorRecord({required this.bills, this.attendance, this.votes});
 
   static LegislatorRecord? fromJson(Object? json, {required String field}) {
     if (json is! Map) {
@@ -189,15 +185,22 @@ class LegislatorRecord {
 
     return LegislatorRecord(
       bills: BillRecord.fromJson(json['bills'], field: '$field.bills'),
-      attendance: ActivitySeries.fromJson(
-        json['attendance'],
-        field: '$field.attendance',
-      ),
-      votes: ActivitySeries.fromJson(json['votes'], field: '$field.votes'),
+      // Either series may be absent: plenary attendance is published as a
+      // file per session, not a feed, and a new member has no votes yet. An
+      // absent series is a shape; a present one still has to be sourced.
+      attendance: json['attendance'] == null
+          ? null
+          : ActivitySeries.fromJson(
+              json['attendance'],
+              field: '$field.attendance',
+            ),
+      votes: json['votes'] == null
+          ? null
+          : ActivitySeries.fromJson(json['votes'], field: '$field.votes'),
     );
   }
 
   final BillRecord bills;
-  final ActivitySeries attendance;
-  final ActivitySeries votes;
+  final ActivitySeries? attendance;
+  final ActivitySeries? votes;
 }
