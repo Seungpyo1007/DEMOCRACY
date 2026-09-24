@@ -39,3 +39,5 @@ app/test/golden/failures/
 app/lib/**/*.freezed.dart
 app/lib/**/*.g.dart
 
+# Supabase CLI local link state
+server/supabase/.temp/
