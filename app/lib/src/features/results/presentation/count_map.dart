@@ -146,14 +146,14 @@ class _DistrictTile extends StatelessWidget {
         // The tiles shade in from the empty end of the ramp, one after
         // another: the map arrives the way the count does.
         child: MotionIn(
-          duration: AppMotion.data,
+          duration: AppMotion.slow,
           delay: AppMotion.staggerFor(index),
-          curve: AppMotion.dataCurve,
+          curve: AppMotion.ink,
           builder: (context, t, _) => TweenAnimationBuilder<double>(
             // Once in, a later count darkens the tile from where it stood.
             tween: Tween(end: target * t),
-            duration: t < 1 ? Duration.zero : AppMotion.standard,
-            curve: AppMotion.dataCurve,
+            duration: t < 1 ? Duration.zero : AppMotion.base,
+            curve: AppMotion.ink,
             builder: (context, shown, _) {
               final fill = CountMap.shadeFor(shown);
               final label = CountMap.labelOn(fill);

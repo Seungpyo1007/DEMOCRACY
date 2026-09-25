@@ -1,5 +1,6 @@
 import 'package:cupertino_native_better/cupertino_native_better.dart';
 import 'package:democracy/src/design/app_tokens.dart';
+import 'package:democracy/src/design/components/motion.dart';
 import 'package:democracy/src/design/components/native_controls.dart';
 import 'package:flutter/material.dart';
 import 'package:liquid_glass_widgets/liquid_glass_widgets.dart';
@@ -216,6 +217,12 @@ class AppPrimaryButton extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final button = _button(context);
+    // A native button already answers the press itself.
+    return usesNativeIosControls(context) ? button : PressScale(child: button);
+  }
+
+  Widget _button(BuildContext context) {
     final surface = Theme.of(context).extension<AppSurfaceTokens>()!;
     final enabled = onPressed != null;
     final accent = ActionTint.maybeOf(context) ?? AppColors.signal;

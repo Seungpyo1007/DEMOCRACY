@@ -132,10 +132,10 @@ void main() {
       await pumpTracker(tester);
 
       // 9 of 24 kept.
-      final hero = tester.widget<CountUp>(
+      final hero = tester.widget<Figure>(
         find.descendant(
           of: find.byKey(PledgeTrackerKeys.heroRate),
-          matching: find.byType(CountUp),
+          matching: find.byType(Figure),
         ),
       );
       expect('${hero.value}${hero.unit}', '38%');
@@ -148,7 +148,7 @@ void main() {
       );
       expect(
         find.byWidgetPredicate(
-          (w) => w is CountUp && w.value == 24 && w.unit == '건',
+          (w) => w is Figure && w.value == 24 && w.unit == '건',
         ),
         findsOneWidget,
       );

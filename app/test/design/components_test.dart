@@ -1,4 +1,5 @@
 import 'package:cupertino_native_better/cupertino_native.dart';
+import 'package:democracy/src/design/app_motion.dart';
 import 'package:democracy/src/design/app_theme.dart';
 import 'package:democracy/src/design/app_tokens.dart';
 import 'package:democracy/src/design/components/app_card.dart';
@@ -340,37 +341,49 @@ void main() {
   });
 
   group('motion', () {
-    testWidgets('a count-up lands on its value and announces only that', (
+    testWidgets('a figure shows its value and announces only that', (
       tester,
     ) async {
       await pump(
         tester,
         TargetPlatform.iOS,
-        const CountUp(value: 58, unit: '%', style: TextStyle(fontSize: 20)),
+        const Figure(value: 58, unit: '%', style: TextStyle(fontSize: 20)),
       );
 
       expect(find.text('58%', findRichText: true), findsOneWidget);
       expect(find.bySemanticsLabel('58%'), findsOneWidget);
     });
 
-    testWidgets('starts from zero and is still moving part-way through', (
-      tester,
-    ) async {
+    // Figures are not counted up: the value on screen is always the record.
+    testWidgets('never shows a number other than its value', (tester) async {
       await tester.pumpWidget(
         MaterialApp(
           theme: AppTheme.light(TargetPlatform.iOS),
           home: const Scaffold(
-            body: CountUp(value: 90, style: TextStyle(fontSize: 20)),
+            body: Figure(value: 90, style: TextStyle(fontSize: 20)),
           ),
         ),
       );
-      expect(find.text('0', findRichText: true), findsOneWidget);
+      expect(find.text('90', findRichText: true), findsOneWidget);
 
       await tester.pump(const Duration(milliseconds: 200));
-      expect(find.text('90', findRichText: true), findsNothing);
+      expect(find.text('90', findRichText: true), findsOneWidget);
+      expect(find.text('0', findRichText: true), findsNothing);
 
       await tester.pumpAndSettle();
       expect(find.text('90', findRichText: true), findsOneWidget);
+    });
+
+    test('a stagger never pushes an item past the entrance budget', () {
+      for (final bars in [false, true]) {
+        for (var i = 0; i < 100; i++) {
+          expect(
+            AppMotion.staggerFor(i, bars: bars) + AppMotion.slow,
+            lessThanOrEqualTo(AppMotion.enterBudget),
+          );
+        }
+      }
+      expect(AppMotion.staggerFor(2), AppMotion.stagger * 2);
     });
 
     // Reduce Motion is a promise that nothing moves. The end state has to be
@@ -386,7 +399,7 @@ void main() {
             home: const Scaffold(
               body: Column(
                 children: [
-                  CountUp(value: 92, style: TextStyle(fontSize: 20)),
+                  Figure(value: 92, style: TextStyle(fontSize: 20)),
                   SizedBox(width: 200, child: GrowBar(fraction: 0.5)),
                 ],
               ),

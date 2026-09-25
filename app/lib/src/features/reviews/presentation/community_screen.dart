@@ -80,8 +80,8 @@ class _CommunityScreenState extends ConsumerState<CommunityScreen> {
       } else {
         _scroll.animateTo(
           end,
-          duration: AppMotion.standard,
-          curve: AppMotion.standardCurve,
+          duration: AppMotion.base,
+          curve: AppMotion.settle,
         );
       }
     });
@@ -172,9 +172,9 @@ class _CommunityScreenState extends ConsumerState<CommunityScreen> {
                   ),
                   SliverToBoxAdapter(
                     child: AnimatedSwitcher(
-                      duration: reduced ? Duration.zero : AppMotion.standard,
-                      switchInCurve: AppMotion.standardCurve,
-                      switchOutCurve: AppMotion.standardCurve,
+                      duration: reduced ? Duration.zero : AppMotion.base,
+                      switchInCurve: AppMotion.settle,
+                      switchOutCurve: AppMotion.settle,
                       // The outgoing tab fades without moving; only the
                       // incoming one rises, so the two never look like they
                       // are sliding past each other.
@@ -278,7 +278,7 @@ class _Summary extends StatelessWidget {
               FittedBox(
                 fit: BoxFit.scaleDown,
                 alignment: AlignmentDirectional.centerStart,
-                child: CountUp(
+                child: Figure(
                   value: summary.average,
                   fractionDigits: 1,
                   style: AppTextStyles.ratingDisplay.copyWith(
@@ -467,7 +467,7 @@ class _ChannelTab extends ConsumerWidget {
     final messages = ref.watch(channelProvider);
     final duration = AppMotion.reduced(context)
         ? Duration.zero
-        : AppMotion.standard;
+        : AppMotion.base;
 
     return Padding(
       padding: const EdgeInsets.fromLTRB(
@@ -515,7 +515,7 @@ class _ChannelTab extends ConsumerWidget {
           ),
           AnimatedSize(
             duration: duration,
-            curve: AppMotion.standardCurve,
+            curve: AppMotion.settle,
             alignment: Alignment.topCenter,
             child: warning == null
                 ? const SizedBox(width: double.infinity)

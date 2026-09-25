@@ -307,9 +307,9 @@ class _IncumbentSectionState extends State<_IncumbentSection> {
         // rather than jumping under the reader's thumb.
         MotionSize(
           child: AnimatedSwitcher(
-            duration: reduced ? Duration.zero : AppMotion.standard,
-            switchInCurve: AppMotion.standardCurve,
-            switchOutCurve: AppMotion.standardCurve,
+            duration: reduced ? Duration.zero : AppMotion.base,
+            switchInCurve: AppMotion.settle,
+            switchOutCurve: AppMotion.settle,
             layoutBuilder: (current, previous) => Stack(
               alignment: Alignment.topCenter,
               children: [...previous, ?current],
@@ -727,7 +727,7 @@ class _CandidateCard extends StatelessWidget {
                 ),
               ),
               if (stat != null)
-                CountUp(
+                Figure(
                   value: stat.value.value,
                   unit: stat.unit,
                   style: AppTextStyles.figureSmall.copyWith(

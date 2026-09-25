@@ -1,6 +1,7 @@
 import 'dart:async';
 import 'dart:io';
 
+import 'package:democracy/src/design/app_motion.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_test/flutter_test.dart';
@@ -9,6 +10,8 @@ import 'package:flutter_test/flutter_test.dart';
 /// `flutter_test_config.dart` up the directory tree, so the rest of the suite
 /// keeps the default exact comparator.
 Future<void> testExecutable(FutureOr<void> Function() testMain) async {
+  // Repeating motion (live marker, caret) would keep pumpAndSettle waiting.
+  AppMotion.loopsEnabled = false;
   final existing = goldenFileComparator as LocalFileComparator;
   goldenFileComparator = _AntialiasTolerantComparator(existing.basedir);
   await _loadBundledFonts();

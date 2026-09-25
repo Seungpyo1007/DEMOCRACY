@@ -17,9 +17,9 @@ class AiTabPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return AnimatedSwitcher(
-      duration: AppMotion.reduced(context) ? Duration.zero : AppMotion.quick,
-      switchInCurve: AppMotion.standardCurve,
-      switchOutCurve: AppMotion.standardCurve,
+      duration: AppMotion.reduced(context) ? Duration.zero : AppMotion.fast,
+      switchInCurve: AppMotion.settle,
+      switchOutCurve: AppMotion.settle,
       child: KeyedSubtree(
         key: ValueKey(mode),
         child: switch (mode) {

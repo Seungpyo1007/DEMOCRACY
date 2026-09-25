@@ -96,9 +96,9 @@ class _ElectionResultsScreenState extends ConsumerState<ElectionResultsScreen> {
               ),
               SliverToBoxAdapter(
                 child: AnimatedSwitcher(
-                  duration: reduced ? Duration.zero : AppMotion.standard,
-                  switchInCurve: AppMotion.standardCurve,
-                  switchOutCurve: AppMotion.standardCurve,
+                  duration: reduced ? Duration.zero : AppMotion.base,
+                  switchInCurve: AppMotion.settle,
+                  switchOutCurve: AppMotion.settle,
                   layoutBuilder: (current, previous) => Stack(
                     alignment: Alignment.topCenter,
                     children: [...previous, ?current],
@@ -162,9 +162,10 @@ class _ElectionResultsScreenState extends ConsumerState<ElectionResultsScreen> {
 
 /// A still dot, always paired with the word.
 ///
-/// It does not pulse. A looping animation never lets the page settle, and the
-/// word already says what a pulse would: a dot on its own is a state only a
-/// sighted reader who knows the convention can read.
+/// The dot breathes while counting runs -- one of the two things in the app
+/// that repeat. The word stays: a dot on its own is a state only a sighted
+/// reader who knows the convention can read. Under reduced motion, and in
+/// tests, the dot is still.
 class _LiveMark extends StatelessWidget {
   const _LiveMark();
 
@@ -173,14 +174,7 @@ class _LiveMark extends StatelessWidget {
     return Row(
       mainAxisSize: MainAxisSize.min,
       children: [
-        Container(
-          width: 7,
-          height: 7,
-          decoration: const BoxDecoration(
-            color: AppColors.signal,
-            shape: BoxShape.circle,
-          ),
-        ),
+        const LivePulse(),
         const SizedBox(width: 5),
         Text(
           'LIVE',
@@ -233,7 +227,7 @@ class _OverallCount extends StatelessWidget {
                       ),
                     ),
                     const SizedBox(height: 2),
-                    CountUp(
+                    Figure(
                       value: counts.overallCountedShare,
                       fractionDigits: 1,
                       unit: '%',
@@ -290,7 +284,7 @@ class _LiveCount extends StatelessWidget {
         : AnimatedSwitcher(
             duration: AppMotion.reduced(context)
                 ? Duration.zero
-                : AppMotion.quick,
+                : AppMotion.fast,
             layoutBuilder: (current, previous) => Stack(
               alignment: Alignment.topCenter,
               children: [...previous, ?current],

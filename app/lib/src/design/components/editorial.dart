@@ -420,40 +420,47 @@ class SectionHeader extends StatelessWidget {
   Widget build(BuildContext context) {
     final style = AppTextStyles.sectionLabel.copyWith(color: AppColors.ink);
 
-    return DecoratedBox(
-      decoration: const BoxDecoration(
-        border: Border(top: BorderSide(color: AppColors.ink, width: 2)),
-      ),
-      child: Padding(
-        padding: const EdgeInsets.only(top: AppSpacing.x2 + 2),
-        child: ConstrainedBox(
-          constraints: const BoxConstraints(minHeight: 20),
-          child: Row(
-            crossAxisAlignment: CrossAxisAlignment.center,
-            children: [
-              Expanded(
-                child: Semantics(
-                  header: true,
-                  child: Text.rich(
-                    TextSpan(
-                      children: [
-                        if (number != null)
-                          TextSpan(
-                            text: '$number ',
-                            style: style.copyWith(color: AppColors.neutral600),
-                          ),
-                        TextSpan(text: label),
-                      ],
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.stretch,
+      mainAxisSize: MainAxisSize.min,
+      children: [
+        // The rule is inked left to right as the section arrives.
+        const InkRule(),
+        // The old border was painted inside this padding; the rule now takes
+        // its own 2dp, so the gap below it is what is left.
+        Padding(
+          padding: const EdgeInsets.only(top: AppSpacing.x2),
+          child: ConstrainedBox(
+            constraints: const BoxConstraints(minHeight: 20),
+            child: Row(
+              crossAxisAlignment: CrossAxisAlignment.center,
+              children: [
+                Expanded(
+                  child: Semantics(
+                    header: true,
+                    child: Text.rich(
+                      TextSpan(
+                        children: [
+                          if (number != null)
+                            TextSpan(
+                              text: '$number ',
+                              style: style.copyWith(
+                                color: AppColors.neutral600,
+                              ),
+                            ),
+                          TextSpan(text: label),
+                        ],
+                      ),
+                      style: style,
                     ),
-                    style: style,
                   ),
                 ),
-              ),
-              ?trailing,
-            ],
+                ?trailing,
+              ],
+            ),
           ),
         ),
-      ),
+      ],
     );
   }
 }
@@ -552,7 +559,7 @@ class RuledRow extends StatelessWidget {
   }
 }
 
-/// A handwritten margin note, with its underline drawn in after it appears.
+/// A handwritten margin note, written in left to right, then underlined.
 ///
 /// Reserved for annotation: `2020년 첫 당선 · 2024년 재선`, `번복은 원문 대조
 /// 가능`. It never carries data a reader needs, and it never judges.
@@ -561,7 +568,7 @@ class MarginNote extends StatelessWidget {
     this.text, {
     this.underline = true,
     this.fontSize,
-    this.delay = const Duration(milliseconds: 240),
+    this.delay = AppMotion.base,
     super.key,
   });
 
@@ -579,10 +586,10 @@ class MarginNote extends StatelessWidget {
 
     final label = Text(text, style: style);
     if (!underline) {
-      return RevealIn(child: label);
+      return WriteIn(child: label);
     }
 
-    return RevealIn(
+    return WriteIn(
       child: IntrinsicWidth(
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.stretch,
@@ -600,7 +607,7 @@ class MarginNote extends StatelessWidget {
   }
 }
 
-/// A figure over its label, counting up into place: `92%` / `출석률`.
+/// A figure over its label, settling into place: `92%` / `출석률`.
 class FigureStat extends StatelessWidget {
   const FigureStat({
     required this.value,
@@ -628,7 +635,7 @@ class FigureStat extends StatelessWidget {
         FittedBox(
           fit: BoxFit.scaleDown,
           alignment: AlignmentDirectional.centerStart,
-          child: CountUp(
+          child: Figure(
             value: value,
             fractionDigits: fractionDigits,
             unit: unit,
@@ -806,7 +813,7 @@ class _ActionEntranceState extends State<_ActionEntrance>
     with SingleTickerProviderStateMixin {
   late final AnimationController _controller = AnimationController(
     vsync: this,
-    duration: AppMotion.emphasized,
+    duration: AppMotion.slow,
   );
   bool? _wasActive;
 
@@ -832,10 +839,7 @@ class _ActionEntranceState extends State<_ActionEntrance>
 
   @override
   Widget build(BuildContext context) {
-    final eased = CurvedAnimation(
-      parent: _controller,
-      curve: AppMotion.emphasizedCurve,
-    );
+    final eased = CurvedAnimation(parent: _controller, curve: AppMotion.sheet);
     return AnimatedBuilder(
       animation: eased,
       child: widget.child,

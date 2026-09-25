@@ -284,7 +284,7 @@ void main() {
   ) async {
     await pumpHome(tester);
 
-    // Figures count up, so they render as rich text.
+    // Figures carry a smaller unit, so they render as rich text.
     expect(find.text('92%', findRichText: true), findsOneWidget);
     expect(
       find.textContaining('출처 open.assembly.go.kr'),

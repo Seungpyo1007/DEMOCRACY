@@ -365,9 +365,9 @@ class _StanceDot extends StatelessWidget {
     const half = _StancePlot._dot / 2;
 
     return MotionIn(
-      duration: AppMotion.emphasized,
+      duration: AppMotion.slow,
       delay: AppMotion.staggerFor(index + 2),
-      curve: AppMotion.emphasizedCurve,
+      curve: AppMotion.sheet,
       builder: (context, t, child) {
         final at = Offset.lerp(center, target, t)!;
         return Positioned(
@@ -486,9 +486,9 @@ class _SlopeChart extends StatelessWidget {
       child: SizedBox(
         height: 180,
         child: MotionIn(
-          duration: AppMotion.data,
+          duration: AppMotion.slow,
           delay: AppMotion.staggerFor(2),
-          curve: AppMotion.drawCurve,
+          curve: AppMotion.ink,
           builder: (context, t, _) => CustomPaint(
             size: Size.infinite,
             painter: _SlopePainter(
@@ -769,7 +769,7 @@ class _IssueRow extends StatelessWidget {
               width: 64,
               child: Align(
                 alignment: Alignment.centerRight,
-                child: CountUp(
+                child: Figure(
                   value: issue.mentions,
                   unit: '건',
                   delay: AppMotion.staggerFor(index + 3),

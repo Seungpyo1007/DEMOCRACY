@@ -70,10 +70,10 @@ class _OnboardingScreenState extends ConsumerState<OnboardingScreen> {
               _StepProgress(state: state),
               Expanded(
                 child: AnimatedSwitcher(
-                  duration: reduced ? Duration.zero : AppMotion.emphasized,
-                  reverseDuration: reduced ? Duration.zero : AppMotion.quick,
-                  switchInCurve: AppMotion.emphasizedCurve,
-                  switchOutCurve: AppMotion.standardCurve,
+                  duration: reduced ? Duration.zero : AppMotion.slow,
+                  reverseDuration: reduced ? Duration.zero : AppMotion.fast,
+                  switchInCurve: AppMotion.sheet,
+                  switchOutCurve: AppMotion.settle,
                   layoutBuilder: (currentChild, previous) => Stack(
                     alignment: Alignment.topCenter,
                     children: [...previous, ?currentChild],
@@ -161,10 +161,8 @@ class _StepProgress extends StatelessWidget {
                           begin: 0,
                           end: i < state.stepNumber ? 1 : 0,
                         ),
-                        duration: reduced
-                            ? Duration.zero
-                            : AppMotion.emphasized,
-                        curve: AppMotion.emphasizedCurve,
+                        duration: reduced ? Duration.zero : AppMotion.slow,
+                        curve: AppMotion.sheet,
                         builder: (context, fill, _) => Align(
                           alignment: AlignmentDirectional.centerStart,
                           child: FractionallySizedBox(
@@ -535,7 +533,7 @@ class _InterestScale extends StatelessWidget {
                 // The value swaps with a short fade so a drag reads as the
                 // word changing, not flickering.
                 AnimatedSwitcher(
-                  duration: reduced ? Duration.zero : AppMotion.quick,
+                  duration: reduced ? Duration.zero : AppMotion.fast,
                   child: Text(
                     label,
                     key: ValueKey(label),
@@ -689,7 +687,7 @@ class _UnderlinedNote extends StatelessWidget {
           Text(text, style: style),
           HandUnderline(
             width: width,
-            delay: AppMotion.staggerFor(3) + AppMotion.standard,
+            delay: AppMotion.staggerFor(3) + AppMotion.base,
           ),
         ],
       ),

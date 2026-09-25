@@ -1,5 +1,6 @@
 import 'package:cupertino_native_better/cupertino_native_better.dart';
 import 'package:democracy/src/design/app_tokens.dart';
+import 'package:democracy/src/design/components/motion.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
@@ -552,6 +553,12 @@ class AppSecondaryButton extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final button = _button(context);
+    // A native button already answers the press itself.
+    return usesNativeIosControls(context) ? button : PressScale(child: button);
+  }
+
+  Widget _button(BuildContext context) {
     if (_isGlass(context)) {
       if (usesNativeIosControls(context)) {
         return SizedBox(
