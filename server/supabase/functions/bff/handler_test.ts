@@ -3,6 +3,7 @@ import { validateEnvelope } from "./contract.ts";
 import { createHandler } from "./handler.ts";
 import { resolveSggCode } from "./mapping.ts";
 import { emptyTables, MemoryStore } from "./store.ts";
+import { signedOut } from "../../../testdata/fake_auth.ts";
 import { fakeUpstream } from "../../../testdata/fake_upstream.ts";
 import { MAPO_B, NOW, runPipeline, toTables } from "../../../testdata/pipeline.ts";
 
@@ -14,6 +15,7 @@ async function handlerWith(overrides: Record<string, () => Response> = {}, logs:
     jusoKey: "J",
     kakaoKey: "K",
     now: () => NOW,
+    ...signedOut(),
     logError: (m) => logs.push(m),
   });
 }
@@ -59,6 +61,7 @@ Deno.test("district without a sourced incumbent is not_found (never a half paylo
     jusoKey: "",
     kakaoKey: "",
     now: () => NOW,
+    ...signedOut(),
   });
   const r = await call(h, `/districts/${MAPO_B}/profile`);
   assertEquals([r.status, r.body.error.code], [404, "not_found"]);
@@ -143,6 +146,7 @@ Deno.test("empty database: every district route is a clean 404", async () => {
     jusoKey: "",
     kakaoKey: "",
     now: () => NOW,
+    ...signedOut(),
   });
   for (const what of ["profile", "history", "pledges"]) {
     const r = await call(h, `/districts/${MAPO_B}/${what}`);

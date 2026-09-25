@@ -2,15 +2,20 @@
 //   GET /districts/{id}/profile | /history | /pledges
 //   GET /address/search?q=
 //   GET /location/district?lat=&lng=
+//   /me/... (account routes, signed-in only; see account.ts)
 //
+// The public routes are GET only and need no account. Account routes are no-store.
 // Privacy: the address query and coordinates are never logged or stored.
 
+import type { Auth } from "../_shared/auth.ts";
 import { ApiError, CORS_HEADERS, fail, ok } from "../_shared/envelope.ts";
 import { isDistrictId } from "../_shared/district_names.ts";
 import { lookupHdong, searchJuso } from "../_shared/geo.ts";
 import type { FetchLike } from "../_shared/http.ts";
 import { UpstreamError } from "../_shared/http.ts";
 import { findKeyedUrls } from "../_shared/provenance.ts";
+import { type AccountContext, handleAccount } from "./account.ts";
+import type { AccountStore } from "./account_store.ts";
 import { buildHistory, buildPledges, buildProfile } from "./builders.ts";
 import { districtForHdong, suggestionsFor } from "./mapping.ts";
 import type { ReadStore } from "./store.ts";
@@ -20,6 +25,10 @@ export interface BffDeps {
   fetch: FetchLike;
   jusoKey: string;
   kakaoKey: string;
+  accounts: AccountStore;
+  auth: Auth;
+  /** Source of randomness for 활동명 draws and tokens; crypto.getRandomValues by default. */
+  randomBytes?: (n: number) => Uint8Array;
   now?: () => Date;
   /** Error reporter; receives no request data. */
   logError?: (message: string) => void;
@@ -42,6 +51,13 @@ function parseCoord(raw: string | null, min: number, max: number): number | null
 
 export function createHandler(deps: BffDeps): (req: Request) => Promise<Response> {
   const now = deps.now ?? (() => new Date());
+  const account: AccountContext = {
+    store: deps.store,
+    accounts: deps.accounts,
+    auth: deps.auth,
+    randomBytes: deps.randomBytes ?? ((n) => crypto.getRandomValues(new Uint8Array(n))),
+    now,
+  };
 
   const respond = (data: unknown, cache?: string) => {
     // Last line of defence: a credential-bearing URL must never leave.
@@ -53,11 +69,14 @@ export function createHandler(deps: BffDeps): (req: Request) => Promise<Response
 
   return async (req: Request): Promise<Response> => {
     if (req.method === "OPTIONS") return new Response(null, { status: 204, headers: CORS_HEADERS });
-    if (req.method !== "GET") return fail("bad_request", "Only GET is supported.", now());
 
     const url = new URL(req.url);
     const path = routePath(url);
     try {
+      const mine = await handleAccount(account, req, url, path);
+      if (mine !== null) return respond(mine);
+      if (req.method !== "GET") throw new ApiError("bad_request", "Only GET is supported.");
+
       const district = /^\/districts\/([^/]+)\/(profile|history|pledges)$/.exec(path);
       if (district) {
         const [, id, what] = district;
@@ -92,7 +111,7 @@ export function createHandler(deps: BffDeps): (req: Request) => Promise<Response
 
       throw new ApiError("not_found", "No such route.");
     } catch (error) {
-      if (error instanceof ApiError) return fail(error.code, error.message, now());
+      if (error instanceof ApiError) return fail(error.code, error.message, now(), error.extra);
       if (error instanceof UpstreamError) {
         // Not error.message: it can carry the upstream URL, i.e. the query.
         deps.logError?.(`upstream ${path}: status ${error.status ?? "network"}`);

@@ -5,10 +5,37 @@
 import type { FetchLike } from "./http.ts";
 
 export class PostgrestError extends Error {
-  constructor(message: string, readonly status: number) {
+  constructor(
+    message: string,
+    readonly status: number,
+    /** SQLSTATE from the body, e.g. "P0001" (raise exception) or "23505" (unique). */
+    readonly code: string | null = null,
+    /** The raised message verbatim; the account functions raise a bare code here. */
+    readonly dbMessage: string | null = null,
+    readonly hint: string | null = null,
+  ) {
     super(message);
     this.name = "PostgrestError";
   }
+}
+
+/** PostgREST error bodies are {code, message, details, hint}; anything else yields nulls. */
+export function postgrestErrorFrom(status: number, body: string): PostgrestError {
+  let parsed: Record<string, unknown> = {};
+  try {
+    const json = JSON.parse(body);
+    if (json && typeof json === "object") parsed = json as Record<string, unknown>;
+  } catch {
+    // Not JSON (a gateway page); keep the nulls.
+  }
+  const str = (v: unknown) => (typeof v === "string" ? v : null);
+  return new PostgrestError(
+    `postgrest ${status}: ${body.slice(0, 300)}`,
+    status,
+    str(parsed.code),
+    str(parsed.message),
+    str(parsed.hint),
+  );
 }
 
 export interface Postgrest {
@@ -34,8 +61,7 @@ export function createPostgrest(
   async function call(url: string, init: RequestInit): Promise<Response> {
     const res = await fetchFn(url, { ...init, headers: { ...headers, ...(init.headers ?? {}) } });
     if (!res.ok) {
-      const body = await res.text();
-      throw new PostgrestError(`postgrest ${res.status}: ${body.slice(0, 300)}`, res.status);
+      throw postgrestErrorFrom(res.status, await res.text());
     }
     return res;
   }
