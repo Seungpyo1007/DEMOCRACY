@@ -3,8 +3,9 @@
 //   GET /address/search?q=
 //   GET /location/district?lat=&lng=
 //   /me/... (account routes, signed-in only; see account.ts)
+//   POST /residency/verify, DELETE /residency (signed-in; see residency.ts)
 //
-// The public routes are GET only and need no account. Account routes are no-store.
+// The public routes are GET only and need no account. Signed-in routes are no-store.
 // Privacy: the address query and coordinates are never logged or stored.
 
 import type { Auth } from "../_shared/auth.ts";
@@ -18,6 +19,7 @@ import { type AccountContext, handleAccount } from "./account.ts";
 import type { AccountStore } from "./account_store.ts";
 import { buildHistory, buildPledges, buildProfile } from "./builders.ts";
 import { districtForHdong, suggestionsFor } from "./mapping.ts";
+import { handleResidency, type ResidencyContext } from "./residency.ts";
 import type { ReadStore } from "./store.ts";
 
 export interface BffDeps {
@@ -58,6 +60,12 @@ export function createHandler(deps: BffDeps): (req: Request) => Promise<Response
     randomBytes: deps.randomBytes ?? ((n) => crypto.getRandomValues(new Uint8Array(n))),
     now,
   };
+  const residency: ResidencyContext = {
+    ...account,
+    fetch: deps.fetch,
+    jusoKey: deps.jusoKey,
+    kakaoKey: deps.kakaoKey,
+  };
 
   const respond = (data: unknown, cache?: string) => {
     // Last line of defence: a credential-bearing URL must never leave.
@@ -75,6 +83,8 @@ export function createHandler(deps: BffDeps): (req: Request) => Promise<Response
     try {
       const mine = await handleAccount(account, req, url, path);
       if (mine !== null) return respond(mine);
+      const verified = await handleResidency(residency, req, path);
+      if (verified !== null) return respond(verified);
       if (req.method !== "GET") throw new ApiError("bad_request", "Only GET is supported.");
 
       const district = /^\/districts\/([^/]+)\/(profile|history|pledges)$/.exec(path);

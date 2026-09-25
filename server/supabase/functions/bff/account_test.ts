@@ -8,6 +8,7 @@ import { accountError, CONSENT_VERSION } from "./account.ts";
 import { MemoryAccountStore, PostgrestAccountStore } from "./account_store.ts";
 import { validateEnvelope } from "./contract.ts";
 import { createHandler } from "./handler.ts";
+import { sha256Hex } from "./residency.ts";
 import { MemoryStore } from "./store.ts";
 import { ANON_KEY, fakeGotrue, seededBytes, SUPABASE_URL } from "../../../testdata/fake_auth.ts";
 import { fakeUpstream } from "../../../testdata/fake_upstream.ts";
@@ -396,4 +397,143 @@ Deno.test("getUser: GoTrue is asked with the bearer; outages are upstream errors
     () => getUser(() => Promise.reject(new TypeError("dns")), SUPABASE_URL, ANON_KEY, TOKEN),
     UpstreamError,
   );
+});
+
+// ------------------------------------------------------------ residency
+
+const SANGAM = "서울특별시 마포구 월드컵북로 400 (상암동)";
+
+Deno.test("residency: needs a user, then a profile, then a well-formed place", async () => {
+  const { call, up } = await setup();
+  const anon = await call("POST", "/residency/verify", {
+    token: ANON_KEY,
+    body: { roadAddress: SANGAM },
+  });
+  assertEquals([anon.status, anon.body.error.code], [401, "unauthorized"]);
+
+  const noProfile = await call("POST", "/residency/verify", { body: { roadAddress: SANGAM } });
+  assertEquals([noProfile.status, noProfile.body.error.code], [403, "consent_required"]);
+  assertEquals(up.requests.length, 0, "no lookup before the profile check");
+
+  await signUp(call);
+  for (
+    const body of [
+      {},
+      { roadAddress: SANGAM, lat: 37.5, lng: 127 },
+      { roadAddress: "마포" },
+      { lat: 10, lng: 127 },
+      { lat: "37.5", lng: 127 },
+    ]
+  ) {
+    const r = await call("POST", "/residency/verify", { body });
+    assertEquals([JSON.stringify(body), r.status], [JSON.stringify(body), 400]);
+  }
+  assertEquals((await call("GET", "/residency/verify")).status, 400);
+});
+
+Deno.test("residency: address → district on the server; only the token hash is kept", async () => {
+  const { call, accounts, logs } = await setup();
+  await signUp(call);
+  // A client-supplied district is ignored: the server derives 마포구 을 itself.
+  const r = await call("POST", "/residency/verify", {
+    body: { roadAddress: `  ${SANGAM.replace(" 400", "  400")} `, districtId: "nec-313502f4" },
+  });
+  assertEquals(r.status, 200);
+  const d = r.body.data;
+  assertEquals(d.districtId, MAPO_B);
+  assertEquals(d.displayName, "서울 마포구 을");
+  assertEquals(d.method, "address_self_declared");
+  assertEquals(d.verifiedAt, NOW.toISOString());
+  assertEquals(d.expiresAt, new Date(NOW.getTime() + 180 * DAY).toISOString());
+  assertMatch(d.token, /^[A-Za-z0-9_-]{43}$/);
+  assertEquals(Object.keys(d).sort(), [
+    "displayName",
+    "districtId",
+    "expiresAt",
+    "method",
+    "token",
+    "verifiedAt",
+  ]);
+
+  const [row] = accounts.t.residency;
+  assertEquals(row.token_hash, await sha256Hex(d.token));
+  assert(!JSON.stringify(accounts.t).includes("월드컵북로"), "address persisted");
+  assert(!JSON.stringify(accounts.t).includes(d.token), "raw token persisted");
+  assertEquals(logs, []);
+
+  const me = await call("GET", "/me");
+  assertEquals(me.body.data.residency, {
+    districtId: MAPO_B,
+    displayName: "서울 마포구 을",
+    method: "address_self_declared",
+    verifiedAt: d.verifiedAt,
+    expiresAt: d.expiresAt,
+  });
+});
+
+Deno.test("residency: coordinates → 행정동 → district", async () => {
+  const { call } = await setup();
+  await signUp(call);
+  const r = await call("POST", "/residency/verify", { body: { lat: 37.55, lng: 126.9 } });
+  assertEquals([r.status, r.body.data.districtId], [200, MAPO_B]);
+});
+
+Deno.test("residency: unmapped, ambiguous or unknown places are no_match", async () => {
+  const { call, accounts } = await setup();
+  await signUp(call);
+  for (
+    const roadAddress of [
+      "부산광역시 중구 가상로 1 (가상동)", // found, but no district mapping
+      "서울특별시 마포구 어딘가로 1", // not among juso's results, which span districts
+    ]
+  ) {
+    const r = await call("POST", "/residency/verify", { body: { roadAddress } });
+    assertEquals([roadAddress, r.status, r.body.error.code], [roadAddress, 404, "no_match"]);
+  }
+  assertEquals(accounts.t.residency, []);
+
+  const other = await setup({
+    "dapi.kakao.com": () =>
+      Response.json({
+        documents: [{ region_type: "H", code: "2611051000", region_3depth_name: "가상동" }],
+      }),
+  });
+  await signUp(other.call);
+  const r = await other.call("POST", "/residency/verify", { body: { lat: 35.1, lng: 129.03 } });
+  assertEquals([r.status, r.body.error.code], [404, "no_match"]);
+});
+
+Deno.test("residency: an upstream failure keeps the address out of logs and storage", async () => {
+  const { call, accounts, logs } = await setup({
+    "business.juso.go.kr": () => new Response("down", { status: 500 }),
+  });
+  await signUp(call);
+  const secret = "서울특별시 마포구 비밀길 123";
+  const r = await call("POST", "/residency/verify", { body: { roadAddress: secret } });
+  assertEquals([r.status, r.body.error.code], [502, "upstream"]);
+  assert(logs.length > 0);
+  for (const line of logs) {
+    assert(!line.includes("비밀길") && !line.includes(encodeURIComponent("비밀길")), line);
+    assert(!line.includes("confmKey"), line);
+  }
+  assert(!JSON.stringify(r.body).includes("비밀길"));
+  assertEquals(accounts.t.residency, []);
+});
+
+Deno.test("residency: re-verify replaces, expiry hides it from /me, DELETE removes", async () => {
+  const { call, accounts, advance } = await setup();
+  await signUp(call);
+  const first = await call("POST", "/residency/verify", { body: { roadAddress: SANGAM } });
+  advance(1);
+  const second = await call("POST", "/residency/verify", { body: { lat: 37.55, lng: 126.9 } });
+  assert(first.body.data.token !== second.body.data.token);
+  assertEquals(accounts.t.residency.length, 1);
+  assertEquals(accounts.t.residency[0].token_hash, await sha256Hex(second.body.data.token));
+
+  advance(181);
+  assertEquals((await call("GET", "/me")).body.data.residency, null);
+  assertEquals((await call("GET", "/me/export")).body.data.residency.districtId, MAPO_B);
+
+  assertEquals((await call("DELETE", "/residency")).body.data, { deleted: true });
+  assertEquals(accounts.t.residency, []);
 });

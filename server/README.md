@@ -23,7 +23,7 @@ Reading needs no account; the account routes need a Supabase Auth sign-in.
 | `supabase/functions/_shared/`                     | API clients, normalizers (one per source), envelope, provenance, PostgREST client                          |
 | `supabase/functions/ingest-assembly/`             | Members (daily), bills and plenary votes (every 6 h)                                                       |
 | `supabase/functions/ingest-nec/`                  | Election and district codes and candidates (weekly), historical winners (`?mode=backfill`)                 |
-| `supabase/functions/bff/`                         | The API. `contract.ts` mirrors the app's Dart parsers. `account.ts` holds the signed-in routes.            |
+| `supabase/functions/bff/`                         | The API. `contract.ts` mirrors the app's Dart parsers. `account.ts`, `residency.ts`: signed-in.            |
 | `scripts/`                                        | One-off importers that write SQL to stdout                                                                 |
 | `testdata/`                                       | Hand-written API samples and district-mapping samples. See `testdata/README.md`.                           |
 
@@ -31,7 +31,7 @@ Reading needs no account; the account routes need a Supabase Auth sign-in.
 
 ```sh
 brew install deno
-deno task ci      # fmt --check, lint, check, test (offline; 66 tests)
+deno task ci      # fmt --check, lint, check, test (offline; 72 tests)
 ```
 
 ## BFF contract (fixed; the app is built against it)
@@ -82,16 +82,28 @@ cached (`no-store`). "Me" below is `{profile|null, consents, residency|null}`:
 - profile: `{handle, provider, email, notify, handleChangedAt, handleChangeAvailableAt, createdAt}`
 - consents: `[{kind, version, granted, at}]`, kind one of `age14`, `terms`, `privacy`, `notify`
 
-| Route                           | Body → data                                                                                  |
-| ------------------------------- | -------------------------------------------------------------------------------------------- |
-| `GET /me`                       | Me. `profile: null` means the consent screen comes next.                                     |
-| `GET /me/handle/options`        | `{handles:[5], expiresAt}`. Only these can be picked, for 30 minutes. `429` in the cooldown. |
-| `POST /me/consent`              | `{age14, terms, privacy, notify, handle}` → Me. The first three must be `true` (`400`).      |
-| `POST /me/under14`              | → `{deleted:true}`. Deletes the login; nothing is kept. `409` once a profile exists.         |
-| `POST /me/handle`               | `{handle}` → Me. Not offered `403`, taken `409`, second change within 30 days `429`.         |
-| `PATCH /me`                     | `{notify}` → Me. Recorded as a `notify` consent row.                                         |
-| `GET /me/export`                | `{exportedAt, account, profile, consents, residency}`. No token hash; no address exists.     |
-| `DELETE /me?posts=keep\|delete` | → `{deleted:true, posts}`. Removes the profile rows, then the auth user.                     |
+| Route                           | Body → data                                                                                         |
+| ------------------------------- | --------------------------------------------------------------------------------------------------- |
+| `GET /me`                       | Me. `profile: null` means the consent screen comes next.                                            |
+| `GET /me/handle/options`        | `{handles:[5], expiresAt}`. Only these can be picked, for 30 minutes. `429` in the cooldown.        |
+| `POST /me/consent`              | `{age14, terms, privacy, notify, handle}` → Me. The first three must be `true` (`400`).             |
+| `POST /me/under14`              | → `{deleted:true}`. Deletes the login; nothing is kept. `409` once a profile exists.                |
+| `POST /me/handle`               | `{handle}` → Me. Not offered `403`, taken `409`, second change within 30 days `429`.                |
+| `PATCH /me`                     | `{notify}` → Me. Recorded as a `notify` consent row.                                                |
+| `GET /me/export`                | `{exportedAt, account, profile, consents, residency}`. No token hash; no address exists.            |
+| `DELETE /me?posts=keep\|delete` | → `{deleted:true, posts}`. Removes the profile rows, then the auth user.                            |
+| `POST /residency/verify`        | `{roadAddress}` or `{lat, lng}` → `{token, districtId, displayName, method, verifiedAt, expiresAt}` |
+| `DELETE /residency`             | → `{deleted:true}`                                                                                  |
+
+- **주민 인증** (`/residency/verify`) needs a profile (`403 consent_required`).
+  - The server derives the district itself: juso plus the 별표2 mapping for an address, Kakao plus
+    the mapping for coordinates. It never accepts a district id from the client. An address must
+    equal one juso `roadAddr` (or be juso's only result) and map to exactly one district; anything
+    ambiguous or unmapped is `404 no_match`.
+  - The token is 32 random bytes (base64url). Only its SHA-256 is stored, with the district, the
+    method (`address_self_declared`) and an expiry 180 days out (`RESIDENCY_TTL_DAYS`). Verifying
+    again replaces the old row and token.
+  - This is a self-declared address, not proof of residence; the app must not call it 실거주 증명.
 
 - **활동명** (handle) is a neutral nature word, a space and two digits (`솔숲 42`), drawn by the
   server from `_shared/handles.ts`. The list excludes surname-like words, party names, party colours
@@ -194,8 +206,9 @@ cached (`no-store`). "Me" below is `{profile|null, consents, residency|null}`:
   - Address, birth date, age, gender, education and job are dropped before the raw payload is
     stored.
   - Staff names and birth dates are removed from raw member pages.
-- `/address/search` and `/location/district` never log or store the query or the coordinates. Logs
-  carry only the route and the upstream status.
+- `/address/search`, `/location/district` and `/residency/verify` never log or store the query,
+  address or coordinates. Logs carry only the route and the upstream status. The residency table has
+  no address or coordinate column.
 - `source_url` columns have a CHECK that rejects keyed URLs.
 - Accounts hold no real name, phone number or birth date. `email` is only what the provider gave,
   kept for export and recovery and never shown. The BFF checks each user token with Supabase Auth
