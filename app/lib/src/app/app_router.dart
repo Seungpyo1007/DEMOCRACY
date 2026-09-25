@@ -1,7 +1,11 @@
 import 'package:cupertino_native_better/cupertino_native_better.dart';
 import 'package:democracy/src/app/app_routes.dart';
+import 'package:democracy/src/core/account/auth_controller.dart';
+import 'package:democracy/src/core/account/auth_state.dart';
 import 'package:democracy/src/core/adaptive/platform_adaptive.dart';
 import 'package:democracy/src/core/auth/address_controller.dart';
+import 'package:democracy/src/features/account/presentation/consent_screen.dart';
+import 'package:democracy/src/features/account/presentation/login_screens.dart';
 import 'package:democracy/src/features/ai_match/presentation/ai_tab_chrome.dart';
 import 'package:democracy/src/features/ai_match/presentation/ai_tab_page.dart';
 import 'package:democracy/src/features/ai_match/presentation/algorithm_log_screen.dart';
@@ -16,12 +20,69 @@ import 'package:democracy/src/features/reviews/presentation/community_screen.dar
 import 'package:democracy/src/features/reviews/presentation/review_compose_screen.dart';
 import 'package:democracy/src/features/shell/presentation/app_shell.dart';
 import 'package:democracy/src/features/tutorial/presentation/tutorial_screen.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/widgets.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 
+/// Where the account routes send someone who should not be on them.
+///
+/// Pure, so the whole table can be tested without a router. Reading routes
+/// never appear here: nobody is ever sent to sign in to read.
+String? accountRedirect(Uri location, AuthState auth) {
+  final path = location.path;
+  final next = location.queryParameters['next'];
+  final signingIn =
+      path == AppRoutes.login || path.startsWith('${AppRoutes.login}/');
+
+  if (path == AppRoutes.consent) {
+    return switch (auth) {
+      AuthNeedsConsent() => null,
+      AuthUnder14() => AppRoutes.under14,
+      AuthSignedIn() => next ?? AppRoutes.home,
+      _ => AppRoutes.withNext(AppRoutes.login, next),
+    };
+  }
+  if (path == AppRoutes.under14) {
+    return auth is AuthUnder14 ? null : AppRoutes.home;
+  }
+  if (signingIn) {
+    return switch (auth) {
+      AuthSignedIn() => next ?? AppRoutes.home,
+      AuthNeedsConsent() => AppRoutes.withNext(AppRoutes.consent, next),
+      _ => null,
+    };
+  }
+  final private =
+      path == AppRoutes.account ||
+      path.startsWith('${AppRoutes.account}/') ||
+      path == AppRoutes.residency ||
+      path.startsWith('${AppRoutes.residency}/');
+  if (private && auth is! AuthSignedIn) {
+    return AppRoutes.withNext(AppRoutes.login, location.toString());
+  }
+  return null;
+}
+
+/// Re-runs the redirect when the account or the district changes -- a
+/// sign-in completing, a session expiring, a district being chosen. Without
+/// it the guard only ran on the next navigation (HANDOFF's known gap).
+class _RouterRefresh extends ChangeNotifier {
+  _RouterRefresh(Ref ref) {
+    ref
+      ..listen(authControllerProvider, (_, _) => notifyListeners())
+      ..listen(
+        addressControllerProvider.select((s) => s.district?.id),
+        (_, _) => notifyListeners(),
+      );
+  }
+}
+
 final appRouterProvider = Provider<GoRouter>((ref) {
+  final refresh = _RouterRefresh(ref);
+  ref.onDispose(refresh.dispose);
   final router = GoRouter(
+    refreshListenable: refresh,
     // Where a launch opens is decided by whether a district survived the last
     // one. The guard cannot do this on its own: it deliberately lets a
     // resident who has a district visit onboarding, because the verification
@@ -48,7 +109,10 @@ final appRouterProvider = Provider<GoRouter>((ref) {
       // Only the missing-district case redirects. Sending a user who already
       // has one back out of onboarding would strand the verification prompt,
       // which deliberately routes here to upgrade a read-only session.
-      return !hasDistrict && !atOnboarding ? AppRoutes.onboarding : null;
+      if (!hasDistrict && !atOnboarding) {
+        return AppRoutes.onboarding;
+      }
+      return accountRedirect(state.uri, ref.read(authControllerProvider));
     },
     // The native tab bar and glass buttons are platform views; this tells
     // them when a sheet or dialog is up so they hide under it instead of
@@ -77,6 +141,46 @@ final appRouterProvider = Provider<GoRouter>((ref) {
           context: context,
           key: state.pageKey,
           child: const ReviewComposeScreen(),
+        ),
+      ),
+      GoRoute(
+        path: AppRoutes.login,
+        pageBuilder: (context, state) => PlatformAdaptiveRoute.page(
+          context: context,
+          key: state.pageKey,
+          child: LoginScreen(next: state.uri.queryParameters['next']),
+        ),
+      ),
+      GoRoute(
+        path: AppRoutes.loginEmail,
+        pageBuilder: (context, state) => PlatformAdaptiveRoute.page(
+          context: context,
+          key: state.pageKey,
+          child: EmailEntryScreen(next: state.uri.queryParameters['next']),
+        ),
+      ),
+      GoRoute(
+        path: AppRoutes.loginCode,
+        pageBuilder: (context, state) => PlatformAdaptiveRoute.page(
+          context: context,
+          key: state.pageKey,
+          child: EmailCodeScreen(next: state.uri.queryParameters['next']),
+        ),
+      ),
+      GoRoute(
+        path: AppRoutes.consent,
+        pageBuilder: (context, state) => PlatformAdaptiveRoute.page(
+          context: context,
+          key: state.pageKey,
+          child: ConsentScreen(next: state.uri.queryParameters['next']),
+        ),
+      ),
+      GoRoute(
+        path: AppRoutes.under14,
+        pageBuilder: (context, state) => PlatformAdaptiveRoute.page(
+          context: context,
+          key: state.pageKey,
+          child: const Under14Screen(),
         ),
       ),
       GoRoute(

@@ -1,7 +1,11 @@
 @Tags(['golden'])
 library;
 
+import 'package:democracy/src/core/account/account.dart';
+import 'package:democracy/src/core/account/auth_controller.dart';
 import 'package:democracy/src/core/time/kst.dart';
+import 'package:democracy/src/features/account/presentation/consent_screen.dart';
+import 'package:democracy/src/features/account/presentation/login_screens.dart';
 import 'package:democracy/src/features/ai_match/presentation/ai_direction_screen.dart';
 import 'package:democracy/src/features/ai_match/presentation/ai_match_screen.dart';
 import 'package:democracy/src/features/district/presentation/district_home_screen.dart';
@@ -214,6 +218,34 @@ void main() {
       await expectLater(
         find.byType(MaterialApp),
         matchesGoldenFile('goldens/community_${name}_390dp.png'),
+      );
+    });
+
+    testWidgets('login at 390dp on $name', (tester) async {
+      await pumpGolden(tester, screen: const LoginScreen(), platform: platform);
+
+      await expectLater(
+        find.byType(MaterialApp),
+        matchesGoldenFile('goldens/login_${name}_390dp.png'),
+      );
+    });
+
+    testWidgets('consent at 390dp on $name', (tester) async {
+      final container = await pumpGolden(
+        tester,
+        screen: const ConsentScreen(),
+        platform: platform,
+      );
+      // A first sign-in: the consent screen is only ever reached signed in
+      // with no profile yet.
+      await container
+          .read(authControllerProvider.notifier)
+          .signIn(SignInProvider.kakao);
+      await tester.pumpAndSettle();
+
+      await expectLater(
+        find.byType(MaterialApp),
+        matchesGoldenFile('goldens/consent_${name}_390dp.png'),
       );
     });
   });

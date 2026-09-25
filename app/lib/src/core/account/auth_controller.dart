@@ -6,7 +6,6 @@ import 'package:democracy/src/core/account/fake_account.dart';
 import 'package:democracy/src/core/auth/address_controller.dart';
 import 'package:democracy/src/core/network/bff_client.dart';
 import 'package:democracy/src/core/time/clock_providers.dart';
-import 'package:flutter/foundation.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 /// Fakes by default, so tests, goldens and a build without a BFF sign in
@@ -19,23 +18,12 @@ final accountRepositoryProvider = Provider<AccountRepository>(
   (ref) => FakeAccountRepository(),
 );
 
-/// The providers the login screen offers, in the platform's order. Without
-/// a BFF every one is shown, so the screen can be seen whole.
-final signInProvidersProvider = Provider<List<SignInProvider>>((ref) {
-  return defaultTargetPlatform == TargetPlatform.iOS
-      ? const [
-          SignInProvider.apple,
-          SignInProvider.kakao,
-          SignInProvider.google,
-          SignInProvider.email,
-        ]
-      : const [
-          SignInProvider.google,
-          SignInProvider.kakao,
-          SignInProvider.apple,
-          SignInProvider.email,
-        ];
-});
+/// The providers this build can complete. The login screen puts them in
+/// the platform's order. Without a BFF every one is offered, so the screen
+/// can be seen whole.
+final signInProvidersProvider = Provider<List<SignInProvider>>(
+  (ref) => SignInProvider.values,
+);
 
 final authControllerProvider = NotifierProvider<AuthController, AuthState>(
   AuthController.new,

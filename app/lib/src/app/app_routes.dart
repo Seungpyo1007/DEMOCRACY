@@ -14,6 +14,33 @@ abstract final class AppRoutes {
   /// Writing a resident review, full screen over the tabs. Pops with `true`
   /// once a review is posted.
   static const reviewCompose = '/review-compose';
+
+  /// Signing in, outside the shell. Each takes `?next=` -- where to land
+  /// once there is an account -- so the gate returns the reader to the
+  /// thing they were about to write.
+  static const login = '/login';
+  static const loginEmail = '/login/email';
+  static const loginCode = '/login/code';
+
+  /// The first sign-in's consent screen, and where saying "under 14" ends.
+  static const consent = '/consent';
+  static const under14 = '/under14';
+
+  /// The signed-in person's own page and what hangs off it.
+  static const account = '/account';
+  static const accountExport = '/account/export';
+  static const accountDelete = '/account/delete';
+
+  /// Checking an address against the district map.
+  static const residency = '/residency';
+  static const residencyAddress = '/residency/address';
+  static const residencyDone = '/residency/done';
+
+  /// [path] carrying where to go afterwards.
+  static String withNext(String path, String? next) =>
+      next == null || next.isEmpty
+      ? path
+      : Uri(path: path, queryParameters: {'next': next}).toString();
   static const home = '/';
   static const history = '/history';
   static const tracker = '/tracker';
