@@ -287,9 +287,25 @@ class ResidencyDoneScreen extends ConsumerWidget {
     return AccountPage(
       title: '주민 인증 완료',
       onBack: () => context.go(next ?? AppRoutes.home),
-      action: AppPrimaryButton(
-        label: next == null || next == AppRoutes.home ? '홈으로' : '쓰던 곳으로 돌아가기',
-        onPressed: () => context.go(next ?? AppRoutes.home),
+      action: Column(
+        mainAxisSize: MainAxisSize.min,
+        crossAxisAlignment: CrossAxisAlignment.stretch,
+        children: [
+          AppPrimaryButton(
+            label: next == null || next == AppRoutes.home
+                ? '홈으로'
+                : '쓰던 곳으로 돌아가기',
+            onPressed: () => context.go(next ?? AppRoutes.home),
+          ),
+          TextButton(
+            onPressed: () => context.go(AppRoutes.account),
+            style: TextButton.styleFrom(
+              foregroundColor: AppColors.neutral700,
+              minimumSize: const Size(44, 48),
+            ),
+            child: const Text('내 계정 보기'),
+          ),
+        ],
       ),
       children: [
         const Align(

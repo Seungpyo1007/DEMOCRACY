@@ -323,6 +323,81 @@ void main() {
     });
   });
 
+  group('the account page', () {
+    Future<(ProviderContainer, GoRouter)> signedIn(WidgetTester tester) async {
+      final (container, router) = await pumpRouter(tester, district: _district);
+      final auth = container.read(authControllerProvider.notifier);
+      await auth.signIn(SignInProvider.kakao);
+      final options = await auth.handleOptions();
+      await auth.acceptConsent(
+        ConsentInput(
+          age14: true,
+          terms: true,
+          privacy: true,
+          notify: false,
+          handle: options.first,
+        ),
+      );
+      await auth.verifyResidency(roadAddress: '서울 마포구 월드컵북로 400');
+      router.go(AppRoutes.home);
+      await tester.pumpAndSettle();
+      unawaited(router.push(AppRoutes.account));
+      await tester.pumpAndSettle();
+      return (container, router);
+    }
+
+    testWidgets('signing out keeps the district and ends the residency', (
+      tester,
+    ) async {
+      final (container, router) = await signedIn(tester);
+      final handle = container.read(authControllerProvider).account!.handle;
+      expect(find.text(handle), findsOneWidget);
+
+      await tester.ensureVisible(find.text('로그아웃'));
+      await tester.tap(find.text('로그아웃'));
+      await tester.pumpAndSettle();
+      await tester.tap(find.text('로그아웃').last);
+      await tester.pumpAndSettle();
+
+      expect(locationOf(router), AppRoutes.home);
+      expect(container.read(authControllerProvider), isA<AuthSignedOut>());
+      final address = container.read(addressControllerProvider);
+      expect(address.district?.id, _district.id);
+      expect(address.isVerified, isFalse);
+    });
+
+    testWidgets('a new handle is picked from the drawn ones', (tester) async {
+      final (container, _) = await signedIn(tester);
+
+      await tester.tap(find.text('변경'));
+      await tester.pumpAndSettle();
+      await tester.tap(find.text('느티 41'));
+      await tester.pump();
+      await tester.tap(find.text('느티 41로 바꾸기'));
+      await tester.pumpAndSettle();
+
+      expect(container.read(authControllerProvider).account?.handle, '느티 41');
+    });
+
+    testWidgets('deleting the account signs out and keeps reading', (
+      tester,
+    ) async {
+      final (container, router) = await signedIn(tester);
+
+      await tester.ensureVisible(find.text('계정 삭제'));
+      await tester.tap(find.text('계정 삭제'));
+      await tester.pumpAndSettle();
+      expect(locationOf(router), AppRoutes.accountDelete);
+
+      await tester.tap(find.text('계정 삭제').last);
+      await tester.pumpAndSettle();
+
+      expect(container.read(authControllerProvider), isA<AuthSignedOut>());
+      expect(locationOf(router), AppRoutes.home);
+      expect(container.read(addressControllerProvider).district, isNotNull);
+    });
+  });
+
   group('accountRedirect', () {
     const account = Account(
       userId: 'u',

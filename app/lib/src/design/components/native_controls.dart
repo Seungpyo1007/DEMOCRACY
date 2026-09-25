@@ -52,6 +52,11 @@ abstract final class AppIcons {
   static const search = AppIcon(Icons.search, 'magnifyingglass');
   static const location = AppIcon(Icons.my_location, 'location');
   static const source = AppIcon(Icons.open_in_new, 'arrow.up.right.square');
+  static const person = AppIcon(Icons.person_outline, 'person.crop.circle');
+  static const personFilled = AppIcon(
+    Icons.account_circle,
+    'person.crop.circle.fill',
+  );
 }
 
 /// A toolbar action: a glass circle on iOS, a Material icon button on

@@ -3,6 +3,7 @@ import 'package:democracy/src/core/account/auth_controller.dart';
 import 'package:democracy/src/core/auth/address_controller.dart';
 import 'package:democracy/src/design/app_page_background.dart';
 import 'package:democracy/src/design/app_theme.dart';
+import 'package:democracy/src/features/account/presentation/account_screens.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -41,7 +42,12 @@ class DemocracyApp extends ConsumerWidget {
         defaultTargetPlatform,
         nativeControls: defaultTargetPlatform == TargetPlatform.iOS,
       ),
-      builder: AppPageBackground.builder,
+      builder: (context, child) => SessionExpiryListener(
+        navigatorKey: router.routerDelegate.navigatorKey,
+        currentLocation: () =>
+            router.routerDelegate.currentConfiguration.uri.toString(),
+        child: AppPageBackground.builder(context, child),
+      ),
       routerConfig: router,
     );
   }

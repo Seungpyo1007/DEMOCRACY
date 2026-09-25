@@ -4,6 +4,7 @@ library;
 import 'package:democracy/src/core/account/account.dart';
 import 'package:democracy/src/core/account/auth_controller.dart';
 import 'package:democracy/src/core/time/kst.dart';
+import 'package:democracy/src/features/account/presentation/account_screens.dart';
 import 'package:democracy/src/features/account/presentation/consent_screen.dart';
 import 'package:democracy/src/features/account/presentation/login_screens.dart';
 import 'package:democracy/src/features/account/presentation/residency_screens.dart';
@@ -287,6 +288,33 @@ void main() {
       await expectLater(
         find.byType(MaterialApp),
         matchesGoldenFile('goldens/residency_done_${name}_390dp.png'),
+      );
+    });
+
+    testWidgets('account at 390dp on $name', (tester) async {
+      final container = await pumpGolden(
+        tester,
+        screen: const AccountScreen(),
+        platform: platform,
+      );
+      final auth = container.read(authControllerProvider.notifier);
+      await auth.signIn(SignInProvider.kakao);
+      final options = await auth.handleOptions();
+      await auth.acceptConsent(
+        ConsentInput(
+          age14: true,
+          terms: true,
+          privacy: true,
+          notify: false,
+          handle: options.first,
+        ),
+      );
+      await auth.verifyResidency(roadAddress: '서울 마포구 월드컵북로 400');
+      await tester.pumpAndSettle();
+
+      await expectLater(
+        find.byType(MaterialApp),
+        matchesGoldenFile('goldens/account_${name}_390dp.png'),
       );
     });
   });
