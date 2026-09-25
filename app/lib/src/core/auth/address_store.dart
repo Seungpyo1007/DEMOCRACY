@@ -105,6 +105,9 @@ Map<String, dynamic> addressStateToJson(AddressState state) => {
     'verification': {
       'opaqueToken': proof.opaqueToken,
       'verifiedAt': proof.verifiedAt.toIso8601String(),
+      'userId': ?proof.userId,
+      if (proof.expiresAt case final expiresAt?)
+        'expiresAt': expiresAt.toIso8601String(),
     },
 };
 
@@ -135,6 +138,11 @@ AddressState addressStateFromJson(Map<String, dynamic> json) {
       proof: ResidencyVerificationProof(
         opaqueToken: verificationJson['opaqueToken'] as String,
         verifiedAt: DateTime.parse(verificationJson['verifiedAt'] as String),
+        userId: verificationJson['userId'] as String?,
+        expiresAt: switch (verificationJson['expiresAt']) {
+          final String at => DateTime.parse(at),
+          _ => null,
+        },
       ),
     );
   }

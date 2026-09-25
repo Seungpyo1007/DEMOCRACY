@@ -99,6 +99,9 @@ export function accountError(error: unknown): unknown {
 function profileView(p: ProfileRec) {
   const next = handleChangeAvailableAt(p.handle_changed_at);
   return {
+    // The app binds a residency proof to this id, so a proof never outlives
+    // the account that earned it on a shared phone.
+    userId: p.user_id,
     handle: p.handle,
     provider: p.provider,
     email: p.email,

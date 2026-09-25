@@ -11,11 +11,36 @@ class ResidencyVerificationProof {
   ResidencyVerificationProof({
     required String opaqueToken,
     required DateTime verifiedAt,
+    this.userId,
+    DateTime? expiresAt,
   }) : opaqueToken = _validateToken(opaqueToken),
-       verifiedAt = verifiedAt.toUtc();
+       verifiedAt = verifiedAt.toUtc(),
+       expiresAt = expiresAt?.toUtc();
+
+  /// A proof for a residency the account already holds, found on a device
+  /// that never saw the grant. The server keeps only the token's hash, so
+  /// there is no token to carry: the signed-in account is the credential.
+  factory ResidencyVerificationProof.ofAccount({
+    required String userId,
+    required DateTime verifiedAt,
+    required DateTime expiresAt,
+  }) => ResidencyVerificationProof(
+    opaqueToken: 'account:$userId',
+    verifiedAt: verifiedAt,
+    userId: userId,
+    expiresAt: expiresAt,
+  );
 
   final String opaqueToken;
   final DateTime verifiedAt;
+
+  /// The account this residency belongs to. A proof bound to one person
+  /// never survives another signing in on the same phone. Null only for a
+  /// proof from a build without accounts.
+  final String? userId;
+
+  /// When the residency has to be checked again.
+  final DateTime? expiresAt;
 
   static String _validateToken(String opaqueToken) {
     if (opaqueToken.trim().isEmpty) {

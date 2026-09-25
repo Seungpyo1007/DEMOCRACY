@@ -13,7 +13,8 @@ typedef FakeRoute = ({int status, Object body});
 class FakeBffAdapter implements HttpClientAdapter {
   FakeBffAdapter(this.routes);
 
-  /// Keyed by path. A missing route answers as though the network is down.
+  /// Keyed by path, or by `METHOD path` when one path answers differently per
+  /// method. A missing route answers as though the network is down.
   final Map<String, FakeRoute> routes;
   final requests = <RequestOptions>[];
 
@@ -24,7 +25,8 @@ class FakeBffAdapter implements HttpClientAdapter {
     Future<void>? cancelFuture,
   ) async {
     requests.add(options);
-    final route = routes[options.path];
+    final route =
+        routes['${options.method} ${options.path}'] ?? routes[options.path];
     if (route == null) {
       throw DioException.connectionError(
         requestOptions: options,
@@ -58,7 +60,11 @@ Map<String, Object?> errorEnvelope(String code) => {
   'error': {'code': code, 'message': code},
 };
 
-BffClient fakeBffClient(FakeBffAdapter adapter, {ResponseCache? cache}) {
+BffClient fakeBffClient(
+  FakeBffAdapter adapter, {
+  ResponseCache? cache,
+  UserTokenSource? userToken,
+}) {
   final dio = Dio(
     BaseOptions(
       baseUrl: 'https://bff.test/functions/v1/bff',
@@ -66,5 +72,5 @@ BffClient fakeBffClient(FakeBffAdapter adapter, {ResponseCache? cache}) {
       validateStatus: (_) => true,
     ),
   )..httpClientAdapter = adapter;
-  return BffClient(dio: dio, cache: cache);
+  return BffClient(dio: dio, cache: cache, userToken: userToken);
 }
