@@ -282,6 +282,47 @@ void main() {
     });
   });
 
+  group('writing for the first time', () {
+    testWidgets('the gate leads through sign-in and the address check back '
+        'to the page, which is then writable', (tester) async {
+      final (container, router) = await pumpRouter(tester, district: _district);
+      router.go(AppRoutes.community);
+      await tester.pumpAndSettle();
+
+      await tester.tap(find.text('평가 작성').first);
+      await tester.pumpAndSettle();
+      await tester.tap(find.text('로그인하고 계속'));
+      await tester.pumpAndSettle();
+
+      await tester.tap(find.text('카카오로 계속하기'));
+      await tester.pumpAndSettle();
+      for (final label in ['만 14세 이상입니다', '이용약관', '개인정보 수집·이용']) {
+        await tester.tap(find.textContaining(label).first);
+        await tester.pump();
+      }
+      await tester.ensureVisible(find.text('동의하고 시작하기'));
+      await tester.tap(find.text('동의하고 시작하기'));
+      await tester.pumpAndSettle();
+      expect(locationOf(router), AppRoutes.residency);
+
+      await tester.tap(find.text('주소로 인증 시작'));
+      await tester.pumpAndSettle();
+      await tester.enterText(find.byType(TextField), '월드컵북로');
+      await tester.pump(const Duration(milliseconds: 400));
+      await tester.pumpAndSettle();
+      await tester.tap(find.text('서울 마포구 월드컵북로 400'));
+      await tester.pumpAndSettle();
+      expect(locationOf(router), AppRoutes.residencyDone);
+
+      await tester.tap(find.text('쓰던 곳으로 돌아가기'));
+      await tester.pumpAndSettle();
+
+      expect(locationOf(router), AppRoutes.community);
+      expect(container.read(writeAccessProvider), WriteAccess.allowed);
+      expect(container.read(addressControllerProvider).isVerified, isTrue);
+    });
+  });
+
   group('accountRedirect', () {
     const account = Account(
       userId: 'u',

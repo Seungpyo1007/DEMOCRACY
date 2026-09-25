@@ -15,7 +15,7 @@ final authRepositoryProvider = Provider<AuthRepository>(
 );
 
 final accountRepositoryProvider = Provider<AccountRepository>(
-  (ref) => FakeAccountRepository(),
+  (ref) => FakeAccountRepository(now: () => ref.read(clockProvider).now().utc),
 );
 
 /// The providers this build can complete. The login screen puts them in

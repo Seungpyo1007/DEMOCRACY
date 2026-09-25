@@ -6,6 +6,7 @@ import 'package:democracy/src/core/adaptive/platform_adaptive.dart';
 import 'package:democracy/src/core/auth/address_controller.dart';
 import 'package:democracy/src/features/account/presentation/consent_screen.dart';
 import 'package:democracy/src/features/account/presentation/login_screens.dart';
+import 'package:democracy/src/features/account/presentation/residency_screens.dart';
 import 'package:democracy/src/features/ai_match/presentation/ai_tab_chrome.dart';
 import 'package:democracy/src/features/ai_match/presentation/ai_tab_page.dart';
 import 'package:democracy/src/features/ai_match/presentation/algorithm_log_screen.dart';
@@ -181,6 +182,32 @@ final appRouterProvider = Provider<GoRouter>((ref) {
           context: context,
           key: state.pageKey,
           child: const Under14Screen(),
+        ),
+      ),
+      GoRoute(
+        path: AppRoutes.residency,
+        pageBuilder: (context, state) => PlatformAdaptiveRoute.page(
+          context: context,
+          key: state.pageKey,
+          child: ResidencyStartScreen(next: state.uri.queryParameters['next']),
+        ),
+      ),
+      GoRoute(
+        path: AppRoutes.residencyAddress,
+        pageBuilder: (context, state) => PlatformAdaptiveRoute.page(
+          context: context,
+          key: state.pageKey,
+          child: ResidencyAddressScreen(
+            next: state.uri.queryParameters['next'],
+          ),
+        ),
+      ),
+      GoRoute(
+        path: AppRoutes.residencyDone,
+        pageBuilder: (context, state) => PlatformAdaptiveRoute.page(
+          context: context,
+          key: state.pageKey,
+          child: ResidencyDoneScreen(next: state.uri.queryParameters['next']),
         ),
       ),
       GoRoute(

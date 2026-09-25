@@ -220,7 +220,7 @@ void main() {
 
       await openCompose(tester);
 
-      expect(find.text('주민 인증이 필요합니다'), findsOneWidget);
+      expect(find.text('로그인하고 계속'), findsOneWidget);
       expect(find.byType(ReviewComposeScreen), findsNothing);
     });
 
@@ -401,7 +401,7 @@ void main() {
 
       await openCompose(tester);
 
-      expect(find.text('주민 인증이 필요합니다'), findsOneWidget);
+      expect(find.text('로그인하고 계속'), findsOneWidget);
       expect(find.byType(ReviewComposeScreen), findsNothing);
     });
 
@@ -481,7 +481,7 @@ void main() {
       // The send button explains the gate rather than sitting dead.
       await tester.tap(find.byIcon(Icons.send));
       await tester.pumpAndSettle();
-      expect(find.text('주민 인증이 필요합니다'), findsOneWidget);
+      expect(find.text('로그인하고 계속'), findsOneWidget);
       expect(find.byType(TextField), findsOneWidget);
     });
 
@@ -545,7 +545,7 @@ void main() {
       expect(find.text('주소 인증 주민만 보낼 수 있습니다'), findsOneWidget);
       await tester.tap(find.bySemanticsLabel('보내기'));
       await tester.pumpAndSettle();
-      expect(find.text('주민 인증이 필요합니다'), findsOneWidget);
+      expect(find.text('로그인하고 계속'), findsOneWidget);
     });
   });
 

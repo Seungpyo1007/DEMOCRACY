@@ -1,4 +1,3 @@
-import 'package:democracy/src/app/app_routes.dart';
 import 'package:democracy/src/core/adaptive/platform_adaptive.dart';
 import 'package:democracy/src/core/auth/verified_gate.dart';
 import 'package:democracy/src/design/app_tokens.dart';
@@ -7,7 +6,6 @@ import 'package:democracy/src/design/components/native_controls.dart';
 import 'package:democracy/src/features/shell/application/tab_accessory.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:go_router/go_router.dart';
 
 /// Reporting is a write, so it is gated like every other write.
 ///
@@ -28,12 +26,8 @@ class PledgeReportAction extends StatelessWidget {
     return TabAccessory(
       label: '이행 제보',
       icon: AppIcons.report,
-      onPressed: () => runVerified(
-        context,
-        ref,
-        onVerificationRequested: () => context.go(AppRoutes.onboarding),
-        onVerified: () => _report(context),
-      ),
+      onPressed: () =>
+          runVerified(context, ref, onVerified: () => _report(context)),
     );
   }
 
@@ -50,7 +44,6 @@ class PledgeReportAction extends StatelessWidget {
     final surface = Theme.of(context).extension<AppSurfaceTokens>()!;
 
     return VerifiedGate(
-      onVerificationRequested: () => context.go(AppRoutes.onboarding),
       onVerified: () => _report(context),
       builder: (context, onPressed) {
         if (surface.isGlass) {

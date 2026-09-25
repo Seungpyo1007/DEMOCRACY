@@ -418,12 +418,8 @@ class _ComposeAction extends StatelessWidget {
     return TabAccessory(
       label: '평가 작성',
       icon: AppIcons.write,
-      onPressed: () => runVerified(
-        context,
-        ref,
-        onVerificationRequested: () => context.go(AppRoutes.onboarding),
-        onVerified: () => _compose(context),
-      ),
+      onPressed: () =>
+          runVerified(context, ref, onVerified: () => _compose(context)),
     );
   }
 
@@ -432,7 +428,6 @@ class _ComposeAction extends StatelessWidget {
     final surface = Theme.of(context).extension<AppSurfaceTokens>()!;
 
     return VerifiedGate(
-      onVerificationRequested: () => context.go(AppRoutes.onboarding),
       onVerified: () => _compose(context),
       builder: (context, onPressed) {
         if (surface.isGlass) {
@@ -621,7 +616,6 @@ class _Composer extends StatelessWidget {
     final hint = enabled ? '메시지 보내기' : '주소 인증 주민만 보낼 수 있습니다';
 
     final send = VerifiedGate(
-      onVerificationRequested: () => context.go(AppRoutes.onboarding),
       onVerified: onSend,
       builder: (context, onPressed) {
         if (surface.isGlass) {
