@@ -1,6 +1,6 @@
 // Address / coordinate → 22대 국회의원 선거구.
 //
-// There is no API for this. district_areas (from 공직선거법 [별표2]) maps
+// There is no API for this. district_areas (from 공직선거법 [별표 1], the 구역표) maps
 // 행정동 → 선거구, with a 5-digit 시군구 row when the whole 시군구 is one
 // 선거구. juso gives a 법정동 code (admCd) and, with addInfoYn=Y, the 행정동
 // name (hemdNm). A 법정동 can straddle 행정동s — and 선거구s (e.g. 마포구
@@ -34,11 +34,19 @@ export function resolveSggCode(
     if (exact) return exact.sgg_code;
   }
   if (hint.hdongName) {
-    const wanted = normalizeHdongName(hint.hdongName);
-    const byName = perHdong.filter((a) =>
-      a.hdong_name && normalizeHdongName(a.hdong_name) === wanted
-    );
-    if (byName.length === 1) return byName[0].sgg_code;
+    // juso lists every 행정동 a building sits in ("용봉동,오치1동" for a campus). One 선거구
+    // for all of them, or none: the bridge would only pick one side.
+    const names = hint.hdongName.split(",").map((n) => normalizeHdongName(n)).filter(Boolean);
+    const found = names.map((wanted) => {
+      const byName = perHdong.filter((a) =>
+        a.hdong_name && normalizeHdongName(a.hdong_name) === wanted
+      );
+      return byName.length === 1 ? byName[0].sgg_code : null;
+    });
+    if (found.length > 1) {
+      return found.every((c) => c !== null && c === found[0]) ? found[0] : null;
+    }
+    if (found[0]) return found[0];
   }
   if (hint.bjdCode) {
     const hdongs = new Set(

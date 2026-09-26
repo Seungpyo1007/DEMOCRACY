@@ -13,7 +13,7 @@ export interface JusoAddress {
   siNm: string | null;
   sggNm: string | null;
   emdNm: string | null;
-  /** 행정동 name; present when addInfoYn=Y. */
+  /** 행정동 name ("치평동"); present when addInfoYn=Y. */
   hemdNm: string | null;
 }
 
@@ -29,6 +29,9 @@ export function jusoUrl(key: string, keyword: string, count = 10): string {
 }
 
 const s = (v: unknown) => (typeof v === "string" && v.trim() !== "" ? v.trim() : null);
+
+/** juso sends hemdNm whole, "전남광주통합특별시 서구 치평동"; the 행정동 is the last word. */
+const lastWord = (v: string | null) => v?.split(/\s+/).pop() ?? null;
 
 /** results.common.errorCode "0" = OK. Keyword errors (E0005..E0015) = no results. */
 export function parseJuso(json: unknown): JusoAddress[] {
@@ -55,7 +58,7 @@ export function parseJuso(json: unknown): JusoAddress[] {
       siNm: s(r.siNm),
       sggNm: s(r.sggNm),
       emdNm: s(r.emdNm),
-      hemdNm: s(r.hemdNm),
+      hemdNm: lastWord(s(r.hemdNm)),
     });
   }
   return out;

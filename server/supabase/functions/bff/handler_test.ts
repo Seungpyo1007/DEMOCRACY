@@ -120,6 +120,8 @@ Deno.test("resolveSggCode: whole 시군구, exact 행정동, name, bridge, ambig
   ];
   assertEquals(resolveSggCode(areas, "11440", { hdongCode: "1144055500" }), "A");
   assertEquals(resolveSggCode(areas, "11440", { hdongName: "망원제1동" }), "B");
+  // A building in two 행정동: same 선거구 or nothing, never the bridge's pick.
+  assertEquals(resolveSggCode(areas, "11440", { hdongName: "망원1동,망원2동" }), "B");
   const bridge = [
     { bjd_code: "1144012300", hdong_code: "1144069000" },
     { bjd_code: "1144012300", hdong_code: "1144070000" },
@@ -127,6 +129,10 @@ Deno.test("resolveSggCode: whole 시군구, exact 행정동, name, bridge, ambig
     { bjd_code: "1144010200", hdong_code: "1144069000" },
   ];
   assertEquals(resolveSggCode(areas, "11440", { bjdCode: "1144012300" }, bridge), "B");
+  assertEquals(
+    resolveSggCode(areas, "11440", { hdongName: "아현동,망원1동", bjdCode: "1144012300" }, bridge),
+    null,
+  );
   assertEquals(resolveSggCode(areas, "11440", { bjdCode: "1144010200" }, bridge), null);
   const whole = [{
     election_sg_id: "20240410",
