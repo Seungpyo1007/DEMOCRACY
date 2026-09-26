@@ -120,7 +120,7 @@
 |---|---|---|
 | 주소 검색 | `AddressSearchRepository` | 카카오/도로명 API 계약과 키 |
 | 위치 → 지역구 | `LocationRepository` | `geolocator` 도입 + 역지오코딩 계약 |
-| 거주지 인증 | `AddressController.acceptVerification` | **BFF 계약.** 현재 opaque token을 클라이언트가 만든다 |
+| 거주지 인증 | `AuthController.verifyResidency` → `POST /residency/verify` | 서버가 주소로 선거구를 다시 도출하고 토큰을 발급한다. 방식은 자기 신고 주소 확인 |
 | 의원·후보·공약 | `DistrictRepository` · `PledgeRepository` | 열린국회정보·선관위 API 계약과 키 |
 | AI 매칭 | `MatchRepository` | LLM 공급자, 가중치 정책, 비용 상한, 편향 감사 기준 |
 | 평가 쓰기 | `ReviewRepository.submit` | 조작 방지 정책, 서버 저장 |
@@ -395,7 +395,15 @@ iPhone 17 Pro / iOS 27.0. 위젯 테스트로만 검증돼 있던 iOS 분기를 
 
 이전 인계는 「실행 중인 앱에서 `VerifiedGate`가 통과 불가」로 적었다. 온보딩 3스텝이 `acceptVerification`을 호출하면서 **해소됐다.**
 
-다만 그 증명은 여전히 fake다. `fixture-residency-token-<districtId>`를 **클라이언트가 만든다.** 실제 계약은 서버가 주소를 확인하고 opaque token을 발급하는 것이고, 그때까지 이 앱의 `verified`는 「인증 흐름을 끝까지 걸었다」는 뜻이지 「거주가 확인됐다」는 뜻이 아니다.
+### 계정과 주민 인증 (2026-09-25 갱신)
+
+위의 fake 경로는 **없어졌다.** 온보딩은 이제 읽기용 지역구만 정한다. 쓰기 버튼은 `글쓰기 전에` 시트(둘러보기 → 계정 → 주민 인증)를 열고, 주민 인증은 로그인한 계정에만 붙는다.
+
+- 로그인: Apple · 카카오 · Google은 각자의 네이티브 시트 → `signInWithIdToken`, 이메일은 6자리 코드. 실명·휴대폰 인증은 없다(`docs/ELECTION_LAW.md`).
+- 첫 로그인은 동의 화면(만 14세 이상·약관·개인정보 필수, 알림 선택)을 거친다. 활동명은 서버가 뽑은 후보에서만 고르고 30일에 한 번 바꾼다.
+- 주민 인증은 `POST /residency/verify`가 주소로 선거구를 다시 도출하고 토큰을 발급한다. 서버는 토큰의 해시만, 앱은 토큰을 계정 id·만료일과 함께 보관한다. 주소 원문과 좌표는 어디에도 남지 않는다.
+- **방식은 자기 신고 주소 확인이다.** 주소가 선거구 안에 있는지만 확인하고 실거주를 증명하지 않는다. 화면 문구도 그렇게 적었다. 더 강한 방식은 여전히 결정 전이다(`method` 칼럼으로 교체 가능).
+- 로그아웃하면 지역구는 남고 주민 인증은 멈춘다. 다른 사람이 같은 기기에서 로그인하면 이전 사람의 증명은 읽기 전용으로 내려간다.
 
 ### 복구한 결함
 
@@ -416,9 +424,11 @@ iPhone 17 Pro / iOS 27.0. 위젯 테스트로만 검증돼 있던 iOS 분기를 
 - **판정에 대한 반론·정정 경로가 없다.** 판정 파이프라인의 첫 노드가 「AI 1차 판단」인데, 「미이행」·「번복」 판정을 받은 정치인이 앱 안에서 반박할 수단도 정정 이력 모델도 없다. 명세에도 기록이 없다.
 - **`SourceMetadata.asOfLabel`이 월·일만 표시한다.** 1년 된 수치와 어제 수치가 같아 보인다. `docs/INITIAL_PLAN.md:95`가 요구한 stale 상태는 아직 없다.
 - **`ContentGuard`가 클라이언트 전용이다.** 혐오·허위 감지가 앱 안에 있으면 편집으로 무력화된다. BFF로 옮겨야 한다 — 지금 만든 것은 인터셉트 지점이지 분류기가 아니다.
-- **거주지 인증 증명을 클라이언트가 만든다.** 온보딩 완료가 opaque token을 직접 생성한다. 실제 계약은 서버가 주소를 확인하고 발급해야 한다.
+- **주민 인증은 자기 신고다.** 서버가 주소를 확인하지만 그 주소에 사는지는 증명하지 않는다. 더 강한 검증 주체는 결정 전이다.
+- **제공자 키가 아직 없다.** Apple Services ID, Google OAuth 클라이언트, Kakao 네이티브 키가 들어오기 전까지 빌드는 이메일 로그인만 제공한다. `server/README.md`의 Go live 절차와 `ios/Flutter/Keys.xcconfig.example` 참조.
+- 게시물 테이블이 아직 없어 계정 삭제의 `내 글도 삭제`는 기록만 된다. 테이블이 생기면 `author_id … on delete set null`(「탈퇴한 주민」) 규약을 따른다.
 - 지도 타일이 없다. `google_maps_flutter` 키가 없어 목업과 같은 회색 격자다. 농도·선택·아웃라인은 실제로 동작하므로, 키가 생기면 셀 렌더링만 Polygon으로 바꾸면 된다.
 - 프리미엄 리포트는 비활성 버튼이다. 결제 계약이 없다.
 - **축소된 탭바가 placeholder 탭에서 펴지지 않는다.** 셸이 `ScrollUpdateNotification`에서만 재확장하는데(`app_shell.dart:65-68`) 스크롤할 것이 없는 화면은 알림을 보내지 않는다. `app_shell_test.dart`가 현재 동작으로 고정해 뒀다. 오프셋 0인 브랜치에서 바를 펼지 여부는 제품 결정이라 바꾸지 않았다.
 - 골든이 정확 일치가 아니라 0.5% 허용 오차로 비교된다(`test/golden/flutter_test_config.dart`). macOS 버전이 다르면 안티에일리어싱만으로 0.04%가 어긋나 CI가 러너 이미지에 따라 깨지기 때문이다.
-- `app_router.dart`의 redirect 가드는 `ref.read`를 쓰고 `refreshListenable`이 없어 네비게이션 시점에만 평가된다. 주소 상태가 바뀌어도 현재 화면은 그대로다.
+- ~~`app_router.dart`의 redirect 가드가 네비게이션 시점에만 평가된다.~~ 계정과 지역구 상태를 듣는 `refreshListenable`을 달아 해소했다. 다만 푸시된 페이지에는 redirect가 닿지 않아(아래 페이지의 위치로 평가된다) 로그인 화면들은 성공 후 스스로 이동한다.
