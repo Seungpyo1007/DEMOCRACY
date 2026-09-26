@@ -1,11 +1,12 @@
 import 'package:democracy/src/design/app_tokens.dart';
+import 'package:democracy/src/design/components/motion.dart';
 import 'package:democracy/src/features/district/domain/legislator_record.dart';
-import 'package:fl_chart/fl_chart.dart';
 import 'package:flutter/material.dart';
 
-/// A figure's recent shape, drawn small.
+/// A figure's recent shape, drawn small, and drawn in when it appears.
 ///
-/// Ink, not the accent: this is a record, and the accent is reserved for the
+/// Straight segments between observations rather than a smoothed curve: a
+/// curve invents values between the months. Ink, not the accent: this is a record, and the accent is reserved for the
 /// brand and for one data meaning that is not this one. The line carries no
 /// judgement about whether the trend is good.
 class Sparkline extends StatelessWidget {
@@ -17,6 +18,8 @@ class Sparkline extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final (low, high) = series.bounds;
+    final span = high - low == 0 ? 1 : high - low;
+    final count = series.points.length;
 
     return Semantics(
       // A line chart is invisible to a screen reader, so the same information
@@ -29,69 +32,34 @@ class Sparkline extends StatelessWidget {
       excludeSemantics: true,
       child: SizedBox(
         height: height,
-        child: LineChart(
-          LineChartData(
-            minY: low,
-            maxY: high,
-            minX: 0,
-            maxX: (series.points.length - 1).toDouble(),
-            gridData: const FlGridData(show: false),
-            borderData: FlBorderData(show: false),
-            titlesData: FlTitlesData(
-              show: true,
-              topTitles: const AxisTitles(),
-              leftTitles: const AxisTitles(),
-              rightTitles: const AxisTitles(),
-              bottomTitles: AxisTitles(
-                sideTitles: SideTitles(
-                  showTitles: true,
-                  reservedSize: 18,
-                  interval: 1,
-                  getTitlesWidget: (value, meta) {
-                    final index = value.round();
-                    if (index < 0 || index >= series.points.length) {
-                      return const SizedBox.shrink();
-                    }
-                    return Padding(
-                      padding: const EdgeInsets.only(top: 2),
-                      child: Text(
-                        series.points[index].label,
-                        style: AppTextStyles.statLabel.copyWith(
-                          color: AppColors.neutral500,
-                        ),
-                      ),
-                    );
-                  },
-                ),
+        child: Column(
+          children: [
+            Expanded(
+              child: DrawnLine(
+                dotRadius: 3,
+                points: [
+                  for (var i = 0; i < count; i++)
+                    Offset(
+                      count == 1 ? 0.5 : i / (count - 1),
+                      (series.points[i].value - low) / span,
+                    ),
+                ],
               ),
             ),
-            lineTouchData: const LineTouchData(enabled: false),
-            lineBarsData: [
-              LineChartBarData(
-                spots: [
-                  for (var i = 0; i < series.points.length; i++)
-                    FlSpot(i.toDouble(), series.points[i].value),
-                ],
-                isCurved: true,
-                curveSmoothness: 0.25,
-                color: AppColors.ink,
-                barWidth: 2,
-                dotData: FlDotData(
-                  show: true,
-                  getDotPainter: (spot, percent, bar, index) =>
-                      FlDotCirclePainter(
-                        radius: index == series.points.length - 1 ? 3 : 0,
-                        color: AppColors.ink,
-                        strokeWidth: 0,
-                      ),
-                ),
-                belowBarData: BarAreaData(
-                  show: true,
-                  color: AppColors.neutral200.withValues(alpha: 0.6),
-                ),
-              ),
-            ],
-          ),
+            const SizedBox(height: AppSpacing.x1),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                for (final point in series.points)
+                  Text(
+                    point.label,
+                    style: AppTextStyles.disclaimer.copyWith(
+                      color: AppColors.neutral600,
+                    ),
+                  ),
+              ],
+            ),
+          ],
         ),
       ),
     );

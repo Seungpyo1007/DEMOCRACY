@@ -1,25 +1,32 @@
+import 'package:democracy/src/app/app_routes.dart';
 import 'package:democracy/src/core/auth/address_controller.dart';
 import 'package:democracy/src/core/auth/address_state.dart';
+import 'package:democracy/src/core/provenance/source_metadata.dart';
+import 'package:democracy/src/design/app_motion.dart';
 import 'package:democracy/src/design/app_tokens.dart';
-import 'package:democracy/src/design/components/app_card.dart';
 import 'package:democracy/src/design/components/app_labels.dart';
+import 'package:democracy/src/design/components/editorial.dart';
+import 'package:democracy/src/design/components/motion.dart';
+import 'package:democracy/src/design/components/native_controls.dart';
 import 'package:democracy/src/design/components/sparkline.dart';
 import 'package:democracy/src/features/district/application/district_providers.dart';
 import 'package:democracy/src/features/district/domain/district_profile.dart';
 import 'package:democracy/src/features/district/domain/legislator_record.dart';
-import 'package:democracy/src/features/onboarding/presentation/address_search_sheet.dart';
+import 'package:democracy/src/features/onboarding/domain/address_search.dart';
 import 'package:democracy/src/features/pledges/application/pledge_providers.dart';
 import 'package:democracy/src/features/pledges/domain/pledge.dart';
 import 'package:democracy/src/features/shared/presentation/async_section.dart';
 import 'package:democracy/src/features/shared/presentation/provenance_widgets.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:go_router/go_router.dart';
 
 /// The home: who holds this seat, what they have done, who is running.
 ///
 /// Ordered incumbent-then-challengers because that is the question a resident
-/// arrives with. Everything below the header is one scroll, and the candidate
-/// rail is horizontal so no challenger gets the top of a list.
+/// arrives with. Everything is one scroll, set as a printed page: numbered
+/// sections under an ink rule, rows between hairlines, no cards. The
+/// candidate rail is horizontal so no challenger gets the top of a list.
 class DistrictHomeScreen extends ConsumerWidget {
   const DistrictHomeScreen({super.key});
 
@@ -30,70 +37,28 @@ class DistrictHomeScreen extends ConsumerWidget {
     await ref.read(districtProfileProvider.future);
   }
 
-  @override
-  Widget build(BuildContext context, WidgetRef ref) {
-    final address = ref.watch(addressControllerProvider);
-    final profile = ref.watch(districtProfileProvider);
-    final board = ref.watch(pledgeBoardProvider);
-
-    if (address.district == null) {
-      return const Scaffold(
-        backgroundColor: Colors.transparent,
-        body: _NoDistrictYet(),
-      );
-    }
-
-    return Scaffold(
-      backgroundColor: Colors.transparent,
-      body: RefreshIndicator(
-        onRefresh: () => _refresh(ref),
-        child: CustomScrollView(
-          slivers: [
-            _DistrictHeader(address: address),
-            SliverPadding(
-              padding: const EdgeInsets.fromLTRB(
-                AppSpacing.screen,
-                AppSpacing.x2,
-                AppSpacing.screen,
-                AppSpacing.x8,
-              ),
-              sliver: SliverList.list(
-                children: [
-                  const SectionLabel('현직 의원'),
-                  const SizedBox(height: AppSpacing.x3),
-                  AsyncSection<DistrictProfile>(
-                    value: profile,
-                    onRetry: () => ref.invalidate(districtProfileProvider),
-                    builder: (context, data) =>
-                        _IncumbentCard(profile: data, board: board),
-                  ),
-                  const SizedBox(height: AppSpacing.x6),
-                  AsyncSection<DistrictProfile>(
-                    value: profile,
-                    onRetry: () => ref.invalidate(districtProfileProvider),
-                    builder: (context, data) =>
-                        _CandidateRail(candidates: data.candidates),
-                  ),
-                ],
-              ),
-            ),
-          ],
-        ),
-      ),
+  /// Pushes the address search page and moves the resident to the district
+  /// picked there.
+  static Future<void> _changeDistrict(
+    BuildContext context,
+    WidgetRef ref,
+  ) async {
+    final picked = await context.push<AddressSuggestion>(
+      AppRoutes.addressSearch,
     );
+    if (picked != null) {
+      // Read-only, not verified: the residency proof was issued for the old
+      // address and does not carry over to a new one.
+      ref
+          .read(addressControllerProvider.notifier)
+          .continueReadOnly(district: picked.district);
+    }
   }
-}
-
-/// Pinned, because the district a figure belongs to is never optional context.
-class _DistrictHeader extends ConsumerWidget {
-  const _DistrictHeader({required this.address});
-
-  final AddressState address;
 
   /// Only the verified state gets a tick. `읽기 전용` is the absence of
   /// verification, and marking it with the same affirmative glyph would say
   /// the opposite of what it means.
-  Widget get _verificationChip => switch (address.status) {
+  static Widget _verificationChip(AddressStatus status) => switch (status) {
     AddressStatus.verified => const VerifiedBadge(label: '주민 인증됨'),
     AddressStatus.pending => const StatusChip(label: '인증 대기'),
     AddressStatus.unverified => const StatusChip(label: '읽기 전용'),
@@ -101,70 +66,69 @@ class _DistrictHeader extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    return SliverAppBar(
-      pinned: true,
-      elevation: 0,
-      scrolledUnderElevation: 0,
-      backgroundColor: Colors.transparent,
-      surfaceTintColor: Colors.transparent,
-      automaticallyImplyLeading: false,
-      toolbarHeight: 68,
-      titleSpacing: AppSpacing.screen,
-      title: Row(
-        children: [
-          Expanded(
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              mainAxisSize: MainAxisSize.min,
-              children: [
-                const MicroLabel('내 지역구'),
-                const SizedBox(height: 2),
-                _DistrictSelector(name: address.district!.displayName),
-              ],
+    final address = ref.watch(addressControllerProvider);
+    final profile = ref.watch(districtProfileProvider);
+    final board = ref.watch(pledgeBoardProvider);
+
+    if (address.district == null) {
+      return const Scaffold(body: _NoDistrictYet());
+    }
+
+    // The district name is the page title and the switch is a toolbar
+    // action: the platform's own top bar on Android, a glass button on iOS.
+    // `.adaptive` gives iOS its own activity spinner for the pull.
+    return Scaffold(
+      body: RefreshIndicator.adaptive(
+        onRefresh: () => _refresh(ref),
+        child: EditorialScrollView(
+          title: address.district!.displayName,
+          kicker: '내 지역구',
+          trailing: _verificationChip(address.status),
+          actions: [
+            AppToolbarButton(
+              icon: AppIcons.swapDistrict,
+              label: '지역구 변경',
+              onPressed: () => _changeDistrict(context, ref),
             ),
-          ),
-          const SizedBox(width: AppSpacing.x2),
-          _verificationChip,
-        ],
-      ),
-    );
-  }
-}
-
-class _DistrictSelector extends ConsumerWidget {
-  const _DistrictSelector({required this.name});
-
-  final String name;
-
-  @override
-  Widget build(BuildContext context, WidgetRef ref) {
-    return Semantics(
-      button: true,
-      label: '지역구 변경',
-      child: InkWell(
-        onTap: () async {
-          final picked = await AddressSearchSheet.show(context);
-          if (picked != null) {
-            // Read-only, not verified: the residency proof was issued for the
-            // old address and does not carry over to a new one.
-            ref
-                .read(addressControllerProvider.notifier)
-                .continueReadOnly(district: picked.district);
-          }
-        },
-        child: Row(
-          mainAxisSize: MainAxisSize.min,
-          children: [
-            Flexible(
-              child: Text(
-                name,
-                maxLines: 1,
-                softWrap: false,
-                overflow: TextOverflow.ellipsis,
-                style: Theme.of(context).textTheme.titleLarge,
+            AppMenuButton(
+              icon: AppIcons.more,
+              semanticLabel: '더보기',
+              items: const [AppMenuItem(label: '튜토리얼 다시 보기')],
+              onSelected: (_) => context.push('${AppRoutes.tutorial}?replay=1'),
+            ),
+          ],
+          slivers: [
+            SliverPadding(
+              padding: const EdgeInsets.only(top: AppSpacing.x6),
+              sliver: SliverList.list(
+                children: [
+                  RevealIn(
+                    index: 1,
+                    child: Padding(
+                      padding: kPagePadding,
+                      child: AsyncSection<DistrictProfile>(
+                        value: profile,
+                        onRetry: () => ref.invalidate(districtProfileProvider),
+                        builder: (context, data) =>
+                            _IncumbentSection(profile: data, board: board),
+                      ),
+                    ),
+                  ),
+                  const SizedBox(height: AppSpacing.x8),
+                  RevealIn(
+                    index: 3,
+                    child: AsyncSection<DistrictProfile>(
+                      value: profile,
+                      onRetry: () => ref.invalidate(districtProfileProvider),
+                      builder: (context, data) => _CandidateSection(
+                        candidates: data.candidates,
+                        fallbackSource: data.source,
+                      ),
+                    ),
+                  ),
+                ],
               ),
             ),
-            const Icon(Icons.expand_more, size: 20, color: AppColors.ink),
           ],
         ),
       ),
@@ -192,145 +156,175 @@ class _NoDistrictYet extends StatelessWidget {
   }
 }
 
-/// Who holds the seat, with the record behind tabs.
-class _IncumbentCard extends StatefulWidget {
-  const _IncumbentCard({required this.profile, required this.board});
+/// One badge per publisher behind [sources], in first-seen order.
+///
+/// A row of figures usually comes from one publisher through several queries.
+/// Printing a badge per query would repeat the same name three times; printing
+/// one per publisher keeps every figure followable without the noise.
+class _SourceBadges extends StatelessWidget {
+  const _SourceBadges({required this.sources});
+
+  final Iterable<SourceMetadata> sources;
+
+  @override
+  Widget build(BuildContext context) {
+    final byPublisher = <String, SourceMetadata>{};
+    for (final source in sources) {
+      byPublisher.putIfAbsent(source.publisher, () => source);
+    }
+
+    return Wrap(
+      spacing: AppSpacing.x3,
+      children: [
+        for (final source in byPublisher.values) SourceBadge(source: source),
+      ],
+    );
+  }
+}
+
+/// Section 01: who holds the seat, three figures, and the record behind
+/// in-page tabs.
+class _IncumbentSection extends StatefulWidget {
+  const _IncumbentSection({required this.profile, required this.board});
 
   final DistrictProfile profile;
   final AsyncValue<PledgeBoard> board;
 
   @override
-  State<_IncumbentCard> createState() => _IncumbentCardState();
+  State<_IncumbentSection> createState() => _IncumbentSectionState();
 }
 
-class _IncumbentCardState extends State<_IncumbentCard>
-    with SingleTickerProviderStateMixin {
+class _IncumbentSectionState extends State<_IncumbentSection> {
   static const _tabs = ['공약', '법안', '출석', '표결'];
 
-  late final TabController _controller = TabController(
-    length: _tabs.length,
-    vsync: this,
-  );
+  int _tab = 0;
 
-  @override
-  void dispose() {
-    _controller.dispose();
-    super.dispose();
+  Widget _pane(LegislatorRecord? record) {
+    return switch (_tab) {
+      0 => AsyncSection<PledgeBoard>(
+        value: widget.board,
+        builder: (context, data) => _PledgePane(board: data),
+      ),
+      _ when record == null => const _RecordMissing(),
+      1 => _BillPane(bills: record.bills),
+      2 => _SeriesPane(series: record.attendance, title: '월별 출석률'),
+      _ => _SeriesPane(series: record.votes, title: '월별 표결 참여율'),
+    };
   }
 
   @override
   Widget build(BuildContext context) {
     final incumbent = widget.profile.incumbent;
-    final record = incumbent.record;
+    final stats = incumbent.stats.take(3).toList();
+    final reduced = AppMotion.reduced(context);
 
-    return AppCard(
-      padding: EdgeInsets.zero,
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          Padding(
-            padding: const EdgeInsets.all(AppSpacing.x3 + 2),
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Row(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    GrayscalePortrait(
-                      name: incumbent.name,
-                      imageUrl: incumbent.portraitUrl,
-                      width: 64,
-                      height: 80,
-                    ),
-                    const SizedBox(width: AppSpacing.x3),
-                    Expanded(
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          Text(
-                            incumbent.name,
-                            style: Theme.of(context).textTheme.titleMedium,
-                          ),
-                          const SizedBox(height: AppSpacing.x1 + 2),
-                          Row(
-                            children: [
-                              Flexible(child: PartyTag(party: incumbent.party)),
-                              if (incumbent.summary.isNotEmpty) ...[
-                                const SizedBox(width: AppSpacing.x2),
-                                Text(
-                                  incumbent.summary,
-                                  style: AppTextStyles.statLabel.copyWith(
-                                    color: AppColors.neutral600,
-                                  ),
-                                ),
-                              ],
-                            ],
-                          ),
-                        ],
-                      ),
-                    ),
-                  ],
-                ),
-                const SizedBox(height: AppSpacing.x4),
-                // Three across, as the guide draws them: figure over name,
-                // scanned left to right before any of them is read.
-                Row(
-                  children: [
-                    for (final stat in incumbent.stats)
-                      Expanded(
-                        child: StatCell(value: stat.display, label: stat.label),
-                      ),
-                  ],
-                ),
-              ],
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.stretch,
+      children: [
+        const SectionHeader(number: '01', label: '현직 의원'),
+        const SizedBox(height: AppSpacing.x4),
+        Row(
+          crossAxisAlignment: CrossAxisAlignment.end,
+          children: [
+            GrayscalePortrait(
+              name: incumbent.name,
+              imageUrl: incumbent.portraitUrl,
+              width: 76,
+              height: 96,
             ),
-          ),
-
-          const Divider(height: 1, color: AppColors.neutral200),
-          TabBar(
-            controller: _controller,
-            labelPadding: EdgeInsets.zero,
-            indicatorSize: TabBarIndicatorSize.tab,
-            indicatorColor: AppColors.signal,
-            indicatorWeight: 2,
-            dividerColor: Colors.transparent,
-            labelColor: AppColors.ink,
-            unselectedLabelColor: AppColors.neutral600,
-            labelStyle: AppTextStyles.tabLabel,
-            unselectedLabelStyle: AppTextStyles.tabLabel,
-            tabs: [for (final tab in _tabs) Tab(height: 38, text: tab)],
-          ),
-          const Divider(height: 1, color: AppColors.neutral200),
-
-          // A fixed height because the four panes have different natural
-          // heights and a TabBarView cannot size to the active one; letting it
-          // resize per tab would make the card jump under the reader's thumb.
-          SizedBox(
-            height: 188,
-            child: TabBarView(
-              controller: _controller,
-              children: [
-                AsyncSection<PledgeBoard>(
-                  value: widget.board,
-                  builder: (context, data) => _PledgePane(board: data),
-                ),
-                if (record == null)
-                  const _RecordMissing()
-                else
-                  _BillPane(bills: record.bills),
-                if (record == null)
-                  const _RecordMissing()
-                else
-                  _SeriesPane(series: record.attendance, title: '월별 출석률'),
-                if (record == null)
-                  const _RecordMissing()
-                else
-                  _SeriesPane(series: record.votes, title: '월별 표결 참여율'),
-              ],
+            const SizedBox(width: AppSpacing.x4),
+            Expanded(
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Text(
+                    incumbent.name,
+                    style: Theme.of(context).textTheme.headlineSmall?.copyWith(
+                      fontSize: 28,
+                      letterSpacing: -0.56,
+                      height: 1.1,
+                    ),
+                  ),
+                  const SizedBox(height: AppSpacing.x2),
+                  Row(
+                    children: [
+                      Flexible(child: PartyTag(party: incumbent.party)),
+                      if (incumbent.summary.isNotEmpty) ...[
+                        const SizedBox(width: AppSpacing.x2),
+                        Flexible(
+                          child: Text(
+                            incumbent.summary,
+                            maxLines: 1,
+                            overflow: TextOverflow.ellipsis,
+                            style: AppTextStyles.ctaSmall.copyWith(
+                              fontSize: 13,
+                              fontWeight: FontWeight.w400,
+                              color: AppColors.neutral600,
+                            ),
+                          ),
+                        ),
+                      ],
+                    ],
+                  ),
+                ],
+              ),
             ),
+          ],
+        ),
+        // No margin note on the tenure: the payload carries no election
+        // years, and a note the data cannot back would be an invented fact.
+        if (stats.isNotEmpty) ...[
+          const SizedBox(height: AppSpacing.x6),
+          // Three across: figure over name, scanned left to right before
+          // any of them is read.
+          FigureRow(
+            children: [
+              for (var i = 0; i < stats.length; i++)
+                FigureStat(
+                  value: stats[i].value.value,
+                  unit: stats[i].unit,
+                  label: stats[i].label,
+                  delay: AppMotion.staggerFor(i + 2),
+                ),
+            ],
           ),
+          const SizedBox(height: AppSpacing.x2),
+          _SourceBadges(sources: [for (final s in stats) s.value.source]),
         ],
-      ),
+        const SizedBox(height: AppSpacing.x6),
+        InlineTabs(
+          labels: _tabs,
+          selectedIndex: _tab,
+          onSelected: (index) => setState(() => _tab = index),
+        ),
+        // The panes differ in height, so the section eases to the new one
+        // rather than jumping under the reader's thumb.
+        MotionSize(
+          child: AnimatedSwitcher(
+            duration: reduced ? Duration.zero : AppMotion.standard,
+            switchInCurve: AppMotion.standardCurve,
+            switchOutCurve: AppMotion.standardCurve,
+            layoutBuilder: (current, previous) => Stack(
+              alignment: Alignment.topCenter,
+              children: [...previous, ?current],
+            ),
+            transitionBuilder: (child, animation) => FadeTransition(
+              opacity: animation,
+              child: SlideTransition(
+                position: Tween(
+                  begin: const Offset(0, 0.04),
+                  end: Offset.zero,
+                ).animate(animation),
+                child: child,
+              ),
+            ),
+            child: KeyedSubtree(
+              key: ValueKey(_tab),
+              child: _pane(incumbent.record),
+            ),
+          ),
+        ),
+      ],
     );
   }
 }
@@ -340,41 +334,34 @@ class _RecordMissing extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Center(
-      child: Padding(
-        padding: const EdgeInsets.all(AppSpacing.x4),
-        child: Text(
-          '의정 활동 기록이 아직 연결되지 않았습니다.',
-          textAlign: TextAlign.center,
-          style: AppTextStyles.cardBody.copyWith(color: AppColors.neutral600),
-        ),
+    return Padding(
+      padding: const EdgeInsets.symmetric(vertical: AppSpacing.x8),
+      child: Text(
+        '의정 활동 기록이 아직 연결되지 않았습니다.',
+        textAlign: TextAlign.center,
+        style: AppTextStyles.cardBody.copyWith(color: AppColors.neutral600),
       ),
     );
   }
 }
 
+/// A pane's last line: where it came from, and how much more there is.
 class _PaneFooter extends StatelessWidget {
-  const _PaneFooter({required this.source, required this.trailing});
+  const _PaneFooter({required this.source, this.trailing});
 
-  final SourceBadge source;
-  final String trailing;
+  final SourceMetadata source;
+  final Widget? trailing;
 
   @override
   Widget build(BuildContext context) {
-    return Padding(
-      padding: const EdgeInsets.only(top: AppSpacing.x2),
-      child: Row(
-        children: [
-          Expanded(child: source),
+    return Row(
+      children: [
+        Expanded(child: SourceBadge(source: source)),
+        if (trailing != null) ...[
           const SizedBox(width: AppSpacing.x2),
-          Text(
-            trailing,
-            style: AppTextStyles.statLabel.copyWith(
-              color: AppColors.neutral600,
-            ),
-          ),
+          trailing!,
         ],
-      ),
+      ],
     );
   }
 }
@@ -384,55 +371,76 @@ class _PledgePane extends StatelessWidget {
 
   final PledgeBoard board;
 
-  /// The card is a summary; the tracker is the list. Three keeps the pane the
-  /// same height whatever the district's pledge count is.
-  static const _shown = 3;
+  /// The home is a summary; the tracker is the list.
+  static const _shown = 4;
 
   @override
   Widget build(BuildContext context) {
     if (board.pledges.isEmpty) {
-      return const Center(child: Text('등록된 공약이 없습니다.'));
+      return Padding(
+        padding: const EdgeInsets.symmetric(vertical: AppSpacing.x8),
+        child: Text(
+          '등록된 공약이 없습니다.',
+          textAlign: TextAlign.center,
+          style: AppTextStyles.cardBody.copyWith(color: AppColors.neutral600),
+        ),
+      );
     }
 
-    final shown = board.pledges.take(_shown);
+    final router = GoRouter.maybeOf(context);
+    final shown = board.pledges.take(_shown).toList();
 
-    return Padding(
-      padding: const EdgeInsets.fromLTRB(
-        AppSpacing.x3 + 2,
-        AppSpacing.x3,
-        AppSpacing.x3 + 2,
-        AppSpacing.x3,
-      ),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          for (final pledge in shown) ...[
-            Row(
-              children: [
-                Expanded(
-                  child: Text(
-                    pledge.title,
-                    maxLines: 1,
-                    overflow: TextOverflow.ellipsis,
-                    style: AppTextStyles.cardBody.copyWith(
-                      color: AppColors.ink,
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.stretch,
+      children: [
+        for (var i = 0; i < shown.length; i++)
+          RevealIn(
+            index: i,
+            child: RuledRow(
+              onTap: router == null
+                  ? null
+                  : () => router.push(AppRoutes.pledgeDetail(shown[i].id)),
+              child: Row(
+                children: [
+                  if (shown[i].category.isNotEmpty) ...[
+                    SizedBox(
+                      width: 34,
+                      child: Text(
+                        shown[i].category,
+                        maxLines: 1,
+                        overflow: TextOverflow.clip,
+                        style: AppTextStyles.disclaimer.copyWith(
+                          color: AppColors.neutral600,
+                        ),
+                      ),
+                    ),
+                    const SizedBox(width: AppSpacing.x3),
+                  ],
+                  Expanded(
+                    child: Text(
+                      shown[i].title,
+                      maxLines: 1,
+                      overflow: TextOverflow.ellipsis,
+                      style: AppTextStyles.cardBody.copyWith(
+                        color: AppColors.ink,
+                      ),
                     ),
                   ),
-                ),
-                const SizedBox(width: AppSpacing.x2),
-                PledgeStatusChip(status: pledge.status),
-              ],
+                  const SizedBox(width: AppSpacing.x3),
+                  PledgeStatusChip(status: shown[i].status),
+                ],
+              ),
             ),
-            const SizedBox(height: AppSpacing.x2 + 2),
-          ],
-          const Spacer(),
-          const Divider(height: 1, color: AppColors.neutral200),
-          _PaneFooter(
-            source: SourceBadge(source: board.source),
-            trailing: '전체 ${board.total}건 →',
           ),
-        ],
-      ),
+        const SizedBox(height: AppSpacing.x1),
+        _PaneFooter(
+          source: board.source,
+          trailing: TextLink(
+            label: '전체 ${board.total}건 →',
+            onTap: router == null ? null : () => router.go(AppRoutes.tracker),
+          ),
+        ),
+      ],
     );
   }
 }
@@ -444,39 +452,56 @@ class _BillPane extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Padding(
-      padding: const EdgeInsets.fromLTRB(
-        AppSpacing.x3 + 2,
-        AppSpacing.x3,
-        AppSpacing.x3 + 2,
-        AppSpacing.x3,
-      ),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          for (final bill in bills.items.take(3)) ...[
-            Text(
-              bill.title,
-              maxLines: 1,
-              overflow: TextOverflow.ellipsis,
-              style: AppTextStyles.cardBody.copyWith(color: AppColors.ink),
-            ),
-            Text(
-              '${bill.stage} · ${bill.stamp}',
-              style: AppTextStyles.statLabel.copyWith(
-                color: AppColors.neutral600,
+    final shown = bills.items.take(3).toList();
+
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.stretch,
+      children: [
+        for (var i = 0; i < shown.length; i++)
+          RevealIn(
+            index: i,
+            child: RuledRow(
+              padding: const EdgeInsets.symmetric(vertical: AppSpacing.x2),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Text(
+                    shown[i].title,
+                    maxLines: 1,
+                    overflow: TextOverflow.ellipsis,
+                    style: AppTextStyles.cardBody.copyWith(
+                      color: AppColors.ink,
+                    ),
+                  ),
+                  Text(
+                    '${shown[i].stage} · ${shown[i].stamp}',
+                    style: AppTextStyles.statLabel.copyWith(
+                      color: AppColors.neutral600,
+                    ),
+                  ),
+                ],
               ),
             ),
-            const SizedBox(height: AppSpacing.x2),
-          ],
-          const Spacer(),
-          const Divider(height: 1, color: AppColors.neutral200),
-          _PaneFooter(
-            source: SourceBadge(source: bills.source),
-            trailing: '전체 ${bills.total}건 →',
           ),
-        ],
-      ),
+        const SizedBox(height: AppSpacing.x1),
+        // No arrow: there is no bill list to go to yet, and an arrow that
+        // leads nowhere is a promise the screen cannot keep.
+        _PaneFooter(
+          source: bills.source,
+          trailing: ConstrainedBox(
+            constraints: const BoxConstraints(minHeight: 44),
+            child: Align(
+              widthFactor: 1,
+              child: Text(
+                '전체 ${bills.total}건',
+                style: AppTextStyles.ctaSmall.copyWith(
+                  color: AppColors.neutral700,
+                ),
+              ),
+            ),
+          ),
+        ),
+      ],
     );
   }
 }
@@ -490,37 +515,43 @@ class _SeriesPane extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Padding(
-      padding: const EdgeInsets.fromLTRB(
-        AppSpacing.x3 + 2,
-        AppSpacing.x3,
-        AppSpacing.x3 + 2,
-        AppSpacing.x3,
-      ),
+      padding: const EdgeInsets.only(top: AppSpacing.x4),
       child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
+        crossAxisAlignment: CrossAxisAlignment.stretch,
         children: [
           Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            crossAxisAlignment: CrossAxisAlignment.baseline,
+            textBaseline: TextBaseline.alphabetic,
             children: [
-              Text(
-                title,
-                style: AppTextStyles.statLabel.copyWith(
-                  color: AppColors.neutral600,
+              Expanded(
+                child: Text(
+                  title,
+                  style: AppTextStyles.statLabel.copyWith(
+                    color: AppColors.neutral600,
+                  ),
                 ),
               ),
               Text(
                 series.latestDisplay,
-                style: AppTextStyles.statValue.copyWith(color: AppColors.ink),
+                style: AppTextStyles.figureSmall.copyWith(
+                  fontSize: 24,
+                  color: AppColors.ink,
+                ),
               ),
             ],
           ),
-          const SizedBox(height: AppSpacing.x1),
-          Expanded(child: Sparkline(series: series)),
-          const Divider(height: 1, color: AppColors.neutral200),
+          const SizedBox(height: AppSpacing.x2),
+          Sparkline(series: series, height: 88),
+          const SizedBox(height: AppSpacing.x2),
+          const Divider(height: 1, color: AppColors.divider),
           _PaneFooter(
-            source: SourceBadge(source: series.source),
-            trailing:
-                '${series.minimum.round()}–${series.maximum.round()}${series.unit}',
+            source: series.source,
+            trailing: Text(
+              '${series.minimum.round()}–${series.maximum.round()}${series.unit}',
+              style: AppTextStyles.statLabel.copyWith(
+                color: AppColors.neutral600,
+              ),
+            ),
           ),
         ],
       ),
@@ -528,53 +559,92 @@ class _SeriesPane extends StatelessWidget {
   }
 }
 
-/// The challengers, side by side.
+/// Section 02: the challengers, side by side.
 ///
 /// Horizontal on purpose: a vertical list would give whoever is first the
 /// position a reader treats as ranked. Every card is the same width and
-/// carries the same fields in the same order, and the sort rule is printed
-/// beside the heading so the order is never mistaken for a judgement.
-class _CandidateRail extends StatelessWidget {
-  const _CandidateRail({required this.candidates});
+/// height and carries the same fields in the same order, and the sort rule
+/// is printed on the section rule so the order is never mistaken for a
+/// judgement.
+class _CandidateSection extends StatelessWidget {
+  const _CandidateSection({
+    required this.candidates,
+    required this.fallbackSource,
+  });
 
   final List<Politician> candidates;
 
+  /// Where the list itself came from, for a list whose cards carry no figure.
+  final SourceMetadata fallbackSource;
+
   @override
   Widget build(BuildContext context) {
+    final figureSources = [
+      for (final candidate in candidates)
+        for (final stat in candidate.stats.take(1)) stat.value.source,
+    ];
+
     return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
+      crossAxisAlignment: CrossAxisAlignment.stretch,
       children: [
-        Row(
-          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-          children: [
-            const SectionLabel('출마 후보'),
-            Text(
-              '정렬 ${DistrictProfile.sortLabel}',
-              style: AppTextStyles.statLabel.copyWith(
-                color: AppColors.neutral500,
-              ),
+        Padding(
+          padding: kPagePadding,
+          child: SectionHeader(
+            number: '02',
+            label: '출마 후보 ${candidates.length}명',
+            // The domain has one ordering, so the menu has one item, checked.
+            // It is still a menu so the rule reads as a setting the reader
+            // can inspect, not a caption (N-2).
+            trailing: AppMenuButton(
+              label: '정렬 ${DistrictProfile.sortLabel}',
+              semanticLabel: '후보 정렬 기준 ${DistrictProfile.sortLabel}',
+              items: const [
+                AppMenuItem(label: DistrictProfile.sortLabel, checked: true),
+              ],
+              onSelected: (_) {},
             ),
-          ],
+          ),
         ),
         const SizedBox(height: AppSpacing.x3),
         if (candidates.isEmpty)
-          Text(
-            '등록된 후보가 없습니다.',
-            style: AppTextStyles.cardBody.copyWith(color: AppColors.neutral600),
+          Padding(
+            padding: kPagePadding,
+            child: Text(
+              '등록된 후보가 없습니다.',
+              style: AppTextStyles.cardBody.copyWith(
+                color: AppColors.neutral600,
+              ),
+            ),
           )
         else
-          SizedBox(
-            height: 190,
-            child: ListView.separated(
-              scrollDirection: Axis.horizontal,
-              clipBehavior: Clip.none,
-              itemCount: candidates.length,
-              separatorBuilder: (context, _) =>
-                  const SizedBox(width: AppSpacing.x3),
-              itemBuilder: (context, index) =>
-                  _CandidateCard(candidate: candidates[index]),
+          // A Row under IntrinsicHeight rather than a fixed-height list, so
+          // every card takes the height of the tallest -- equal whatever the
+          // text scale -- without any card being clipped.
+          SingleChildScrollView(
+            scrollDirection: Axis.horizontal,
+            padding: kPagePadding,
+            child: IntrinsicHeight(
+              child: Row(
+                crossAxisAlignment: CrossAxisAlignment.stretch,
+                children: [
+                  for (var i = 0; i < candidates.length; i++) ...[
+                    if (i > 0) const SizedBox(width: AppSpacing.x3 + 2),
+                    RevealIn(
+                      index: i,
+                      child: _CandidateCard(candidate: candidates[i]),
+                    ),
+                  ],
+                ],
+              ),
             ),
           ),
+        const SizedBox(height: AppSpacing.x3),
+        Padding(
+          padding: kPagePadding,
+          child: _SourceBadges(
+            sources: figureSources.isEmpty ? [fallbackSource] : figureSources,
+          ),
+        ),
       ],
     );
   }
@@ -583,6 +653,8 @@ class _CandidateRail extends StatelessWidget {
 class _CandidateCard extends StatelessWidget {
   const _CandidateCard({required this.candidate});
 
+  static const _width = 156.0;
+
   final Politician candidate;
 
   @override
@@ -590,51 +662,78 @@ class _CandidateCard extends StatelessWidget {
     final stat = candidate.stats.isEmpty ? null : candidate.stats.first;
 
     return SizedBox(
-      width: 150,
-      child: AppCard(
-        padding: const EdgeInsets.all(AppSpacing.x3),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            GrayscalePortrait(
-              name: candidate.name,
-              imageUrl: candidate.portraitUrl,
-              width: double.infinity,
-              height: 64,
-            ),
-            const SizedBox(height: AppSpacing.x2),
-            Text(
-              candidate.name,
-              maxLines: 1,
-              overflow: TextOverflow.ellipsis,
-              style: AppTextStyles.ctaSmall.copyWith(color: AppColors.ink),
-            ),
-            const SizedBox(height: AppSpacing.x1 + 2),
-            Align(
-              alignment: Alignment.centerLeft,
-              child: PartyTag(party: candidate.party),
-            ),
-            const Spacer(),
-            if (stat != null)
-              Text(
-                '${stat.label} ${stat.display}',
-                maxLines: 1,
-                overflow: TextOverflow.ellipsis,
-                style: AppTextStyles.statLabel.copyWith(
-                  color: AppColors.neutral600,
+      width: _width,
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          GrayscalePortrait(
+            name: candidate.name,
+            imageUrl: candidate.portraitUrl,
+            width: _width,
+            height: 124,
+          ),
+          const SizedBox(height: AppSpacing.x2),
+          Text(
+            candidate.name,
+            maxLines: 1,
+            overflow: TextOverflow.ellipsis,
+            style: Theme.of(
+              context,
+            ).textTheme.titleMedium?.copyWith(fontSize: 19),
+          ),
+          const SizedBox(height: AppSpacing.x2),
+          Row(
+            children: [
+              Flexible(child: PartyTag(party: candidate.party)),
+              if (candidate.summary.isNotEmpty) ...[
+                const SizedBox(width: AppSpacing.x1 + 2),
+                Flexible(
+                  child: Text(
+                    candidate.summary,
+                    maxLines: 1,
+                    overflow: TextOverflow.ellipsis,
+                    style: AppTextStyles.statLabel.copyWith(
+                      color: AppColors.neutral600,
+                    ),
+                  ),
+                ),
+              ],
+            ],
+          ),
+          const Spacer(),
+          const SizedBox(height: AppSpacing.x2),
+          const Divider(height: 1, color: AppColors.divider),
+          const SizedBox(height: AppSpacing.x2),
+          Row(
+            crossAxisAlignment: CrossAxisAlignment.baseline,
+            textBaseline: TextBaseline.alphabetic,
+            children: [
+              Expanded(
+                child: Text(
+                  stat?.label ?? '공개된 수치 없음',
+                  maxLines: 1,
+                  overflow: TextOverflow.ellipsis,
+                  style: AppTextStyles.statLabel.copyWith(
+                    color: AppColors.neutral600,
+                  ),
                 ),
               ),
-            if (candidate.summary.isNotEmpty)
-              Text(
-                candidate.summary,
-                maxLines: 1,
-                overflow: TextOverflow.ellipsis,
-                style: AppTextStyles.statLabel.copyWith(
-                  color: AppColors.neutral500,
+              if (stat != null)
+                CountUp(
+                  value: stat.value.value,
+                  unit: stat.unit,
+                  style: AppTextStyles.figureSmall.copyWith(
+                    fontSize: 22,
+                    color: AppColors.ink,
+                  ),
+                  unitStyle: AppTextStyles.figureUnit.copyWith(
+                    fontSize: 12,
+                    color: AppColors.ink,
+                  ),
                 ),
-              ),
-          ],
-        ),
+            ],
+          ),
+        ],
       ),
     );
   }

@@ -1,0 +1,72 @@
+{
+  "_note": "Sample direction analysis. Not a real model run, not real bill counts or issue mentions, and not an evaluation of any candidate or legislator.",
+  "generatedAt": "2026-07-30T09:00:00Z",
+  "stances": {
+    "axes": {
+      "xLow": "성장 중심",
+      "xHigh": "분배 중심",
+      "yLow": "규제 강화",
+      "yHigh": "자율 확대",
+      "xDefinition": "공약 문구가 경제 성장·투자 확대를 앞세우는지, 소득 재분배·복지 확대를 앞세우는지를 문장 단위로 분류해 평균을 냈습니다.",
+      "yDefinition": "공약 문구가 규제 완화·민간 자율을 제안하는지, 규제 신설·공공 관리 강화를 제안하는지를 문장 단위로 분류해 평균을 냈습니다."
+    },
+    "candidates": [
+      {
+        "candidateId": "fixture-candidate-3",
+        "name": "가상 후보 다",
+        "x": 0.44,
+        "y": 0.44,
+        "pledgeCount": 15
+      },
+      {
+        "candidateId": "fixture-candidate-1",
+        "name": "가상 후보 가",
+        "x": -0.36,
+        "y": 0.24,
+        "pledgeCount": 18
+      },
+      {
+        "candidateId": "fixture-candidate-2",
+        "name": "가상 후보 나",
+        "x": 0.2,
+        "y": -0.24,
+        "pledgeCount": 12
+      }
+    ],
+    "source": {
+      "sourceUrl": "https://info.nec.go.kr/fixture/seoul-mapo-b/pledges",
+      "fetchedAt": "2026-07-30T09:00:00Z"
+    }
+  },
+  "trend": {
+    "legislatorName": "가상 의원",
+    "fromTerm": "21대",
+    "toTerm": "22대",
+    "billCount": 31,
+    "fields": [
+      { "label": "교통", "from": 38, "to": 22 },
+      { "label": "주거", "from": 20, "to": 34 },
+      { "label": "복지", "from": 18, "to": 20 },
+      { "label": "기타", "from": 24, "to": 24 }
+    ],
+    "summary": "21대에는 교통 법안 비중이 가장 컸고, 22대에는 주거 법안 비중이 가장 큽니다. 복지 분야 비중은 비슷하게 유지됐습니다.",
+    "source": {
+      "sourceUrl": "https://open.assembly.go.kr/fixture/legislator-1/bills",
+      "fetchedAt": "2026-07-30T09:00:00Z"
+    }
+  },
+  "issues": {
+    "period": "최근 6개월",
+    "basis": "법안 · 민원 · 지역 보도 기준 · AI 분류",
+    "issues": [
+      { "label": "청년 주거", "monthly": [3, 4, 6, 7, 9, 12] },
+      { "label": "상가 공실", "monthly": [2, 2, 3, 5, 6, 7] },
+      { "label": "심야 교통", "monthly": [6, 5, 6, 6, 5, 6] },
+      { "label": "공원 보전", "monthly": [8, 7, 5, 4, 3, 3] }
+    ],
+    "source": {
+      "sourceUrl": "https://www.epeople.go.kr/fixture/seoul-mapo-b/issues",
+      "fetchedAt": "2026-07-30T09:00:00Z"
+    }
+  }
+}

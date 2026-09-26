@@ -31,30 +31,45 @@ void main() {
   });
 
   group('status colours', () {
-    // The README states these as `≈` approximations of oklch() values. The
-    // converted values are what the design actually specifies, and they are
-    // visibly different -- #249057 against the README's #3D9A63.
-    test('come from the oklch source, not the README approximations', () {
-      expect(AppColors.fulfilled, const Color(0xFF249057));
-      expect(AppColors.inProgress, const Color(0xFFCF9A35));
+    // Three statuses are a lightness ramp of ink, so they stay apart without
+    // hue -- including for a colour-blind reader -- and the one that does carry
+    // hue is the one the eye should land on.
+    test('the three non-reversed statuses step down in lightness', () {
+      expect(
+        AppColors.fulfilled.computeLuminance(),
+        lessThan(AppColors.inProgress.computeLuminance()),
+      );
+      expect(
+        AppColors.inProgress.computeLuminance(),
+        lessThan(AppColors.unfulfilled.computeLuminance()),
+      );
     });
 
-    test('미이행 is neutral 400, the value the guide names', () {
-      expect(AppColors.unfulfilled, AppColors.neutral400);
-    });
-
-    // Signal is the brand colour. The guide allows it back into data for
-    // exactly one meaning, and a second borrower would make the brand read as
-    // a judgement.
+    // The accent is the primary action. The design allows it back into data
+    // for exactly one meaning, and a second borrower would make an action
+    // colour read as a judgement.
     test('번복 is the only status allowed to reuse the accent', () {
-      expect(AppColors.reversed, AppColors.accent700);
+      expect(AppColors.reversed, AppColors.signal);
       for (final other in [
         AppColors.fulfilled,
         AppColors.inProgress,
         AppColors.unfulfilled,
       ]) {
         expect(other, isNot(AppColors.signal));
-        expect(other, isNot(AppColors.accent700));
+      }
+    });
+
+    test('every status label reads as body text on the page', () {
+      for (final text in [
+        AppColors.fulfilledText,
+        AppColors.inProgressText,
+        AppColors.unfulfilledText,
+        AppColors.reversedText,
+      ]) {
+        final ratio =
+            (AppColors.ground.computeLuminance() + 0.05) /
+            (text.computeLuminance() + 0.05);
+        expect(ratio, greaterThanOrEqualTo(4.5));
       }
     });
 
@@ -102,18 +117,42 @@ void main() {
       }
     });
 
-    test('the named scale matches the guide', () {
+    test('the named scale matches the redesign', () {
       final theme = AppTypography.textTheme;
-      expect(theme.displaySmall?.fontSize, 28);
-      expect(theme.headlineSmall?.fontSize, 22);
-      expect(theme.titleLarge?.fontSize, 19);
-      expect(theme.titleMedium?.fontSize, 17);
+      expect(theme.displaySmall?.fontSize, 34);
+      expect(theme.displaySmall?.fontFamily, AppFonts.serif);
+      expect(theme.titleLarge?.fontSize, 24);
       expect(theme.bodyLarge?.fontSize, 15);
       expect(theme.bodyLarge?.height, 1.55);
-      expect(theme.bodySmall?.fontSize, 12);
+      // Body text is the system face on purpose.
+      expect(theme.bodyLarge?.fontFamily, isNull);
       expect(theme.labelSmall?.fontSize, 11);
-      // .08em at 11px, the guide's data-label tracking.
-      expect(theme.labelSmall?.letterSpacing, closeTo(0.88, 0.001));
+      // .12em at 11px, the kicker tracking.
+      expect(theme.labelSmall?.letterSpacing, closeTo(1.32, 0.001));
+    });
+
+    test(
+      'figures are serif with tabular numerals, so a count-up holds still',
+      () {
+        for (final style in [
+          AppTextStyles.figureHero,
+          AppTextStyles.statValue,
+          AppTextStyles.figureSmall,
+        ]) {
+          expect(style.fontFamily, AppFonts.serif);
+          expect(
+            style.fontFeatures,
+            contains(const FontFeature.tabularFigures()),
+          );
+        }
+      },
+    );
+
+    test('the handwriting face is used for margin notes and nothing else', () {
+      final hand = AppTextStyles.all
+          .where((style) => style.fontFamily == AppFonts.hand)
+          .toList();
+      expect(hand, [AppTextStyles.marginNote]);
     });
   });
 
@@ -126,12 +165,11 @@ void main() {
       expect(AppSurfaceTokens.android.cardFill.a, 1.0);
     });
 
-    // Android cards are white on a white page, so the border is the only
-    // thing separating them. iOS can afford a shadow instead.
-    test('Android separates cards with a border, iOS with a shadow', () {
+    // Android surfaces are flat paper divided by rules; only glass lifts.
+    test('Android surfaces are flat, iOS glass carries a shadow', () {
       expect(AppSurfaceTokens.android.cardShadow, isEmpty);
       expect(AppSurfaceTokens.ios.cardShadow, isNotEmpty);
-      expect(AppSurfaceTokens.android.cardBorder, AppColors.neutral300);
+      expect(AppSurfaceTokens.android.cardFill, AppColors.ground);
     });
 
     test('lerp moves between the two without dropping a field', () {
@@ -143,15 +181,15 @@ void main() {
   });
 
   group('theme', () {
-    test('Android draws on white, iOS leaves the page to the gradient', () {
-      expect(
-        AppTheme.light(TargetPlatform.android).scaffoldBackgroundColor,
-        AppColors.androidBackground,
-      );
-      expect(
-        AppTheme.light(TargetPlatform.iOS).scaffoldBackgroundColor,
-        Colors.transparent,
-      );
+    // One paper on both platforms. A transparent iOS scaffold let a grey
+    // through on device, so pages and paper-coloured bands disagreed.
+    test('both platforms draw every page on the paper', () {
+      for (final platform in [TargetPlatform.android, TargetPlatform.iOS]) {
+        expect(
+          AppTheme.light(platform).scaffoldBackgroundColor,
+          AppColors.ground,
+        );
+      }
     });
 
     test('carries the surface tokens for the platform it was built for', () {

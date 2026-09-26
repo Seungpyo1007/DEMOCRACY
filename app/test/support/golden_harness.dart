@@ -8,10 +8,14 @@ import 'package:democracy/src/core/time/clock_providers.dart';
 import 'package:democracy/src/core/time/kst.dart';
 import 'package:democracy/src/design/app_page_background.dart';
 import 'package:democracy/src/design/app_theme.dart';
+import 'package:democracy/src/features/ai_match/application/direction_providers.dart';
 import 'package:democracy/src/features/ai_match/application/match_providers.dart';
+import 'package:democracy/src/features/ai_match/data/fake_direction_repository.dart';
 import 'package:democracy/src/features/ai_match/data/fake_match_repository.dart';
 import 'package:democracy/src/features/district/application/district_providers.dart';
 import 'package:democracy/src/features/district/data/fake_district_repository.dart';
+import 'package:democracy/src/features/history/application/history_providers.dart';
+import 'package:democracy/src/features/history/data/fake_history_repository.dart';
 import 'package:democracy/src/features/onboarding/application/onboarding_providers.dart';
 import 'package:democracy/src/features/onboarding/data/fake_address_repositories.dart';
 import 'package:democracy/src/features/pledges/application/pledge_providers.dart';
@@ -82,8 +86,10 @@ Future<ProviderContainer> pumpGolden(
   bool verified = false,
   OnboardingStep? onboardingStep,
 
-  /// A screen with a deliberately perpetual animation -- the LIVE dot on the
-  /// results screen -- can never settle. Pump it a fixed distance instead.
+  /// Pump a fixed distance instead of settling. Nothing needs it since the
+  /// redesign -- every animation is an entrance that ends, including the
+  /// LIVE dot, which no longer pulses -- but a screen that ever reintroduces
+  /// a loop can opt out here rather than hang the suite.
   bool settle = true,
 
   /// The moment the goldens are taken at.
@@ -130,6 +136,12 @@ Future<ProviderContainer> pumpGolden(
       ),
       communityRepositoryProvider.overrideWithValue(
         FakeCommunityRepository(loader: loader),
+      ),
+      historyRepositoryProvider.overrideWithValue(
+        FakeHistoryRepository(loader: loader),
+      ),
+      directionRepositoryProvider.overrideWithValue(
+        FakeDirectionRepository(loader: loader),
       ),
     ],
   );
@@ -195,6 +207,8 @@ void expectFixturesReadableFromDisk() {
     'district_fixture-seoul-mapo-b',
     'pledges_fixture-seoul-mapo-b',
     'reviews_fixture-seoul-mapo-b',
+    'history_fixture-seoul-mapo-b',
+    'ai_direction_fixture-seoul-mapo-b',
   ]) {
     expect(
       File('assets/fixtures/$name.json').existsSync(),

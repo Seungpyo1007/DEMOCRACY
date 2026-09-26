@@ -117,6 +117,7 @@ void main() {
     // outside, which is the whole reason the redirect exists.
     for (final route in const [
       AppRoutes.home,
+      AppRoutes.history,
       AppRoutes.tracker,
       AppRoutes.aiMatch,
       AppRoutes.community,
@@ -148,6 +149,7 @@ void main() {
 
       for (final route in const [
         AppRoutes.home,
+        AppRoutes.history,
         AppRoutes.tracker,
         AppRoutes.aiMatch,
         AppRoutes.community,
@@ -170,6 +172,10 @@ void main() {
       router.go(AppRoutes.algorithmLog);
       await tester.pump();
       expect(locationOf(router), AppRoutes.algorithmLog);
+
+      router.go(AppRoutes.aiDirection);
+      await tester.pump();
+      expect(locationOf(router), AppRoutes.aiDirection);
     });
 
     // A resident who skipped verification routes back here from a write gate

@@ -1,10 +1,13 @@
 import 'dart:ui' show lerpDouble;
 
+import 'package:cupertino_native_better/cupertino_native_better.dart';
 import 'package:democracy/src/design/app_tokens.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:liquid_glass_widgets/liquid_glass_widgets.dart';
+import 'package:native_liquid_glass/native_liquid_glass.dart'
+    show LiquidGlassAlert, LiquidGlassAlertAction, NativeLiquidGlassUtils;
 
 abstract final class PlatformAdaptiveRoute {
   static Page<T> page<T>({
@@ -55,11 +58,56 @@ class AdaptiveTabItem {
     required this.label,
     required this.icon,
     this.activeIcon,
+    this.sfSymbol,
+    this.sfSymbolActive,
   });
 
   final String label;
   final IconData icon;
   final IconData? activeIcon;
+
+  /// The SF Symbol the native iOS tab bar draws. Without one the item falls
+  /// back to the Material glyph, which UIKit renders as an image.
+  final String? sfSymbol;
+  final String? sfSymbolActive;
+}
+
+/// The tab the native bar last showed, kept so the bar has something valid
+/// to show while a destination outside it is current.
+int _lastTab = 0;
+
+/// Point size for the native tab glyphs. Set on each symbol: the bar's own
+/// `iconSize` does not reach SF Symbols, which is why the first pass drew
+/// them at the system's large default.
+const _nativeIconSize = 15.0;
+
+CNTabBarItem _nativeItem(AdaptiveTabItem item) {
+  return CNTabBarItem(
+    label: item.label,
+    icon: item.sfSymbol == null
+        ? null
+        : CNSymbol(item.sfSymbol!, size: _nativeIconSize),
+    activeIcon: item.sfSymbolActive == null
+        ? null
+        : CNSymbol(item.sfSymbolActive!, size: _nativeIconSize),
+    customIcon: item.sfSymbol == null ? item.icon : null,
+    activeCustomIcon: item.sfSymbol == null ? item.activeIcon : null,
+  );
+}
+
+/// A primary action the current tab lends to the native iOS tab bar's round
+/// accessory, in place of the destination that normally sits there.
+@immutable
+class AdaptiveTabAccessory {
+  const AdaptiveTabAccessory({
+    required this.label,
+    required this.sfSymbol,
+    required this.onPressed,
+  });
+
+  final String label;
+  final String sfSymbol;
+  final VoidCallback onPressed;
 }
 
 class PlatformAdaptiveTabBar extends StatelessWidget {
@@ -68,8 +116,15 @@ class PlatformAdaptiveTabBar extends StatelessWidget {
     required this.items,
     required this.onTap,
     this.minimized = false,
+    this.accessory,
     super.key,
   });
+
+  /// Native iOS only: while set, the round button beside the bar is this
+  /// action instead of the sixth destination, and morphs between the two as
+  /// the reader changes tab. Pages that lend one draw no floating button of
+  /// their own there.
+  final AdaptiveTabAccessory? accessory;
 
   /// The bar's visible surface, whatever it is made of.
   ///
@@ -87,6 +142,39 @@ class PlatformAdaptiveTabBar extends StatelessWidget {
   /// tab bar contracts while the user is scrolling down.
   final bool minimized;
 
+  Widget _extraButton(AdaptiveTabItem item, int index) {
+    final selected = currentIndex == index;
+    return Semantics(
+      key: ValueKey('tab-extra-$index'),
+      button: true,
+      selected: selected,
+      label: item.label,
+      child: CNButton.icon(
+        icon: CNSymbol(item.sfSymbol ?? 'circle', size: _nativeIconSize),
+        tint: selected ? AppColors.signal : AppColors.ink,
+        config: const CNButtonConfig(style: CNButtonStyle.glass, minHeight: 60),
+        onPressed: () => onTap(index),
+      ),
+    );
+  }
+
+  Widget _accessoryButton(AdaptiveTabAccessory action) {
+    return Semantics(
+      key: ValueKey('tab-accessory-${action.label}'),
+      button: true,
+      label: action.label,
+      child: CNButton.icon(
+        icon: CNSymbol(action.sfSymbol, size: _nativeIconSize + 2),
+        tint: AppColors.signal,
+        config: const CNButtonConfig(
+          style: CNButtonStyle.prominentGlass,
+          minHeight: 60,
+        ),
+        onPressed: action.onPressed,
+      ),
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
@@ -97,6 +185,81 @@ class PlatformAdaptiveTabBar extends StatelessWidget {
     // iOS 26 one: a capsule only as wide as its own items. The material
     // underneath does differ -- iOS gets real glass, Android an opaque
     // surface -- but that is [_FloatingBarFrame]'s business, not this one's.
+    // Android: Material 3's navigation bar, the platform's own control.
+    if (!surfaceTokens.isGlass) {
+      return NavigationBar(
+        key: PlatformAdaptiveTabBar.surfaceKey,
+        selectedIndex: currentIndex,
+        onDestinationSelected: onTap,
+        destinations: [
+          for (final item in items)
+            NavigationDestination(
+              icon: Icon(item.icon),
+              selectedIcon: Icon(item.activeIcon ?? item.icon),
+              label: item.label,
+            ),
+        ],
+      );
+    }
+
+    // iOS 26: the system UITabBar, Liquid Glass and all, in the widget tree
+    // so the shell keeps owning the index. It does not minimize on scroll --
+    // only the full UITabBarController takeover can, and that would break
+    // per-tab state (see HANDOFF). [minimized] is ignored here.
+    //
+    // UITabBar takes five items at most (the package asserts it, and UIKit
+    // squeezes a sixth into a bar built for five). Past five, the extra
+    // destinations float beside the bar as their own glass buttons -- the
+    // place iOS 26 puts its separate search tab.
+    if (theme.extension<AppCapabilities>()?.nativeControls ?? false) {
+      const maxTabs = 5;
+      final tabs = items.take(maxTabs).toList();
+      final extras = items.skip(maxTabs).toList();
+      final inTabs = currentIndex < maxTabs;
+      // No SafeArea and no bottom padding: UITabBar lays itself out around
+      // the home indicator, and its intrinsic height already includes it.
+      // Wrapping it doubled the space -- the bar sat on a 139pt block.
+      return Padding(
+        padding: const EdgeInsets.symmetric(horizontal: AppSpacing.x2),
+        child: Row(
+          children: [
+            Expanded(
+              child: CNTabBar(
+                key: PlatformAdaptiveTabBar.surfaceKey,
+                // UIKit cannot show "nothing selected"; while an extra is
+                // current the bar keeps its last tab and the extra lights
+                // up instead.
+                currentIndex: inTabs ? currentIndex : _lastTab,
+                onTap: (index) {
+                  _lastTab = index;
+                  onTap(index);
+                },
+                tint: AppColors.signal,
+                items: [for (final item in tabs) _nativeItem(item)],
+              ),
+            ),
+            for (var i = 0; i < extras.length; i++)
+              Padding(
+                // Lifted to sit on the bar's capsule, which UIKit draws
+                // above the home indicator rather than centred in the view.
+                padding: const EdgeInsets.only(left: AppSpacing.x1, bottom: 8),
+                child: SizedBox.square(
+                  dimension: 60,
+                  child: _AccessorySwitcher(
+                    child: i == 0 && accessory != null
+                        ? _accessoryButton(accessory!)
+                        : _extraButton(extras[i], maxTabs + i),
+                  ),
+                ),
+              ),
+          ],
+        ),
+      );
+    }
+
+    // Where UIKit is unavailable (tests, goldens, older systems): the drawn
+    // capsule, same contract.
+
     return _FloatingBarFrame(
       inset: surfaceTokens.navBarInset,
       surfaceTokens: surfaceTokens,
@@ -130,9 +293,11 @@ class _CapsuleTabStrip extends StatelessWidget {
   static const _duration = Duration(milliseconds: 280);
   static const _curve = Curves.easeOutCubic;
 
-  static const _expandedWidth = 64.0;
+  /// Six destinations have to fit a 390dp screen with the capsule's inset,
+  /// so items are 56 wide rather than the 64 five of them could have.
+  static const _expandedWidth = 56.0;
   static const _expandedHeight = 52.0;
-  static const _minimizedWidth = 46.0;
+  static const _minimizedWidth = 44.0;
   static const _minimizedHeight = 38.0;
   static const _padding = 6.0;
 
@@ -189,7 +354,7 @@ class _CapsuleTabStrip extends StatelessWidget {
                           item: items[i],
                           selected: i == currentIndex,
                           onTap: () => onTap(i),
-                          iconSize: lerpDouble(22, 20, t)!,
+                          iconSize: lerpDouble(20, 18, t)!,
                           labelOpacity: labelOpacity,
                         ),
                       ),
@@ -264,8 +429,8 @@ class _CapsuleTabItem extends StatelessWidget {
                     maxLines: 1,
                     overflow: TextOverflow.ellipsis,
                     style: TextStyle(
-                      fontSize: 11,
-                      fontWeight: selected ? FontWeight.w600 : FontWeight.w500,
+                      fontSize: 10,
+                      fontWeight: selected ? FontWeight.w700 : FontWeight.w500,
                       color: foreground,
                     ),
                   ),
@@ -341,6 +506,30 @@ class _FloatingBarFrame extends StatelessWidget {
   }
 }
 
+/// A short confirmation that something happened: `평가를 올렸습니다`.
+///
+/// Android shows Material's snackbar, which is its system pattern for this.
+/// iOS has no snackbar -- a Material bar sliding up on an iPhone reads as a
+/// foreign app -- so it shows the system alert with a single 확인.
+abstract final class PlatformAdaptiveNotice {
+  static Future<void> show(
+    BuildContext context, {
+    required String message,
+    String? title,
+  }) async {
+    if (_isCupertino(context)) {
+      return PlatformAdaptiveDialog.show(
+        context: context,
+        title: title ?? '',
+        message: message,
+      );
+    }
+    ScaffoldMessenger.of(
+      context,
+    ).showSnackBar(SnackBar(content: Text(message)));
+  }
+}
+
 abstract final class PlatformAdaptiveDialog {
   static Future<void> show({
     required BuildContext context,
@@ -348,10 +537,44 @@ abstract final class PlatformAdaptiveDialog {
     required String message,
     String confirmLabel = '확인',
     VoidCallback? onConfirmed,
+    String? secondaryLabel,
+    VoidCallback? onSecondary,
   }) {
     void handleConfirmed(BuildContext dialogContext) {
       Navigator.of(dialogContext).pop();
       onConfirmed?.call();
+    }
+
+    // A second, non-default action placed before the confirm button, which is
+    // where both platforms put the less emphatic choice.
+    void handleSecondary(BuildContext dialogContext) {
+      Navigator.of(dialogContext).pop();
+      onSecondary?.call();
+    }
+
+    // iOS with UIKit: the system alert itself (UIAlertController, Liquid
+    // Glass on iOS 26). The Cupertino dialog below is Flutter's drawing of
+    // one, kept for tests and systems without the native presenter.
+    if (_isCupertino(context) &&
+        (Theme.of(context).extension<AppCapabilities>()?.nativeControls ??
+            false) &&
+        NativeLiquidGlassUtils.supportsLiquidGlass) {
+      return LiquidGlassAlert.show(
+        context: context,
+        title: title,
+        message: message,
+        actions: [
+          if (secondaryLabel != null)
+            LiquidGlassAlertAction(id: 'secondary', title: secondaryLabel),
+          LiquidGlassAlertAction(id: 'confirm', title: confirmLabel),
+        ],
+      ).then((choice) {
+        if (choice == 'secondary') {
+          onSecondary?.call();
+        } else if (choice == 'confirm') {
+          onConfirmed?.call();
+        }
+      });
     }
 
     if (_isCupertino(context)) {
@@ -361,7 +584,13 @@ abstract final class PlatformAdaptiveDialog {
           title: Text(title),
           content: Text(message),
           actions: [
+            if (secondaryLabel != null)
+              CupertinoDialogAction(
+                onPressed: () => handleSecondary(context),
+                child: Text(secondaryLabel),
+              ),
             CupertinoDialogAction(
+              isDefaultAction: secondaryLabel != null,
               onPressed: () => handleConfirmed(context),
               child: Text(confirmLabel),
             ),
@@ -376,6 +605,11 @@ abstract final class PlatformAdaptiveDialog {
         title: Text(title),
         content: Text(message),
         actions: [
+          if (secondaryLabel != null)
+            TextButton(
+              onPressed: () => handleSecondary(context),
+              child: Text(secondaryLabel),
+            ),
           TextButton(
             onPressed: () => handleConfirmed(context),
             child: Text(confirmLabel),
@@ -418,44 +652,38 @@ abstract final class PlatformAdaptiveSheet {
     required WidgetBuilder builder,
     bool isScrollControlled = true,
   }) {
-    final surface = Theme.of(context).extension<AppSurfaceTokens>()!;
-    final radius = BorderRadius.vertical(
-      top: Radius.circular(surface.sheetRadius),
-    );
+    final theme = Theme.of(context);
+    final surface = theme.extension<AppSurfaceTokens>()!;
 
+    // iOS with UIKit: the system sheet presentation, through the package's
+    // wrapper so the native tab bar and buttons hide beneath it rather than
+    // drawing through it.
+    if (surface.isGlass &&
+        (theme.extension<AppCapabilities>()?.nativeControls ?? false)) {
+      return CNBottomSheet.showCupertino<T>(
+        context: context,
+        pageBuilder: (context) => Material(
+          color: AppColors.ground,
+          child: SafeArea(top: false, child: builder(context)),
+        ),
+      );
+    }
+
+    // Android: Material 3's modal bottom sheet with its drag handle (from
+    // the theme). The iOS stand-in shares it, on the same paper.
     return showModalBottomSheet<T>(
       context: context,
       isScrollControlled: isScrollControlled,
-      backgroundColor: surface.isGlass ? AppColors.neutral100 : AppColors.white,
-      shape: RoundedRectangleBorder(borderRadius: radius),
-      builder: (context) => SafeArea(
-        top: false,
-        child: Column(
-          mainAxisSize: MainAxisSize.min,
-          children: [
-            if (!surface.isGlass) const _DragHandle(),
-            Flexible(child: builder(context)),
-          ],
+      useSafeArea: true,
+      showDragHandle: true,
+      backgroundColor: AppColors.ground,
+      shape: RoundedRectangleBorder(
+        borderRadius: BorderRadius.vertical(
+          top: Radius.circular(surface.sheetRadius),
         ),
       ),
-    );
-  }
-}
-
-class _DragHandle extends StatelessWidget {
-  const _DragHandle();
-
-  @override
-  Widget build(BuildContext context) {
-    return Padding(
-      padding: const EdgeInsets.only(top: AppSpacing.x1),
-      child: Container(
-        width: 36,
-        height: 4,
-        decoration: BoxDecoration(
-          color: AppColors.neutral300,
-          borderRadius: BorderRadius.circular(AppRadii.androidProgress),
-        ),
+      builder: (context) => CNSheetGeometryProbe(
+        child: SafeArea(top: false, child: builder(context)),
       ),
     );
   }
@@ -483,4 +711,31 @@ bool _isCupertino(BuildContext context) {
 
 bool _isCupertinoPlatform(TargetPlatform platform) {
   return platform == TargetPlatform.iOS || platform == TargetPlatform.macOS;
+}
+
+/// The morph between the accessory's two lives -- a destination in glass and
+/// the tab's action in pine: the old one shrinks away as the new one grows
+/// in, in the same spot, so it reads as one button changing role.
+class _AccessorySwitcher extends StatelessWidget {
+  const _AccessorySwitcher({required this.child});
+
+  final Widget child;
+
+  @override
+  Widget build(BuildContext context) {
+    final reduced = MediaQuery.maybeDisableAnimationsOf(context) ?? false;
+    return AnimatedSwitcher(
+      duration: reduced ? Duration.zero : const Duration(milliseconds: 360),
+      switchInCurve: const Cubic(0.05, 0.7, 0.1, 1),
+      switchOutCurve: Curves.easeInCubic,
+      transitionBuilder: (child, animation) => FadeTransition(
+        opacity: animation,
+        child: ScaleTransition(
+          scale: Tween(begin: 0.6, end: 1.0).animate(animation),
+          child: child,
+        ),
+      ),
+      child: child,
+    );
+  }
 }

@@ -6,6 +6,28 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 typedef VerifiedActionBuilder =
     Widget Function(BuildContext context, VoidCallback onPressed);
 
+/// Runs [onVerified] for a verified resident; otherwise explains the gate and
+/// offers [onVerificationRequested]. The same check [VerifiedGate] applies,
+/// for an action that is not built through it -- the tab bar's accessory.
+void runVerified(
+  BuildContext context,
+  WidgetRef ref, {
+  required VoidCallback onVerified,
+  required VoidCallback onVerificationRequested,
+}) {
+  if (ref.read(addressControllerProvider).isVerified) {
+    onVerified();
+    return;
+  }
+  PlatformAdaptiveDialog.show(
+    context: context,
+    title: '주민 인증이 필요합니다',
+    message: '읽기는 계속할 수 있지만 작성과 제보는 주소 인증 후 이용할 수 있습니다.',
+    confirmLabel: '인증하러 가기',
+    onConfirmed: onVerificationRequested,
+  );
+}
+
 class VerifiedGate extends ConsumerWidget {
   const VerifiedGate({
     required this.builder,

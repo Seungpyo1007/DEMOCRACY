@@ -1,0 +1,118 @@
+{
+  "_note": "Sample payload for local development. Not a live feed and not a real person. Region items are placeholders shaped like a district chronology, not a verified record.",
+  "district": {
+    "id": "fixture-seoul-mapo-b",
+    "displayName": "서울 마포구 을"
+  },
+  "region": {
+    "source": {
+      "sourceUrl": "https://www.mapo.go.kr/site/main/content/fixture-history",
+      "fetchedAt": "2026-07-30T09:00:00Z"
+    },
+    "events": [
+      {
+        "year": 1944,
+        "title": "마포구 설치",
+        "detail": "서대문구·용산구 일부를 나누어 새 구로 출범"
+      },
+      {
+        "year": null,
+        "title": "선거구 획정으로 마포구 갑·을 분리",
+        "detail": "국회의원 선거구 기준 인구 변동 반영"
+      },
+      {
+        "year": 2001,
+        "title": "서울월드컵경기장 개장",
+        "detail": "상암동 일대 개발의 시작점"
+      },
+      {
+        "year": 2016,
+        "title": "경의선 숲길 전 구간 개통",
+        "detail": "폐선 부지를 공원으로 전환"
+      }
+    ]
+  },
+  "elections": {
+    "source": {
+      "sourceUrl": "https://info.nec.go.kr/main/fixture-history",
+      "fetchedAt": "2026-07-30T09:00:00Z"
+    },
+    "basis": "득표율은 당선자 기준",
+    "rows": [
+      {
+        "term": 20,
+        "year": 2016,
+        "winner": {
+          "id": "fixture-former-1",
+          "name": "가상 인물 라",
+          "party": "다라당"
+        },
+        "share": 44.1
+      },
+      {
+        "term": 21,
+        "year": 2020,
+        "winner": {
+          "id": "fixture-incumbent-1",
+          "name": "가상 의원",
+          "party": "가나당"
+        },
+        "share": 46.8
+      },
+      {
+        "term": 22,
+        "year": 2024,
+        "winner": {
+          "id": "fixture-incumbent-1",
+          "name": "가상 의원",
+          "party": "가나당"
+        },
+        "share": 45.2
+      },
+      {
+        "term": 23,
+        "year": 2026,
+        "ongoing": true
+      }
+    ]
+  },
+  "legislator": {
+    "source": {
+      "sourceUrl": "https://open.assembly.go.kr/portal/openapi/fixture-chronicle",
+      "fetchedAt": "2026-07-30T09:00:00Z"
+    },
+    "incumbent": {
+      "id": "fixture-incumbent-1",
+      "name": "가상 의원",
+      "party": "가나당",
+      "summary": "재선"
+    },
+    "events": [
+      {
+        "mark": "2020",
+        "title": "제21대 국회의원 당선",
+        "detail": "공약 등록 · 선관위 공보"
+      },
+      {
+        "mark": "2024",
+        "title": "제22대 재선",
+        "detail": "공약 24건 등록"
+      },
+      {
+        "mark": "5월",
+        "title": "역세권 청년주택 공급 촉진법 일부개정안",
+        "detail": "5월 12일 · 본회의 통과"
+      },
+      {
+        "mark": "6월",
+        "title": "소상공인 임대료 부담 완화 특별법안",
+        "detail": "6월 3일 · 소위 심사"
+      },
+      {
+        "mark": "7월",
+        "title": "도시공원 보전 및 이용에 관한 법률 개정안",
+        "detail": "7월 9일 · 발의"
+      }
+    ]
+  }
+}

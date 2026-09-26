@@ -3,14 +3,20 @@ import 'package:democracy/src/core/auth/address_controller.dart';
 import 'package:democracy/src/core/auth/address_state.dart';
 import 'package:democracy/src/core/auth/address_store.dart';
 import 'package:democracy/src/core/provenance/source_metadata.dart';
+import 'package:democracy/src/core/tips/tip_providers.dart';
+import 'package:democracy/src/core/tips/tip_store.dart';
 import 'package:democracy/src/design/app_theme.dart';
+import 'package:democracy/src/features/ai_match/application/direction_providers.dart';
 import 'package:democracy/src/features/ai_match/application/match_providers.dart';
+import 'package:democracy/src/features/ai_match/data/fake_direction_repository.dart';
 import 'package:democracy/src/features/ai_match/data/fake_match_repository.dart';
 import 'package:democracy/src/features/ai_match/domain/candidate_match.dart';
+import 'package:democracy/src/features/ai_match/presentation/ai_direction_screen.dart';
 import 'package:democracy/src/features/ai_match/presentation/ai_disclosure.dart';
 import 'package:democracy/src/features/ai_match/presentation/ai_match_screen.dart';
 import 'package:democracy/src/features/ai_match/presentation/algorithm_log_screen.dart';
 import 'package:democracy/src/features/shared/presentation/provenance_widgets.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_test/flutter_test.dart';
@@ -27,6 +33,9 @@ void main() {
   Future<ProviderContainer> pumpMatch(
     WidgetTester tester, {
     TargetPlatform platform = TargetPlatform.android,
+    TipStore? tips,
+    bool onScreen = true,
+    double textScale = 1,
   }) async {
     tester.view.physicalSize = const Size(390, 844);
     tester.view.devicePixelRatio = 1.0;
@@ -35,12 +44,18 @@ void main() {
     final container = ProviderContainer(
       overrides: [
         addressStoreProvider.overrideWithValue(InMemoryAddressStore()),
+        // Unset, the default store reports every tip seen and no dialog
+        // appears; the first-visit tests pass their own.
+        if (tips != null) tipStoreProvider.overrideWithValue(tips),
         matchRepositoryProvider.overrideWithValue(
           FakeMatchRepository(
             loader: fixtureLoaderFromDisk(),
             // The stream is what is under test, not the wait.
             tokenDelay: Duration.zero,
           ),
+        ),
+        directionRepositoryProvider.overrideWithValue(
+          FakeDirectionRepository(loader: fixtureLoaderFromDisk()),
         ),
       ],
     );
@@ -61,6 +76,10 @@ void main() {
               path: AppRoutes.algorithmLogSegment,
               builder: (context, state) => const AlgorithmLogScreen(),
             ),
+            GoRoute(
+              path: AppRoutes.aiDirectionSegment,
+              builder: (context, state) => const AiDirectionScreen(),
+            ),
           ],
         ),
       ],
@@ -73,6 +92,13 @@ void main() {
         child: MaterialApp.router(
           theme: AppTheme.light(platform),
           routerConfig: router,
+          // The shell keeps an unvisited tab built but offstage, tickers off.
+          builder: (context, child) => MediaQuery(
+            data: MediaQuery.of(
+              context,
+            ).copyWith(textScaler: TextScaler.linear(textScale)),
+            child: TickerMode(enabled: onScreen, child: child!),
+          ),
         ),
       ),
     );
@@ -80,25 +106,99 @@ void main() {
     return container;
   }
 
-  group('the disclosure', () {
-    // N-6 is a standing disclosure, not a splash. It has to still be on screen
-    // at the moment a reader is looking at a score.
-    testWidgets('stays on screen while the results scroll under it', (
-      tester,
-    ) async {
-      await pumpMatch(tester);
-      expect(find.textContaining(AiMatchScreen.disclosure), findsOneWidget);
+  // The toggle sits under the leader's bars, below the fold once the native
+  // top bar and segmented control have taken their share of the screen.
+  Future<void> openReasoning(WidgetTester tester) async {
+    await tester.drag(find.byType(CustomScrollView), const Offset(0, -300));
+    await tester.pumpAndSettle();
+    await tester.tap(find.text('왜 유리한가'));
+    await tester.pumpAndSettle();
+  }
 
-      await tester.drag(find.byType(CustomScrollView), const Offset(0, -600));
+  group('the disclosure', () {
+    // N-6 is a standing disclosure, not a splash: the marking sits on the
+    // output itself, so it is on screen whenever a score is.
+    for (final platform in [TargetPlatform.android, TargetPlatform.iOS]) {
+      testWidgets('${platform.name}: labels every score it shows', (
+        tester,
+      ) async {
+        await pumpMatch(tester, platform: platform);
+        await tester.scrollUntilVisible(
+          find.text('3위'),
+          200,
+          scrollable: find.byType(Scrollable).first,
+        );
+        await tester.pumpAndSettle();
+
+        final scores = find.textContaining(
+          RegExp(r'^\d+점$'),
+          findRichText: true,
+        );
+        final labels = find.byType(AiReferenceLabel);
+        expect(scores, findsNWidgets(3));
+        expect(labels, findsNWidgets(3));
+        expect(find.text(aiReferenceLabel), findsNWidgets(3));
+
+        // Each label sits directly under its own figure.
+        for (final label in ['87점', '73점', '61점']) {
+          final score = tester.getRect(find.text(label, findRichText: true));
+          final nearest =
+              [for (var i = 0; i < 3; i++) tester.getRect(labels.at(i))]
+                  .where((rect) => (rect.top - score.bottom).abs() < 16)
+                  .where((rect) => (rect.right - score.right).abs() < 16);
+          expect(nearest, hasLength(1), reason: label);
+        }
+      });
+    }
+
+    // iOS, where no app bar brings a persistent header of its own.
+    testWidgets('no longer pins a band over the results', (tester) async {
+      await pumpMatch(tester, platform: TargetPlatform.iOS);
+
+      expect(find.byType(SliverPersistentHeader), findsNothing);
+      expect(find.text(aiDisclosure), findsNothing);
+    });
+
+    testWidgets('a label opens the notice', (tester) async {
+      await pumpMatch(tester);
+
+      await tester.tap(find.byType(AiReferenceLabel).first);
       await tester.pumpAndSettle();
 
-      expect(find.textContaining(AiMatchScreen.disclosure), findsOneWidget);
+      expect(find.text('AI 분석 안내'), findsOneWidget);
+      expect(find.textContaining(aiDisclosure), findsOneWidget);
+      expect(find.textContaining(aiDisclosureMethod), findsOneWidget);
     });
+
+    for (final platform in [TargetPlatform.android, TargetPlatform.iOS]) {
+      testWidgets('${platform.name}: the ⓘ reopens the notice natively', (
+        tester,
+      ) async {
+        await pumpMatch(tester, platform: platform);
+
+        await tester.tap(_action(platform, 'AI 분석 안내'));
+        await tester.pumpAndSettle();
+
+        expect(
+          find.byType(
+            platform == TargetPlatform.iOS ? CupertinoAlertDialog : AlertDialog,
+          ),
+          findsOneWidget,
+        );
+        expect(find.textContaining(aiDisclosure), findsOneWidget);
+
+        await tester.tap(find.text('확인'));
+        await tester.pumpAndSettle();
+        expect(find.textContaining(aiDisclosure), findsNothing);
+      });
+    }
 
     testWidgets('links to the weights the run actually used', (tester) async {
       await pumpMatch(tester);
 
-      await tester.tap(find.text('오픈소스 알고리즘 검증 →'));
+      await tester.tap(_action(TargetPlatform.android, 'AI 분석 안내'));
+      await tester.pumpAndSettle();
+      await tester.tap(find.text('알고리즘 검증'));
       await tester.pumpAndSettle();
 
       expect(find.text('알고리즘 검증'), findsOneWidget);
@@ -106,14 +206,155 @@ void main() {
       expect(find.textContaining('fixture-match-v0'), findsOneWidget);
       expect(find.text('42건'), findsOneWidget);
     });
+
+    testWidgets('keeps the labels whole at a larger text size', (tester) async {
+      await pumpMatch(tester, textScale: 1.3);
+
+      expect(tester.takeException(), isNull);
+      expect(find.byType(AiReferenceLabel), findsWidgets);
+    });
+  });
+
+  group('the first visit', () {
+    testWidgets('opens the notice once, and remembers it was read', (
+      tester,
+    ) async {
+      final tips = InMemoryTipStore();
+      await pumpMatch(tester, tips: tips);
+
+      expect(find.text('AI 분석 안내'), findsOneWidget);
+      expect(find.textContaining(aiDisclosure), findsOneWidget);
+
+      await tester.tap(find.text('확인'));
+      await tester.pumpAndSettle();
+
+      expect(find.textContaining(aiDisclosure), findsNothing);
+      expect(await tips.load(), contains(TipIds.aiDisclosure));
+
+      // Back to the tab in a later session: no dialog.
+      await tester.pumpWidget(const SizedBox.shrink());
+      await pumpMatch(tester, tips: tips);
+      expect(find.textContaining(aiDisclosure), findsNothing);
+    });
+
+    testWidgets('stays closed on switching views after it was read', (
+      tester,
+    ) async {
+      await pumpMatch(tester, tips: InMemoryTipStore());
+      await tester.tap(find.text('확인'));
+      await tester.pumpAndSettle();
+
+      await tester.tap(find.text('방향 분석'));
+      await tester.pumpAndSettle();
+
+      expect(find.text('어디로 향하고 있나'), findsWidgets);
+      expect(find.textContaining(aiDisclosure), findsNothing);
+    });
+
+    testWidgets('counts 알고리즘 검증 as read and opens the log', (tester) async {
+      final tips = InMemoryTipStore();
+      await pumpMatch(tester, tips: tips, platform: TargetPlatform.iOS);
+
+      expect(find.byType(CupertinoAlertDialog), findsOneWidget);
+      await tester.tap(find.text('알고리즘 검증'));
+      await tester.pumpAndSettle();
+
+      expect(find.textContaining('axisWeights'), findsOneWidget);
+      expect(await tips.load(), contains(TipIds.aiDisclosure));
+    });
+
+    // A tab the shell has built offstage is not a visit.
+    testWidgets('waits while the tab is offstage', (tester) async {
+      final tips = InMemoryTipStore();
+      await pumpMatch(tester, tips: tips, onScreen: false);
+
+      expect(find.textContaining(aiDisclosure), findsNothing);
+      expect(await tips.load(), isNot(contains(TipIds.aiDisclosure)));
+    });
+
+    testWidgets('is skipped when already dismissed', (tester) async {
+      await pumpMatch(tester, tips: InMemoryTipStore({TipIds.aiDisclosure}));
+
+      expect(find.textContaining(aiDisclosure), findsNothing);
+    });
+  });
+
+  group('the header', () {
+    testWidgets('says how much text the result rests on, and when', (
+      tester,
+    ) async {
+      await pumpMatch(tester);
+
+      expect(find.text('나에게 유리한 후보는?'), findsWidgets);
+      expect(find.text('서울 마포구 을'), findsOneWidget);
+      expect(find.text('대조한 공약 42건 · 7월 30일 산출'), findsOneWidget);
+    });
+
+    testWidgets('links the meta line to the weights', (tester) async {
+      await pumpMatch(tester);
+
+      await tester.tap(find.text('가중치와 입력값'));
+      await tester.pumpAndSettle();
+
+      expect(find.textContaining('axisWeights'), findsOneWidget);
+    });
+
+    testWidgets('switches to the direction analysis and back', (tester) async {
+      await pumpMatch(tester);
+
+      await tester.tap(find.text('방향 분석'));
+      await tester.pumpAndSettle();
+      expect(find.text('어디로 향하고 있나'), findsWidgets);
+
+      await tester.tap(find.text('후보 매칭'));
+      await tester.pumpAndSettle();
+      expect(find.text('나에게 유리한 후보는?'), findsWidgets);
+      expect(find.text('어디로 향하고 있나'), findsNothing);
+    });
+  });
+
+  group('the native chrome', () {
+    testWidgets('android: a large app bar and M3 segments', (tester) async {
+      await pumpMatch(tester);
+
+      expect(find.byType(SliverAppBar), findsOneWidget);
+      expect(find.byType(SegmentedButton<int>), findsOneWidget);
+    });
+
+    testWidgets('ios: the title on the page, no app bar', (tester) async {
+      await pumpMatch(tester, platform: TargetPlatform.iOS);
+
+      expect(find.byType(SliverAppBar), findsNothing);
+      expect(find.text('나에게 유리한 후보는?'), findsOneWidget);
+    });
+
+    for (final platform in [TargetPlatform.android, TargetPlatform.iOS]) {
+      testWidgets('${platform.name}: the notice leads to the weights', (
+        tester,
+      ) async {
+        await pumpMatch(tester, platform: platform);
+
+        await tester.tap(_action(platform, 'AI 분석 안내'));
+        await tester.pumpAndSettle();
+        await tester.tap(find.text('알고리즘 검증'));
+        await tester.pumpAndSettle();
+        expect(find.textContaining('axisWeights'), findsOneWidget);
+
+        // The log is a pushed page with the platform's own way back.
+        await tester.tap(_action(platform, '뒤로').last);
+        await tester.pumpAndSettle();
+        expect(find.textContaining('axisWeights'), findsNothing);
+        expect(find.text('나에게 유리한 후보는?'), findsWidgets);
+      });
+    }
   });
 
   group('the ranking', () {
     testWidgets('leads with the top match and its score', (tester) async {
       await pumpMatch(tester);
 
-      expect(find.text('1위 매칭'), findsOneWidget);
-      expect(find.text('87점'), findsOneWidget);
+      expect(find.text('1위 매칭', findRichText: true), findsOneWidget);
+      expect(find.text('87점', findRichText: true), findsOneWidget);
       expect(find.text('가상 후보 가'), findsOneWidget);
     });
 
@@ -128,17 +369,34 @@ void main() {
       ]);
     });
 
-    // Only the leader gets the radar and the bars; the others are a row. A
+    testWidgets('draws one bar per axis for the leader only', (tester) async {
+      await pumpMatch(tester);
+
+      for (final label in ['세금', '부동산', '복지', '교육', '청년']) {
+        expect(find.text(label), findsOneWidget);
+      }
+      expect(find.text('92'), findsOneWidget);
+    });
+
+    // Only the leader gets the bars; the others are a row. A
     // second full card would read as a comparison between candidates rather
     // than between each candidate and the reader.
     testWidgets('gives the runners-up a row, not a second card', (
       tester,
     ) async {
       await pumpMatch(tester);
+      await tester.scrollUntilVisible(
+        find.text('3위'),
+        200,
+        scrollable: find.byType(Scrollable).first,
+      );
+      await tester.pumpAndSettle();
 
-      expect(find.text('73점'), findsOneWidget);
-      expect(find.text('61점'), findsOneWidget);
-      expect(find.text('2위 매칭'), findsNothing);
+      expect(find.text('73점', findRichText: true), findsOneWidget);
+      expect(find.text('61점', findRichText: true), findsOneWidget);
+      expect(find.text('2위'), findsOneWidget);
+      expect(find.text('3위'), findsOneWidget);
+      expect(find.text('2위 매칭', findRichText: true), findsNothing);
     });
   });
 
@@ -148,7 +406,28 @@ void main() {
     ) async {
       await pumpMatch(tester);
 
-      await tester.tap(find.text('왜 유리한가'));
+      await openReasoning(tester);
+
+      expect(find.textContaining('간이과세 기준 상향'), findsOneWidget);
+    });
+
+    testWidgets('numbers each reason', (tester) async {
+      await pumpMatch(tester);
+
+      await openReasoning(tester);
+
+      expect(find.text('1'), findsOneWidget);
+      expect(find.text('2'), findsOneWidget);
+      expect(find.textContaining('1인 가구 대상 주거비'), findsOneWidget);
+      expect(find.text('원문 대조 보기 ↗'), findsOneWidget);
+    });
+
+    // Tapping an axis is a request to see why.
+    testWidgets('opens when an axis is tapped', (tester) async {
+      await pumpMatch(tester);
+      expect(find.textContaining('간이과세 기준 상향'), findsNothing);
+
+      await tester.tap(find.text('세금'));
       await tester.pumpAndSettle();
 
       expect(find.textContaining('간이과세 기준 상향'), findsOneWidget);
@@ -158,8 +437,7 @@ void main() {
     testWidgets('carries a source for every claim it makes', (tester) async {
       await pumpMatch(tester);
 
-      await tester.tap(find.text('왜 유리한가'));
-      await tester.pumpAndSettle();
+      await openReasoning(tester);
 
       expect(find.byType(SourceBadge), findsNWidgets(2));
     });
@@ -258,8 +536,26 @@ void main() {
       expect(caught, isNull);
     });
 
-    // The residue a type cannot express -- that the banner is still on screen
-    // at the moment a reader is looking at a score -- is already pinned by
-    // 'stays on screen while the results scroll under it' above.
+    testWidgets('the label refuses to build without it too', (tester) async {
+      await tester.pumpWidget(
+        MaterialApp(
+          theme: AppTheme.light(TargetPlatform.android),
+          home: const AiReferenceLabel(),
+        ),
+      );
+
+      expect(tester.takeException(), isA<MissingDisclosureScopeException>());
+    });
+
+    // The residue a type cannot express -- that the marking is on screen at
+    // the moment a reader is looking at a score -- is pinned by 'labels every
+    // score it shows' above.
   });
 }
+
+/// A toolbar action by its label: the Material tooltip on Android, the glass
+/// button's semantics label on iOS.
+Finder _action(TargetPlatform platform, String label) =>
+    platform == TargetPlatform.android
+    ? find.byTooltip(label)
+    : find.bySemanticsLabel(label);

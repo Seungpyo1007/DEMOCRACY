@@ -1,4 +1,5 @@
 import 'package:democracy/src/design/app_tokens.dart';
+import 'package:democracy/src/design/components/motion.dart';
 import 'package:flutter/material.dart';
 
 /// A named quantity drawn as a bar: label, track, value.
@@ -8,9 +9,7 @@ import 'package:flutter/material.dart';
 /// onboarding interest slider's track. They differ only in column widths, bar
 /// height and fill colour, so they are one widget rather than five.
 ///
-/// Only the track shape is platform-adaptive, and it is the reverse of what
-/// you would guess: the guide draws these square on iOS and rounded on
-/// Android.
+/// The bar grows to its value when it first appears.
 class LabeledBar extends StatelessWidget {
   const LabeledBar({
     required this.label,
@@ -18,16 +17,11 @@ class LabeledBar extends StatelessWidget {
     required this.valueText,
     this.fillColor,
     this.labelWidth = 52,
-    this.valueWidth = 32,
+    this.valueWidth = 40,
     this.trackHeight = 10,
-    this.duration = Duration.zero,
+    this.delay = Duration.zero,
     super.key,
   });
-
-  /// The tracker's category bars fill once, over 800ms, and never animate
-  /// again. Everything else is drawn at rest.
-  static const fillDuration = Duration(milliseconds: 800);
-  static const fillCurve = Curves.easeOut;
 
   final String label;
 
@@ -40,16 +34,12 @@ class LabeledBar extends StatelessWidget {
   final double labelWidth;
   final double valueWidth;
   final double trackHeight;
-  final Duration duration;
+
+  /// Stagger for a stack of bars, so they fill one after another.
+  final Duration delay;
 
   @override
   Widget build(BuildContext context) {
-    final surface = Theme.of(context).extension<AppSurfaceTokens>()!;
-    final radius = surface.isGlass
-        ? BorderRadius.zero
-        : BorderRadius.circular(trackHeight / 2);
-    final clamped = fraction.clamp(0.0, 1.0);
-
     return Row(
       children: [
         SizedBox(
@@ -58,43 +48,20 @@ class LabeledBar extends StatelessWidget {
             label,
             maxLines: 1,
             overflow: TextOverflow.ellipsis,
-            style: AppTextStyles.statLabel.copyWith(
-              color: AppColors.neutral700,
-            ),
+            style: AppTextStyles.ctaSmall.copyWith(color: AppColors.ink),
           ),
         ),
-        const SizedBox(width: AppSpacing.x2),
+        const SizedBox(width: AppSpacing.x2 + 2),
+        // Square on both platforms: a quantity, not a control.
         Expanded(
-          child: ClipRRect(
-            borderRadius: radius,
-            child: SizedBox(
-              height: trackHeight,
-              child: ColoredBox(
-                color: AppColors.neutral200,
-                child: Align(
-                  alignment: Alignment.centerLeft,
-                  child: TweenAnimationBuilder<double>(
-                    tween: Tween(
-                      begin: duration == Duration.zero ? clamped : 0,
-                      end: clamped,
-                    ),
-                    duration: duration,
-                    curve: fillCurve,
-                    // heightFactor is not optional here: a ColoredBox has no
-                    // child to take a height from, so without it the fill
-                    // collapses to nothing and the track renders empty.
-                    builder: (context, value, _) => FractionallySizedBox(
-                      widthFactor: value,
-                      heightFactor: 1,
-                      child: ColoredBox(color: fillColor ?? AppColors.ink),
-                    ),
-                  ),
-                ),
-              ),
-            ),
+          child: GrowBar(
+            fraction: fraction,
+            color: fillColor ?? AppColors.ink,
+            height: trackHeight,
+            delay: delay,
           ),
         ),
-        const SizedBox(width: AppSpacing.x2),
+        const SizedBox(width: AppSpacing.x2 + 2),
         SizedBox(
           width: valueWidth,
           child: Text(
@@ -102,7 +69,10 @@ class LabeledBar extends StatelessWidget {
             textAlign: TextAlign.end,
             maxLines: 1,
             overflow: TextOverflow.ellipsis,
-            style: AppTextStyles.badge.copyWith(color: AppColors.ink),
+            style: AppTextStyles.figureSmall.copyWith(
+              color: AppColors.ink,
+              fontSize: 15,
+            ),
           ),
         ),
       ],
@@ -161,7 +131,6 @@ class _MonotonicBarState extends State<MonotonicBar> {
       labelWidth: widget.labelWidth,
       valueWidth: widget.valueWidth,
       trackHeight: widget.trackHeight,
-      duration: const Duration(milliseconds: 400),
     );
   }
 }

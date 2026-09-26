@@ -46,6 +46,8 @@ class StatCell extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    // Prefer FigureStat for a number: it counts up. This stays for values
+    // that are not numbers.
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       mainAxisSize: MainAxisSize.min,
@@ -68,11 +70,12 @@ class StatCell extends StatelessWidget {
   }
 }
 
-/// The green tick that marks a verified thing.
+/// The tick that marks a verified thing.
 ///
 /// `인증 가능` before verification, `주민 인증됨` after, `인증` on a review.
-/// Green here is a status, not a brand colour, and it is always paired with a
-/// tick and a word for the same reason pledge status is.
+/// An ink outline, not a colour: the accent is kept for action and for one
+/// data meaning, and a verification is neither. The tick and the word carry
+/// the state.
 ///
 /// Affirmative only. A state that is *not* a verification -- read-only,
 /// awaiting review -- gets a [StatusChip] instead: putting a tick on
@@ -88,18 +91,21 @@ class VerifiedBadge extends StatelessWidget {
 
     return DecoratedBox(
       decoration: BoxDecoration(
-        color: AppColors.fulfilledChipBackground,
-        borderRadius: BorderRadius.circular(surface.chipRadius),
+        border: Border.all(color: AppColors.ink),
+        borderRadius: BorderRadius.circular(
+          surface.isGlass ? 999 : AppRadii.androidChip,
+        ),
       ),
       child: Padding(
         padding: const EdgeInsets.symmetric(
-          horizontal: AppSpacing.x2,
+          horizontal: AppSpacing.x2 + 2,
           vertical: 3,
         ),
         child: Text(
           '✓ $label',
           style: AppTextStyles.badge.copyWith(
-            color: AppColors.fulfilledChipForeground,
+            color: AppColors.ink,
+            fontSize: 12,
           ),
         ),
       ),
@@ -122,17 +128,22 @@ class StatusChip extends StatelessWidget {
 
     return DecoratedBox(
       decoration: BoxDecoration(
-        color: AppColors.neutral200,
-        borderRadius: BorderRadius.circular(surface.chipRadius),
+        border: Border.all(color: AppColors.neutral500),
+        borderRadius: BorderRadius.circular(
+          surface.isGlass ? 999 : AppRadii.androidChip,
+        ),
       ),
       child: Padding(
         padding: const EdgeInsets.symmetric(
-          horizontal: AppSpacing.x2,
+          horizontal: AppSpacing.x2 + 2,
           vertical: 3,
         ),
         child: Text(
           label,
-          style: AppTextStyles.badge.copyWith(color: AppColors.neutral700),
+          style: AppTextStyles.badge.copyWith(
+            color: AppColors.neutral700,
+            fontSize: 12,
+          ),
         ),
       ),
     );
@@ -142,9 +153,10 @@ class StatusChip extends StatelessWidget {
 /// How the app says "this is not what it might look like".
 ///
 /// Two of them exist because the two notices carry different weight. The AI
-/// one is a standing disclosure the guide pins to the top of the screen, so it
-/// gets a filled surface. The community one is a rule about who may write, so
-/// it gets a dashed outline -- visibly a note, not a result.
+/// one is a standing disclosure pinned to the top of the screen, so it is a
+/// full-width ink band -- the heaviest thing on the page, deliberately. The
+/// community one is a rule about who may write, so it gets a dashed outline:
+/// visibly a note, not a result.
 enum DisclaimerTone { pinned, note }
 
 class DisclaimerBox extends StatelessWidget {
@@ -158,53 +170,91 @@ class DisclaimerBox extends StatelessWidget {
   final String text;
   final DisclaimerTone tone;
 
-  /// The guide requires the AI notice to carry a link to the open algorithm.
+  /// The AI notice has to carry a link to the open algorithm.
   final Widget? action;
 
   @override
   Widget build(BuildContext context) {
     final surface = Theme.of(context).extension<AppSurfaceTokens>()!;
-    final radius = BorderRadius.circular(surface.cardRadius);
-
-    final body = Padding(
-      padding: const EdgeInsets.symmetric(
-        horizontal: AppSpacing.x3 + 2,
-        vertical: AppSpacing.x2 + 2,
-      ),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        mainAxisSize: MainAxisSize.min,
-        children: [
-          Text(
-            'ⓘ $text',
-            style: AppTextStyles.disclaimer.copyWith(
-              color: AppColors.neutral700,
-            ),
-          ),
-          if (action != null) ...[const SizedBox(height: 3), action!],
-        ],
-      ),
-    );
 
     if (tone == DisclaimerTone.pinned) {
-      return DecoratedBox(
-        decoration: BoxDecoration(
-          color: surface.isGlass ? surface.cardFill : AppColors.neutral100,
-          border: Border.all(
-            color: surface.isGlass ? surface.cardBorder : AppColors.neutral200,
+      return ColoredBox(
+        color: AppColors.ink,
+        child: Padding(
+          padding: const EdgeInsets.symmetric(
+            horizontal: AppSpacing.screen,
+            vertical: AppSpacing.x3 + 2,
           ),
-          borderRadius: radius,
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              Row(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  const Padding(
+                    padding: EdgeInsets.only(top: 2),
+                    child: Icon(
+                      Icons.info_outline,
+                      size: 18,
+                      color: AppColors.ground,
+                    ),
+                  ),
+                  const SizedBox(width: AppSpacing.x2),
+                  Expanded(
+                    child: Text(
+                      text,
+                      style: AppTextStyles.cardBody.copyWith(
+                        color: AppColors.ground,
+                        fontSize: 14,
+                        fontWeight: FontWeight.w600,
+                        height: 1.4,
+                      ),
+                    ),
+                  ),
+                ],
+              ),
+              if (action != null)
+                Padding(
+                  padding: const EdgeInsets.only(left: 26, top: AppSpacing.x1),
+                  child: DefaultTextStyle.merge(
+                    style: const TextStyle(color: AppColors.ground),
+                    child: action!,
+                  ),
+                ),
+            ],
+          ),
         ),
-        child: body,
       );
     }
 
+    final radius = surface.isGlass ? 6.0 : 4.0;
     return CustomPaint(
       painter: _DashedBorderPainter(
-        color: AppColors.neutral400,
-        radius: surface.cardRadius,
+        color: AppColors.neutral500,
+        radius: radius,
       ),
-      child: body,
+      child: Padding(
+        padding: const EdgeInsets.symmetric(
+          horizontal: AppSpacing.x3 + 2,
+          vertical: AppSpacing.x3,
+        ),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            Text(
+              'ⓘ $text',
+              style: AppTextStyles.cardBody.copyWith(
+                color: AppColors.neutral700,
+                fontSize: 13,
+                height: 1.5,
+              ),
+            ),
+            if (action != null) ...[const SizedBox(height: 3), action!],
+          ],
+        ),
+      ),
     );
   }
 }

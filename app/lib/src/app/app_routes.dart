@@ -1,6 +1,21 @@
 abstract final class AppRoutes {
   static const onboarding = '/onboarding';
+
+  /// The walkthrough. Outside the shell: it is a screen of its own, not a
+  /// tab. `?replay=1` returns to where it was opened from instead of going
+  /// on to the home tab.
+  static const tutorial = '/tutorial';
+
+  /// Address search, full screen. Pushed from onboarding and from the home
+  /// tab's district switch; pops with the chosen `AddressSuggestion`.
+  /// Reachable without a district -- onboarding is where one is chosen.
+  static const addressSearch = '/address-search';
+
+  /// Writing a resident review, full screen over the tabs. Pops with `true`
+  /// once a review is posted.
+  static const reviewCompose = '/review-compose';
   static const home = '/';
+  static const history = '/history';
   static const tracker = '/tracker';
   static const aiMatch = '/ai-match';
   static const community = '/community';
@@ -23,4 +38,11 @@ abstract final class AppRoutes {
   static const algorithmLogSegment = 'log';
 
   static const algorithmLog = '$aiMatch/log';
+
+  /// Direction analysis: policy positions, the incumbent's trend, local
+  /// issues. A sibling of the match under the same tab and the same
+  /// disclosure, reached from the switch at the top of the AI tab.
+  static const aiDirectionSegment = 'direction';
+
+  static const aiDirection = '$aiMatch/direction';
 }

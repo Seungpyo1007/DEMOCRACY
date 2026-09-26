@@ -1,4 +1,6 @@
+import 'package:democracy/src/design/app_motion.dart';
 import 'package:democracy/src/design/app_tokens.dart';
+import 'package:democracy/src/design/components/motion.dart';
 import 'package:democracy/src/features/results/domain/election_results.dart';
 import 'package:flutter/material.dart';
 
@@ -7,8 +9,9 @@ import 'package:flutter/material.dart';
 /// This is N-1 made structural. There is no parameter here that takes a party,
 /// a leader or a winner -- the only thing that reaches the fill is
 /// [DistrictCount.countedShare], so the map cannot become a map of who is
-/// ahead. A district's own outline is the accent, which marks where the reader
-/// lives rather than who is winning there.
+/// ahead. The reader's own district is marked by an inset outline in the
+/// paper's colour: a cut in the tile, not a colour, so it marks where the
+/// reader lives without adding a hue a reader could take for a side.
 ///
 /// Google Maps needs an API key that this build does not have, so the tiles
 /// are stood in for by the mockup's own grid. The shading, the selection and
@@ -19,7 +22,7 @@ class CountMap extends StatelessWidget {
     required this.selectedId,
     required this.homeId,
     required this.onSelected,
-    this.height = 280,
+    this.tileHeight = 96,
     super.key,
   });
 
@@ -30,7 +33,7 @@ class CountMap extends StatelessWidget {
   final String? homeId;
 
   final ValueChanged<DistrictCount> onSelected;
-  final double height;
+  final double tileHeight;
 
   /// Light where little is counted, dark where most is. A single-hue ramp,
   /// because two hues would read as two sides.
@@ -42,56 +45,93 @@ class CountMap extends StatelessWidget {
     )!;
   }
 
+  /// Whichever of white and ink reads better on [fill].
+  ///
+  /// Decided by contrast rather than by a threshold on the share, so the label
+  /// flips exactly where the ramp stops supporting it -- the fill is the datum
+  /// and stays put; the label is what gives way.
+  static Color labelOn(Color fill) {
+    double contrast(Color a, Color b) {
+      final la = a.computeLuminance();
+      final lb = b.computeLuminance();
+      final hi = la > lb ? la : lb;
+      final lo = la > lb ? lb : la;
+      return (hi + 0.05) / (lo + 0.05);
+    }
+
+    return contrast(fill, AppColors.white) >= contrast(fill, AppColors.ink)
+        ? AppColors.white
+        : AppColors.ink;
+  }
+
   @override
   Widget build(BuildContext context) {
-    return SizedBox(
-      height: height,
-      child: ColoredBox(
-        color: AppColors.neutral200,
-        child: Stack(
-          children: [
-            Padding(
-              padding: const EdgeInsets.all(AppSpacing.x3 + 2),
-              child: GridView.count(
-                crossAxisCount: 3,
-                mainAxisSpacing: 2,
-                crossAxisSpacing: 2,
-                physics: const NeverScrollableScrollPhysics(),
-                children: [
-                  for (final district in districts)
-                    _DistrictCell(
-                      district: district,
-                      selected: district.districtId == selectedId,
-                      home: district.districtId == homeId,
-                      onTap: () => onSelected(district),
-                    ),
-                ],
-              ),
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.stretch,
+      mainAxisSize: MainAxisSize.min,
+      children: [
+        ColoredBox(
+          color: AppColors.neutral100,
+          child: Padding(
+            padding: const EdgeInsets.all(2),
+            child: LayoutBuilder(
+              builder: (context, constraints) {
+                final width = (constraints.maxWidth - 2) / 2;
+                return Wrap(
+                  spacing: 2,
+                  runSpacing: 2,
+                  children: [
+                    for (var i = 0; i < districts.length; i++)
+                      SizedBox(
+                        width: width,
+                        height: tileHeight,
+                        child: _DistrictTile(
+                          district: districts[i],
+                          index: i,
+                          selected: districts[i].districtId == selectedId,
+                          home: districts[i].districtId == homeId,
+                          onTap: () => onSelected(districts[i]),
+                        ),
+                      ),
+                  ],
+                );
+              },
             ),
-            const Positioned(right: 10, bottom: 10, child: _CountLegend()),
-          ],
+          ),
         ),
-      ),
+        const SizedBox(height: AppSpacing.x2),
+        const _CountLegend(),
+      ],
     );
   }
 }
 
-class _DistrictCell extends StatelessWidget {
-  const _DistrictCell({
+class _DistrictTile extends StatelessWidget {
+  const _DistrictTile({
     required this.district,
+    required this.index,
     required this.selected,
     required this.home,
     required this.onTap,
   });
 
   final DistrictCount district;
+  final int index;
   final bool selected;
   final bool home;
   final VoidCallback onTap;
 
+  /// '서울 마포구 을' is set as '마포구 을': every tile on the grid shares the
+  /// city, and the tile is too narrow to repeat it. The full name is what the
+  /// screen reader hears.
+  String get _shortName {
+    final words = district.districtName.split(' ');
+    return words.length > 1 ? words.skip(1).join(' ') : district.districtName;
+  }
+
   @override
   Widget build(BuildContext context) {
-    final shade = CountMap.shadeFor(district.countedFraction);
+    final target = district.countedFraction.clamp(0.0, 1.0);
 
     return Semantics(
       button: true,
@@ -102,25 +142,69 @@ class _DistrictCell extends StatelessWidget {
       excludeSemantics: true,
       child: GestureDetector(
         onTap: onTap,
-        child: DecoratedBox(
-          decoration: BoxDecoration(
-            color: shade,
-            border: home
-                ? Border.all(color: AppColors.signal, width: 3)
-                : (selected
-                      ? Border.all(color: AppColors.white, width: 2)
-                      : null),
-          ),
-          child: Center(
-            child: Text(
-              '${district.countedShare.round()}',
-              style: AppTextStyles.badge.copyWith(
-                // Flip the label rather than the fill: the fill is the datum.
-                color: district.countedFraction > 0.55
-                    ? AppColors.white
-                    : AppColors.neutral700,
-              ),
-            ),
+        behavior: HitTestBehavior.opaque,
+        // The tiles shade in from the empty end of the ramp, one after
+        // another: the map arrives the way the count does.
+        child: MotionIn(
+          duration: AppMotion.data,
+          delay: AppMotion.staggerFor(index),
+          curve: AppMotion.dataCurve,
+          builder: (context, t, _) => TweenAnimationBuilder<double>(
+            // Once in, a later count darkens the tile from where it stood.
+            tween: Tween(end: target * t),
+            duration: t < 1 ? Duration.zero : AppMotion.standard,
+            curve: AppMotion.dataCurve,
+            builder: (context, shown, _) {
+              final fill = CountMap.shadeFor(shown);
+              final label = CountMap.labelOn(fill);
+              return DecoratedBox(
+                decoration: BoxDecoration(color: fill),
+                position: DecorationPosition.background,
+                child: DecoratedBox(
+                  position: DecorationPosition.foreground,
+                  decoration: BoxDecoration(
+                    border: home
+                        ? Border.all(color: AppColors.ground, width: 3)
+                        : null,
+                  ),
+                  child: Padding(
+                    padding: const EdgeInsets.all(AppSpacing.x3),
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        Row(
+                          children: [
+                            Expanded(
+                              child: Text(
+                                home ? '$_shortName · 내 지역구' : _shortName,
+                                maxLines: 1,
+                                overflow: TextOverflow.ellipsis,
+                                style: AppTextStyles.ctaSmall.copyWith(
+                                  color: label,
+                                  fontSize: 13,
+                                ),
+                              ),
+                            ),
+                            // The selection is a mark, not a tint: a tint
+                            // would compete with the shade for meaning.
+                            if (selected)
+                              Icon(Icons.circle, size: 8, color: label),
+                          ],
+                        ),
+                        Text(
+                          '${(shown * 100).round()}%',
+                          style: AppTextStyles.figureSmall.copyWith(
+                            color: label,
+                            fontSize: 22,
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
+                ),
+              );
+            },
           ),
         ),
       ),
@@ -133,29 +217,17 @@ class _CountLegend extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return DecoratedBox(
-      decoration: BoxDecoration(
-        color: AppColors.white,
-        border: Border.all(color: AppColors.neutral300),
-      ),
-      child: Padding(
-        padding: const EdgeInsets.symmetric(
-          horizontal: AppSpacing.x2 + 2,
-          vertical: AppSpacing.x2,
-        ),
-        child: Column(
-          mainAxisSize: MainAxisSize.min,
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            Text(
-              '개표율 농도',
-              style: AppTextStyles.statLabel.copyWith(
-                color: AppColors.neutral700,
-              ),
-            ),
-            const SizedBox(height: 3),
-            Container(
-              width: 70,
+    final style = AppTextStyles.disclaimer.copyWith(
+      color: AppColors.neutral600,
+    );
+
+    return ExcludeSemantics(
+      child: Row(
+        children: [
+          Text('개표율 농도', style: style),
+          const SizedBox(width: AppSpacing.x2),
+          Expanded(
+            child: Container(
               height: 8,
               decoration: const BoxDecoration(
                 gradient: LinearGradient(
@@ -163,15 +235,10 @@ class _CountLegend extends StatelessWidget {
                 ),
               ),
             ),
-            const SizedBox(height: 2),
-            Text(
-              '0% — 100%',
-              style: AppTextStyles.statLabel.copyWith(
-                color: AppColors.neutral500,
-              ),
-            ),
-          ],
-        ),
+          ),
+          const SizedBox(width: AppSpacing.x2),
+          Text('0 → 100%', style: style),
+        ],
       ),
     );
   }

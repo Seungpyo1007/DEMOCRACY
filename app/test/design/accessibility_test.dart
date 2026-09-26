@@ -18,23 +18,28 @@ double _contrast(Color a, Color b) {
 
 void main() {
   group('the accent as text', () {
-    // The design system says the accent-to-ground pair is tuned to 3:1 --
-    // enough for icons and chrome, not for body copy -- and that
-    // paragraph-size text in the accent must use accent-700 instead. These
-    // numbers are why that instruction exists.
-    test('is too light for body copy, and accent700 is not', () {
-      for (final ground in [AppColors.white, AppColors.neutral100]) {
+    // Pine is dark enough to be the text colour as well as the fill, which
+    // is part of why it replaced the red: the old signal needed a separate
+    // accent700 for anything paragraph-sized.
+    test('is dark enough for body copy on every page colour', () {
+      for (final ground in [
+        AppColors.white,
+        AppColors.ground,
+        AppColors.neutral100,
+      ]) {
         expect(
           _contrast(AppColors.signal, ground),
-          lessThan(4.5),
-          reason: 'Signal on a page is large-text contrast at best',
-        );
-        expect(
-          _contrast(AppColors.accent700, ground),
           greaterThanOrEqualTo(4.5),
-          reason: 'accent700 is the ramp step that carries text',
+          reason: 'the accent carries text: 번복 labels and margin notes',
         );
       }
+    });
+
+    test('white on the accent clears the body threshold for CTA labels', () {
+      expect(
+        _contrast(AppColors.white, AppColors.signal),
+        greaterThanOrEqualTo(4.5),
+      );
     });
 
     test('still clears the 3:1 that chrome and icons need', () {

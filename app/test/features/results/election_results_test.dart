@@ -6,12 +6,13 @@ import 'package:democracy/src/core/time/clock_providers.dart';
 import 'package:democracy/src/core/time/kst.dart';
 import 'package:democracy/src/design/app_theme.dart';
 import 'package:democracy/src/design/app_tokens.dart';
+import 'package:democracy/src/design/components/native_controls.dart';
 import 'package:democracy/src/features/results/application/results_providers.dart';
 import 'package:democracy/src/features/results/data/fake_results_repository.dart';
 import 'package:democracy/src/features/results/domain/election_results.dart';
 import 'package:democracy/src/features/results/presentation/count_map.dart';
 import 'package:democracy/src/features/results/presentation/election_results_screen.dart';
-import 'package:fl_chart/fl_chart.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_test/flutter_test.dart';
@@ -24,13 +25,12 @@ const _district = DistrictRef(
 );
 
 void main() {
-  /// The LIVE dot pulses forever, so `pumpAndSettle` never returns on this
-  /// screen. A bounded pump is the honest way to wait for one that is
-  /// deliberately never at rest.
-  Future<void> settle(WidgetTester tester) async {
-    await tester.pump();
-    await tester.pump(const Duration(milliseconds: 400));
-  }
+  /// Nothing on this screen loops -- the LIVE dot is still -- so it settles
+  /// like any other. A regression to a pulsing dot hangs these tests, which
+  /// is the point.
+  Future<void> settle(WidgetTester tester) => tester.pumpAndSettle();
+
+  final pollChart = find.byKey(const ValueKey('poll-chart'));
 
   /// The fixture's election closes at 18:00 KST on 15 April 2026, so this is
   /// well clear of both embargoes and is what the existing assertions run
@@ -40,6 +40,7 @@ void main() {
   Future<ProviderContainer> pumpResults(
     WidgetTester tester, {
     KstInstant? now,
+    TargetPlatform platform = TargetPlatform.android,
   }) async {
     tester.view.physicalSize = const Size(390, 844);
     tester.view.devicePixelRatio = 1.0;
@@ -70,7 +71,7 @@ void main() {
       UncontrolledProviderScope(
         container: container,
         child: MaterialApp(
-          theme: AppTheme.light(TargetPlatform.android),
+          theme: AppTheme.light(platform),
           home: const ElectionResultsScreen(),
         ),
       ),
@@ -91,6 +92,13 @@ void main() {
       expect(CountMap.shadeFor(1), AppColors.ink);
     });
 
+    // The fill is the datum, so the label is what gives way: whichever of
+    // white and ink reads on the shade.
+    test('flips the label, never the fill, for contrast', () {
+      expect(CountMap.labelOn(CountMap.shadeFor(0.1)), AppColors.ink);
+      expect(CountMap.labelOn(CountMap.shadeFor(0.9)), AppColors.white);
+    });
+
     testWidgets('reads out the count for a reader who cannot see the shade', (
       tester,
     ) async {
@@ -103,12 +111,111 @@ void main() {
 
     testWidgets('selecting a district moves the panel to it', (tester) async {
       await pumpResults(tester);
-      expect(find.textContaining('서울 마포구 을 · 개표 71%'), findsOneWidget);
+      expect(find.text('서울 마포구 을'), findsOneWidget);
+      expect(find.text('개표 71%'), findsOneWidget);
 
-      await tester.tap(find.text('82'));
+      await tester.tap(find.text('82%'));
       await settle(tester);
 
-      expect(find.textContaining('서울 서대문구 갑 · 개표 82%'), findsOneWidget);
+      expect(find.text('서울 서대문구 갑'), findsOneWidget);
+      expect(find.text('개표 82%'), findsOneWidget);
+    });
+
+    // The reader's district is marked by a cut in the tile and by words, not
+    // by a colour a reader could take for a side.
+    testWidgets('marks the reader\'s own district in words', (tester) async {
+      await pumpResults(tester);
+
+      expect(find.text('마포구 을 · 내 지역구'), findsOneWidget);
+      expect(find.text('개표율 농도'), findsOneWidget);
+    });
+  });
+
+  // iOS floats the panel as glass over the foot of the map; Android sets it
+  // as a flush sheet. The content, and every rule on it, is the same.
+  testWidgets('the iOS panel carries the same count', (tester) async {
+    await pumpResults(tester, platform: TargetPlatform.iOS);
+
+    expect(find.text('서울 마포구 을'), findsOneWidget);
+    expect(find.text('48.2%'), findsOneWidget);
+    expect(find.textContaining('출처 info.nec.go.kr'), findsWidgets);
+  });
+
+  // Everything the reader operates is the platform's own control; the
+  // editorial page underneath is the same on both.
+  group('native chrome', () {
+    testWidgets('Android: M3 large top app bar, SegmentedButton, filled card', (
+      tester,
+    ) async {
+      await pumpResults(tester);
+
+      expect(find.byType(SliverAppBar), findsOneWidget);
+      expect(find.byType(SegmentedButton<int>), findsOneWidget);
+      expect(find.byType(Card), findsOneWidget);
+      expect(find.text('제23대 총선'), findsOneWidget);
+    });
+
+    testWidgets('iOS: large title on the page, no Material app bar', (
+      tester,
+    ) async {
+      await pumpResults(tester, platform: TargetPlatform.iOS);
+
+      expect(find.byType(SliverAppBar), findsNothing);
+      expect(find.byType(SegmentedButton<int>), findsNothing);
+      expect(find.text('실시간 개표'), findsOneWidget);
+      expect(find.text('제23대 총선'), findsOneWidget);
+      expect(find.text('LIVE'), findsOneWidget);
+    });
+
+    testWidgets('the disclosure links are native text buttons', (tester) async {
+      await pumpResults(tester);
+      await tester.tap(find.text('여론조사 비교'));
+      await tester.pumpAndSettle();
+      await tester.tap(find.text('한국갤럽 · 공인 조사'));
+      await tester.pumpAndSettle();
+
+      expect(
+        find.ancestor(
+          of: find.text('질문내용 원문'),
+          matching: find.byWidgetPredicate((w) => w is TextButton),
+        ),
+        findsOneWidget,
+      );
+      expect(find.byIcon(AppIcons.source.material), findsNWidgets(2));
+    });
+
+    testWidgets('iOS: the disclosure links are Cupertino buttons', (
+      tester,
+    ) async {
+      await pumpResults(tester, platform: TargetPlatform.iOS);
+      await tester.tap(find.text('여론조사 비교'));
+      await tester.pumpAndSettle();
+      await tester.tap(find.text('한국갤럽 · 공인 조사'));
+      await tester.pumpAndSettle();
+
+      expect(
+        find.ancestor(
+          of: find.text('중앙선거여론조사심의위원회 등록현황'),
+          matching: find.byType(CupertinoButton),
+        ),
+        findsOneWidget,
+      );
+      expect(find.text('공직선거법 제108조제5항'), findsOneWidget);
+    });
+  });
+
+  group('the national figure', () {
+    testWidgets('counts up to one decimal and names its source', (
+      tester,
+    ) async {
+      final handle = tester.ensureSemantics();
+      await pumpResults(tester);
+
+      expect(find.text('전국 개표율'), findsOneWidget);
+      expect(find.text('67.2%', findRichText: true), findsOneWidget);
+      expect(find.bySemanticsLabel(RegExp(r'67\.2%')), findsOneWidget);
+      expect(find.text('LIVE'), findsOneWidget);
+      handle.dispose();
     });
   });
 
@@ -119,7 +226,10 @@ void main() {
       expect(find.text('48.2%'), findsOneWidget);
       expect(find.text('44.7%'), findsOneWidget);
       expect(find.text('7.1%'), findsOneWidget);
-      expect(find.textContaining('출처: info.nec.go.kr'), findsWidgets);
+      expect(find.textContaining('출처 info.nec.go.kr'), findsWidgets);
+      // Names and parties, but no party colour: the tags are outlines.
+      expect(find.text('나다당'), findsOneWidget);
+      expect(find.text('무소속'), findsOneWidget);
     });
 
     testWidgets('switches between live, historical and polls', (tester) async {
@@ -129,9 +239,14 @@ void main() {
       await settle(tester);
       expect(find.text('역대 득표율'), findsOneWidget);
 
-      await tester.tap(find.textContaining('여론조사'));
+      await tester.tap(find.text('여론조사 비교'));
       await settle(tester);
-      expect(find.text('여론조사 비교'), findsOneWidget);
+      expect(find.text('조사별 추이'), findsOneWidget);
+      expect(pollChart, findsOneWidget);
+
+      await tester.tap(find.text('실시간'));
+      await settle(tester);
+      expect(find.byType(CountMap), findsOneWidget);
     });
 
     // The guide requires the distinction to be visible at all times, so it is
@@ -141,7 +256,7 @@ void main() {
     ) async {
       await pumpResults(tester);
 
-      await tester.tap(find.textContaining('여론조사'));
+      await tester.tap(find.text('여론조사 비교'));
       await settle(tester);
 
       expect(find.text('한국갤럽 · 공인 조사'), findsOneWidget);
@@ -191,10 +306,12 @@ void main() {
       expect(find.text('질문내용 원문'), findsOneWidget);
       expect(find.text('중앙선거여론조사심의위원회 등록현황'), findsOneWidget);
       expect(
-        find.textContaining('nesdc.go.kr'),
+        find.textContaining('https://www.nesdc.go.kr'),
         findsNWidgets(2),
         reason: 'both links are readable, not hidden behind their labels',
       );
+      // The disclosure carries its own provenance, like every other figure.
+      expect(find.textContaining('출처 nesdc.go.kr'), findsOneWidget);
     });
   });
 
@@ -302,8 +419,10 @@ void main() {
       await tester.tap(find.text('여론조사 비교'));
       await settle(tester);
 
-      expect(find.byType(LineChart), findsNothing);
+      expect(pollChart, findsNothing);
       expect(find.text('공직선거법 제108조제1항'), findsOneWidget);
+      expect(find.text('지금은 여론조사 결과를\n표시할 수 없습니다'), findsOneWidget);
+      expect(find.text('공개 시각'), findsOneWidget);
       expect(find.textContaining('4월 15일 18:00'), findsWidgets);
 
       container.dispose();
@@ -322,6 +441,7 @@ void main() {
       // The LIVE dot is a statement about the count, so it goes with it.
       expect(find.text('LIVE'), findsNothing);
       expect(find.textContaining('개표율'), findsNothing);
+      expect(find.text('지금은 개표 결과를\n표시할 수 없습니다'), findsOneWidget);
 
       container.dispose();
     });
@@ -341,7 +461,7 @@ void main() {
       await tester.tap(find.text('여론조사 비교'));
       await settle(tester);
 
-      expect(find.byType(LineChart), findsWidgets);
+      expect(pollChart, findsOneWidget);
       expect(find.text('공직선거법 제108조제1항'), findsNothing);
 
       container.dispose();
