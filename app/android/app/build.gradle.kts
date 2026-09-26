@@ -14,7 +14,9 @@ plugins {
 
 android {
     namespace = "com.democracy.kr.democracy"
-    compileSdk = flutter.compileSdkVersion
+    // flutter_secure_storage 11 compiles against Android 37 and requires its
+    // dependents to as well; Flutter 3.44's default is still 36.
+    compileSdk = 37
     ndkVersion = flutter.ndkVersion
 
     compileOptions {
