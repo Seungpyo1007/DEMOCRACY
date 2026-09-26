@@ -60,6 +60,28 @@ Deno.test("name keys join NEC names and Assembly ORIG_NM", () => {
   assertEquals(districtNameKey("서울특별시", "마포구을"), "서울마포구을");
   assertEquals(assemblyOrigKey("서울 마포구을"), "서울마포구을");
   assertEquals(assemblyOrigKey("대구 동구군위군을"), districtNameKey("대구광역시", "동구군위군을"));
+  // 세종 is a single token in ORIG_NM; NEC keeps the 시도 name in the 선거구.
+  assertEquals(
+    assemblyOrigKey("세종특별자치시을"),
+    districtNameKey("세종특별자치시", "세종특별자치시을"),
+  );
+  // The merged 시도 maps back to the 22대 선거구 it came from.
+  assertEquals(
+    assemblyOrigKey("전남광주통합특별시 광산구갑"),
+    districtNameKey("광주광역시", "광산구갑"),
+  );
+  assertEquals(
+    assemblyOrigKey("전남광주통합특별시 동구남구을"),
+    districtNameKey("광주광역시", "동구남구을"),
+  );
+  assertEquals(
+    assemblyOrigKey("전남광주통합특별시 순천시광양시곡성군구례군갑"),
+    districtNameKey("전라남도", "순천시광양시곡성군구례군갑"),
+  );
+  assertEquals(
+    assemblyOrigKey("전남광주통합특별시 목포시"),
+    districtNameKey("전라남도", "목포시"),
+  );
   assertEquals(assemblyOrigKey("비례대표"), null);
   assertEquals(assemblyOrigKey(null), null);
 });
