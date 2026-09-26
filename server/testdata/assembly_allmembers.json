@@ -1,0 +1,37 @@
+{
+  "ALLNAMEMBER": [
+    {
+      "head": [
+        {
+          "list_total_count": 2
+        },
+        {
+          "RESULT": {
+            "CODE": "INFO-000",
+            "MESSAGE": "정상 처리되었습니다."
+          }
+        }
+      ]
+    },
+    {
+      "row": [
+        {
+          "NAAS_CD": "FAKE0001",
+          "NAAS_NM": "가상 의원",
+          "PLPT_NM": "가나당",
+          "GTELT_ERACO": "제21대, 제22대",
+          "BIRDY_DT": "1970-01-01",
+          "SCRT_NM": "가상 비서",
+          "NAAS_PIC": "https://www.assembly.go.kr/static/portal/img/openassm/new/fake0001.jpg"
+        },
+        {
+          "NAAS_CD": "FAKE0002",
+          "NAAS_NM": "가상 의원 둘",
+          "PLPT_NM": "다라당",
+          "GTELT_ERACO": "제22대",
+          "NAAS_PIC": "https://elsewhere.example.com/fake0002.jpg"
+        }
+      ]
+    }
+  ]
+}

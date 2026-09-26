@@ -1,4 +1,5 @@
 import 'package:democracy/src/core/adaptive/platform_adaptive.dart';
+import 'package:democracy/src/core/network/not_available.dart';
 import 'package:democracy/src/core/provenance/source_metadata.dart';
 import 'package:democracy/src/design/app_tokens.dart';
 import 'package:flutter/material.dart';
@@ -35,6 +36,25 @@ class AsyncSection<T> extends StatelessWidget {
   }
 }
 
+/// The headline and the explanation for a section that did not load.
+///
+/// Three different things, told apart: data that is not ready for this
+/// district, data refused for lacking a source, and a failure to fetch.
+/// Shared so the screens that draw their own error state say the same thing.
+(String, String) describeLoadError(Object error) {
+  return switch (error) {
+    NotAvailableException() => (
+      '아직 준비 중인 자료입니다.',
+      '이 지역구의 자료가 공개 출처에서 정리되는 대로 표시합니다.',
+    ),
+    MissingSourceException() => (
+      '출처가 확인되지 않아 표시하지 않습니다.',
+      '원문 주소와 취득 시각이 확인된 자료만 표시합니다.',
+    ),
+    _ => ('내용을 불러오지 못했습니다.', '연결 상태를 확인한 뒤 다시 시도해 주세요.'),
+  };
+}
+
 class _SectionError extends StatelessWidget {
   const _SectionError({required this.error, this.onRetry});
 
@@ -43,13 +63,9 @@ class _SectionError extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final missingSource = error is MissingSourceException;
-    final message = missingSource
-        ? '출처가 확인되지 않아 표시하지 않습니다.'
-        : '내용을 불러오지 못했습니다.';
-    final detail = missingSource
-        ? '원문 주소와 취득 시각이 확인된 자료만 표시합니다.'
-        : '연결 상태를 확인한 뒤 다시 시도해 주세요.';
+    final (message, detail) = describeLoadError(error);
+    // Retrying cannot produce data that does not exist yet.
+    final onRetry = error is NotAvailableException ? null : this.onRetry;
 
     final surface = Theme.of(context).extension<AppSurfaceTokens>()!;
 

@@ -1,0 +1,52 @@
+{
+  "response": {
+    "header": {
+      "resultCode": "INFO-00",
+      "resultMsg": "NORMAL SERVICE"
+    },
+    "body": {
+      "items": {
+        "item": [
+          {
+            "num": 1,
+            "sgId": "20160413",
+            "sgTypecode": "2",
+            "sgName": "제20대 국회의원선거",
+            "sgVotedate": "20160413"
+          },
+          {
+            "num": 2,
+            "sgId": "20200415",
+            "sgTypecode": "2",
+            "sgName": "제21대 국회의원선거",
+            "sgVotedate": "20200415"
+          },
+          {
+            "num": 3,
+            "sgId": "20240410",
+            "sgTypecode": "2",
+            "sgName": "제22대 국회의원선거",
+            "sgVotedate": "20240410"
+          },
+          {
+            "num": 4,
+            "sgId": "20240410",
+            "sgTypecode": "7",
+            "sgName": "제22대 국회의원선거",
+            "sgVotedate": "20240410"
+          },
+          {
+            "num": 5,
+            "sgId": "20280412",
+            "sgTypecode": "2",
+            "sgName": "제23대 국회의원선거",
+            "sgVotedate": "20280412"
+          }
+        ]
+      },
+      "numOfRows": 100,
+      "pageNo": 1,
+      "totalCount": 5
+    }
+  }
+}

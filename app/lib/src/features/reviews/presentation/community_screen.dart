@@ -2,6 +2,7 @@ import 'package:democracy/src/app/app_routes.dart';
 import 'package:democracy/src/core/adaptive/platform_adaptive.dart';
 import 'package:democracy/src/core/auth/address_controller.dart';
 import 'package:democracy/src/core/auth/verified_gate.dart';
+import 'package:democracy/src/core/network/not_available.dart';
 import 'package:democracy/src/design/app_motion.dart';
 import 'package:democracy/src/design/app_tokens.dart';
 import 'package:democracy/src/design/components/app_card.dart';
@@ -483,9 +484,15 @@ class _ChannelTab extends ConsumerWidget {
               padding: const EdgeInsets.symmetric(vertical: AppSpacing.x8),
               child: Center(child: PlatformAdaptiveProgress.circular(context)),
             ),
-            error: (error, _) => const Padding(
-              padding: EdgeInsets.symmetric(vertical: AppSpacing.x8),
-              child: Center(child: Text('채팅을 불러오지 못했습니다.')),
+            error: (error, _) => Padding(
+              padding: const EdgeInsets.symmetric(vertical: AppSpacing.x8),
+              child: Center(
+                child: Text(
+                  error is NotAvailableException
+                      ? '지역구 채팅은 아직 준비 중입니다.'
+                      : '채팅을 불러오지 못했습니다.',
+                ),
+              ),
             ),
             // A column rather than a lazy list so each message keeps its
             // element by key: a new message rises in on its own instead of

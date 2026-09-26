@@ -1,0 +1,96 @@
+{
+  "nojepdqqaweusdfbi": [
+    {
+      "head": [
+        {
+          "list_total_count": 3
+        },
+        {
+          "RESULT": {
+            "CODE": "INFO-000",
+            "MESSAGE": "정상 처리되었습니다."
+          }
+        }
+      ]
+    },
+    {
+      "row": [
+        {
+          "HG_NM": "가상 의원",
+          "HJ_NM": null,
+          "POLY_NM": "가나당",
+          "ORIG_NM": "서울 마포구을",
+          "MEMBER_NO": "2200000000000",
+          "POLY_CD": "000000",
+          "ORIG_CD": "000000",
+          "VOTE_DATE": "20260512 153000",
+          "BILL_NO": "2200001",
+          "BILL_NAME": "역세권 청년주택 공급 촉진법 일부개정법률안",
+          "BILL_ID": "PRC_FAKE0001",
+          "LAW_TITLE": "역세권 청년주택 공급 촉진법",
+          "CURR_COMMITTEE": "국토교통위원회",
+          "RESULT_VOTE_MOD": "찬성",
+          "DEPT_CD": "0",
+          "CURR_COMMITTEE_ID": "9700000",
+          "DISP_ORDER": 0,
+          "BILL_URL": "http://likms.assembly.go.kr/bill/billDetail.do?billId=PRC_FAKE0001",
+          "BILL_NAME_URL": "",
+          "SESSION_CD": 430,
+          "CURRENTS_CD": 5,
+          "AGE": 22,
+          "MONA_CD": "FAKE0001"
+        },
+        {
+          "HG_NM": "가상 의원 둘",
+          "HJ_NM": null,
+          "POLY_NM": "가나당",
+          "ORIG_NM": "서울 마포구을",
+          "MEMBER_NO": "2200000000000",
+          "POLY_CD": "000000",
+          "ORIG_CD": "000000",
+          "VOTE_DATE": "20260512 153000",
+          "BILL_NO": "2200001",
+          "BILL_NAME": "역세권 청년주택 공급 촉진법 일부개정법률안",
+          "BILL_ID": "PRC_FAKE0001",
+          "LAW_TITLE": "역세권 청년주택 공급 촉진법",
+          "CURR_COMMITTEE": "국토교통위원회",
+          "RESULT_VOTE_MOD": "불참",
+          "DEPT_CD": "0",
+          "CURR_COMMITTEE_ID": "9700000",
+          "DISP_ORDER": 0,
+          "BILL_URL": "http://likms.assembly.go.kr/bill/billDetail.do?billId=PRC_FAKE0001",
+          "BILL_NAME_URL": "",
+          "SESSION_CD": 430,
+          "CURRENTS_CD": 5,
+          "AGE": 22,
+          "MONA_CD": "FAKE0002"
+        },
+        {
+          "HG_NM": "가상 의원 셋",
+          "HJ_NM": null,
+          "POLY_NM": "가나당",
+          "ORIG_NM": "서울 마포구을",
+          "MEMBER_NO": "2200000000000",
+          "POLY_CD": "000000",
+          "ORIG_CD": "000000",
+          "VOTE_DATE": "20260512 153000",
+          "BILL_NO": "2200001",
+          "BILL_NAME": "역세권 청년주택 공급 촉진법 일부개정법률안",
+          "BILL_ID": "PRC_FAKE0001",
+          "LAW_TITLE": "역세권 청년주택 공급 촉진법",
+          "CURR_COMMITTEE": "국토교통위원회",
+          "RESULT_VOTE_MOD": "기권",
+          "DEPT_CD": "0",
+          "CURR_COMMITTEE_ID": "9700000",
+          "DISP_ORDER": 0,
+          "BILL_URL": "http://likms.assembly.go.kr/bill/billDetail.do?billId=PRC_FAKE0001",
+          "BILL_NAME_URL": "",
+          "SESSION_CD": 430,
+          "CURRENTS_CD": 5,
+          "AGE": 22,
+          "MONA_CD": "FAKE0003"
+        }
+      ]
+    }
+  ]
+}

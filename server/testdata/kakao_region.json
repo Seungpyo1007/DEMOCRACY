@@ -1,0 +1,27 @@
+{
+  "meta": {
+    "total_count": 2
+  },
+  "documents": [
+    {
+      "region_type": "B",
+      "code": "1144012300",
+      "address_name": "서울특별시 마포구 망원동",
+      "region_1depth_name": "서울특별시",
+      "region_2depth_name": "마포구",
+      "region_3depth_name": "망원동",
+      "x": 126.9,
+      "y": 37.55
+    },
+    {
+      "region_type": "H",
+      "code": "1144069000",
+      "address_name": "서울특별시 마포구 망원1동",
+      "region_1depth_name": "서울특별시",
+      "region_2depth_name": "마포구",
+      "region_3depth_name": "망원1동",
+      "x": 126.9,
+      "y": 37.55
+    }
+  ]
+}

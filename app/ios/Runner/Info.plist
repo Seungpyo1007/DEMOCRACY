@@ -66,5 +66,7 @@
 		<string>UIInterfaceOrientationLandscapeLeft</string>
 		<string>UIInterfaceOrientationLandscapeRight</string>
 	</array>
+	<key>NSLocationWhenInUseUsageDescription</key>
+	<string>현재 위치로 내 지역구를 찾는 데만 사용하며, 위치는 저장하지 않습니다.</string>
 </dict>
 </plist>

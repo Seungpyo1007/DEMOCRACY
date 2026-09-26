@@ -1,0 +1,27 @@
+# Supabase CLI config. Only the parts this project relies on; everything else
+# uses CLI defaults. `supabase link --project-ref <ref>` before `db push`.
+project_id = "democracy"
+
+[api]
+enabled = true
+# The app never reads tables directly; only the `bff` function is public.
+schemas = ["public"]
+max_rows = 1000
+
+[db]
+major_version = 17
+
+[db.seed]
+enabled = true
+sql_paths = ["./seed.sql"]
+
+# Read API for the app. Requests carry the anon key as `apikey` + Bearer.
+[functions.bff]
+verify_jwt = true
+
+# Called only by pg_cron/pg_net with the x-ingest-secret header; no user JWT.
+[functions.ingest-assembly]
+verify_jwt = false
+
+[functions.ingest-nec]
+verify_jwt = false
