@@ -79,7 +79,8 @@ A success is `200 {"servedAt": ISO-UTC, "data": {...}}`. An error is non-2xx
 Account routes need a user access token; the anon key alone is `401 unauthorized`. They are never
 cached (`no-store`). "Me" below is `{profile|null, consents, residency|null}`:
 
-- profile: `{handle, provider, email, notify, handleChangedAt, handleChangeAvailableAt, createdAt}`
+- profile:
+  `{userId, handle, provider, email, notify, handleChangedAt, handleChangeAvailableAt, createdAt}`
 - consents: `[{kind, version, granted, at}]`, kind one of `age14`, `terms`, `privacy`, `notify`
 
 | Route                           | Body → data                                                                                         |
