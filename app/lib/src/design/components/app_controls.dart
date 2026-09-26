@@ -38,7 +38,7 @@ class AppFilterChip extends StatelessWidget {
 
     final duration = AppMotion.reduced(context)
         ? Duration.zero
-        : AppMotion.quick;
+        : AppMotion.fast;
 
     // iOS has no system chip, so this one is drawn. Selection is ink fill and
     // a tick: a state carried by colour alone is a state some readers cannot
@@ -55,7 +55,7 @@ class AppFilterChip extends StatelessWidget {
           borderRadius: radius,
           child: AnimatedContainer(
             duration: duration,
-            curve: AppMotion.standardCurve,
+            curve: AppMotion.settle,
             constraints: const BoxConstraints(minHeight: 40),
             padding: const EdgeInsets.symmetric(horizontal: AppSpacing.x3 + 2),
             decoration: BoxDecoration(
@@ -188,7 +188,7 @@ class AppSegmentedControl extends StatelessWidget {
 
     final duration = AppMotion.reduced(context)
         ? Duration.zero
-        : AppMotion.standard;
+        : AppMotion.base;
 
     if (surface.isGlass) {
       // A tinted track with a white pill that slides to the selection.
@@ -210,7 +210,7 @@ class AppSegmentedControl extends StatelessWidget {
               children: [
                 AnimatedPositioned(
                   duration: duration,
-                  curve: AppMotion.emphasizedCurve,
+                  curve: AppMotion.sheet,
                   left: segment * selectedIndex,
                   top: 0,
                   bottom: 0,

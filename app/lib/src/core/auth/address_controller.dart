@@ -1,3 +1,4 @@
+import 'package:democracy/src/core/account/account.dart';
 import 'package:democracy/src/core/auth/address_state.dart';
 import 'package:democracy/src/core/auth/address_store.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -52,6 +53,71 @@ class AddressController extends Notifier<AddressState> {
     required ResidencyVerificationProof proof,
   }) {
     _set(AddressState.verified(district: district, proof: proof));
+  }
+
+  /// Records a residency the server just granted. The district becomes the
+  /// resident's own: that is what they verified.
+  void adoptResidency(ResidencyGrant grant, {required String userId}) {
+    final residency = grant.residency;
+    _set(
+      AddressState.verified(
+        district: DistrictRef(
+          id: residency.districtId,
+          displayName: residency.displayName,
+        ),
+        proof: ResidencyVerificationProof(
+          opaqueToken: grant.token,
+          verifiedAt: residency.verifiedAt,
+          userId: userId,
+          expiresAt: residency.expiresAt,
+        ),
+      ),
+    );
+  }
+
+  /// Back to reading: signed out, account deleted, or residency withdrawn.
+  /// The district stays, so the home screen does not go blank.
+  ///
+  /// A proof with no account behind it -- from a build without accounts --
+  /// is left alone; `LiveAddressStore` retires those in a build with a BFF.
+  void dropResidency() {
+    final proof = state.verification;
+    if (state.isVerified && proof?.userId != null) {
+      _set(AddressState.readOnly(district: state.district));
+    }
+  }
+
+  /// Brings the stored status in line with what the account says after a
+  /// sign-in or a restore: a proof for someone else, or an expired one, is
+  /// dropped; a residency the account holds for this district is shown.
+  void reconcileResidency({
+    required String userId,
+    required Residency? residency,
+    required DateTime now,
+  }) {
+    final valid = residency != null && residency.isValidAt(now);
+    final proof = state.verification;
+    final district = state.district;
+
+    if (state.isVerified &&
+        (!valid ||
+            proof?.userId != userId ||
+            district?.id != residency.districtId)) {
+      _set(AddressState.readOnly(district: district));
+      return;
+    }
+    if (valid && !state.isVerified && district?.id == residency.districtId) {
+      _set(
+        AddressState.verified(
+          district: district!,
+          proof: ResidencyVerificationProof.ofAccount(
+            userId: userId,
+            verifiedAt: residency.verifiedAt,
+            expiresAt: residency.expiresAt,
+          ),
+        ),
+      );
+    }
   }
 
   /// Adopts a session read back from [AddressStore] at launch.

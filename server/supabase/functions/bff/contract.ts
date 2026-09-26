@@ -204,7 +204,19 @@ export function validateEnvelope(json: unknown, expectError: boolean): string[] 
   }
   if (expectError) {
     const e = json.error;
-    const codes = ["not_found", "no_match", "not_curated", "bad_request", "upstream", "internal"];
+    const codes = [
+      "not_found",
+      "no_match",
+      "not_curated",
+      "bad_request",
+      "upstream",
+      "internal",
+      "unauthorized",
+      "forbidden",
+      "consent_required",
+      "conflict",
+      "too_soon",
+    ];
     if (!isMap(e) || !codes.includes(e.code as string) || typeof e.message !== "string") {
       errs.push("envelope: error {code, message}");
     }

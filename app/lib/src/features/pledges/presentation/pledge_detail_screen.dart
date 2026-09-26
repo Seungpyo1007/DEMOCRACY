@@ -1,3 +1,4 @@
+import 'package:democracy/src/design/app_motion.dart';
 import 'package:democracy/src/design/app_tokens.dart';
 import 'package:democracy/src/design/components/app_labels.dart';
 import 'package:democracy/src/design/components/app_timeline.dart';
@@ -156,10 +157,7 @@ List<Widget> _detail(Pledge pledge) {
     const SizedBox(height: AppSpacing.x4),
     const Align(
       alignment: AlignmentDirectional.centerStart,
-      child: MarginNote(
-        '판정 근거는 모두 원문으로 연결됩니다',
-        delay: Duration(milliseconds: 600),
-      ),
+      child: MarginNote('판정 근거는 모두 원문으로 연결됩니다', delay: AppMotion.slow),
     ),
   ];
 }

@@ -14,9 +14,9 @@ import 'package:flutter/material.dart';
 class MotionIn extends StatefulWidget {
   const MotionIn({
     required this.builder,
-    this.duration = AppMotion.standard,
+    this.duration = AppMotion.base,
     this.delay = Duration.zero,
-    this.curve = AppMotion.standardCurve,
+    this.curve = AppMotion.settle,
     this.child,
     super.key,
   });
@@ -82,7 +82,7 @@ class _MotionInState extends State<MotionIn>
   }
 }
 
-/// Fades a child in and lifts it 12dp into place.
+/// Fades a child in and lifts it [AppMotion.rise] into place.
 ///
 /// Give siblings consecutive [index]es and they arrive one after another.
 class RevealIn extends StatelessWidget {
@@ -99,7 +99,7 @@ class RevealIn extends StatelessWidget {
       builder: (context, t, child) => Opacity(
         opacity: t,
         child: Transform.translate(
-          offset: Offset(0, 12 * (1 - t)),
+          offset: Offset(0, AppMotion.rise * (1 - t)),
           child: child,
         ),
       ),
@@ -124,22 +124,21 @@ class MotionSize extends StatelessWidget {
       return child;
     }
     return AnimatedSize(
-      duration: AppMotion.standard,
-      curve: AppMotion.standardCurve,
+      duration: AppMotion.base,
+      curve: AppMotion.settle,
       alignment: Alignment.topCenter,
       child: child,
     );
   }
 }
 
-/// A figure that counts up from zero to [value] when it first appears, and
-/// from its old value to its new one when [value] changes.
+/// A figure set large, with an optional smaller unit after it.
 ///
-/// Screen readers get the final value only. An announcement that walks
-/// through every intermediate number would be noise, and one read mid-count
-/// would be wrong.
-class CountUp extends StatelessWidget {
-  const CountUp({
+/// It settles into place like a row and shows its final value from the first
+/// frame it is visible. It never counts up: ticking through numbers the
+/// record does not contain would dramatise a value that should only be read.
+class Figure extends StatelessWidget {
+  const Figure({
     required this.value,
     required this.style,
     this.fractionDigits = 0,
@@ -158,40 +157,267 @@ class CountUp extends StatelessWidget {
   final TextStyle? unitStyle;
   final Duration delay;
 
-  String _format(double v) => v.toStringAsFixed(fractionDigits);
+  @override
+  Widget build(BuildContext context) {
+    final text = value.toDouble().toStringAsFixed(fractionDigits);
+    return Semantics(
+      label: '$text${unit ?? ''}',
+      excludeSemantics: true,
+      child: MotionIn(
+        delay: delay,
+        builder: (context, t, child) => Opacity(
+          opacity: t,
+          child: Transform.translate(
+            offset: Offset(0, AppMotion.rise * (1 - t)),
+            child: child,
+          ),
+        ),
+        child: Text.rich(
+          TextSpan(
+            text: text,
+            style: style,
+            children: [
+              if (unit != null) TextSpan(text: unit, style: unitStyle ?? style),
+            ],
+          ),
+        ),
+      ),
+    );
+  }
+}
+
+/// Reveals its child left to right, as a pen would write it. Nothing fades:
+/// the part not yet written is simply not there.
+class WriteIn extends StatelessWidget {
+  const WriteIn({required this.child, this.delay = Duration.zero, super.key});
+
+  final Widget child;
+  final Duration delay;
 
   @override
   Widget build(BuildContext context) {
-    final target = value.toDouble();
-    final label = '${_format(target)}${unit ?? ''}';
+    return MotionIn(
+      duration: AppMotion.write,
+      delay: delay,
+      curve: AppMotion.writeCurve,
+      child: child,
+      builder: (context, t, child) =>
+          t >= 1 ? child! : ClipRect(clipper: _WrittenSoFar(t), child: child),
+    );
+  }
+}
 
-    return Semantics(
-      label: label,
-      excludeSemantics: true,
-      child: MotionIn(
-        duration: AppMotion.data,
-        delay: delay,
-        curve: AppMotion.dataCurve,
-        builder: (context, t, _) {
-          return TweenAnimationBuilder<double>(
-            // Once the entrance has run, a later change animates from where
-            // the figure stands rather than from zero again.
-            tween: Tween(end: target * t),
-            duration: t < 1 ? Duration.zero : AppMotion.standard,
-            curve: AppMotion.dataCurve,
-            builder: (context, shown, _) => Text.rich(
-              TextSpan(
-                text: _format(shown),
-                style: style,
-                children: [
-                  if (unit != null)
-                    TextSpan(text: unit, style: unitStyle ?? style),
-                ],
+class _WrittenSoFar extends CustomClipper<Rect> {
+  _WrittenSoFar(this.progress);
+
+  final double progress;
+
+  // Generous vertically so descenders and the underline's wobble are kept.
+  @override
+  Rect getClip(Size size) =>
+      Rect.fromLTWH(0, -size.height, size.width * progress, size.height * 3);
+
+  @override
+  bool shouldReclip(_WrittenSoFar old) => old.progress != progress;
+}
+
+/// The 2px ink rule over a section, drawn left to right.
+class InkRule extends StatelessWidget {
+  const InkRule({
+    this.color = AppColors.ink,
+    this.thickness = 2,
+    this.delay = Duration.zero,
+    super.key,
+  });
+
+  final Color color;
+  final double thickness;
+  final Duration delay;
+
+  @override
+  Widget build(BuildContext context) {
+    return MotionIn(
+      duration: AppMotion.slow,
+      delay: delay,
+      curve: AppMotion.ink,
+      builder: (context, t, _) => SizedBox(
+        height: thickness,
+        width: double.infinity,
+        child: Align(
+          alignment: AlignmentDirectional.centerStart,
+          child: FractionallySizedBox(
+            widthFactor: t,
+            heightFactor: 1,
+            child: ColoredBox(color: color),
+          ),
+        ),
+      ),
+    );
+  }
+}
+
+/// Shakes its child once when it first appears -- an error that arrived.
+class ShakeOnce extends StatelessWidget {
+  const ShakeOnce({required this.child, this.delay = Duration.zero, super.key});
+
+  final Widget child;
+  final Duration delay;
+
+  // Damped: -6, 5, -3, 2, 0 across the shake.
+  static double _offset(double t) {
+    const peaks = [0.0, -6.0, 5.0, -3.0, 2.0, 0.0];
+    final x = t * (peaks.length - 1);
+    final i = x.floor().clamp(0, peaks.length - 2);
+    final f = x - i;
+    return peaks[i] + (peaks[i + 1] - peaks[i]) * f;
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return MotionIn(
+      duration: AppMotion.shake,
+      delay: delay,
+      curve: Curves.linear,
+      child: child,
+      builder: (context, t, child) =>
+          Transform.translate(offset: Offset(_offset(t), 0), child: child),
+    );
+  }
+}
+
+/// Shrinks its child slightly while pressed.
+///
+/// Listens to raw pointers so it wraps any button without taking its tap.
+class PressScale extends StatefulWidget {
+  const PressScale({required this.child, super.key});
+
+  final Widget child;
+
+  @override
+  State<PressScale> createState() => _PressScaleState();
+}
+
+class _PressScaleState extends State<PressScale> {
+  bool _down = false;
+
+  void _set(bool down) {
+    if (_down != down) {
+      setState(() => _down = down);
+    }
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    final reduced = AppMotion.reduced(context);
+    return Listener(
+      onPointerDown: (_) => _set(true),
+      onPointerUp: (_) => _set(false),
+      onPointerCancel: (_) => _set(false),
+      child: AnimatedScale(
+        scale: _down && !reduced ? AppMotion.pressScale : 1,
+        duration: reduced ? Duration.zero : AppMotion.fast,
+        curve: AppMotion.settle,
+        child: widget.child,
+      ),
+    );
+  }
+}
+
+/// Repeats [builder] with a 0..1..0 phase while [AppMotion.loops] allows it,
+/// and shows phase 0 otherwise. Only the live marker and a text caret use it.
+class _Loop extends StatefulWidget {
+  const _Loop({required this.period, required this.builder});
+
+  final Duration period;
+  final Widget Function(BuildContext context, double phase) builder;
+
+  @override
+  State<_Loop> createState() => _LoopState();
+}
+
+class _LoopState extends State<_Loop> with SingleTickerProviderStateMixin {
+  late final AnimationController _controller = AnimationController(
+    vsync: this,
+    duration: widget.period,
+  );
+
+  @override
+  void didChangeDependencies() {
+    super.didChangeDependencies();
+    if (AppMotion.loops(context)) {
+      if (!_controller.isAnimating) {
+        _controller.repeat();
+      }
+    } else {
+      _controller
+        ..stop()
+        ..value = 0;
+    }
+  }
+
+  @override
+  void dispose() {
+    _controller.dispose();
+    super.dispose();
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return AnimatedBuilder(
+      animation: _controller,
+      builder: (context, _) => widget.builder(context, _controller.value),
+    );
+  }
+}
+
+/// The dot beside LIVE: breathes while a count is running.
+class LivePulse extends StatelessWidget {
+  const LivePulse({this.size = 7, this.color = AppColors.signal, super.key});
+
+  final double size;
+  final Color color;
+
+  @override
+  Widget build(BuildContext context) {
+    return _Loop(
+      period: const Duration(milliseconds: 1600),
+      builder: (context, phase) {
+        final wave = 1 - (2 * phase - 1).abs(); // 0 at the ends, 1 mid-way
+        return Opacity(
+          opacity: 1 - 0.65 * wave,
+          child: Transform.scale(
+            scale: 1 - 0.2 * wave,
+            child: SizedBox.square(
+              dimension: size,
+              child: DecoratedBox(
+                decoration: BoxDecoration(color: color, shape: BoxShape.circle),
               ),
             ),
-          );
-        },
-      ),
+          ),
+        );
+      },
+    );
+  }
+}
+
+/// Blinks between [on] and [off] -- the border of the focused code cell.
+class Caret extends StatelessWidget {
+  const Caret({
+    required this.on,
+    required this.off,
+    required this.builder,
+    super.key,
+  });
+
+  final Color on;
+  final Color off;
+  final Widget Function(BuildContext context, Color color) builder;
+
+  @override
+  Widget build(BuildContext context) {
+    return _Loop(
+      period: const Duration(milliseconds: 1050),
+      builder: (context, phase) => builder(context, phase < 0.5 ? on : off),
     );
   }
 }
@@ -224,15 +450,15 @@ class GrowBar extends StatelessWidget {
       child: ColoredBox(
         color: trackColor,
         child: MotionIn(
-          duration: AppMotion.data,
+          duration: AppMotion.slow,
           delay: delay,
-          curve: AppMotion.dataCurve,
+          curve: AppMotion.ink,
           // After the entrance, a new value animates from the old one instead
           // of snapping -- the live count grows in place.
           builder: (context, t, _) => TweenAnimationBuilder<double>(
             tween: Tween(end: target * t),
-            duration: t < 1 ? Duration.zero : AppMotion.standard,
-            curve: AppMotion.dataCurve,
+            duration: t < 1 ? Duration.zero : AppMotion.base,
+            curve: AppMotion.ink,
             builder: (context, shown, _) => Align(
               alignment: AlignmentDirectional.centerStart,
               child: FractionallySizedBox(
@@ -270,9 +496,9 @@ class HandUnderline extends StatelessWidget {
   Widget build(BuildContext context) {
     return ExcludeSemantics(
       child: MotionIn(
-        duration: AppMotion.draw,
+        duration: AppMotion.write,
         delay: delay,
-        curve: AppMotion.drawCurve,
+        curve: AppMotion.writeCurve,
         builder: (context, t, _) => SizedBox(
           width: width ?? double.infinity,
           height: 8,
@@ -339,7 +565,7 @@ class DrawnLine extends StatelessWidget {
     return MotionIn(
       duration: AppMotion.draw,
       delay: delay,
-      curve: AppMotion.drawCurve,
+      curve: AppMotion.ink,
       builder: (context, t, _) => CustomPaint(
         size: Size.infinite,
         painter: _LinePainter(

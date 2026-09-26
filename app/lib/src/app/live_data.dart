@@ -1,3 +1,7 @@
+import 'package:democracy/src/core/account/account_repository.dart';
+import 'package:democracy/src/core/account/auth_config.dart';
+import 'package:democracy/src/core/account/auth_controller.dart';
+import 'package:democracy/src/core/account/gotrue_auth_repository.dart';
 import 'package:democracy/src/core/auth/address_state.dart';
 import 'package:democracy/src/core/auth/address_store.dart';
 import 'package:democracy/src/core/network/bff_client.dart';
@@ -22,6 +26,7 @@ import 'package:democracy/src/features/reviews/application/review_providers.dart
 import 'package:democracy/src/features/reviews/domain/resident_review.dart';
 import 'package:democracy/src/features/reviews/domain/review_draft.dart';
 import 'package:democracy/src/features/reviews/domain/review_repository.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter_riverpod/misc.dart';
 
 /// Every override a build with a BFF needs, or none without one.
@@ -36,11 +41,26 @@ List<Override> liveDataOverrides(BffConfig? config) {
     return const [];
   }
 
+  final authConfig = AuthConfig.fromEnvironment();
+  final auth = GoTrueAuthRepository(
+    // The BFF lives at <project>/functions/v1/bff; auth at <project>/auth/v1.
+    projectUrl: config.baseUrl.replace(path: '/'),
+    anonKey: config.anonKey,
+    config: authConfig,
+  );
   final client = BffClient.fromConfig(
     config,
     cache: SharedPreferencesResponseCache(),
+    userToken: auth.accessToken,
   );
   return [
+    authRepositoryProvider.overrideWithValue(auth),
+    accountRepositoryProvider.overrideWithValue(
+      RemoteAccountRepository(client),
+    ),
+    signInProvidersProvider.overrideWith(
+      (ref) => authConfig.available(defaultTargetPlatform),
+    ),
     districtRepositoryProvider.overrideWithValue(
       RemoteDistrictRepository(client),
     ),
@@ -69,7 +89,8 @@ List<Override> liveDataOverrides(BffConfig? config) {
   ];
 }
 
-/// Forgets a district saved while the app ran on fixtures.
+/// Forgets a district saved while the app ran on fixtures, and a residency
+/// that no account stands behind.
 ///
 /// A fixture id means nothing to the BFF, so restoring one would open on an
 /// empty home. Sending the resident back to onboarding once is the honest
@@ -86,6 +107,15 @@ class LiveAddressStore implements AddressStore {
     if (id != null && id.startsWith('fixture-')) {
       await inner.clear();
       return null;
+    }
+    // A residency with no account behind it was made by a build without
+    // accounts; here residency belongs to an account, so it is read-only.
+    if (stored != null &&
+        stored.isVerified &&
+        stored.verification?.userId == null) {
+      final downgraded = AddressState.readOnly(district: stored.district);
+      await inner.write(downgraded);
+      return downgraded;
     }
     return stored;
   }

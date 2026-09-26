@@ -1,6 +1,7 @@
 import 'dart:ui' show lerpDouble;
 
 import 'package:cupertino_native_better/cupertino_native_better.dart';
+import 'package:democracy/src/design/app_motion.dart';
 import 'package:democracy/src/design/app_tokens.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -290,8 +291,8 @@ class _CapsuleTabStrip extends StatelessWidget {
     required this.minimized,
   });
 
-  static const _duration = Duration(milliseconds: 280);
-  static const _curve = Curves.easeOutCubic;
+  static const _duration = AppMotion.base;
+  static const _curve = AppMotion.settle;
 
   /// Six destinations have to fit a 390dp screen with the capsule's inset,
   /// so items are 56 wide rather than the 64 five of them could have.
@@ -725,8 +726,8 @@ class _AccessorySwitcher extends StatelessWidget {
   Widget build(BuildContext context) {
     final reduced = MediaQuery.maybeDisableAnimationsOf(context) ?? false;
     return AnimatedSwitcher(
-      duration: reduced ? Duration.zero : const Duration(milliseconds: 360),
-      switchInCurve: const Cubic(0.05, 0.7, 0.1, 1),
+      duration: reduced ? Duration.zero : AppMotion.base,
+      switchInCurve: AppMotion.sheet,
       switchOutCurve: Curves.easeInCubic,
       transitionBuilder: (child, animation) => FadeTransition(
         opacity: animation,

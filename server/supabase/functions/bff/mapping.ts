@@ -95,3 +95,28 @@ export async function districtForHdong(
   const [d] = await store.districtsBySggCodes(CURRENT_DISTRICT_SG_ID, [code]);
   return d ? { id: d.id, displayName: d.display_name } : null;
 }
+
+/**
+ * The district of one address the user picked, for resident verification. Stricter than
+ * suggestionsFor: juso is searched with the full road address, and only results whose
+ * roadAddr is that address count (or the sole result, when juso returns one). Every
+ * such result must map, and all to the same district; otherwise null. The client's own
+ * idea of the district is never asked for.
+ */
+export async function districtForRoadAddress(
+  store: ReadStore,
+  found: JusoAddress[],
+  roadAddress: string,
+): Promise<DistrictRef | null> {
+  const norm = (s: string) => s.replace(/\s+/g, " ").trim();
+  const wanted = norm(roadAddress);
+  const exact = found.filter((a) => norm(a.roadAddr) === wanted);
+  const candidates = exact.length > 0 ? exact : found.length === 1 ? found : [];
+  if (candidates.length === 0) return null;
+  // One at a time: suggestionsFor merges equal addresses, which could hide a split.
+  const each = await Promise.all(candidates.map((a) => suggestionsFor(store, [a])));
+  if (each.some((s) => s.length === 0)) return null;
+  const ids = new Set(each.map((s) => s[0].district.id));
+  if (ids.size !== 1) return null;
+  return each[0][0].district;
+}

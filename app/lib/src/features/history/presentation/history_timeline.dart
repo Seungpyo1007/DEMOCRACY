@@ -187,7 +187,7 @@ class _GrowingRule extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MotionIn(
-      duration: AppMotion.emphasized,
+      duration: AppMotion.slow,
       delay: AppMotion.staggerFor(index + 1),
       builder: (context, t, _) => Align(
         alignment: Alignment.topCenter,

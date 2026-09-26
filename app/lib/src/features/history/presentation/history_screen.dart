@@ -119,8 +119,8 @@ class _HistoryScreenState extends ConsumerState<HistoryScreen> {
       } else {
         await _scroll.animateTo(
           target,
-          duration: AppMotion.emphasized,
-          curve: AppMotion.emphasizedCurve,
+          duration: AppMotion.slow,
+          curve: AppMotion.sheet,
         );
       }
     } finally {
@@ -465,7 +465,7 @@ class _ElectionRowView extends StatelessWidget {
             ),
           ),
           const SizedBox(width: 10),
-          CountUp(
+          Figure(
             value: row.share!,
             fractionDigits: 1,
             unit: '%',

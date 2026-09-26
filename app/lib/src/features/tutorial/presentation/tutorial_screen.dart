@@ -67,10 +67,7 @@ class _TutorialScreenState extends ConsumerState<TutorialScreen> {
       _pages.jumpToPage(_index + 1);
       return;
     }
-    _pages.nextPage(
-      duration: AppMotion.standard,
-      curve: AppMotion.emphasizedCurve,
-    );
+    _pages.nextPage(duration: AppMotion.base, curve: AppMotion.sheet);
   }
 
   @override
@@ -198,7 +195,7 @@ class _Dots extends StatelessWidget {
   Widget build(BuildContext context) {
     final duration = AppMotion.reduced(context)
         ? Duration.zero
-        : AppMotion.standard;
+        : AppMotion.base;
     return Semantics(
       label: '$count쪽 중 ${index + 1}쪽',
       excludeSemantics: true,
@@ -208,7 +205,7 @@ class _Dots extends StatelessWidget {
           for (var i = 0; i < count; i++)
             AnimatedContainer(
               duration: duration,
-              curve: AppMotion.emphasizedCurve,
+              curve: AppMotion.sheet,
               margin: const EdgeInsets.symmetric(horizontal: 3),
               width: i == index ? 22 : 7,
               height: 7,
@@ -303,7 +300,7 @@ class _CoverIllustration extends StatelessWidget {
       mainAxisSize: MainAxisSize.min,
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        CountUp(
+        Figure(
           value: 58,
           unit: '%',
           style: AppTextStyles.figureHero.copyWith(color: AppColors.ink),
@@ -447,7 +444,7 @@ class _AiIllustration extends StatelessWidget {
                 ).textTheme.headlineSmall?.copyWith(color: AppColors.ink),
               ),
             ),
-            CountUp(
+            Figure(
               value: 87,
               unit: '점',
               style: AppTextStyles.scoreDisplay.copyWith(color: AppColors.ink),

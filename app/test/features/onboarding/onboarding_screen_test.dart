@@ -326,10 +326,9 @@ void main() {
   });
 
   group('completing the flow', () {
-    // Until now nothing in the running app called acceptVerification, so the
-    // verified state was reachable only from a test and every write gate was
-    // permanently shut.
-    testWidgets('is the first path that reaches a verified resident', (
+    // Residency comes from the server's address check, on an account, and
+    // nowhere else: finishing onboarding sets the district for reading only.
+    testWidgets('finishing sets the district for reading, not residency', (
       tester,
     ) async {
       final container = await pumpOnboarding(tester);
@@ -340,13 +339,13 @@ void main() {
       await tester.pumpAndSettle();
       await tester.tap(find.text('다음'));
       await tester.pumpAndSettle();
-      await tester.tap(find.text('주민 인증 완료'));
+      expect(find.text('지금 주민 인증하기'), findsOneWidget);
+      await tester.tap(find.text('시작하기'));
       await tester.pumpAndSettle();
 
       final address = container.read(addressControllerProvider);
-      expect(address.isVerified, isTrue);
+      expect(address.isVerified, isFalse);
       expect(address.district?.id, 'fixture-seoul-mapo-b');
-      expect(address.verification?.opaqueToken, isNotEmpty);
     });
 
     testWidgets('skipping leaves the resident read-only with a district', (

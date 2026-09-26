@@ -29,6 +29,7 @@ class BffException implements Exception {
     required this.code,
     required this.message,
     this.statusCode,
+    this.details = const {},
   });
 
   /// The envelope's `error.code`, or `offline` / `malformed` for failures
@@ -37,9 +38,29 @@ class BffException implements Exception {
   final String message;
   final int? statusCode;
 
+  /// Anything else the error carried, like `availableAt` on `too_soon`.
+  final Map<String, Object?> details;
+
   @override
   String toString() => 'BffException($code, $statusCode): $message';
 }
+
+/// The BFF refused the signed-in person's token: it expired or was revoked.
+///
+/// Separate from other failures because the answer is a sheet -- sign in
+/// again, the draft is kept -- not an error message.
+class SessionExpiredException extends BffException {
+  const SessionExpiredException()
+    : super(
+        code: 'unauthorized',
+        message: 'The session has expired.',
+        statusCode: 401,
+      );
+}
+
+/// Hands the BFF client the signed-in person's access token, or null when
+/// nobody is signed in and requests go out under the anon key alone.
+typedef UserTokenSource = Future<String?> Function();
 
 /// The only thing in the app that talks to the network.
 ///
@@ -48,11 +69,16 @@ class BffException implements Exception {
 /// the same `fromJson` the fixtures go through, so the provenance checks
 /// apply to live data exactly as they do to samples.
 class BffClient {
-  BffClient({required this._dio, this._cache});
+  BffClient({required this._dio, this._cache, this._userToken});
 
-  factory BffClient.fromConfig(BffConfig config, {ResponseCache? cache}) {
+  factory BffClient.fromConfig(
+    BffConfig config, {
+    ResponseCache? cache,
+    UserTokenSource? userToken,
+  }) {
     return BffClient(
       cache: cache,
+      userToken: userToken,
       dio: Dio(
         BaseOptions(
           baseUrl: config.baseUrl.toString(),
@@ -73,22 +99,58 @@ class BffClient {
 
   final Dio _dio;
   final ResponseCache? _cache;
+  final UserTokenSource? _userToken;
 
   /// Error codes that mean "not here yet" rather than "broken".
   static const _notAvailable = {'not_found', 'not_curated'};
 
   /// GETs [path]. With [cacheable], a successful body is kept and served
   /// again when the network fails.
+  ///
+  /// Only public records are cacheable. A request made as a signed-in person
+  /// is never cached: an account answer kept on disk would outlive a sign-out.
   Future<BffResponse> get(
     String path, {
     Map<String, String>? query,
     bool cacheable = false,
+  }) => _send('GET', path, query: query, cacheable: cacheable);
+
+  Future<BffResponse> post(String path, {Map<String, Object?>? body}) =>
+      _send('POST', path, body: body);
+
+  Future<BffResponse> patch(String path, {Map<String, Object?>? body}) =>
+      _send('PATCH', path, body: body);
+
+  Future<BffResponse> delete(String path, {Map<String, String>? query}) =>
+      _send('DELETE', path, query: query);
+
+  Future<BffResponse> _send(
+    String method,
+    String path, {
+    Map<String, String>? query,
+    Map<String, Object?>? body,
+    bool cacheable = false,
   }) async {
+    final token = await _userToken?.call();
+    final signedIn = token != null;
+    final useCache = cacheable && !signedIn;
+
     final Response<String> response;
     try {
-      response = await _dio.get<String>(path, queryParameters: query);
+      response = await _dio.request<String>(
+        path,
+        queryParameters: query,
+        data: body == null ? null : json.encode(body),
+        options: Options(
+          method: method,
+          headers: {
+            if (signedIn) 'Authorization': 'Bearer $token',
+            if (body != null) 'Content-Type': 'application/json',
+          },
+        ),
+      );
     } on DioException catch (error) {
-      final cached = cacheable ? await _cache?.read(path) : null;
+      final cached = useCache ? await _cache?.read(path) : null;
       if (cached != null) {
         return _decode(cached, fromCache: true);
       }
@@ -98,18 +160,21 @@ class BffClient {
       );
     }
 
-    final body = response.data ?? '';
+    final text = response.data ?? '';
     final status = response.statusCode ?? 0;
     if (status >= 200 && status < 300) {
-      final decoded = _decode(body);
-      if (cacheable) {
-        await _cache?.write(path, body);
+      final decoded = _decode(text);
+      if (useCache) {
+        await _cache?.write(path, text);
       }
       return decoded;
     }
 
-    final error = _errorOf(body);
+    final error = _errorOf(text);
     final code = error?['code'];
+    if (signedIn && status == 401) {
+      throw const SessionExpiredException();
+    }
     if (code is String && _notAvailable.contains(code)) {
       throw NotAvailableException(path);
     }
@@ -119,6 +184,8 @@ class BffClient {
           ? error!['message']! as String
           : 'HTTP $status',
       statusCode: status,
+      details: {...?error}
+        ..removeWhere((k, _) => k == 'code' || k == 'message'),
     );
   }
 

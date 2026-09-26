@@ -99,4 +99,60 @@ void main() {
       throwsA(isA<BffException>().having((e) => e.code, 'code', 'offline')),
     );
   });
+
+  group('as a signed-in person', () {
+    test('sends the user token instead of the anon bearer', () async {
+      final adapter = FakeBffAdapter({
+        '/me': (status: 200, body: envelope({'profile': null})),
+      });
+      final client = fakeBffClient(adapter, userToken: () async => 'jwt-1');
+
+      await client.get('/me');
+
+      expect(adapter.requests.single.headers['Authorization'], 'Bearer jwt-1');
+    });
+
+    test('writes a JSON body with the method it was asked for', () async {
+      final adapter = FakeBffAdapter({
+        'POST /me/consent': (status: 200, body: envelope({'ok': true})),
+      });
+      final client = fakeBffClient(adapter, userToken: () async => 'jwt-1');
+
+      await client.post('/me/consent', body: {'age14': true});
+
+      final request = adapter.requests.single;
+      expect(request.method, 'POST');
+      expect(request.data, '{"age14":true}');
+    });
+
+    test('a 401 is a lost session, not an error message', () async {
+      final client = fakeBffClient(
+        FakeBffAdapter({
+          '/me': (status: 401, body: errorEnvelope('unauthorized')),
+        }),
+        userToken: () async => 'expired',
+      );
+
+      await expectLater(
+        client.get('/me'),
+        throwsA(isA<SessionExpiredException>()),
+      );
+    });
+
+    // An account answer on disk would outlive a sign-out.
+    test('never caches, even when asked to', () async {
+      final cache = InMemoryResponseCache();
+      final client = fakeBffClient(
+        FakeBffAdapter({
+          '/me': (status: 200, body: envelope({'profile': null})),
+        }),
+        cache: cache,
+        userToken: () async => 'jwt-1',
+      );
+
+      await client.get('/me', cacheable: true);
+
+      expect(await cache.read('/me'), isNull);
+    });
+  });
 }

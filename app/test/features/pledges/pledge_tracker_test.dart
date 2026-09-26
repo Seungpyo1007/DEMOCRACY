@@ -132,10 +132,10 @@ void main() {
       await pumpTracker(tester);
 
       // 9 of 24 kept.
-      final hero = tester.widget<CountUp>(
+      final hero = tester.widget<Figure>(
         find.descendant(
           of: find.byKey(PledgeTrackerKeys.heroRate),
-          matching: find.byType(CountUp),
+          matching: find.byType(Figure),
         ),
       );
       expect('${hero.value}${hero.unit}', '38%');
@@ -148,7 +148,7 @@ void main() {
       );
       expect(
         find.byWidgetPredicate(
-          (w) => w is CountUp && w.value == 24 && w.unit == '건',
+          (w) => w is Figure && w.value == 24 && w.unit == '건',
         ),
         findsOneWidget,
       );
@@ -347,7 +347,7 @@ void main() {
       await tester.tap(find.text('이행 제보'));
       await tester.pumpAndSettle();
 
-      expect(find.text('주민 인증이 필요합니다'), findsOneWidget);
+      expect(find.text('로그인하고 계속'), findsOneWidget);
       expect(find.textContaining('제보 화면은'), findsNothing);
     });
 
@@ -357,7 +357,7 @@ void main() {
       await tester.tap(find.text('이행 제보'));
       await tester.pumpAndSettle();
 
-      expect(find.text('주민 인증이 필요합니다'), findsNothing);
+      expect(find.text('로그인하고 계속'), findsNothing);
       expect(find.textContaining('제보 화면은'), findsOneWidget);
     });
 
@@ -369,7 +369,7 @@ void main() {
       await tester.tap(find.text('이행 제보'));
       await tester.pumpAndSettle();
 
-      expect(find.text('주민 인증이 필요합니다'), findsOneWidget);
+      expect(find.text('로그인하고 계속'), findsOneWidget);
     });
 
     // Each platform's own control: M3's large app bar and extended FAB on

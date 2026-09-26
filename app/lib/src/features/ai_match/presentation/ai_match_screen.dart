@@ -224,10 +224,8 @@ class _TopMatchState extends State<_TopMatch> {
       if (context != null && context.mounted) {
         Scrollable.ensureVisible(
           context,
-          duration: AppMotion.reduced(context)
-              ? Duration.zero
-              : AppMotion.standard,
-          curve: AppMotion.standardCurve,
+          duration: AppMotion.reduced(context) ? Duration.zero : AppMotion.base,
+          curve: AppMotion.settle,
         );
       }
     });
@@ -266,7 +264,7 @@ class _TopMatchState extends State<_TopMatch> {
             Column(
               crossAxisAlignment: CrossAxisAlignment.end,
               children: [
-                CountUp(
+                Figure(
                   value: match.score.round(),
                   unit: '점',
                   style: AppTextStyles.scoreDisplay.copyWith(
@@ -423,8 +421,8 @@ class _Reasoning extends ConsumerWidget {
                     ),
                     AnimatedRotation(
                       turns: expanded ? 0.5 : 0,
-                      duration: reduced ? Duration.zero : AppMotion.standard,
-                      curve: AppMotion.standardCurve,
+                      duration: reduced ? Duration.zero : AppMotion.base,
+                      curve: AppMotion.settle,
                       child: const Icon(
                         Icons.expand_more,
                         size: 22,
@@ -606,7 +604,7 @@ class _RunnerUpRow extends StatelessWidget {
           Column(
             crossAxisAlignment: CrossAxisAlignment.end,
             children: [
-              CountUp(
+              Figure(
                 value: match.score.round(),
                 unit: '점',
                 delay: AppMotion.staggerFor(rank),

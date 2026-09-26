@@ -107,7 +107,7 @@ class _ReviewComposeScreenState extends ConsumerState<ReviewComposeScreen> {
     final blocked = _draft.blockedReason;
     final duration = AppMotion.reduced(context)
         ? Duration.zero
-        : AppMotion.standard;
+        : AppMotion.base;
 
     final submit = AppPrimaryButton(
       label: submitting ? '올리는 중' : '평가 올리기',
@@ -161,7 +161,7 @@ class _ReviewComposeScreenState extends ConsumerState<ReviewComposeScreen> {
               RevealIn(index: 6, child: _BodyField(onChanged: _setBody)),
               AnimatedSize(
                 duration: duration,
-                curve: AppMotion.standardCurve,
+                curve: AppMotion.settle,
                 alignment: Alignment.topCenter,
                 child: _warning == null
                     ? const SizedBox(width: double.infinity)
@@ -407,7 +407,7 @@ class _AxisRating extends StatelessWidget {
   Widget build(BuildContext context) {
     final duration = AppMotion.reduced(context)
         ? Duration.zero
-        : AppMotion.quick;
+        : AppMotion.fast;
 
     return DecoratedBox(
       decoration: const BoxDecoration(
@@ -450,7 +450,7 @@ class _AxisRating extends StatelessWidget {
                         child: Center(
                           child: AnimatedScale(
                             duration: duration,
-                            curve: AppMotion.standardCurve,
+                            curve: AppMotion.settle,
                             scale: i == score ? 1.12 : 1,
                             child: Icon(
                               i <= score

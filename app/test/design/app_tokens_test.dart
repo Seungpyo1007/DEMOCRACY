@@ -132,7 +132,7 @@ void main() {
     });
 
     test(
-      'figures are serif with tabular numerals, so a count-up holds still',
+      'figures are serif with tabular numerals, so columns of figures line up',
       () {
         for (final style in [
           AppTextStyles.figureHero,

@@ -80,8 +80,8 @@ class _CommunityScreenState extends ConsumerState<CommunityScreen> {
       } else {
         _scroll.animateTo(
           end,
-          duration: AppMotion.standard,
-          curve: AppMotion.standardCurve,
+          duration: AppMotion.base,
+          curve: AppMotion.settle,
         );
       }
     });
@@ -172,9 +172,9 @@ class _CommunityScreenState extends ConsumerState<CommunityScreen> {
                   ),
                   SliverToBoxAdapter(
                     child: AnimatedSwitcher(
-                      duration: reduced ? Duration.zero : AppMotion.standard,
-                      switchInCurve: AppMotion.standardCurve,
-                      switchOutCurve: AppMotion.standardCurve,
+                      duration: reduced ? Duration.zero : AppMotion.base,
+                      switchInCurve: AppMotion.settle,
+                      switchOutCurve: AppMotion.settle,
                       // The outgoing tab fades without moving; only the
                       // incoming one rises, so the two never look like they
                       // are sliding past each other.
@@ -278,7 +278,7 @@ class _Summary extends StatelessWidget {
               FittedBox(
                 fit: BoxFit.scaleDown,
                 alignment: AlignmentDirectional.centerStart,
-                child: CountUp(
+                child: Figure(
                   value: summary.average,
                   fractionDigits: 1,
                   style: AppTextStyles.ratingDisplay.copyWith(
@@ -418,12 +418,8 @@ class _ComposeAction extends StatelessWidget {
     return TabAccessory(
       label: '평가 작성',
       icon: AppIcons.write,
-      onPressed: () => runVerified(
-        context,
-        ref,
-        onVerificationRequested: () => context.go(AppRoutes.onboarding),
-        onVerified: () => _compose(context),
-      ),
+      onPressed: () =>
+          runVerified(context, ref, onVerified: () => _compose(context)),
     );
   }
 
@@ -432,7 +428,6 @@ class _ComposeAction extends StatelessWidget {
     final surface = Theme.of(context).extension<AppSurfaceTokens>()!;
 
     return VerifiedGate(
-      onVerificationRequested: () => context.go(AppRoutes.onboarding),
       onVerified: () => _compose(context),
       builder: (context, onPressed) {
         if (surface.isGlass) {
@@ -467,7 +462,7 @@ class _ChannelTab extends ConsumerWidget {
     final messages = ref.watch(channelProvider);
     final duration = AppMotion.reduced(context)
         ? Duration.zero
-        : AppMotion.standard;
+        : AppMotion.base;
 
     return Padding(
       padding: const EdgeInsets.fromLTRB(
@@ -515,7 +510,7 @@ class _ChannelTab extends ConsumerWidget {
           ),
           AnimatedSize(
             duration: duration,
-            curve: AppMotion.standardCurve,
+            curve: AppMotion.settle,
             alignment: Alignment.topCenter,
             child: warning == null
                 ? const SizedBox(width: double.infinity)
@@ -621,7 +616,6 @@ class _Composer extends StatelessWidget {
     final hint = enabled ? '메시지 보내기' : '주소 인증 주민만 보낼 수 있습니다';
 
     final send = VerifiedGate(
-      onVerificationRequested: () => context.go(AppRoutes.onboarding),
       onVerified: onSend,
       builder: (context, onPressed) {
         if (surface.isGlass) {

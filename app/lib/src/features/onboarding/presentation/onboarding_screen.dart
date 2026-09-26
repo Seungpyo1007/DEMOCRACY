@@ -1,7 +1,8 @@
 import 'package:democracy/src/app/app_routes.dart';
+import 'package:democracy/src/core/account/auth_controller.dart';
+import 'package:democracy/src/core/account/auth_state.dart';
 import 'package:democracy/src/core/auth/address_controller.dart';
 import 'package:democracy/src/core/auth/address_state.dart';
-import 'package:democracy/src/core/time/clock_providers.dart';
 import 'package:democracy/src/core/tips/tip_providers.dart';
 import 'package:democracy/src/core/tips/tip_store.dart';
 import 'package:democracy/src/design/app_motion.dart';
@@ -70,10 +71,10 @@ class _OnboardingScreenState extends ConsumerState<OnboardingScreen> {
               _StepProgress(state: state),
               Expanded(
                 child: AnimatedSwitcher(
-                  duration: reduced ? Duration.zero : AppMotion.emphasized,
-                  reverseDuration: reduced ? Duration.zero : AppMotion.quick,
-                  switchInCurve: AppMotion.emphasizedCurve,
-                  switchOutCurve: AppMotion.standardCurve,
+                  duration: reduced ? Duration.zero : AppMotion.slow,
+                  reverseDuration: reduced ? Duration.zero : AppMotion.fast,
+                  switchInCurve: AppMotion.sheet,
+                  switchOutCurve: AppMotion.settle,
                   layoutBuilder: (currentChild, previous) => Stack(
                     alignment: Alignment.topCenter,
                     children: [...previous, ?currentChild],
@@ -161,10 +162,8 @@ class _StepProgress extends StatelessWidget {
                           begin: 0,
                           end: i < state.stepNumber ? 1 : 0,
                         ),
-                        duration: reduced
-                            ? Duration.zero
-                            : AppMotion.emphasized,
-                        curve: AppMotion.emphasizedCurve,
+                        duration: reduced ? Duration.zero : AppMotion.slow,
+                        curve: AppMotion.sheet,
                         builder: (context, fill, _) => Align(
                           alignment: AlignmentDirectional.centerStart,
                           child: FractionallySizedBox(
@@ -535,7 +534,7 @@ class _InterestScale extends StatelessWidget {
                 // The value swaps with a short fade so a drag reads as the
                 // word changing, not flickering.
                 AnimatedSwitcher(
-                  duration: reduced ? Duration.zero : AppMotion.quick,
+                  duration: reduced ? Duration.zero : AppMotion.fast,
                   child: Text(
                     label,
                     key: ValueKey(label),
@@ -650,7 +649,8 @@ class _DoneStep extends ConsumerWidget {
         const RevealIn(
           index: 4,
           child: DisclaimerBox(
-            text: '주민 인증을 마치면 평가 작성과 이행 제보를 쓸 수 있습니다. 읽기는 인증 없이도 계속 가능합니다.',
+            text:
+                '로그인하고 주민 인증을 마치면 평가 작성과 이행 제보를 쓸 수 있습니다. 읽기는 둘 다 없이 계속 가능합니다.',
           ),
         ),
       ],
@@ -689,7 +689,7 @@ class _UnderlinedNote extends StatelessWidget {
           Text(text, style: style),
           HandUnderline(
             width: width,
-            delay: AppMotion.staggerFor(3) + AppMotion.standard,
+            delay: AppMotion.staggerFor(3) + AppMotion.base,
           ),
         ],
       ),
@@ -735,29 +735,24 @@ class _BottomActions extends ConsumerWidget {
 
   final OnboardingState state;
 
-  /// Stands in for the residency check the BFF will run.
-  ///
-  /// This is the only place the app can reach `verified`, and it is a fake:
-  /// the real contract issues an opaque token server-side after checking the
-  /// address. Deliberately not a device biometric -- `PlatformAdaptiveAuth`
-  /// exists and says in its own doc that reauthentication is not proof of
-  /// residency.
-  void _completeVerification(BuildContext context, WidgetRef ref) {
+  /// Residency is not granted here any more: it belongs to an account and
+  /// comes from the server's address check. Onboarding sets the district
+  /// for reading and, if the resident wants to write, hands over to that
+  /// flow -- sign in, then the address check, then home.
+  void _verifyNow(BuildContext context, WidgetRef ref) {
     final district = state.district;
     if (district == null) {
       return;
     }
-
     ref
         .read(addressControllerProvider.notifier)
-        .acceptVerification(
-          district: district,
-          proof: ResidencyVerificationProof(
-            opaqueToken: 'fixture-residency-token-${district.id}',
-            verifiedAt: ref.read(clockProvider).now().utc,
-          ),
-        );
-    _leave(context, ref);
+        .continueReadOnly(district: district);
+    final residency = AppRoutes.withNext(AppRoutes.residency, AppRoutes.home);
+    context.go(
+      ref.read(authControllerProvider) is AuthSignedIn
+          ? residency
+          : AppRoutes.withNext(AppRoutes.login, residency),
+    );
   }
 
   /// Skipping means read-only, not district-less: every screen past here is
@@ -800,6 +795,10 @@ class _BottomActions extends ConsumerWidget {
     // other two leave the flow read-only.
     final (secondaryLabel, secondary) = switch (state.step) {
       OnboardingStep.profile => ('건너뛰기', controller.next),
+      OnboardingStep.done => (
+        '지금 주민 인증하기',
+        state.district == null ? null : () => _verifyNow(context, ref),
+      ),
       _ => ('나중에 인증하기', _readOnly(context, ref)),
     };
 
@@ -824,15 +823,9 @@ class _BottomActions extends ConsumerWidget {
             const SizedBox(height: AppSpacing.x2),
           ],
           AppPrimaryButton(
-            label: isLast ? '주민 인증 완료' : '다음',
+            label: isLast ? '시작하기' : '다음',
             onPressed: state.canAdvance
-                ? () {
-                    if (isLast) {
-                      _completeVerification(context, ref);
-                    } else {
-                      controller.next();
-                    }
-                  }
+                ? (isLast ? _readOnly(context, ref) : controller.next)
                 : null,
           ),
           const SizedBox(height: AppSpacing.x1),

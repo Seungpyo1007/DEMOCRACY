@@ -9,6 +9,7 @@ import 'package:democracy/src/design/components/editorial.dart';
 import 'package:democracy/src/design/components/motion.dart';
 import 'package:democracy/src/design/components/native_controls.dart';
 import 'package:democracy/src/design/components/sparkline.dart';
+import 'package:democracy/src/features/account/presentation/account_screens.dart';
 import 'package:democracy/src/features/district/application/district_providers.dart';
 import 'package:democracy/src/features/district/domain/district_profile.dart';
 import 'package:democracy/src/features/district/domain/legislator_record.dart';
@@ -85,6 +86,7 @@ class DistrictHomeScreen extends ConsumerWidget {
           kicker: '내 지역구',
           trailing: _verificationChip(address.status),
           actions: [
+            const AccountEntryButton(),
             AppToolbarButton(
               icon: AppIcons.swapDistrict,
               label: '지역구 변경',
@@ -307,9 +309,9 @@ class _IncumbentSectionState extends State<_IncumbentSection> {
         // rather than jumping under the reader's thumb.
         MotionSize(
           child: AnimatedSwitcher(
-            duration: reduced ? Duration.zero : AppMotion.standard,
-            switchInCurve: AppMotion.standardCurve,
-            switchOutCurve: AppMotion.standardCurve,
+            duration: reduced ? Duration.zero : AppMotion.base,
+            switchInCurve: AppMotion.settle,
+            switchOutCurve: AppMotion.settle,
             layoutBuilder: (current, previous) => Stack(
               alignment: Alignment.topCenter,
               children: [...previous, ?current],
@@ -727,7 +729,7 @@ class _CandidateCard extends StatelessWidget {
                 ),
               ),
               if (stat != null)
-                CountUp(
+                Figure(
                   value: stat.value.value,
                   unit: stat.unit,
                   style: AppTextStyles.figureSmall.copyWith(

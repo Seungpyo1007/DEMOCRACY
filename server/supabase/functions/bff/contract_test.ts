@@ -12,6 +12,7 @@ import {
 } from "./contract.ts";
 import { createHandler } from "./handler.ts";
 import { MemoryStore } from "./store.ts";
+import { signedOut } from "../../../testdata/fake_auth.ts";
 import { fakeUpstream } from "../../../testdata/fake_upstream.ts";
 import { JONGNO, MAPO_A, MAPO_B, NOW, runPipeline, toTables } from "../../../testdata/pipeline.ts";
 
@@ -24,6 +25,7 @@ async function setup() {
     jusoKey: "JUSO-SECRET",
     kakaoKey: "KAKAO-SECRET",
     now: () => NOW,
+    ...signedOut(),
   });
   const get = async (path: string) => {
     const res = await handler(new Request(`https://ref.supabase.co/functions/v1/bff${path}`));
@@ -154,6 +156,7 @@ Deno.test("history: ongoing row only while counting; empty region still sourced"
     jusoKey: "",
     kakaoKey: "",
     now: () => NOW,
+    ...signedOut(),
   });
   const body =
     await (await handler(new Request(`https://r/functions/v1/bff/districts/${MAPO_A}/history`)))

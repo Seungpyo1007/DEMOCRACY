@@ -1,5 +1,6 @@
 import 'package:cupertino_native_better/cupertino_native_better.dart';
 import 'package:democracy/src/design/app_tokens.dart';
+import 'package:democracy/src/design/components/motion.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
@@ -51,6 +52,11 @@ abstract final class AppIcons {
   static const search = AppIcon(Icons.search, 'magnifyingglass');
   static const location = AppIcon(Icons.my_location, 'location');
   static const source = AppIcon(Icons.open_in_new, 'arrow.up.right.square');
+  static const person = AppIcon(Icons.person_outline, 'person.crop.circle');
+  static const personFilled = AppIcon(
+    Icons.account_circle,
+    'person.crop.circle.fill',
+  );
 }
 
 /// A toolbar action: a glass circle on iOS, a Material icon button on
@@ -552,6 +558,12 @@ class AppSecondaryButton extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final button = _button(context);
+    // A native button already answers the press itself.
+    return usesNativeIosControls(context) ? button : PressScale(child: button);
+  }
+
+  Widget _button(BuildContext context) {
     if (_isGlass(context)) {
       if (usesNativeIosControls(context)) {
         return SizedBox(

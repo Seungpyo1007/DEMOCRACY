@@ -1,7 +1,13 @@
 @Tags(['golden'])
 library;
 
+import 'package:democracy/src/core/account/account.dart';
+import 'package:democracy/src/core/account/auth_controller.dart';
 import 'package:democracy/src/core/time/kst.dart';
+import 'package:democracy/src/features/account/presentation/account_screens.dart';
+import 'package:democracy/src/features/account/presentation/consent_screen.dart';
+import 'package:democracy/src/features/account/presentation/login_screens.dart';
+import 'package:democracy/src/features/account/presentation/residency_screens.dart';
 import 'package:democracy/src/features/ai_match/presentation/ai_direction_screen.dart';
 import 'package:democracy/src/features/ai_match/presentation/ai_match_screen.dart';
 import 'package:democracy/src/features/district/presentation/district_home_screen.dart';
@@ -214,6 +220,101 @@ void main() {
       await expectLater(
         find.byType(MaterialApp),
         matchesGoldenFile('goldens/community_${name}_390dp.png'),
+      );
+    });
+
+    testWidgets('login at 390dp on $name', (tester) async {
+      await pumpGolden(tester, screen: const LoginScreen(), platform: platform);
+
+      await expectLater(
+        find.byType(MaterialApp),
+        matchesGoldenFile('goldens/login_${name}_390dp.png'),
+      );
+    });
+
+    testWidgets('consent at 390dp on $name', (tester) async {
+      final container = await pumpGolden(
+        tester,
+        screen: const ConsentScreen(),
+        platform: platform,
+      );
+      // A first sign-in: the consent screen is only ever reached signed in
+      // with no profile yet.
+      await container
+          .read(authControllerProvider.notifier)
+          .signIn(SignInProvider.kakao);
+      await tester.pumpAndSettle();
+
+      await expectLater(
+        find.byType(MaterialApp),
+        matchesGoldenFile('goldens/consent_${name}_390dp.png'),
+      );
+    });
+
+    testWidgets('residency start at 390dp on $name', (tester) async {
+      await pumpGolden(
+        tester,
+        screen: const ResidencyStartScreen(),
+        platform: platform,
+      );
+
+      await expectLater(
+        find.byType(MaterialApp),
+        matchesGoldenFile('goldens/residency_start_${name}_390dp.png'),
+      );
+    });
+
+    testWidgets('residency done at 390dp on $name', (tester) async {
+      final container = await pumpGolden(
+        tester,
+        screen: const ResidencyDoneScreen(next: '/community'),
+        platform: platform,
+      );
+      final auth = container.read(authControllerProvider.notifier);
+      await auth.signIn(SignInProvider.kakao);
+      final options = await auth.handleOptions();
+      await auth.acceptConsent(
+        ConsentInput(
+          age14: true,
+          terms: true,
+          privacy: true,
+          notify: false,
+          handle: options.first,
+        ),
+      );
+      await auth.verifyResidency(roadAddress: '서울 마포구 월드컵북로 400');
+      await tester.pumpAndSettle();
+
+      await expectLater(
+        find.byType(MaterialApp),
+        matchesGoldenFile('goldens/residency_done_${name}_390dp.png'),
+      );
+    });
+
+    testWidgets('account at 390dp on $name', (tester) async {
+      final container = await pumpGolden(
+        tester,
+        screen: const AccountScreen(),
+        platform: platform,
+      );
+      final auth = container.read(authControllerProvider.notifier);
+      await auth.signIn(SignInProvider.kakao);
+      final options = await auth.handleOptions();
+      await auth.acceptConsent(
+        ConsentInput(
+          age14: true,
+          terms: true,
+          privacy: true,
+          notify: false,
+          handle: options.first,
+        ),
+      );
+      await auth.verifyResidency(roadAddress: '서울 마포구 월드컵북로 400');
+      await tester.pumpAndSettle();
+
+      await expectLater(
+        find.byType(MaterialApp),
+        matchesGoldenFile('goldens/account_${name}_390dp.png'),
       );
     });
   });

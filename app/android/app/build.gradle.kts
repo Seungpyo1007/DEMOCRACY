@@ -1,3 +1,11 @@
+import java.util.Properties
+
+fun localProperty(key: String): String? {
+    val file = rootProject.file("local.properties")
+    if (!file.exists()) return null
+    return Properties().apply { file.inputStream().use(::load) }.getProperty(key)
+}
+
 plugins {
     id("com.android.application")
     // The Flutter Gradle Plugin must be applied after the Android and Kotlin Gradle plugins.
@@ -6,7 +14,9 @@ plugins {
 
 android {
     namespace = "com.democracy.kr.democracy"
-    compileSdk = flutter.compileSdkVersion
+    // flutter_secure_storage 11 compiles against Android 37 and requires its
+    // dependents to as well; Flutter 3.44's default is still 36.
+    compileSdk = 37
     ndkVersion = flutter.ndkVersion
 
     compileOptions {
@@ -27,6 +37,13 @@ android {
         targetSdk = flutter.targetSdkVersion
         versionCode = flutter.versionCode
         versionName = flutter.versionName
+        // Kakao's redirect scheme is kakao<native app key>. Not a secret, but
+        // per environment: pass -PKAKAO_NATIVE_KEY=… or set it in
+        // android/local.properties.
+        manifestPlaceholders["kakaoNativeKey"] =
+            (project.findProperty("KAKAO_NATIVE_KEY") as String?)
+                ?: localProperty("KAKAO_NATIVE_KEY")
+                ?: ""
     }
 
     buildTypes {

@@ -111,7 +111,7 @@ class ResultsLineChart extends StatelessWidget {
                   child: MotionIn(
                     duration: AppMotion.draw,
                     delay: AppMotion.stagger,
-                    curve: AppMotion.drawCurve,
+                    curve: AppMotion.ink,
                     builder: (context, t, _) => CustomPaint(
                       painter: _SeriesPainter(
                         series: series,

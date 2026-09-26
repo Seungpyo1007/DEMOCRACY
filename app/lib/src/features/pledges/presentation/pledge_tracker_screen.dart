@@ -205,7 +205,7 @@ class _Overview extends StatelessWidget {
                 key: PledgeTrackerKeys.heroRate,
                 fit: BoxFit.scaleDown,
                 alignment: AlignmentDirectional.centerStart,
-                child: CountUp(
+                child: Figure(
                   value: percent,
                   unit: '%',
                   style: AppTextStyles.figureHero.copyWith(
@@ -225,7 +225,7 @@ class _Overview extends StatelessWidget {
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.end,
                 children: [
-                  CountUp(
+                  Figure(
                     value: board.total,
                     unit: '건',
                     delay: AppMotion.staggerFor(2),
@@ -274,10 +274,7 @@ class _Overview extends StatelessWidget {
             Expanded(child: SourceBadge(source: board.source)),
             const SizedBox(width: AppSpacing.x3),
             // Descriptive: it says what the reader can do, not what to think.
-            const MarginNote(
-              '번복은 원문 대조 가능',
-              delay: Duration(milliseconds: 600),
-            ),
+            const MarginNote('번복은 원문 대조 가능', delay: AppMotion.slow),
           ],
         ),
       ],
@@ -322,7 +319,7 @@ class _StatusBar extends StatelessWidget {
             final width = (constraints.maxWidth - gaps).clamp(0.0, 1e9);
 
             return MotionIn(
-              duration: AppMotion.data,
+              duration: AppMotion.slow,
               delay: AppMotion.staggerFor(1),
               curve: Curves.linear,
               builder: (context, t, _) => Row(
@@ -358,7 +355,7 @@ class _StatusBar extends StatelessWidget {
     final start = index * slice * 0.85;
     final end = (start + slice * 1.45).clamp(0.0, 1.0);
     final local = ((t - start) / (end - start)).clamp(0.0, 1.0);
-    return AppMotion.dataCurve.transform(local);
+    return AppMotion.ink.transform(local);
   }
 }
 
@@ -388,8 +385,8 @@ class _LegendRow extends StatelessWidget {
       child: InkWell(
         onTap: onTap,
         child: AnimatedContainer(
-          duration: reduced ? Duration.zero : AppMotion.quick,
-          curve: AppMotion.standardCurve,
+          duration: reduced ? Duration.zero : AppMotion.fast,
+          curve: AppMotion.settle,
           constraints: const BoxConstraints(minHeight: 44),
           padding: EdgeInsets.symmetric(
             horizontal: selected ? AppSpacing.x2 : 0,
@@ -486,13 +483,13 @@ class _PledgeList extends StatelessWidget {
           // its new size while the rows cross-fade, instead of the page below
           // jumping.
           AnimatedSize(
-            duration: AppMotion.standard,
-            curve: AppMotion.standardCurve,
+            duration: AppMotion.base,
+            curve: AppMotion.settle,
             alignment: Alignment.topCenter,
             child: AnimatedSwitcher(
-              duration: AppMotion.standard,
-              switchInCurve: AppMotion.standardCurve,
-              switchOutCurve: AppMotion.standardCurve,
+              duration: AppMotion.base,
+              switchInCurve: AppMotion.settle,
+              switchOutCurve: AppMotion.settle,
               layoutBuilder: (current, previous) => Stack(
                 alignment: Alignment.topCenter,
                 children: [...previous, ?current],

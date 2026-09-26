@@ -1,5 +1,11 @@
+import 'dart:async';
+
 import 'package:democracy/src/app/app_router.dart';
 import 'package:democracy/src/app/app_routes.dart';
+import 'package:democracy/src/core/account/account.dart';
+import 'package:democracy/src/core/account/auth_controller.dart';
+import 'package:democracy/src/core/account/auth_repository.dart';
+import 'package:democracy/src/core/account/auth_state.dart';
 import 'package:democracy/src/core/auth/address_controller.dart';
 import 'package:democracy/src/core/auth/address_state.dart';
 import 'package:democracy/src/core/auth/address_store.dart';
@@ -104,8 +110,13 @@ void main() {
     return (container, router);
   }
 
-  String locationOf(GoRouter router) =>
-      router.routerDelegate.currentConfiguration.uri.path;
+  /// The page on top: a pushed page's own location, not the tab beneath it.
+  String locationOf(GoRouter router) {
+    final configuration = router.routerDelegate.currentConfiguration;
+    return configuration.isEmpty
+        ? configuration.uri.path
+        : Uri.parse(configuration.last.matchedLocation).path;
+  }
 
   group('without a district', () {
     testWidgets('starts at onboarding', (tester) async {
@@ -191,12 +202,10 @@ void main() {
     });
   });
 
-  group('the guard reads on navigation, not on state change', () {
-    // It uses ref.read and has no refreshListenable, so acquiring a district
-    // does not by itself move anyone. That is deliberate -- onboarding
-    // navigates when it is finished -- but it is worth pinning, because
-    // someone adding a refreshListenable later would change where a resident
-    // lands mid-flow.
+  group('the guard re-runs when the state changes', () {
+    // Acquiring a district leaves the resident where they are: onboarding
+    // navigates itself when it is finished, and moving them mid-flow would
+    // skip its last step.
     testWidgets('acquiring a district does not navigate on its own', (
       tester,
     ) async {
@@ -211,7 +220,8 @@ void main() {
       expect(locationOf(router), AppRoutes.onboarding);
     });
 
-    testWidgets('losing a district only bites at the next navigation', (
+    // HANDOFF's known gap: this used to wait for the next navigation.
+    testWidgets('losing a district sends the reader to onboarding at once', (
       tester,
     ) async {
       final (container, router) = await pumpRouter(tester, district: _district);
@@ -221,15 +231,214 @@ void main() {
 
       container.read(addressControllerProvider.notifier).continueReadOnly();
       await tester.pump();
-      expect(
-        locationOf(router),
-        AppRoutes.tracker,
-        reason: 'no refreshListenable, so nothing re-evaluates yet',
-      );
 
-      router.go(AppRoutes.results);
-      await tester.pump();
       expect(locationOf(router), AppRoutes.onboarding);
     });
+  });
+
+  group('account routes', () {
+    testWidgets('a first sign-in goes through consent to where it began', (
+      tester,
+    ) async {
+      final (container, router) = await pumpRouter(tester, district: _district);
+      router.go(AppRoutes.community);
+      await tester.pumpAndSettle();
+      // The write gate pushes login over the tab it was opened from.
+      unawaited(
+        router.push(AppRoutes.withNext(AppRoutes.login, AppRoutes.community)),
+      );
+      await tester.pumpAndSettle();
+
+      await tester.tap(find.text('카카오로 계속하기'));
+      await tester.pumpAndSettle();
+      expect(locationOf(router), AppRoutes.consent);
+
+      for (final label in ['만 14세 이상입니다', '이용약관', '개인정보 수집·이용']) {
+        await tester.tap(find.textContaining(label).first);
+        await tester.pump();
+      }
+      await tester.ensureVisible(find.text('동의하고 시작하기'));
+      await tester.tap(find.text('동의하고 시작하기'));
+      await tester.pumpAndSettle();
+
+      expect(container.read(authControllerProvider), isA<AuthSignedIn>());
+      expect(locationOf(router), AppRoutes.community);
+    });
+
+    testWidgets('under 14 ends on its own page with no account', (
+      tester,
+    ) async {
+      final (container, router) = await pumpRouter(tester, district: _district);
+      unawaited(router.push(AppRoutes.login));
+      await tester.pumpAndSettle();
+      await tester.tap(find.text('카카오로 계속하기'));
+      await tester.pumpAndSettle();
+
+      await tester.tap(find.text('만 14세 미만이에요'));
+      await tester.pumpAndSettle();
+
+      expect(locationOf(router), AppRoutes.under14);
+      expect(container.read(authControllerProvider), isA<AuthUnder14>());
+    });
+  });
+
+  group('writing for the first time', () {
+    testWidgets('the gate leads through sign-in and the address check back '
+        'to the page, which is then writable', (tester) async {
+      final (container, router) = await pumpRouter(tester, district: _district);
+      router.go(AppRoutes.community);
+      await tester.pumpAndSettle();
+
+      await tester.tap(find.text('평가 작성').first);
+      await tester.pumpAndSettle();
+      await tester.tap(find.text('로그인하고 계속'));
+      await tester.pumpAndSettle();
+
+      await tester.tap(find.text('카카오로 계속하기'));
+      await tester.pumpAndSettle();
+      for (final label in ['만 14세 이상입니다', '이용약관', '개인정보 수집·이용']) {
+        await tester.tap(find.textContaining(label).first);
+        await tester.pump();
+      }
+      await tester.ensureVisible(find.text('동의하고 시작하기'));
+      await tester.tap(find.text('동의하고 시작하기'));
+      await tester.pumpAndSettle();
+      expect(locationOf(router), AppRoutes.residency);
+
+      await tester.tap(find.text('주소로 인증 시작'));
+      await tester.pumpAndSettle();
+      await tester.enterText(find.byType(TextField), '월드컵북로');
+      await tester.pump(const Duration(milliseconds: 400));
+      await tester.pumpAndSettle();
+      await tester.tap(find.text('서울 마포구 월드컵북로 400'));
+      await tester.pumpAndSettle();
+      expect(locationOf(router), AppRoutes.residencyDone);
+
+      await tester.tap(find.text('쓰던 곳으로 돌아가기'));
+      await tester.pumpAndSettle();
+
+      expect(locationOf(router), AppRoutes.community);
+      expect(container.read(writeAccessProvider), WriteAccess.allowed);
+      expect(container.read(addressControllerProvider).isVerified, isTrue);
+    });
+  });
+
+  group('the account page', () {
+    Future<(ProviderContainer, GoRouter)> signedIn(WidgetTester tester) async {
+      final (container, router) = await pumpRouter(tester, district: _district);
+      final auth = container.read(authControllerProvider.notifier);
+      await auth.signIn(SignInProvider.kakao);
+      final options = await auth.handleOptions();
+      await auth.acceptConsent(
+        ConsentInput(
+          age14: true,
+          terms: true,
+          privacy: true,
+          notify: false,
+          handle: options.first,
+        ),
+      );
+      await auth.verifyResidency(roadAddress: '서울 마포구 월드컵북로 400');
+      router.go(AppRoutes.home);
+      await tester.pumpAndSettle();
+      unawaited(router.push(AppRoutes.account));
+      await tester.pumpAndSettle();
+      return (container, router);
+    }
+
+    testWidgets('signing out keeps the district and ends the residency', (
+      tester,
+    ) async {
+      final (container, router) = await signedIn(tester);
+      final handle = container.read(authControllerProvider).account!.handle;
+      expect(find.text(handle), findsOneWidget);
+
+      await tester.ensureVisible(find.text('로그아웃'));
+      await tester.tap(find.text('로그아웃'));
+      await tester.pumpAndSettle();
+      await tester.tap(find.text('로그아웃').last);
+      await tester.pumpAndSettle();
+
+      expect(locationOf(router), AppRoutes.home);
+      expect(container.read(authControllerProvider), isA<AuthSignedOut>());
+      final address = container.read(addressControllerProvider);
+      expect(address.district?.id, _district.id);
+      expect(address.isVerified, isFalse);
+    });
+
+    testWidgets('a new handle is picked from the drawn ones', (tester) async {
+      final (container, _) = await signedIn(tester);
+
+      await tester.tap(find.text('변경'));
+      await tester.pumpAndSettle();
+      await tester.tap(find.text('느티 41'));
+      await tester.pump();
+      await tester.tap(find.text('느티 41로 바꾸기'));
+      await tester.pumpAndSettle();
+
+      expect(container.read(authControllerProvider).account?.handle, '느티 41');
+    });
+
+    testWidgets('deleting the account signs out and keeps reading', (
+      tester,
+    ) async {
+      final (container, router) = await signedIn(tester);
+
+      await tester.ensureVisible(find.text('계정 삭제'));
+      await tester.tap(find.text('계정 삭제'));
+      await tester.pumpAndSettle();
+      expect(locationOf(router), AppRoutes.accountDelete);
+
+      await tester.tap(find.text('계정 삭제').last);
+      await tester.pumpAndSettle();
+
+      expect(container.read(authControllerProvider), isA<AuthSignedOut>());
+      expect(locationOf(router), AppRoutes.home);
+      expect(container.read(addressControllerProvider).district, isNotNull);
+    });
+  });
+
+  group('accountRedirect', () {
+    const account = Account(
+      userId: 'u',
+      provider: SignInProvider.kakao,
+      handle: '솔숲 27',
+    );
+    const session = AuthSession(userId: 'u', provider: SignInProvider.kakao);
+    final cases = <(String, AuthState, String?)>[
+      // Reading is never redirected, signed in or not.
+      (AppRoutes.home, const AuthSignedOut(), null),
+      (AppRoutes.community, const AuthSignedOut(), null),
+      // Private pages want an account and come back afterwards.
+      (AppRoutes.account, const AuthSignedOut(), '/login?next=%2Faccount'),
+      (
+        AppRoutes.residencyAddress,
+        const AuthSignedOut(),
+        '/login?next=%2Fresidency%2Faddress',
+      ),
+      (AppRoutes.account, const AuthSignedIn(account: account), null),
+      // Signed in: the login pages hand over to where the reader was going.
+      (
+        '/login?next=%2Fcommunity',
+        const AuthSignedIn(account: account),
+        '/community',
+      ),
+      ('/login/code', const AuthSignedIn(account: account), AppRoutes.home),
+      // Half signed in: consent first.
+      (
+        '/login?next=%2Fcommunity',
+        const AuthNeedsConsent(session: session, handleOptions: []),
+        '/consent?next=%2Fcommunity',
+      ),
+      // Consent only while it is owed.
+      (AppRoutes.consent, const AuthSignedOut(), AppRoutes.login),
+      (AppRoutes.consent, const AuthUnder14(), AppRoutes.under14),
+      (AppRoutes.under14, const AuthSignedOut(), AppRoutes.home),
+    ];
+    for (final (location, auth, expected) in cases) {
+      test('$location while ${auth.runtimeType} → $expected', () {
+        expect(accountRedirect(Uri.parse(location), auth), expected);
+      });
+    }
   });
 }
