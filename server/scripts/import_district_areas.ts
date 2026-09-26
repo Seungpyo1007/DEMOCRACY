@@ -1,4 +1,4 @@
-// 공직선거법 [별표2] → district_areas (행정동 → 선거구), as SQL on stdout.
+// 공직선거법 [별표 1] → district_areas (행정동 → 선거구), as SQL on stdout.
 //
 // Input CSV (UTF-8, header row; lines starting with # are comments):
 //   election_sg_id,sd_name,sgg_name,sigungu_code,hdong_code,hdong_name

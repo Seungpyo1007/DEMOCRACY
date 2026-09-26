@@ -1,4 +1,4 @@
-# SAMPLE, NOT VERIFIED AGAINST 공직선거법 [별표2]. See testdata/README.md.
+# SAMPLE, NOT VERIFIED AGAINST 공직선거법 [별표 1]. See testdata/README.md.
 # 마포구 갑/을 composition: ko.wikipedia "마포구 을" (22대: 서강·서교·합정·망원1·망원2·연남·성산1·성산2·상암 = 을; the other 7 행정동 = 갑).
 # 행정동 codes: vuski/admdongkor ver20250101 (adm_cd2). 종로구 = one whole-시군구 선거구.
 election_sg_id,sd_name,sgg_name,sigungu_code,hdong_code,hdong_name

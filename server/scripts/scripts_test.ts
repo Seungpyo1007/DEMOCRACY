@@ -1,6 +1,14 @@
 import { assert, assertEquals, assertMatch, assertStringIncludes, assertThrows } from "@std/assert";
 import { districtAreasToSql, parseDistrictAreas } from "./import_district_areas.ts";
 import { bridgeToSql, parseBridge } from "./import_bjdong_hdong.ts";
+import {
+  bridgeCsv,
+  buildDistrictAreas,
+  lawTableFromJson,
+  parseKikH,
+  parseKikMix,
+  parseLawTable,
+} from "./build_district_areas.ts";
 import { attendanceToSql } from "./import_attendance.ts";
 import { resultsToSql } from "./import_historical_results.ts";
 import { geojsonToSql } from "./import_geojson.ts";
@@ -70,6 +78,76 @@ Deno.test("bridge: simple CSV and KIKmix headers; 말소 rows skipped", () => {
   assertEquals(rows.length, 1);
   assertEquals(rows[0].hdong_name, "망원1동");
   assertStringIncludes(bridgeToSql(kik, opts), "insert into public.bjdong_hdong");
+});
+
+const bytes = (name: string) => Deno.readFileSync(new URL(`../testdata/${name}`, import.meta.url));
+
+Deno.test("build district areas: 구역표 text parses, wrapped lines and all", () => {
+  const law = parseLawTable(sample("byeolpyo1_sample.txt"));
+  assertEquals(law.map((d) => `${d.sido} ${d.name}`), [
+    "서울특별시 종로구",
+    "서울특별시 마포구갑",
+    "서울특별시 마포구을",
+    "광주광역시 서구갑",
+    "광주광역시 서구을",
+    "전라남도 여수시갑",
+  ]);
+  assertEquals(law[2].area, "서교동, 망원제1동");
+  const json = {
+    법령: { 별표: { 별표단위: [{ 별표제목: "국회의원지역선거구구역표", 별표내용: [["a"]] }] } },
+  };
+  assertEquals(lawTableFromJson(json), "a");
+});
+
+Deno.test("build district areas: carried to today's codes, then imported", () => {
+  const codes = parseKikH(bytes("kikcd_h_sample.cp949"));
+  const mix = parseKikMix(bytes("kikmix_sample.cp949"));
+  assertEquals(codes[8].sido, "전남광주통합특별시");
+  const { csv, problems, stats } = buildDistrictAreas({
+    law: parseLawTable(sample("byeolpyo1_sample.txt")),
+    codes,
+    mix,
+    election: "20240410",
+  });
+  assertEquals(problems, []);
+  // 광주 re-coded by name; 새솔동 (2025) by the 합정동 it took from 서교동; 출장소 with 돌산읍.
+  assertEquals(stats, {
+    "same code": 5,
+    "same name": 4,
+    "법정동 overlap": 1,
+    "whole-시군구 rows": 2,
+    "행정동 rows": 7,
+    "선거구": 6,
+  });
+  const lines = csv.trim().split("\n");
+  assert(lines.includes("20240410,서울특별시,종로구,11110,,"));
+  assert(lines.includes("20240410,서울특별시,마포구을,11440,1144071000,새솔동"));
+  assert(lines.includes("20240410,광주광역시,서구갑,12240,1224074500,치평동"));
+  assert(lines.includes("20240410,전라남도,여수시갑,12810,,"));
+  assertEquals(parseDistrictAreas(csv, opts).districts.size, 6);
+});
+
+Deno.test("build district areas: a 행정동 straddling 선거구 fails the run", () => {
+  const mix = parseKikMix(bytes("kikmix_sample.cp949"));
+  const straddle = { ...mix[1], code: "1144055500", emd: "공덕동", bjd: "1144012100" };
+  const { problems } = buildDistrictAreas({
+    law: parseLawTable(sample("byeolpyo1_sample.txt")),
+    codes: parseKikH(bytes("kikcd_h_sample.cp949")),
+    mix: [...mix, { ...straddle, born: "19880423", dead: "" }],
+    election: "20240410",
+  });
+  assertEquals(problems, [
+    "1144071000 서울특별시 마포구 새솔동: spans 서울특별시|마포구갑, 서울특별시|마포구을",
+  ]);
+});
+
+Deno.test("build district areas: bridge keeps today's pairs only", () => {
+  const csv = bridgeCsv(parseKikMix(bytes("kikmix_sample.cp949")));
+  assertEquals(parseBridge(csv, opts).map((r) => `${r.bjd_code}>${r.hdong_code}`), [
+    "1144012000>1144066000",
+    "1144012100>1144071000",
+    "1224012000>1224074500",
+  ]);
 });
 
 Deno.test("attendance / historical results importers", () => {

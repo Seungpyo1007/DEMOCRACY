@@ -1,6 +1,6 @@
 -- SAMPLE SEED (generated from server/testdata by scripts; see testdata/README.md).
--- NOT VERIFIED against 공직선거법 [별표2]. Enough for 마포구 갑/을 + 종로구 to resolve.
--- Real data: run scripts/import_district_areas.ts on the full 별표2 CSV instead.
+-- NOT VERIFIED against 공직선거법 [별표 1]. Enough for 마포구 갑/을 + 종로구 to resolve.
+-- Real data: run scripts/import_district_areas.ts on the full [별표 1] CSV (server/data/) instead.
 -- District ids: nec-313502f4 = 서울 마포구 갑, nec-24863648 = 서울 마포구 을, nec-0bd970c0 = 서울 종로구
 
 insert into public.districts (id, sg_id, sg_typecode, sgg_code, sd_name, wiw_name, sgg_name, display_name, name_key, sgg_jungsu, s_order, source_url, publisher, fetched_at) values

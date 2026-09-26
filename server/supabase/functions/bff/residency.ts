@@ -5,7 +5,7 @@
 //   DELETE /residency          → {deleted: true}
 //
 // The server derives the district itself from juso (address) or Kakao (coordinates) and
-// the 별표2 mapping; a district id from the client is never accepted. An address that is
+// the [별표 1] mapping; a district id from the client is never accepted. An address that is
 // ambiguous or unmapped is no_match rather than a guess.
 //
 // The address and coordinates are used for that one lookup and dropped: they are not
