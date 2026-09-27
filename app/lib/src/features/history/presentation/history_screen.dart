@@ -290,10 +290,16 @@ class _HistoryBody extends StatelessWidget {
         const SizedBox(height: AppSpacing.x8),
         RevealIn(
           index: 2,
-          child: _LegislatorSection(
-            legislator: record.legislator,
-            anchor: anchors[2],
-          ),
+          child: switch (record.legislator) {
+            final legislator? => _LegislatorSection(
+              legislator: legislator,
+              anchor: anchors[2],
+            ),
+            null => _EmptySeatSection(
+              vacancy: record.vacancy,
+              anchor: anchors[2],
+            ),
+          },
         ),
       ],
     );
@@ -368,7 +374,7 @@ class _ElectionSection extends StatelessWidget {
               firstWin:
                   firstWin != null &&
                   newestFirst[i].year == firstWin &&
-                  newestFirst[i].winner?.id == record.legislator.id,
+                  newestFirst[i].winner?.id == record.legislator?.id,
             ),
           ),
         const SizedBox(height: AppSpacing.x2),
@@ -475,6 +481,51 @@ class _ElectionRowView extends StatelessWidget {
           ),
         ],
       ),
+    );
+  }
+}
+
+/// Section 03 when nobody holds the seat. With a [vacancy] the assembly's
+/// member list says so, and the section says 「현재 공석」 with that list as
+/// its source; without one the feed could not tell, and the section says only
+/// that the record is not ready. Neither guesses at a reason.
+class _EmptySeatSection extends StatelessWidget {
+  const _EmptySeatSection({required this.vacancy, required this.anchor});
+
+  final SeatVacancy? vacancy;
+  final GlobalKey anchor;
+
+  @override
+  Widget build(BuildContext context) {
+    final vacancy = this.vacancy;
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.stretch,
+      children: [
+        SectionHeader(key: anchor, number: '03', label: '의원 연대기'),
+        const SizedBox(height: AppSpacing.x4),
+        if (vacancy != null) ...[
+          Text(
+            '현재 공석',
+            style: Theme.of(
+              context,
+            ).textTheme.titleLarge?.copyWith(fontSize: 22),
+          ),
+          const SizedBox(height: 6),
+          Text(
+            '국회의원 명단에 이 지역구 의원이 없습니다.',
+            style: AppTextStyles.cardBody.copyWith(
+              fontSize: 13,
+              color: AppColors.neutral600,
+            ),
+          ),
+          const SizedBox(height: AppSpacing.x4),
+          SourceBadge(source: vacancy.source),
+        ] else
+          Text(
+            '의원 정보는 아직 준비 중입니다.',
+            style: AppTextStyles.cardBody.copyWith(color: AppColors.neutral600),
+          ),
+      ],
     );
   }
 }

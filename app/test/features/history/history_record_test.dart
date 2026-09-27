@@ -36,8 +36,8 @@ void main() {
       ]);
       expect(record.elections.rows.map((r) => r.term), [20, 21, 22, 23]);
       expect(record.elections.decided.map((r) => r.share), [44.1, 46.8, 45.2]);
-      expect(record.legislator.name, '가상 의원');
-      expect(record.legislator.events, hasLength(5));
+      expect(record.legislator!.name, '가상 의원');
+      expect(record.legislator!.events, hasLength(5));
     });
 
     test('keeps an unknown year as null rather than guessing one', () {
@@ -81,6 +81,49 @@ void main() {
         () => HistoryRecord.fromJson(payload),
         throwsA(isA<MissingSourceException>()),
       );
+    });
+
+    test('a vacant seat keeps the place and its elections', () {
+      final payload = _fixture()
+        ..['legislator'] = {
+          'vacant': true,
+          'source': {
+            'sourceUrl':
+                'https://open.assembly.go.kr/portal/data/service/selectAPIServicePage.do/OWSSC6001134T516707',
+            'fetchedAt': '2026-09-24T03:00:00Z',
+          },
+        };
+      final record = HistoryRecord.fromJson(payload);
+
+      expect(record.legislator, isNull);
+      expect(record.vacancy?.source.publisher, isNotEmpty);
+      expect(record.region.events, hasLength(4));
+      expect(record.elections.decided, hasLength(3));
+      expect(record.incumbentFirstWinYear, isNull);
+    });
+
+    test('a vacancy without a source is refused', () {
+      final payload = _fixture()..['legislator'] = {'vacant': true};
+
+      expect(
+        () => HistoryRecord.fromJson(payload),
+        throwsA(
+          isA<MissingSourceException>().having(
+            (e) => e.field,
+            'field',
+            'legislator',
+          ),
+        ),
+      );
+    });
+
+    test('with nobody on record, nothing is said about the seat', () {
+      final payload = _fixture()..['legislator'] = null;
+      final record = HistoryRecord.fromJson(payload);
+
+      expect(record.legislator, isNull);
+      expect(record.vacancy, isNull);
+      expect(record.elections.decided, hasLength(3));
     });
 
     test('an ongoing election needs no winner', () {

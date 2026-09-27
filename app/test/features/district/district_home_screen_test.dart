@@ -32,9 +32,16 @@ const _source = {
 };
 
 class FakeProfileRepository implements DistrictRepository {
-  const FakeProfileRepository({this.failure, this.withRecord = true});
+  const FakeProfileRepository({
+    this.failure,
+    this.withRecord = true,
+    this.vacant = false,
+  });
 
   final Object? failure;
+
+  /// The member list names nobody for the district.
+  final bool vacant;
 
   /// A district whose activity feed is not wired yet still has to render.
   final bool withRecord;
@@ -47,48 +54,50 @@ class FakeProfileRepository implements DistrictRepository {
     return DistrictProfile.fromJson({
       'district': {'id': districtId, 'displayName': _district.displayName},
       'source': _source,
-      'incumbent': {
-        'id': 'fixture-incumbent',
-        'name': '가상 의원',
-        'party': '가나당',
-        'stats': [
-          {
-            'label': '출석률',
-            'unit': '%',
-            'value': {'value': 92, ..._source},
-          },
-        ],
-        if (withRecord)
-          'record': {
-            'bills': {
-              'source': _source,
-              'items': [
-                {
-                  'id': 'fixture-bill-1',
-                  'title': '가상 법안',
-                  'stage': '소위 심사',
-                  'stamp': '6월 3일',
-                },
-              ],
-            },
-            'attendance': {
+      if (vacant) 'vacant': true,
+      if (!vacant)
+        'incumbent': {
+          'id': 'fixture-incumbent',
+          'name': '가상 의원',
+          'party': '가나당',
+          'stats': [
+            {
+              'label': '출석률',
               'unit': '%',
-              'source': _source,
-              'points': [
-                {'label': '6월', 'value': 92},
-                {'label': '7월', 'value': 95},
-              ],
+              'value': {'value': 92, ..._source},
             },
-            'votes': {
-              'unit': '%',
-              'source': _source,
-              'points': [
-                {'label': '6월', 'value': 87},
-                {'label': '7월', 'value': 88},
-              ],
+          ],
+          if (withRecord)
+            'record': {
+              'bills': {
+                'source': _source,
+                'items': [
+                  {
+                    'id': 'fixture-bill-1',
+                    'title': '가상 법안',
+                    'stage': '소위 심사',
+                    'stamp': '6월 3일',
+                  },
+                ],
+              },
+              'attendance': {
+                'unit': '%',
+                'source': _source,
+                'points': [
+                  {'label': '6월', 'value': 92},
+                  {'label': '7월', 'value': 95},
+                ],
+              },
+              'votes': {
+                'unit': '%',
+                'source': _source,
+                'points': [
+                  {'label': '6월', 'value': 87},
+                  {'label': '7월', 'value': 88},
+                ],
+              },
             },
-          },
-      },
+        },
       'candidates': [
         {
           'id': 'fixture-c3',
@@ -197,6 +206,22 @@ void main() {
     );
     expect(find.text('내 지역구'), findsOneWidget);
     expect(find.text('읽기 전용'), findsOneWidget);
+  });
+
+  testWidgets('a vacant seat says so, with the list it was read from', (
+    tester,
+  ) async {
+    await pumpHome(
+      tester,
+      profileRepository: const FakeProfileRepository(vacant: true),
+    );
+
+    expect(find.text('현재 공석'), findsOneWidget);
+    expect(find.text('가상 의원'), findsNothing);
+    // No record tabs for a member who is not there; candidates still show.
+    expect(find.text('법안'), findsNothing);
+    expect(find.text('가후보'), findsOneWidget);
+    expect(find.byType(SourceBadge), findsWidgets);
   });
 
   testWidgets('the district switch is a toolbar action', (tester) async {

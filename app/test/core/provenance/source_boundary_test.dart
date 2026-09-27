@@ -110,12 +110,39 @@ void main() {
 
     test('parses when every figure is sourced', () {
       final profile = DistrictProfile.fromJson(districtJson());
-      expect(profile.incumbent.stats.single.display, '92%');
+      expect(profile.incumbent!.stats.single.display, '92%');
     });
 
     test('refuses the whole payload when one figure is unsourced', () {
       expect(
         () => DistrictProfile.fromJson(districtJson(statValue: {'value': 92})),
+        throwsA(isA<MissingSourceException>()),
+      );
+    });
+
+    test('a vacant seat has no incumbent and keeps its source', () {
+      final profile = DistrictProfile.fromJson(
+        districtJson()
+          ..['incumbent'] = null
+          ..['vacant'] = true,
+      );
+      expect(profile.isVacant, isTrue);
+      expect(profile.incumbent, isNull);
+      expect(profile.source.publisher, isNotEmpty);
+    });
+
+    test('a payload that only lost its incumbent is still refused', () {
+      expect(
+        () => DistrictProfile.fromJson(districtJson()..['incumbent'] = null),
+        throwsA(isA<MissingSourceException>()),
+      );
+      expect(
+        () => DistrictProfile.fromJson(
+          districtJson()
+            ..['incumbent'] = null
+            ..['vacant'] = true
+            ..remove('source'),
+        ),
         throwsA(isA<MissingSourceException>()),
       );
     });

@@ -157,6 +157,50 @@ void main() {
     });
   }
 
+  Map<String, Object?> fixturePayload() =>
+      json.decode(
+            File(
+              'assets/fixtures/history_fixture-seoul-mapo-b.json',
+            ).readAsStringSync(),
+          )
+          as Map<String, Object?>;
+
+  testWidgets('a vacant seat still shows the place and its elections', (
+    tester,
+  ) async {
+    final payload = fixturePayload()
+      ..['legislator'] = {
+        'vacant': true,
+        'source': {
+          'sourceUrl':
+              'https://open.assembly.go.kr/portal/data/service/selectAPIServicePage.do/OWSSC6001134T516707',
+          'fetchedAt': '2026-09-24T03:00:00Z',
+        },
+      };
+    await pumpHistory(tester, repository: _PayloadRepository(payload));
+
+    expect(find.text('마포구 설치'), findsOneWidget);
+    expect(find.text('가상 인물 라'), findsOneWidget);
+    expect(sectionHeader('의원 연대기'), findsOneWidget);
+    expect(find.text('현재 공석'), findsOneWidget);
+    expect(find.text('첫 당선'), findsNothing);
+    expect(find.byType(GrayscalePortrait), findsNothing);
+    // The district office, the commission, and the member list the vacancy
+    // was read from.
+    expect(find.byType(SourceBadge), findsNWidgets(3));
+  });
+
+  testWidgets('with nobody on record the seat is not called vacant', (
+    tester,
+  ) async {
+    final payload = fixturePayload()..['legislator'] = null;
+    await pumpHistory(tester, repository: _PayloadRepository(payload));
+
+    expect(find.text('가상 인물 라'), findsOneWidget);
+    expect(find.text('현재 공석'), findsNothing);
+    expect(find.text('의원 정보는 아직 준비 중입니다.'), findsOneWidget);
+  });
+
   testWidgets('an unknown year says so instead of printing one', (
     tester,
   ) async {

@@ -126,14 +126,19 @@ class DistrictProfile {
           Politician.fromJson(candidate as Map<String, Object?>),
     ];
 
+    // A vacant seat has no incumbent and says so; anything else must name
+    // one, so a payload that merely lost its incumbent is still refused.
+    final vacant = json['vacant'] == true;
     return DistrictProfile(
       district: DistrictRef(
         id: districtJson['id'] as String? ?? '',
         displayName: districtJson['displayName'] as String? ?? '',
       ),
-      incumbent: Politician.fromJson(
-        json['incumbent'] as Map<String, Object?>? ?? const {},
-      ),
+      incumbent: vacant
+          ? null
+          : Politician.fromJson(
+              json['incumbent'] as Map<String, Object?>? ?? const {},
+            ),
       candidates: sortedByName(candidates),
       source: SourceMetadata.fromJson(json['source'], field: 'district'),
     );
@@ -149,7 +154,12 @@ class DistrictProfile {
   static const sortLabel = '가나다순';
 
   final DistrictRef district;
-  final Politician incumbent;
+
+  /// Null when the seat is vacant: the assembly's member list names nobody
+  /// for this district, and [source] is that list.
+  final Politician? incumbent;
   final List<Politician> candidates;
   final SourceMetadata source;
+
+  bool get isVacant => incumbent == null;
 }

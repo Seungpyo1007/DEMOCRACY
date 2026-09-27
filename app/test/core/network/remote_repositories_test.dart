@@ -74,7 +74,7 @@ void main() {
     final profile = await RemoteDistrictRepository(client).loadProfile(id);
 
     expect(profile.district.displayName, '서울 마포구 을');
-    expect(profile.incumbent.record, isNotNull);
+    expect(profile.incumbent!.record, isNotNull);
   });
 
   test('the history fixture is a valid history response', () async {

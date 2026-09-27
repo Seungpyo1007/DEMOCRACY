@@ -64,7 +64,7 @@ class _PledgeTrackerScreenState extends ConsumerState<PledgeTrackerScreen> {
     final district = ref.watch(districtProvider);
     // The name is a courtesy in the kicker, not something the tracker needs,
     // so a profile that has not loaded (or failed) just leaves it out.
-    final incumbent = ref.watch(districtProfileProvider).value?.incumbent.name;
+    final incumbent = ref.watch(districtProfileProvider).value?.incumbent?.name;
     final kicker = [?incumbent, ?district?.displayName].join(' · ');
 
     return TabAccessoryScope(

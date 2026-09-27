@@ -223,6 +223,9 @@ class _IncumbentSectionState extends State<_IncumbentSection> {
   @override
   Widget build(BuildContext context) {
     final incumbent = widget.profile.incumbent;
+    if (incumbent == null) {
+      return _VacantSeat(source: widget.profile.source);
+    }
     final stats = incumbent.stats.take(3).toList();
     final reduced = AppMotion.reduced(context);
 
@@ -333,6 +336,41 @@ class _IncumbentSectionState extends State<_IncumbentSection> {
             ),
           ),
         ),
+      ],
+    );
+  }
+}
+
+/// Section 01 for a seat nobody holds: the fact and the list it was read
+/// from. No record tabs, since a record belongs to a member, and no reason,
+/// since the list gives none.
+class _VacantSeat extends StatelessWidget {
+  const _VacantSeat({required this.source});
+
+  final SourceMetadata source;
+
+  @override
+  Widget build(BuildContext context) {
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.stretch,
+      children: [
+        const SectionHeader(number: '01', label: '현직 의원'),
+        const SizedBox(height: AppSpacing.x4),
+        Text(
+          '현재 공석',
+          style: Theme.of(context).textTheme.headlineSmall?.copyWith(
+            fontSize: 28,
+            letterSpacing: -0.56,
+            height: 1.1,
+          ),
+        ),
+        const SizedBox(height: AppSpacing.x2),
+        Text(
+          '국회의원 명단에 이 지역구 의원이 없습니다.',
+          style: AppTextStyles.cardBody.copyWith(color: AppColors.neutral600),
+        ),
+        const SizedBox(height: AppSpacing.x4),
+        SourceBadge(source: source),
       ],
     );
   }
