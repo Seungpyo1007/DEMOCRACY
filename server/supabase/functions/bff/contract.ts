@@ -1,6 +1,7 @@
 // A TS mirror of the app's Dart parsers' required-field rules
 // (app/lib/src/core/provenance/source_metadata.dart, features/district/domain/*,
-// features/history/domain/history_record.dart, features/pledges/domain/pledge.dart).
+// features/history/domain/history_record.dart, features/pledges/domain/pledge.dart,
+// features/reviews/domain/resident_review.dart, features/reviews/data/remote_*).
 // Returns a list of violations; empty = the app would parse it.
 //
 // One deliberate difference: `record.attendance` / `record.votes` are optional
@@ -193,6 +194,64 @@ export function validateAddressSuggestions(json: unknown): string[] {
   return errs;
 }
 
+/** ReviewBoard.fromJson: summary {average, respondents:int, axes[]}, reviews[]. */
+export function validateReviewBoard(json: unknown): string[] {
+  const errs: string[] = [];
+  if (!isMap(json)) return ["reviews: not an object"];
+  const s = json.summary;
+  if (!isMap(s) || typeof s.average !== "number" || !Number.isInteger(s.respondents)) {
+    errs.push("summary: average and integer respondents");
+  } else {
+    (Array.isArray(s.axes) ? s.axes : []).forEach((a, i) => {
+      if (!isMap(a) || typeof a.label !== "string" || typeof a.score !== "number") {
+        errs.push(`summary.axes[${i}]: label and score`);
+      }
+    });
+  }
+  (Array.isArray(json.reviews) ? json.reviews : []).forEach((r, i) => {
+    if (
+      !isMap(r) || typeof r.id !== "string" || typeof r.body !== "string" ||
+      typeof r.score !== "number"
+    ) {
+      return errs.push(`reviews[${i}]: id, body and score`);
+    }
+    if (r.author !== undefined && r.author !== null && typeof r.author !== "string") {
+      errs.push(`reviews[${i}].author: must be a string`);
+    }
+    if (r.verifiedResident !== undefined && typeof r.verifiedResident !== "boolean") {
+      errs.push(`reviews[${i}].verifiedResident: must be a boolean`);
+    }
+  });
+  return errs;
+}
+
+/** The channel and threads: messages need id, author and body; threads id and title. */
+export function validateCommunity(json: unknown): string[] {
+  const errs: string[] = [];
+  if (!isMap(json)) return ["community: not an object"];
+  if (!Array.isArray(json.messages)) errs.push("messages: list required");
+  if (!Array.isArray(json.threads)) errs.push("threads: list required");
+  (Array.isArray(json.messages) ? json.messages : []).forEach((m, i) => {
+    if (!isMap(m) || !nonEmpty(m.id) || typeof m.author !== "string" || !nonEmpty(m.body)) {
+      return errs.push(`messages[${i}]: id, author and body`);
+    }
+    for (const k of ["verifiedResident", "mine"]) {
+      if (m[k] !== undefined && typeof m[k] !== "boolean") {
+        errs.push(`messages[${i}].${k}: must be a boolean`);
+      }
+    }
+  });
+  (Array.isArray(json.threads) ? json.threads : []).forEach((t, i) => {
+    if (!isMap(t) || !nonEmpty(t.id) || !nonEmpty(t.title)) {
+      return errs.push(`threads[${i}]: id and title`);
+    }
+    if (t.replies !== undefined && !Number.isInteger(t.replies)) {
+      errs.push(`threads[${i}].replies: must be an integer`);
+    }
+  });
+  return errs;
+}
+
 /** The envelope every BFF response shares. */
 export function validateEnvelope(json: unknown, expectError: boolean): string[] {
   const errs: string[] = [];
@@ -216,6 +275,9 @@ export function validateEnvelope(json: unknown, expectError: boolean): string[] 
       "consent_required",
       "conflict",
       "too_soon",
+      "residency_required",
+      "content_rejected",
+      "rate_limited",
     ];
     if (!isMap(e) || !codes.includes(e.code as string) || typeof e.message !== "string") {
       errs.push("envelope: error {code, message}");
