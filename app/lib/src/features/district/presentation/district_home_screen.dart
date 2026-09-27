@@ -88,7 +88,7 @@ class DistrictHomeScreen extends ConsumerWidget {
           actions: [
             const AccountEntryButton(),
             AppToolbarButton(
-              icon: AppIcons.swapDistrict,
+              icon: AppIcons.search,
               label: '지역구 변경',
               onPressed: () => _changeDistrict(context, ref),
             ),
