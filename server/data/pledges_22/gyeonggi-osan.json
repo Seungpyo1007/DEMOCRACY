@@ -1,0 +1,77 @@
+{
+  "_note": "제22대 국회의원선거 경기 오산시 당선인 차지호 (더불어민주당). 책자형 선거공보 PDF 5쪽 「차지호가 함께할 오산의 10년, 변화의 클래스가 다릅니다!」 「오산 글로벌-AI 3축 전략」 3개와 「경기도 하이퍼 커넥티드 3대 비전」 3개, 모두 6개 상자의 머리 문장. PDF 5쪽은 글자층이 없어(이미지) 쪽 이미지를 보고 옮겼다. 상자 안의 세부 항목, PDF 6쪽의 동별 공약, PDF 1–4쪽의 이력·정권 비판은 넣지 않았다. 제목은 원문 문구를 따랐고 바꾼 것은 위에 적은 구호·수식어 덜어내기뿐이다. 분류(category)는 앱에 정해진 분류 체계가 없어 비워 두었다. 이행 여부는 판정하지 않았다(notJudged).",
+  "districtId": "nec-06730f91",
+  "source": {
+    "sourceUrl": "https://policy.nec.go.kr/policy_pdf/20240410/PDF/PBINFO_PUB/4127/003_100152999_20240401_2.pdf",
+    "fetchedAt": "2026-09-28T02:00:00Z",
+    "publisher": "중앙선거관리위원회"
+  },
+  "pledges": [
+    {
+      "id": "22-gyeonggi-osan-01",
+      "title": "AI 공공의료 융합연구단지 조성으로 미래의료 시스템을 선도하겠습니다",
+      "category": "",
+      "status": "notJudged",
+      "source": {
+        "sourceUrl": "https://policy.nec.go.kr/policy_pdf/20240410/PDF/PBINFO_PUB/4127/003_100152999_20240401_2.pdf",
+        "fetchedAt": "2026-09-28T02:00:00Z",
+        "publisher": "중앙선거관리위원회"
+      }
+    },
+    {
+      "id": "22-gyeonggi-osan-02",
+      "title": "에듀케이션 4.0으로 완전히 새로운 미래교육을 선도하겠습니다",
+      "category": "",
+      "status": "notJudged",
+      "source": {
+        "sourceUrl": "https://policy.nec.go.kr/policy_pdf/20240410/PDF/PBINFO_PUB/4127/003_100152999_20240401_2.pdf",
+        "fetchedAt": "2026-09-28T02:00:00Z",
+        "publisher": "중앙선거관리위원회"
+      }
+    },
+    {
+      "id": "22-gyeonggi-osan-03",
+      "title": "글로벌 AI 인재와 함께 오산 미래산업 생태계를 조성하겠습니다",
+      "category": "",
+      "status": "notJudged",
+      "source": {
+        "sourceUrl": "https://policy.nec.go.kr/policy_pdf/20240410/PDF/PBINFO_PUB/4127/003_100152999_20240401_2.pdf",
+        "fetchedAt": "2026-09-28T02:00:00Z",
+        "publisher": "중앙선거관리위원회"
+      }
+    },
+    {
+      "id": "22-gyeonggi-osan-04",
+      "title": "초연결 교통-SOC 1단계로 도시 간 거리를 좁히겠습니다",
+      "category": "",
+      "status": "notJudged",
+      "source": {
+        "sourceUrl": "https://policy.nec.go.kr/policy_pdf/20240410/PDF/PBINFO_PUB/4127/003_100152999_20240401_2.pdf",
+        "fetchedAt": "2026-09-28T02:00:00Z",
+        "publisher": "중앙선거관리위원회"
+      }
+    },
+    {
+      "id": "22-gyeonggi-osan-05",
+      "title": "스마트 소셜 케어를 도입해 복지의 접근성을 높이겠습니다",
+      "category": "",
+      "status": "notJudged",
+      "source": {
+        "sourceUrl": "https://policy.nec.go.kr/policy_pdf/20240410/PDF/PBINFO_PUB/4127/003_100152999_20240401_2.pdf",
+        "fetchedAt": "2026-09-28T02:00:00Z",
+        "publisher": "중앙선거관리위원회"
+      }
+    },
+    {
+      "id": "22-gyeonggi-osan-06",
+      "title": "초연결 그린 인프라를 구축해 살기좋은 환경을 만들겠습니다",
+      "category": "",
+      "status": "notJudged",
+      "source": {
+        "sourceUrl": "https://policy.nec.go.kr/policy_pdf/20240410/PDF/PBINFO_PUB/4127/003_100152999_20240401_2.pdf",
+        "fetchedAt": "2026-09-28T02:00:00Z",
+        "publisher": "중앙선거관리위원회"
+      }
+    }
+  ]
+}

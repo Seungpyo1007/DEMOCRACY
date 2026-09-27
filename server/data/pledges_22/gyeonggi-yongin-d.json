@@ -1,0 +1,341 @@
+{
+  "_note": "제22대 국회의원선거 경기 용인시 정 당선인 이언주 (더불어민주당). 책자형 선거공보 PDF 5쪽 「주변 지역과 연결이 핵심! 용인플랫폼시티」 굵은 항목 8개와 PDF 7–8쪽 「살고 싶은 도시, 용인특례시!」의 미래형 경제도시·속시원한 교통시대·살기 좋은 녹색도시·문화 업그레이드·교육 업그레이드·함께 누리는 복지도시 • 항목 22개. 5쪽 용인플렉스·EX허브 항목 밑의 작은 설명 줄은 넣지 않았고, 동백신봉선 항목은 밑줄의 구간과 '조속 추진'까지가 한 문장이라 이어 붙였다. PDF 7–8쪽 아래의 동별 공약(구성동·마북동·동백1,3동·보정동·죽전1,2,3동·상현2동), PDF 9쪽 청년 공약, PDF 10쪽 국정 공약은 넣지 않았다. 제목은 원문 문구를 따랐고 바꾼 것은 위에 적은 구호·수식어 덜어내기뿐이다. 분류(category)는 앱에 정해진 분류 체계가 없어 비워 두었다. 이행 여부는 판정하지 않았다(notJudged).",
+  "districtId": "nec-262e4504",
+  "source": {
+    "sourceUrl": "https://policy.nec.go.kr/policy_pdf/20240410/PDF/PBINFO_PUB/4137/003_100152933_20240402_2.pdf",
+    "fetchedAt": "2026-09-28T02:00:00Z",
+    "publisher": "중앙선거관리위원회"
+  },
+  "pledges": [
+    {
+      "id": "22-gyeonggi-yongin-d-01",
+      "title": "동백신봉선 도시철도 [동백(-청덕·언남)-GTX구성역(-상현)-성복-신봉] 조속 추진",
+      "category": "",
+      "status": "notJudged",
+      "source": {
+        "sourceUrl": "https://policy.nec.go.kr/policy_pdf/20240410/PDF/PBINFO_PUB/4137/003_100152933_20240402_2.pdf",
+        "fetchedAt": "2026-09-28T02:00:00Z",
+        "publisher": "중앙선거관리위원회"
+      }
+    },
+    {
+      "id": "22-gyeonggi-yongin-d-02",
+      "title": "인접 지역 연결 도로 및 터널 설치 추진",
+      "category": "",
+      "status": "notJudged",
+      "source": {
+        "sourceUrl": "https://policy.nec.go.kr/policy_pdf/20240410/PDF/PBINFO_PUB/4137/003_100152933_20240402_2.pdf",
+        "fetchedAt": "2026-09-28T02:00:00Z",
+        "publisher": "중앙선거관리위원회"
+      }
+    },
+    {
+      "id": "22-gyeonggi-yongin-d-03",
+      "title": "GTX구성역 연결하는 노선버스 정비 및 신설",
+      "category": "",
+      "status": "notJudged",
+      "source": {
+        "sourceUrl": "https://policy.nec.go.kr/policy_pdf/20240410/PDF/PBINFO_PUB/4137/003_100152933_20240402_2.pdf",
+        "fetchedAt": "2026-09-28T02:00:00Z",
+        "publisher": "중앙선거관리위원회"
+      }
+    },
+    {
+      "id": "22-gyeonggi-yongin-d-04",
+      "title": "SRT 구성역 정차 추진",
+      "category": "",
+      "status": "notJudged",
+      "source": {
+        "sourceUrl": "https://policy.nec.go.kr/policy_pdf/20240410/PDF/PBINFO_PUB/4137/003_100152933_20240402_2.pdf",
+        "fetchedAt": "2026-09-28T02:00:00Z",
+        "publisher": "중앙선거관리위원회"
+      }
+    },
+    {
+      "id": "22-gyeonggi-yongin-d-05",
+      "title": "플랫폼시티 개발이익금 용인시 재투자 추진",
+      "category": "",
+      "status": "notJudged",
+      "source": {
+        "sourceUrl": "https://policy.nec.go.kr/policy_pdf/20240410/PDF/PBINFO_PUB/4137/003_100152933_20240402_2.pdf",
+        "fetchedAt": "2026-09-28T02:00:00Z",
+        "publisher": "중앙선거관리위원회"
+      }
+    },
+    {
+      "id": "22-gyeonggi-yongin-d-06",
+      "title": "용인플렉스 추진",
+      "category": "",
+      "status": "notJudged",
+      "source": {
+        "sourceUrl": "https://policy.nec.go.kr/policy_pdf/20240410/PDF/PBINFO_PUB/4137/003_100152933_20240402_2.pdf",
+        "fetchedAt": "2026-09-28T02:00:00Z",
+        "publisher": "중앙선거관리위원회"
+      }
+    },
+    {
+      "id": "22-gyeonggi-yongin-d-07",
+      "title": "EX허브 복합환승센터 조속 건립",
+      "category": "",
+      "status": "notJudged",
+      "source": {
+        "sourceUrl": "https://policy.nec.go.kr/policy_pdf/20240410/PDF/PBINFO_PUB/4137/003_100152933_20240402_2.pdf",
+        "fetchedAt": "2026-09-28T02:00:00Z",
+        "publisher": "중앙선거관리위원회"
+      }
+    },
+    {
+      "id": "22-gyeonggi-yongin-d-08",
+      "title": "한시적 미세먼지 집중관리 구역 지정과 민원 창구 개설",
+      "category": "",
+      "status": "notJudged",
+      "source": {
+        "sourceUrl": "https://policy.nec.go.kr/policy_pdf/20240410/PDF/PBINFO_PUB/4137/003_100152933_20240402_2.pdf",
+        "fetchedAt": "2026-09-28T02:00:00Z",
+        "publisher": "중앙선거관리위원회"
+      }
+    },
+    {
+      "id": "22-gyeonggi-yongin-d-09",
+      "title": "용인반도체클러스터 연계 첨단산업 플랫폼 환경 조성",
+      "category": "",
+      "status": "notJudged",
+      "source": {
+        "sourceUrl": "https://policy.nec.go.kr/policy_pdf/20240410/PDF/PBINFO_PUB/4137/003_100152933_20240402_2.pdf",
+        "fetchedAt": "2026-09-28T02:00:00Z",
+        "publisher": "중앙선거관리위원회"
+      }
+    },
+    {
+      "id": "22-gyeonggi-yongin-d-10",
+      "title": "용인플랫폼시티 미래성장산업 유치로 일자리 창출 및 경제 활성화",
+      "category": "",
+      "status": "notJudged",
+      "source": {
+        "sourceUrl": "https://policy.nec.go.kr/policy_pdf/20240410/PDF/PBINFO_PUB/4137/003_100152933_20240402_2.pdf",
+        "fetchedAt": "2026-09-28T02:00:00Z",
+        "publisher": "중앙선거관리위원회"
+      }
+    },
+    {
+      "id": "22-gyeonggi-yongin-d-11",
+      "title": "마북연구단지에 첨단·신사업 혁신밸리 조성",
+      "category": "",
+      "status": "notJudged",
+      "source": {
+        "sourceUrl": "https://policy.nec.go.kr/policy_pdf/20240410/PDF/PBINFO_PUB/4137/003_100152933_20240402_2.pdf",
+        "fetchedAt": "2026-09-28T02:00:00Z",
+        "publisher": "중앙선거관리위원회"
+      }
+    },
+    {
+      "id": "22-gyeonggi-yongin-d-12",
+      "title": "서울, 분당과 죽전·마북·동백을 잇는 지하철 연장 추진",
+      "category": "",
+      "status": "notJudged",
+      "source": {
+        "sourceUrl": "https://policy.nec.go.kr/policy_pdf/20240410/PDF/PBINFO_PUB/4137/003_100152933_20240402_2.pdf",
+        "fetchedAt": "2026-09-28T02:00:00Z",
+        "publisher": "중앙선거관리위원회"
+      }
+    },
+    {
+      "id": "22-gyeonggi-yongin-d-13",
+      "title": "용구대로(국지도23호선) 지하도로 조속 추진",
+      "category": "",
+      "status": "notJudged",
+      "source": {
+        "sourceUrl": "https://policy.nec.go.kr/policy_pdf/20240410/PDF/PBINFO_PUB/4137/003_100152933_20240402_2.pdf",
+        "fetchedAt": "2026-09-28T02:00:00Z",
+        "publisher": "중앙선거관리위원회"
+      }
+    },
+    {
+      "id": "22-gyeonggi-yongin-d-14",
+      "title": "영동고속도로 동백IC 조기 착공 추진",
+      "category": "",
+      "status": "notJudged",
+      "source": {
+        "sourceUrl": "https://policy.nec.go.kr/policy_pdf/20240410/PDF/PBINFO_PUB/4137/003_100152933_20240402_2.pdf",
+        "fetchedAt": "2026-09-28T02:00:00Z",
+        "publisher": "중앙선거관리위원회"
+      }
+    },
+    {
+      "id": "22-gyeonggi-yongin-d-15",
+      "title": "교통취약지역 공공버스 확대",
+      "category": "",
+      "status": "notJudged",
+      "source": {
+        "sourceUrl": "https://policy.nec.go.kr/policy_pdf/20240410/PDF/PBINFO_PUB/4137/003_100152933_20240402_2.pdf",
+        "fetchedAt": "2026-09-28T02:00:00Z",
+        "publisher": "중앙선거관리위원회"
+      }
+    },
+    {
+      "id": "22-gyeonggi-yongin-d-16",
+      "title": "법화산, 대지산, 석성산 녹지 보존 및 자연탐방로 설치",
+      "category": "",
+      "status": "notJudged",
+      "source": {
+        "sourceUrl": "https://policy.nec.go.kr/policy_pdf/20240410/PDF/PBINFO_PUB/4137/003_100152933_20240402_2.pdf",
+        "fetchedAt": "2026-09-28T02:00:00Z",
+        "publisher": "중앙선거관리위원회"
+      }
+    },
+    {
+      "id": "22-gyeonggi-yongin-d-17",
+      "title": "걷고 싶은 탄천길 조성",
+      "category": "",
+      "status": "notJudged",
+      "source": {
+        "sourceUrl": "https://policy.nec.go.kr/policy_pdf/20240410/PDF/PBINFO_PUB/4137/003_100152933_20240402_2.pdf",
+        "fetchedAt": "2026-09-28T02:00:00Z",
+        "publisher": "중앙선거관리위원회"
+      }
+    },
+    {
+      "id": "22-gyeonggi-yongin-d-18",
+      "title": "안전하고 쾌적한 보행환경개선 사업 추진",
+      "category": "",
+      "status": "notJudged",
+      "source": {
+        "sourceUrl": "https://policy.nec.go.kr/policy_pdf/20240410/PDF/PBINFO_PUB/4137/003_100152933_20240402_2.pdf",
+        "fetchedAt": "2026-09-28T02:00:00Z",
+        "publisher": "중앙선거관리위원회"
+      }
+    },
+    {
+      "id": "22-gyeonggi-yongin-d-19",
+      "title": "쾌적한 도시환경을 위한 전선지중화 추진",
+      "category": "",
+      "status": "notJudged",
+      "source": {
+        "sourceUrl": "https://policy.nec.go.kr/policy_pdf/20240410/PDF/PBINFO_PUB/4137/003_100152933_20240402_2.pdf",
+        "fetchedAt": "2026-09-28T02:00:00Z",
+        "publisher": "중앙선거관리위원회"
+      }
+    },
+    {
+      "id": "22-gyeonggi-yongin-d-20",
+      "title": "용인포은아트홀 리모델링 추진",
+      "category": "",
+      "status": "notJudged",
+      "source": {
+        "sourceUrl": "https://policy.nec.go.kr/policy_pdf/20240410/PDF/PBINFO_PUB/4137/003_100152933_20240402_2.pdf",
+        "fetchedAt": "2026-09-28T02:00:00Z",
+        "publisher": "중앙선거관리위원회"
+      }
+    },
+    {
+      "id": "22-gyeonggi-yongin-d-21",
+      "title": "대형 공연장을 갖춘 ‘아트플랫폼용인(가칭)’ 신설 추진",
+      "category": "",
+      "status": "notJudged",
+      "source": {
+        "sourceUrl": "https://policy.nec.go.kr/policy_pdf/20240410/PDF/PBINFO_PUB/4137/003_100152933_20240402_2.pdf",
+        "fetchedAt": "2026-09-28T02:00:00Z",
+        "publisher": "중앙선거관리위원회"
+      }
+    },
+    {
+      "id": "22-gyeonggi-yongin-d-22",
+      "title": "용인문화유산박물관(가칭) 건립 추진",
+      "category": "",
+      "status": "notJudged",
+      "source": {
+        "sourceUrl": "https://policy.nec.go.kr/policy_pdf/20240410/PDF/PBINFO_PUB/4137/003_100152933_20240402_2.pdf",
+        "fetchedAt": "2026-09-28T02:00:00Z",
+        "publisher": "중앙선거관리위원회"
+      }
+    },
+    {
+      "id": "22-gyeonggi-yongin-d-23",
+      "title": "학교 신설 및 증설 추진",
+      "category": "",
+      "status": "notJudged",
+      "source": {
+        "sourceUrl": "https://policy.nec.go.kr/policy_pdf/20240410/PDF/PBINFO_PUB/4137/003_100152933_20240402_2.pdf",
+        "fetchedAt": "2026-09-28T02:00:00Z",
+        "publisher": "중앙선거관리위원회"
+      }
+    },
+    {
+      "id": "22-gyeonggi-yongin-d-24",
+      "title": "안전한 등하교를 위한 공공스쿨버스 도입 추진",
+      "category": "",
+      "status": "notJudged",
+      "source": {
+        "sourceUrl": "https://policy.nec.go.kr/policy_pdf/20240410/PDF/PBINFO_PUB/4137/003_100152933_20240402_2.pdf",
+        "fetchedAt": "2026-09-28T02:00:00Z",
+        "publisher": "중앙선거관리위원회"
+      }
+    },
+    {
+      "id": "22-gyeonggi-yongin-d-25",
+      "title": "AI 기술을 활용한 안심통학로 체계 구축",
+      "category": "",
+      "status": "notJudged",
+      "source": {
+        "sourceUrl": "https://policy.nec.go.kr/policy_pdf/20240410/PDF/PBINFO_PUB/4137/003_100152933_20240402_2.pdf",
+        "fetchedAt": "2026-09-28T02:00:00Z",
+        "publisher": "중앙선거관리위원회"
+      }
+    },
+    {
+      "id": "22-gyeonggi-yongin-d-26",
+      "title": "학교 교육시설 환경개선",
+      "category": "",
+      "status": "notJudged",
+      "source": {
+        "sourceUrl": "https://policy.nec.go.kr/policy_pdf/20240410/PDF/PBINFO_PUB/4137/003_100152933_20240402_2.pdf",
+        "fetchedAt": "2026-09-28T02:00:00Z",
+        "publisher": "중앙선거관리위원회"
+      }
+    },
+    {
+      "id": "22-gyeonggi-yongin-d-27",
+      "title": "공공도서관, 노인복지관 등 복지시설 확대",
+      "category": "",
+      "status": "notJudged",
+      "source": {
+        "sourceUrl": "https://policy.nec.go.kr/policy_pdf/20240410/PDF/PBINFO_PUB/4137/003_100152933_20240402_2.pdf",
+        "fetchedAt": "2026-09-28T02:00:00Z",
+        "publisher": "중앙선거관리위원회"
+      }
+    },
+    {
+      "id": "22-gyeonggi-yongin-d-28",
+      "title": "온동네초등돌봄 도입, 다함께돌봄센터 확대 설치",
+      "category": "",
+      "status": "notJudged",
+      "source": {
+        "sourceUrl": "https://policy.nec.go.kr/policy_pdf/20240410/PDF/PBINFO_PUB/4137/003_100152933_20240402_2.pdf",
+        "fetchedAt": "2026-09-28T02:00:00Z",
+        "publisher": "중앙선거관리위원회"
+      }
+    },
+    {
+      "id": "22-gyeonggi-yongin-d-29",
+      "title": "간병비 건강보험 적용",
+      "category": "",
+      "status": "notJudged",
+      "source": {
+        "sourceUrl": "https://policy.nec.go.kr/policy_pdf/20240410/PDF/PBINFO_PUB/4137/003_100152933_20240402_2.pdf",
+        "fetchedAt": "2026-09-28T02:00:00Z",
+        "publisher": "중앙선거관리위원회"
+      }
+    },
+    {
+      "id": "22-gyeonggi-yongin-d-30",
+      "title": "경로당 주5일 점심 제공",
+      "category": "",
+      "status": "notJudged",
+      "source": {
+        "sourceUrl": "https://policy.nec.go.kr/policy_pdf/20240410/PDF/PBINFO_PUB/4137/003_100152933_20240402_2.pdf",
+        "fetchedAt": "2026-09-28T02:00:00Z",
+        "publisher": "중앙선거관리위원회"
+      }
+    }
+  ]
+}

@@ -1,0 +1,143 @@
+{
+  "_note": "제22대 국회의원선거 경기 남양주시 갑 당선인 최민희 (더불어민주당). 책자형 선거공보 PDF 7쪽 「삶의 질과 직결되는 교통, 고통이 되지 않도록!」 ● 항목 5개와 같은 쪽 「남양주 특례시로 '예산4조·4대 혁신시대'를 열겠습니다!」 ● 항목 4개, PDF 9쪽의 머리 공약 3개(변전소·송전탑 건설 반대, 하수처리시설 반대, 종합병원급 경기도립병원 유치). 항목 앞의 설명어(「사회안전망 확충:」 등)는 원문대로 두었다. PDF 8쪽 「화도·수동을 위한 약속」과 10쪽 「평내호평을 위한 약속」은 동네별 공약이라, PDF 2·4–6쪽은 정권심판·입법 패키지 등 전국 공약이라 넣지 않았다. 끝의 !만 덜어냈다. 제목은 원문 문구를 따랐고 바꾼 것은 위에 적은 구호·수식어 덜어내기뿐이다. 분류(category)는 앱에 정해진 분류 체계가 없어 비워 두었다. 이행 여부는 판정하지 않았다(notJudged).",
+  "districtId": "nec-b575a633",
+  "source": {
+    "sourceUrl": "https://policy.nec.go.kr/policy_pdf/20240410/PDF/PBINFO_PUB/4126/003_100151806_20240402_2.pdf",
+    "fetchedAt": "2026-09-28T02:00:00Z",
+    "publisher": "중앙선거관리위원회"
+  },
+  "pledges": [
+    {
+      "id": "22-gyeonggi-namyangju-a-01",
+      "title": "지하철 9호선 화도 연장·분선 추진",
+      "category": "",
+      "status": "notJudged",
+      "source": {
+        "sourceUrl": "https://policy.nec.go.kr/policy_pdf/20240410/PDF/PBINFO_PUB/4126/003_100151806_20240402_2.pdf",
+        "fetchedAt": "2026-09-28T02:00:00Z",
+        "publisher": "중앙선거관리위원회"
+      }
+    },
+    {
+      "id": "22-gyeonggi-namyangju-a-02",
+      "title": "GTX-B(송도-마석)노선 조기 추진",
+      "category": "",
+      "status": "notJudged",
+      "source": {
+        "sourceUrl": "https://policy.nec.go.kr/policy_pdf/20240410/PDF/PBINFO_PUB/4126/003_100151806_20240402_2.pdf",
+        "fetchedAt": "2026-09-28T02:00:00Z",
+        "publisher": "중앙선거관리위원회"
+      }
+    },
+    {
+      "id": "22-gyeonggi-namyangju-a-03",
+      "title": "호평·평내-오남 국지도 건설 추진",
+      "category": "",
+      "status": "notJudged",
+      "source": {
+        "sourceUrl": "https://policy.nec.go.kr/policy_pdf/20240410/PDF/PBINFO_PUB/4126/003_100151806_20240402_2.pdf",
+        "fetchedAt": "2026-09-28T02:00:00Z",
+        "publisher": "중앙선거관리위원회"
+      }
+    },
+    {
+      "id": "22-gyeonggi-namyangju-a-04",
+      "title": "하남-남양주-포천 중부연결 고속도로 조기추진",
+      "category": "",
+      "status": "notJudged",
+      "source": {
+        "sourceUrl": "https://policy.nec.go.kr/policy_pdf/20240410/PDF/PBINFO_PUB/4126/003_100151806_20240402_2.pdf",
+        "fetchedAt": "2026-09-28T02:00:00Z",
+        "publisher": "중앙선거관리위원회"
+      }
+    },
+    {
+      "id": "22-gyeonggi-namyangju-a-05",
+      "title": "화도IC 교통정체 해소 1+1 패키지 1) 녹촌IC 우회도로 2) 신호체계 개선",
+      "category": "",
+      "status": "notJudged",
+      "source": {
+        "sourceUrl": "https://policy.nec.go.kr/policy_pdf/20240410/PDF/PBINFO_PUB/4126/003_100151806_20240402_2.pdf",
+        "fetchedAt": "2026-09-28T02:00:00Z",
+        "publisher": "중앙선거관리위원회"
+      }
+    },
+    {
+      "id": "22-gyeonggi-namyangju-a-06",
+      "title": "사회안전망 확충: 보건소, 경찰서, 4개 구청 신설 및 복지혜택 확대",
+      "category": "",
+      "status": "notJudged",
+      "source": {
+        "sourceUrl": "https://policy.nec.go.kr/policy_pdf/20240410/PDF/PBINFO_PUB/4126/003_100151806_20240402_2.pdf",
+        "fetchedAt": "2026-09-28T02:00:00Z",
+        "publisher": "중앙선거관리위원회"
+      }
+    },
+    {
+      "id": "22-gyeonggi-namyangju-a-07",
+      "title": "개발·전용규제완화: 농지·산지전용, 개발지구 등 인허가 시간 단축",
+      "category": "",
+      "status": "notJudged",
+      "source": {
+        "sourceUrl": "https://policy.nec.go.kr/policy_pdf/20240410/PDF/PBINFO_PUB/4126/003_100151806_20240402_2.pdf",
+        "fetchedAt": "2026-09-28T02:00:00Z",
+        "publisher": "중앙선거관리위원회"
+      }
+    },
+    {
+      "id": "22-gyeonggi-namyangju-a-08",
+      "title": "유연한 도시개발: 건축, 택지개발 권한 확대로 유연한 도시개발 가능",
+      "category": "",
+      "status": "notJudged",
+      "source": {
+        "sourceUrl": "https://policy.nec.go.kr/policy_pdf/20240410/PDF/PBINFO_PUB/4126/003_100151806_20240402_2.pdf",
+        "fetchedAt": "2026-09-28T02:00:00Z",
+        "publisher": "중앙선거관리위원회"
+      }
+    },
+    {
+      "id": "22-gyeonggi-namyangju-a-09",
+      "title": "지역경제활성화: 기후위기 대응관련 탄소중립·에너지전환 등 新산업기반 조성",
+      "category": "",
+      "status": "notJudged",
+      "source": {
+        "sourceUrl": "https://policy.nec.go.kr/policy_pdf/20240410/PDF/PBINFO_PUB/4126/003_100151806_20240402_2.pdf",
+        "fetchedAt": "2026-09-28T02:00:00Z",
+        "publisher": "중앙선거관리위원회"
+      }
+    },
+    {
+      "id": "22-gyeonggi-namyangju-a-10",
+      "title": "변전소·송전탑 건설 반대",
+      "category": "",
+      "status": "notJudged",
+      "source": {
+        "sourceUrl": "https://policy.nec.go.kr/policy_pdf/20240410/PDF/PBINFO_PUB/4126/003_100151806_20240402_2.pdf",
+        "fetchedAt": "2026-09-28T02:00:00Z",
+        "publisher": "중앙선거관리위원회"
+      }
+    },
+    {
+      "id": "22-gyeonggi-namyangju-a-11",
+      "title": "하수처리시설 반대",
+      "category": "",
+      "status": "notJudged",
+      "source": {
+        "sourceUrl": "https://policy.nec.go.kr/policy_pdf/20240410/PDF/PBINFO_PUB/4126/003_100151806_20240402_2.pdf",
+        "fetchedAt": "2026-09-28T02:00:00Z",
+        "publisher": "중앙선거관리위원회"
+      }
+    },
+    {
+      "id": "22-gyeonggi-namyangju-a-12",
+      "title": "종합병원급 경기도립병원 유치",
+      "category": "",
+      "status": "notJudged",
+      "source": {
+        "sourceUrl": "https://policy.nec.go.kr/policy_pdf/20240410/PDF/PBINFO_PUB/4126/003_100151806_20240402_2.pdf",
+        "fetchedAt": "2026-09-28T02:00:00Z",
+        "publisher": "중앙선거관리위원회"
+      }
+    }
+  ]
+}

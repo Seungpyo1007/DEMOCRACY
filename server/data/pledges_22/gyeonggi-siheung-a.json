@@ -1,0 +1,77 @@
+{
+  "_note": "제22대 국회의원선거 경기 시흥시 갑 당선인 문정복 (더불어민주당). 책자형 선거공보 PDF 9쪽 「시흥시민을 위한 문정복의 약속」 「마을 공통 추진 사안」 • 항목 6개. 앞 4개는 PDF 7–8쪽 「확신의 4년! 시흥완성」에서 크게 소개한 것과 같다. PDF 3–6쪽은 지난 임기 성과라, PDF 9–10쪽의 동별 공약은 동네별 목록이라 넣지 않았다. 끝의 !만 덜어냈다. 제목은 원문 문구를 따랐고 바꾼 것은 위에 적은 구호·수식어 덜어내기뿐이다. 분류(category)는 앱에 정해진 분류 체계가 없어 비워 두었다. 이행 여부는 판정하지 않았다(notJudged).",
+  "districtId": "nec-609b44d8",
+  "source": {
+    "sourceUrl": "https://policy.nec.go.kr/policy_pdf/20240410/PDF/PBINFO_PUB/4129/003_100152766_20240402_2.pdf",
+    "fetchedAt": "2026-09-28T02:00:00Z",
+    "publisher": "중앙선거관리위원회"
+  },
+  "pledges": [
+    {
+      "id": "22-gyeonggi-siheung-a-01",
+      "title": "제2경인선·신구로선·신천~신림선 신설 추진",
+      "category": "",
+      "status": "notJudged",
+      "source": {
+        "sourceUrl": "https://policy.nec.go.kr/policy_pdf/20240410/PDF/PBINFO_PUB/4129/003_100152766_20240402_2.pdf",
+        "fetchedAt": "2026-09-28T02:00:00Z",
+        "publisher": "중앙선거관리위원회"
+      }
+    },
+    {
+      "id": "22-gyeonggi-siheung-a-02",
+      "title": "대규모 행정복합타운 추진",
+      "category": "",
+      "status": "notJudged",
+      "source": {
+        "sourceUrl": "https://policy.nec.go.kr/policy_pdf/20240410/PDF/PBINFO_PUB/4129/003_100152766_20240402_2.pdf",
+        "fetchedAt": "2026-09-28T02:00:00Z",
+        "publisher": "중앙선거관리위원회"
+      }
+    },
+    {
+      "id": "22-gyeonggi-siheung-a-03",
+      "title": "북부권 교육·행정타운 추진",
+      "category": "",
+      "status": "notJudged",
+      "source": {
+        "sourceUrl": "https://policy.nec.go.kr/policy_pdf/20240410/PDF/PBINFO_PUB/4129/003_100152766_20240402_2.pdf",
+        "fetchedAt": "2026-09-28T02:00:00Z",
+        "publisher": "중앙선거관리위원회"
+      }
+    },
+    {
+      "id": "22-gyeonggi-siheung-a-04",
+      "title": "원도심개발(용적률 상향) 용역 추진",
+      "category": "",
+      "status": "notJudged",
+      "source": {
+        "sourceUrl": "https://policy.nec.go.kr/policy_pdf/20240410/PDF/PBINFO_PUB/4129/003_100152766_20240402_2.pdf",
+        "fetchedAt": "2026-09-28T02:00:00Z",
+        "publisher": "중앙선거관리위원회"
+      }
+    },
+    {
+      "id": "22-gyeonggi-siheung-a-05",
+      "title": "장곡역 문화광장 및 지하주차장 신설 추진",
+      "category": "",
+      "status": "notJudged",
+      "source": {
+        "sourceUrl": "https://policy.nec.go.kr/policy_pdf/20240410/PDF/PBINFO_PUB/4129/003_100152766_20240402_2.pdf",
+        "fetchedAt": "2026-09-28T02:00:00Z",
+        "publisher": "중앙선거관리위원회"
+      }
+    },
+    {
+      "id": "22-gyeonggi-siheung-a-06",
+      "title": "시흥시 노인회관·보훈회관 건립 추진",
+      "category": "",
+      "status": "notJudged",
+      "source": {
+        "sourceUrl": "https://policy.nec.go.kr/policy_pdf/20240410/PDF/PBINFO_PUB/4129/003_100152766_20240402_2.pdf",
+        "fetchedAt": "2026-09-28T02:00:00Z",
+        "publisher": "중앙선거관리위원회"
+      }
+    }
+  ]
+}

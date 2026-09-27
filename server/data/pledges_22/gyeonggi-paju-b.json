@@ -1,0 +1,77 @@
+{
+  "_note": "제22대 국회의원선거 경기 파주시 을 당선인 박정 (더불어민주당). 책자형 선거공보 PDF 7쪽 「678 공약(6대 비전, 7대 중점추진분야, 80대 세부공약)」 중 「6대 비전」 6개. PDF 8쪽 「7대 중점추진 분야」 세부 항목은 6대 비전을 풀어 쓴 더 긴 목록이라, PDF 9–10쪽은 읍·면·동별 공약이라, PDF 6쪽 「민주당의 삶의 질 수직상승 10대 공약」은 당 공약이라 넣지 않았다. 제목은 원문 문구를 따랐고 바꾼 것은 위에 적은 구호·수식어 덜어내기뿐이다. 분류(category)는 앱에 정해진 분류 체계가 없어 비워 두었다. 이행 여부는 판정하지 않았다(notJudged).",
+  "districtId": "nec-4f29fce6",
+  "source": {
+    "sourceUrl": "https://policy.nec.go.kr/policy_pdf/20240410/PDF/PBINFO_PUB/4132/003_100152044_20240402_2.pdf",
+    "fetchedAt": "2026-09-28T02:00:00Z",
+    "publisher": "중앙선거관리위원회"
+  },
+  "pledges": [
+    {
+      "id": "22-gyeonggi-paju-b-01",
+      "title": "평화경제특구, 경기북부특별자치도 양날개로 파주 2배 발전 실현",
+      "category": "",
+      "status": "notJudged",
+      "source": {
+        "sourceUrl": "https://policy.nec.go.kr/policy_pdf/20240410/PDF/PBINFO_PUB/4132/003_100152044_20240402_2.pdf",
+        "fetchedAt": "2026-09-28T02:00:00Z",
+        "publisher": "중앙선거관리위원회"
+      }
+    },
+    {
+      "id": "22-gyeonggi-paju-b-02",
+      "title": "파주를 스포츠산업 대표도시로 도약",
+      "category": "",
+      "status": "notJudged",
+      "source": {
+        "sourceUrl": "https://policy.nec.go.kr/policy_pdf/20240410/PDF/PBINFO_PUB/4132/003_100152044_20240402_2.pdf",
+        "fetchedAt": "2026-09-28T02:00:00Z",
+        "publisher": "중앙선거관리위원회"
+      }
+    },
+    {
+      "id": "22-gyeonggi-paju-b-03",
+      "title": "파주관광특구를 1,000만 파주 관광 시대 전진기지로 구축",
+      "category": "",
+      "status": "notJudged",
+      "source": {
+        "sourceUrl": "https://policy.nec.go.kr/policy_pdf/20240410/PDF/PBINFO_PUB/4132/003_100152044_20240402_2.pdf",
+        "fetchedAt": "2026-09-28T02:00:00Z",
+        "publisher": "중앙선거관리위원회"
+      }
+    },
+    {
+      "id": "22-gyeonggi-paju-b-04",
+      "title": "광역급행철도 신설 및 철도, 고속도로 연결망 확대로 교통 혁신",
+      "category": "",
+      "status": "notJudged",
+      "source": {
+        "sourceUrl": "https://policy.nec.go.kr/policy_pdf/20240410/PDF/PBINFO_PUB/4132/003_100152044_20240402_2.pdf",
+        "fetchedAt": "2026-09-28T02:00:00Z",
+        "publisher": "중앙선거관리위원회"
+      }
+    },
+    {
+      "id": "22-gyeonggi-paju-b-05",
+      "title": "수준 높은 교육기관 유치, 교육발전특구로 교육격차 해소",
+      "category": "",
+      "status": "notJudged",
+      "source": {
+        "sourceUrl": "https://policy.nec.go.kr/policy_pdf/20240410/PDF/PBINFO_PUB/4132/003_100152044_20240402_2.pdf",
+        "fetchedAt": "2026-09-28T02:00:00Z",
+        "publisher": "중앙선거관리위원회"
+      }
+    },
+    {
+      "id": "22-gyeonggi-paju-b-06",
+      "title": "사회안전망 확대, 취약계층 보호 강화, 삶의 질 증진",
+      "category": "",
+      "status": "notJudged",
+      "source": {
+        "sourceUrl": "https://policy.nec.go.kr/policy_pdf/20240410/PDF/PBINFO_PUB/4132/003_100152044_20240402_2.pdf",
+        "fetchedAt": "2026-09-28T02:00:00Z",
+        "publisher": "중앙선거관리위원회"
+      }
+    }
+  ]
+}
