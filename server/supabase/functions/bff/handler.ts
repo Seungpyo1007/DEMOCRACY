@@ -1,5 +1,5 @@
 // BFF router. Paths (after /functions/v1/bff):
-//   GET /districts/{id}/profile | /history | /pledges
+//   GET /districts/{id}/profile | /history | /pledges | /direction
 //   GET /address/search?q=
 //   GET /location/district?lat=&lng=
 //   /me/... (account routes, signed-in only; see account.ts)
@@ -18,6 +18,7 @@ import { findKeyedUrls } from "../_shared/provenance.ts";
 import { type AccountContext, handleAccount } from "./account.ts";
 import type { AccountStore } from "./account_store.ts";
 import { buildHistory, buildPledges, buildProfile } from "./builders.ts";
+import { buildDirection } from "./direction.ts";
 import { districtForPlace, suggestionsFor } from "./mapping.ts";
 import { handleResidency, type ResidencyContext } from "./residency.ts";
 import type { ReadStore } from "./store.ts";
@@ -90,7 +91,7 @@ export function createHandler(deps: BffDeps): (req: Request) => Promise<Response
       if (verified !== null) return respond(verified);
       if (req.method !== "GET") throw new ApiError("bad_request", "Only GET is supported.");
 
-      const district = /^\/districts\/([^/]+)\/(profile|history|pledges)$/.exec(path);
+      const district = /^\/districts\/([^/]+)\/(profile|history|pledges|direction)$/.exec(path);
       if (district) {
         const [, id, what] = district;
         if (!isDistrictId(id)) throw new ApiError("bad_request", "Malformed district id.");
@@ -98,6 +99,9 @@ export function createHandler(deps: BffDeps): (req: Request) => Promise<Response
           return respond(await buildProfile(deps.store, id, now()), PROFILE_CACHE);
         }
         if (what === "history") return respond(await buildHistory(deps.store, id), PROFILE_CACHE);
+        if (what === "direction") {
+          return respond(await buildDirection(deps.store, id), PROFILE_CACHE);
+        }
         return respond(await buildPledges(deps.store, id), PROFILE_CACHE);
       }
 

@@ -32,7 +32,7 @@ Reading needs no account; the account routes need a Supabase Auth sign-in.
 
 ```sh
 brew install deno
-deno task ci      # fmt --check, lint, check, test (offline; 72 tests)
+deno task ci      # fmt --check, lint, check, test (offline; 91 tests)
 ```
 
 ## BFF contract (fixed; the app is built against it)
@@ -45,13 +45,14 @@ A success is `200 {"servedAt": ISO-UTC, "data": {...}}`. An error is non-2xx
 `not_curated`, `bad_request`, `upstream`, `internal`, `unauthorized` (401), `forbidden` (403),
 `consent_required` (403), `conflict` (409) and `too_soon` (429, with `error.availableAt`).
 
-| Route                              | data                                                                                     |
-| ---------------------------------- | ---------------------------------------------------------------------------------------- |
-| `GET /districts/{id}/profile`      | DistrictProfile. Cached 300 s.                                                           |
-| `GET /districts/{id}/history`      | HistoryRecord. Cached 300 s.                                                             |
-| `GET /districts/{id}/pledges`      | PledgeBoard, or `404 not_curated`                                                        |
-| `GET /address/search?q=`           | `{suggestions:[{address, district:{id, displayName}}]}`. Unmapped addresses are dropped. |
-| `GET /location/district?lat=&lng=` | `{district:{id, displayName}}`, or `404 no_match`                                        |
+| Route                              | data                                                                                        |
+| ---------------------------------- | ------------------------------------------------------------------------------------------- |
+| `GET /districts/{id}/profile`      | DistrictProfile. Cached 300 s.                                                              |
+| `GET /districts/{id}/history`      | HistoryRecord. Cached 300 s.                                                                |
+| `GET /districts/{id}/pledges`      | PledgeBoard, or `404 not_curated`                                                           |
+| `GET /districts/{id}/direction`    | DirectionReport: `trend` only (or `null`); `stances`, `issues` always `null`. Cached 300 s. |
+| `GET /address/search?q=`           | `{suggestions:[{address, district:{id, displayName}}]}`. Unmapped addresses are dropped.    |
+| `GET /location/district?lat=&lng=` | `{district:{id, displayName}}`, or `404 no_match`                                           |
 
 - **District ids** have the form `nec-<sggCode>`.
   - NEC's `getCommonSggCodeList` has **no code field**. It returns only sggName, sdName, wiwName,
@@ -73,7 +74,37 @@ A success is `200 {"servedAt": ISO-UTC, "data": {...}}`. An error is non-2xx
   - votes = monthly share of the member's recorded plenary votes that are not 불참.
   - 발의 법안 = bills where the member is 대표발의자 (`RST_MONA_CD`).
   - 공약 이행 = fulfilled ÷ curated pledges. It appears only when curated pledges exist.
+  - direction `trend` = the incumbent's 대표발의 bills in the 21대 and in the 22대, each term split
+    into fields by the bill's 소관위원회 (`COMMITTEE`) through the fixed table in
+    `bff/bill_fields.ts`. Shares are percent of that term's bills that have a committee. Bills not
+    yet referred to a committee are left out and counted in `excludedCount`.
+    - `{legislatorName, fromTerm:"21대", toTerm:"22대", billCount, fromCount, toCount,
+      excludedCount, fields:[{label, from, to}], summary, source}`.
+      A term with no counted bills has `from` (or `to`) `null`: no point, not 0%.
+    - `summary` is a template over the numbers: which field had the largest share in each term.
+    - `trend` is `null` until the 21대 backfill has run (no 21대 rows at all), or when neither term
+      has a counted bill.
+    - No model is involved. `stances` and `issues` would need one and are not served; the app shows
+      them as 준비 중.
   - There are no rankings, scores or labels.
+
+Committee → field (`bff/bill_fields.ts`; exact name first, then a stem, else 기타):
+
+| Field     | Committees                                                                     |
+| --------- | ------------------------------------------------------------------------------ |
+| 법사·행정 | 국회운영, 법제사법, 행정안전                                                   |
+| 경제·산업 | 정무, 기획재정 (재정경제기획), 산업통상자원중소벤처기업 (산업통상중소벤처기업) |
+| 과학·방송 | 과학기술정보방송통신                                                           |
+| 복지·보건 | 보건복지, 여성가족 (성평등가족)                                                |
+| 교육·문화 | 교육, 문화체육관광                                                             |
+| 국토·교통 | 국토교통                                                                       |
+| 농림·해양 | 농림축산식품해양수산                                                           |
+| 환경·노동 | 환경노동 (기후에너지환경노동)                                                  |
+| 외교·안보 | 외교통일, 국방, 정보                                                           |
+| 기타      | 예산결산특별, 윤리특별, and any committee neither the table nor a stem places  |
+
+Names in parentheses are the 22대 mid-term renames as recorded in the table. They are not yet
+checked against a live bill row; the stems (재정, 산업통상, 가족, 노동, …) place them either way.
 
 ### Account routes
 

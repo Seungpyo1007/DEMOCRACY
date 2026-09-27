@@ -35,6 +35,7 @@ Deno.test("error envelope and codes", async () => {
     ["/districts/nec-00000000/profile", 404, "not_found"],
     ["/districts/fixture-seoul-mapo-b/profile", 400, "bad_request"],
     ["/districts/nec-00000000/pledges", 404, "not_found"],
+    ["/districts/nec-00000000/direction", 404, "not_found"],
     ["/nope", 404, "not_found"],
     ["/address/search", 400, "bad_request"],
     ["/address/search?q=a", 400, "bad_request"],
@@ -157,7 +158,7 @@ Deno.test("empty database: every district route is a clean 404", async () => {
     now: () => NOW,
     ...signedOut(),
   });
-  for (const what of ["profile", "history", "pledges"]) {
+  for (const what of ["profile", "history", "pledges", "direction"]) {
     const r = await call(h, `/districts/${MAPO_B}/${what}`);
     assertEquals(r.status, 404);
   }
