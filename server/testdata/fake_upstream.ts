@@ -13,6 +13,10 @@ export interface FakeUpstream {
   requests: string[];
 }
 
+/** ASCII names for the 개표 samples (nec_counts_<sgId>_<시도>[_<선거구>].json). */
+const SIDO_SLUG: Record<string, string> = { "서울특별시": "seoul", "대구광역시": "daegu" };
+const SGG_SLUG: Record<string, string> = { "마포구을": "mapo_b" };
+
 const json = (body: string, status = 200) =>
   new Response(body, { status, headers: { "Content-Type": "application/json" } });
 
@@ -68,6 +72,20 @@ export function fakeUpstream(overrides: Record<string, () => Response> = {}): Fa
           return Promise.resolve(json(sample("nec_candidates_single.json")));
         case "getPoelpcddRegistSttusInfoInqire":
           return Promise.resolve(json(sample("nec_nodata.json")));
+        case "getXmntckSttusInfoInqire": {
+          // 20240410 and 20200415 answer per 시도; 20160413 only by 선거구 name,
+          // which exercises the ingest's fallback.
+          const sido = SIDO_SLUG[p.get("sdName") ?? ""];
+          const sgg = p.get("sggName");
+          const file = sgg === null
+            ? `nec_counts_${p.get("sgId")}_${sido}.json`
+            : `nec_counts_${p.get("sgId")}_${sido}_${SGG_SLUG[sgg]}.json`;
+          try {
+            return Promise.resolve(json(sample(file)));
+          } catch {
+            return Promise.resolve(json(sample("nec_nodata.json")));
+          }
+        }
       }
     }
     if (url.host === "business.juso.go.kr") {

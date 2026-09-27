@@ -15,24 +15,25 @@ Reading needs no account; the account routes need a Supabase Auth sign-in.
 
 ## Layout
 
-| Path                                              | What                                                                                                          |
-| ------------------------------------------------- | ------------------------------------------------------------------------------------------------------------- |
-| `supabase/migrations/20260924000000_init.sql`     | Schema, RLS, BFF SQL helpers, purge functions, cron schedules                                                 |
-| `supabase/migrations/20260926000000_accounts.sql` | Profiles, consents, 활동명 offers, residency; account SQL functions; orphan-login purge                       |
-| `supabase/seed.sql`                               | **Sample** 마포구 갑/을 + 종로구 district mapping, generated from `testdata/`. Not verified against [별표 1]. |
-| `supabase/functions/_shared/`                     | API clients, normalizers (one per source), envelope, provenance, PostgREST client                             |
-| `supabase/functions/ingest-assembly/`             | Members (daily), bills and plenary votes (every 6 h)                                                          |
-| `supabase/functions/ingest-nec/`                  | Election and district codes and candidates (weekly), historical winners (`?mode=backfill`)                    |
-| `supabase/functions/bff/`                         | The API. `contract.ts` mirrors the app's Dart parsers. `account.ts`, `residency.ts`: signed-in.               |
-| `scripts/`                                        | One-off importers that write SQL to stdout; `build_district_areas.ts` builds the mapping CSV                  |
-| `data/`                                           | Generated inputs kept in git: the 22대 district mapping                                                       |
-| `testdata/`                                       | Hand-written API samples and district-mapping samples. See `testdata/README.md`.                              |
+| Path                                                     | What                                                                                                                      |
+| -------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------- |
+| `supabase/migrations/20260924000000_init.sql`            | Schema, RLS, BFF SQL helpers, purge functions, cron schedules                                                             |
+| `supabase/migrations/20260926000000_accounts.sql`        | Profiles, consents, 활동명 offers, residency; account SQL functions; orphan-login purge                                   |
+| `supabase/migrations/20260927120000_district_counts.sql` | Final 개표 per 선거구 per election (`district_counts`)                                                                    |
+| `supabase/seed.sql`                                      | **Sample** 마포구 갑/을 + 종로구 district mapping, generated from `testdata/`. Not verified against [별표 1].             |
+| `supabase/functions/_shared/`                            | API clients, normalizers (one per source), envelope, provenance, PostgREST client                                         |
+| `supabase/functions/ingest-assembly/`                    | Members (daily), bills and plenary votes (every 6 h)                                                                      |
+| `supabase/functions/ingest-nec/`                         | Election and district codes and candidates (weekly), historical winners (`?mode=backfill`), final counts (`?mode=counts`) |
+| `supabase/functions/bff/`                                | The API. `contract.ts` mirrors the app's Dart parsers. `account.ts`, `residency.ts`: signed-in.                           |
+| `scripts/`                                               | One-off importers that write SQL to stdout; `build_district_areas.ts` builds the mapping CSV                              |
+| `data/`                                                  | Generated inputs kept in git: the 22대 district mapping                                                                   |
+| `testdata/`                                              | Hand-written API samples and district-mapping samples. See `testdata/README.md`.                                          |
 
 ## Develop
 
 ```sh
 brew install deno
-deno task ci      # fmt --check, lint, check, test (offline; 72 tests)
+deno task ci      # fmt --check, lint, check, test (offline; 80 tests)
 ```
 
 ## BFF contract (fixed; the app is built against it)
@@ -156,6 +157,9 @@ cached (`no-store`). "Me" below is `{profile|null, consents, residency|null}`:
    ```sql
    select public.call_ingest('ingest-nec', 'mode=codes');       -- districts first (check: 254 rows)
    select public.call_ingest('ingest-nec', 'mode=backfill');    -- 20·21·22대 winners
+   select public.call_ingest('ingest-nec', 'mode=counts&sgIds=20240410'); -- 22대 final counts
+   select public.call_ingest('ingest-nec', 'mode=counts&sgIds=20200415');
+   select public.call_ingest('ingest-nec', 'mode=counts&sgIds=20160413');
    select public.call_ingest('ingest-assembly', 'mode=members'); -- check: ~300 rows, summary.unmatchedDistricts
    select public.call_ingest('ingest-assembly', 'mode=bills_votes');
    ```
@@ -163,7 +167,13 @@ cached (`no-store`). "Me" below is `{profile|null, consents, residency|null}`:
      `select * from net._http_response order by id desc limit 5;`.
    - Votes backfill 40 bills per call. The hourly `ingest-assembly-votes` job works through the 22대
      backlog.
-   - Row-count guards refuse to apply fewer than 250 members or 250 districts.
+   - Row-count guards refuse to apply fewer than 250 members, 250 districts or counts for fewer than
+     250 선거구.
+   - `mode=counts` asks each 시도 once and asks by 선거구 name for whatever that leaves out, so one
+     election per call keeps it inside the function's time limit. Its summary says how many were
+     asked by name (`askedByName`; about 254 means the API wants `sggName`) and which 22대 rows
+     found no district (`unmatchedDistricts`, expected empty). It refuses an election whose day has
+     not passed: only finished counts are stored.
 6. **Load the district mapping.** `data/district_areas_20240410.csv` is the 22대 mapping, already
    built. Rebuild it only when 행안부 publishes new 행정동 codes or for a new election.
    - Inputs, all public:

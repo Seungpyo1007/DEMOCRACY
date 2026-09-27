@@ -13,6 +13,7 @@ import {
   DEFAULT_BACKFILL_SG_IDS,
   ingestCandidates,
   ingestCodes,
+  ingestCounts,
   ingestWinners,
 } from "../supabase/functions/ingest-nec/ingest.ts";
 import { emptyTables, type MemoryTables } from "../supabase/functions/bff/store.ts";
@@ -50,11 +51,20 @@ export async function runPipeline(): Promise<{ db: MemoryPostgrest; requests: st
   const up = fakeUpstream();
   const now = () => NOW;
   const retry = { retries: 0 };
-  const nec = { db, fetch: up.fetch, serviceKey: "TEST-NEC-KEY", now, retry, minDistricts: 1 };
+  const nec = {
+    db,
+    fetch: up.fetch,
+    serviceKey: "TEST-NEC-KEY",
+    now,
+    retry,
+    minDistricts: 1,
+    minCountDistricts: 1,
+  };
   const asm = { db, fetch: up.fetch, key: "TEST-ASSEMBLY-KEY", now, retry, minMembers: 1 };
 
   await ingestCodes(nec);
   await ingestWinners(nec, DEFAULT_BACKFILL_SG_IDS);
+  await ingestCounts(nec, DEFAULT_BACKFILL_SG_IDS);
   await ingestCandidates(nec);
   await ingestMembers(asm);
   await ingestBills(asm);

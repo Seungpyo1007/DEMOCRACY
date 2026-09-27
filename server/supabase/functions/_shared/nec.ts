@@ -16,6 +16,8 @@ export const NEC_OPERATIONS = {
   candidates: "PofelcddInfoInqireService/getPofelcddRegistSttusInfoInqire",
   /** 예비후보자 */
   preliminaryCandidates: "PofelcddInfoInqireService/getPoelpcddRegistSttusInfoInqire",
+  /** 개표현황: per 선거구 and 구시군, with a "합계" row per 선거구 */
+  counts: "VoteXmntckInfoInqireService2/getXmntckSttusInfoInqire",
 } as const;
 
 export type NecItem = Record<string, unknown>;
