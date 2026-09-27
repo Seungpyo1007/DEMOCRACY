@@ -93,7 +93,9 @@ export async function buildResults(store: ReadStore, id: string) {
 
   const election = elections.find((e) => e.sg_id === sgId && e.sg_typecode === 2);
   const term = election?.term ?? generalElectionTerm(sgId, "");
-  const electionName = election?.sg_name ?? `제${term}대 국회의원선거`;
+  // NEC's sg_name for a general election is just "국회의원선거"; the term is what tells
+  // one from the next.
+  const electionName = term ? `제${term}대 국회의원선거` : election?.sg_name ?? "국회의원선거";
 
   return {
     electionName,
