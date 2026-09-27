@@ -310,6 +310,7 @@ class _IncumbentSectionState extends State<_IncumbentSection> {
         MotionSize(
           child: AnimatedSwitcher(
             duration: reduced ? Duration.zero : AppMotion.base,
+            reverseDuration: AppMotion.leave,
             switchInCurve: AppMotion.settle,
             switchOutCurve: AppMotion.settle,
             layoutBuilder: (current, previous) => Stack(

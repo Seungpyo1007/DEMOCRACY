@@ -173,6 +173,7 @@ class _CommunityScreenState extends ConsumerState<CommunityScreen> {
                   SliverToBoxAdapter(
                     child: AnimatedSwitcher(
                       duration: reduced ? Duration.zero : AppMotion.base,
+                      reverseDuration: AppMotion.leave,
                       switchInCurve: AppMotion.settle,
                       switchOutCurve: AppMotion.settle,
                       // The outgoing tab fades without moving; only the

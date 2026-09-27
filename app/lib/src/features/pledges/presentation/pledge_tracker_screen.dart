@@ -488,6 +488,7 @@ class _PledgeList extends StatelessWidget {
             alignment: Alignment.topCenter,
             child: AnimatedSwitcher(
               duration: AppMotion.base,
+              reverseDuration: AppMotion.leave,
               switchInCurve: AppMotion.settle,
               switchOutCurve: AppMotion.settle,
               layoutBuilder: (current, previous) => Stack(
