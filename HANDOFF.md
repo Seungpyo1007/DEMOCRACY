@@ -106,7 +106,8 @@
 - **fixture가 곧 계약이다.** BFF의 `data`는 `assets/fixtures/*.json`과 같은 모양이다(`_note`만 뺀다). `test/core/network/remote_repositories_test.dart`가 각 fixture를 envelope에 싸서 remote 리포지토리로 파싱한다. fixture 모양을 바꾸면 서버도 바꿔야 한다.
 - envelope: `{servedAt, data}` / `{servedAt, error:{code,message}}`. `not_found`·`not_curated`는 `NotAvailableException`이 되고 화면은 "준비 중"을 보인다(재시도 없음). 샘플 데이터로 대신 채우지 않는다.
 - 켜는 법: `flutter run --dart-define=BFF_URL=https://<ref>.supabase.co/functions/v1/bff --dart-define=BFF_ANON_KEY=<anon>`. 없으면 지금처럼 전부 fixture이고, 테스트·골든도 fixture로 돈다(`lib/src/app/live_data.dart`).
-- 실데이터: 지역구 프로필, 역사, 주소 검색, 위치 → 지역구, 공약(큐레이션된 지역구만). AI·개표·평가·채팅은 BFF 모드에서 "준비 중"이다.
+- 실데이터: 지역구 프로필, 역사, 주소 검색, 위치 → 지역구, 공약(큐레이션된 지역구만), 주민 평가·지역 채팅·정책 토론. AI·개표는 BFF 모드에서 "준비 중"이다.
+- 평가·채팅·토론은 처음엔 비어 있다. 빈 상태는 "아직 올라온 평가가 없습니다" 같은 안내로 보이고 0.0 평균은 그리지 않는다. 토론 스레드는 현직 의원 대표발의 법안에서 서버가 연다(`sync_bill_threads`). 채팅은 소켓이 없어 열 때와 보낸 뒤에만 다시 읽는다.
 - 캐시: 프로필·역사·공약만 마지막 응답을 보관해 오프라인에 보여 준다. 각 수치의 `fetchedAt`이 배지에 찍히므로 별도 stale 표시는 두지 않았다. 주소 질의와 좌표는 캐시하지 않는다.
 - `LegislatorRecord.attendance`·`votes`는 선택 필드가 됐다. 본회의 출결은 API가 아니라 회기별 파일이라 없을 수 있다.
 - `servedAt`은 `BffResponse`까지 온다. `ServerAnchoredClock`은 아직 만들지 않았다.
@@ -114,7 +115,7 @@
 
 ## 지금 fake인 것
 
-전부 repository 계약 뒤에 있다. 실제 구현으로 교체할 때 화면은 건드리지 않는다. 아래 중 주소 검색·위치·의원·공약은 BFF 모드에서 실데이터로 바뀌었다(위 절).
+전부 repository 계약 뒤에 있다. 실제 구현으로 교체할 때 화면은 건드리지 않는다. 아래 중 주소 검색·위치·의원·공약·평가·채팅은 BFF 모드에서 실데이터로 바뀌었다(위 절).
 
 | 영역 | 계약 | 막고 있는 것 |
 |---|---|---|
@@ -123,9 +124,9 @@
 | 거주지 인증 | `AuthController.verifyResidency` → `POST /residency/verify` | 서버가 주소로 선거구를 다시 도출하고 토큰을 발급한다. 방식은 자기 신고 주소 확인 |
 | 의원·후보·공약 | `DistrictRepository` · `PledgeRepository` | 열린국회정보·선관위 API 계약과 키 |
 | AI 매칭 | `MatchRepository` | LLM 공급자, 가중치 정책, 비용 상한, 편향 감사 기준 |
-| 평가 쓰기 | `ReviewRepository.submit` | 조작 방지 정책, 서버 저장 |
-| 채팅 | `CommunityRepository` | WebSocket 엔드포인트, moderation 정책 |
-| 혐오·허위 감지 | `ContentGuard` | **클라이언트 전용이라 편집으로 무력화 가능.** BFF로 옮겨야 한다 |
+| 평가 쓰기 | `ReviewRepository.submit` → `POST /districts/{id}/reviews` | 서버 저장·주민 인증 확인·분당 5건 제한은 됨. 조작 방지 정책은 아직 |
+| 채팅 | `CommunityRepository` → `GET /community`, `POST /messages` | WebSocket 엔드포인트, moderation·신고 정책 |
+| 혐오·허위 감지 | `ContentGuard` + BFF `_shared/content_guard.ts` | 혐오 목록만 서버가 거절(422)하고 앱도 막는다. 허위 주장 목록은 앱 경고로만 남김(한 번 더 누르면 보냄). 둘 다 키워드 목록이지 분류기가 아님 |
 | 개표 | `ResultsRepository` | SSE 엔드포인트, 폴링 주기 헤더 |
 | 지도 타일 | `CountMap` | Google Maps 키. 현재 목업과 같은 회색 격자 |
 | 프리미엄 | — | 결제. 버튼은 비활성이고 그렇다고 표시한다 |
@@ -423,10 +424,10 @@ iPhone 17 Pro / iOS 27.0. 위젯 테스트로만 검증돼 있던 iOS 분기를 
 - **공표 금지 게이트는 기기 시계 위에 서 있다.** 시계를 되돌리면 뚫린다. 클라이언트에서 해결 불가능하고, 법적 보장은 BFF가 금지 기간 데이터를 애초에 전송하지 않는 것이어야 한다. `docs/ELECTION_LAW.md` 참조.
 - **판정에 대한 반론·정정 경로가 없다.** 판정 파이프라인의 첫 노드가 「AI 1차 판단」인데, 「미이행」·「번복」 판정을 받은 정치인이 앱 안에서 반박할 수단도 정정 이력 모델도 없다. 명세에도 기록이 없다.
 - **`SourceMetadata.asOfLabel`이 월·일만 표시한다.** 1년 된 수치와 어제 수치가 같아 보인다. `docs/INITIAL_PLAN.md:95`가 요구한 stale 상태는 아직 없다.
-- **`ContentGuard`가 클라이언트 전용이다.** 혐오·허위 감지가 앱 안에 있으면 편집으로 무력화된다. BFF로 옮겨야 한다 — 지금 만든 것은 인터셉트 지점이지 분류기가 아니다.
+- **`ContentGuard`는 반만 서버로 갔다.** 혐오 목록은 BFF가 거절한다(`content_rejected`, reason `hate`). 허위 주장 목록은 앱 경고로만 남겼다: 키워드로는 거짓 주장과 사실·인용을 못 가리고, 서버에서 막으면 정치인에 대해 주민이 할 수 있는 말을 앱이 정하는 셈이라 제품·법률 결정이 먼저다. 둘 다 여전히 분류기가 아니라 키워드 목록이다.
 - **주민 인증은 자기 신고다.** 서버가 주소를 확인하지만 그 주소에 사는지는 증명하지 않는다. 더 강한 검증 주체는 결정 전이다.
 - **제공자 키가 아직 없다.** Apple Services ID, Google OAuth 클라이언트, Kakao 네이티브 키가 들어오기 전까지 빌드는 이메일 로그인만 제공한다. `server/README.md`의 Go live 절차와 `ios/Flutter/Keys.xcconfig.example` 참조.
-- 게시물 테이블이 아직 없어 계정 삭제의 `내 글도 삭제`는 기록만 된다. 테이블이 생기면 `author_id … on delete set null`(「탈퇴한 주민」) 규약을 따른다.
+- 게시물 테이블(`20260927000000_community.sql`)이 생겼다. `내 글도 삭제`는 평가·메시지·답글을 먼저 지우고, `남기기`는 `author_id … on delete set null`로 「탈퇴한 주민」이 된다. 답글은 테이블과 개수만 있고 쓰는 경로가 없다(앱이 스레드를 열지 않음).
 - 지도 타일이 없다. `google_maps_flutter` 키가 없어 목업과 같은 회색 격자다. 농도·선택·아웃라인은 실제로 동작하므로, 키가 생기면 셀 렌더링만 Polygon으로 바꾸면 된다.
 - 프리미엄 리포트는 비활성 버튼이다. 결제 계약이 없다.
 - **축소된 탭바가 placeholder 탭에서 펴지지 않는다.** 셸이 `ScrollUpdateNotification`에서만 재확장하는데(`app_shell.dart:65-68`) 스크롤할 것이 없는 화면은 알림을 보내지 않는다. `app_shell_test.dart`가 현재 동작으로 고정해 뒀다. 오프셋 0인 브랜치에서 바를 펼지 여부는 제품 결정이라 바꾸지 않았다.

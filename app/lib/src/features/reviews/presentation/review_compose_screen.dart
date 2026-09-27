@@ -52,14 +52,16 @@ class _ReviewComposeScreenState extends ConsumerState<ReviewComposeScreen> {
   ReviewDraft _draft = ReviewDraft(anonymous: true);
   ContentWarning? _warning;
 
-  /// Set once the author has been warned and chose to continue. The guide asks
-  /// for interception before sending, not for a block -- the resident, not the
-  /// app, decides whether their sentence stands.
+  /// Set once the author has been warned about a claim and chose to continue.
+  /// The guide asks for interception before sending, not for a block -- for a
+  /// claim, the resident, not the app, decides whether their sentence stands.
+  /// A hate term is the exception: it is held until the sentence changes, as
+  /// the server would refuse it anyway.
   bool _acknowledged = false;
 
   Future<void> _submit() async {
     final warning = ContentGuard.inspect(_draft.body);
-    if (warning != null && !_acknowledged) {
+    if (warning != null && (warning.blocks || !_acknowledged)) {
       setState(() {
         _warning = warning;
         _acknowledged = true;
@@ -103,8 +105,16 @@ class _ReviewComposeScreenState extends ConsumerState<ReviewComposeScreen> {
   @override
   Widget build(BuildContext context) {
     final surface = Theme.of(context).extension<AppSurfaceTokens>()!;
-    final submitting = ref.watch(reviewSubmissionProvider).isLoading;
+    final submission = ref.watch(reviewSubmissionProvider);
+    final submitting = submission.isLoading;
     final blocked = _draft.blockedReason;
+    // Held back here, or refused by the server: either way, said beside the
+    // words it is about.
+    final problem = _warning != null
+        ? _warning!.prompt('올리려면')
+        : submission.hasError
+        ? writeFailureMessage(submission.error!)
+        : null;
     final duration = AppMotion.reduced(context)
         ? Duration.zero
         : AppMotion.base;
@@ -163,15 +173,13 @@ class _ReviewComposeScreenState extends ConsumerState<ReviewComposeScreen> {
                 duration: duration,
                 curve: AppMotion.settle,
                 alignment: Alignment.topCenter,
-                child: _warning == null
+                child: problem == null
                     ? const SizedBox(width: double.infinity)
                     : Padding(
                         padding: const EdgeInsets.only(top: AppSpacing.x2),
                         child: Semantics(
                           liveRegion: true,
-                          child: DisclaimerBox(
-                            text: '${_warning!.message} 그대로 올리려면 한 번 더 누르세요.',
-                          ),
+                          child: DisclaimerBox(text: problem),
                         ),
                       ),
               ),
