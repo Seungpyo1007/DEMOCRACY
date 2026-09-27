@@ -88,22 +88,54 @@ export interface AssemblyFetchOptions {
   onPage?: (page: { pIndex: number; json: unknown }) => Promise<void> | void;
 }
 
+export interface AssemblyPageRun {
+  rows: AssemblyRow[];
+  /** list_total_count as the last page reported it. */
+  total: number;
+  /** The last page index fetched. */
+  lastPage: number;
+  /** True when the service has no pages after `lastPage`. */
+  done: boolean;
+}
+
+/**
+ * Fetches up to `maxPages` pages starting at `firstPage` (1-based). A long
+ * backfill runs in windows so each call stays under the function time limit;
+ * `done` says whether another window is needed.
+ */
+export async function fetchAssemblyPages(
+  service: string,
+  params: Record<string, string>,
+  opts: AssemblyFetchOptions & { firstPage?: number },
+): Promise<AssemblyPageRun> {
+  const pageSize = opts.pageSize ?? 1000;
+  const maxPages = opts.maxPages ?? 100;
+  const firstPage = opts.firstPage ?? 1;
+  const all: AssemblyRow[] = [];
+  let total = 0;
+  let lastPage = firstPage - 1;
+  let done = false;
+  for (let pIndex = firstPage; pIndex < firstPage + maxPages; pIndex++) {
+    const url = assemblyUrl(service, opts.key, params, pIndex, pageSize);
+    const json = await fetchJsonWithRetry(opts.fetch, url, opts.retry);
+    const page = parseAssemblyPage(service, json);
+    await opts.onPage?.({ pIndex, json });
+    all.push(...page.rows);
+    total = page.total;
+    lastPage = pIndex;
+    if (page.rows.length < pageSize || pIndex * pageSize >= page.total) {
+      done = true;
+      break;
+    }
+  }
+  return { rows: all, total, lastPage, done };
+}
+
 /** Fetches every page of a service. INFO-200 yields []. */
 export async function fetchAssemblyAll(
   service: string,
   params: Record<string, string>,
   opts: AssemblyFetchOptions,
 ): Promise<AssemblyRow[]> {
-  const pageSize = opts.pageSize ?? 1000;
-  const maxPages = opts.maxPages ?? 100;
-  const all: AssemblyRow[] = [];
-  for (let pIndex = 1; pIndex <= maxPages; pIndex++) {
-    const url = assemblyUrl(service, opts.key, params, pIndex, pageSize);
-    const json = await fetchJsonWithRetry(opts.fetch, url, opts.retry);
-    const page = parseAssemblyPage(service, json);
-    await opts.onPage?.({ pIndex, json });
-    all.push(...page.rows);
-    if (page.rows.length < pageSize || all.length >= page.total) break;
-  }
-  return all;
+  return (await fetchAssemblyPages(service, params, opts)).rows;
 }

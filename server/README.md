@@ -21,7 +21,7 @@ Reading needs no account; the account routes need a Supabase Auth sign-in.
 | `supabase/migrations/20260926000000_accounts.sql` | Profiles, consents, 활동명 offers, residency; account SQL functions; orphan-login purge                       |
 | `supabase/seed.sql`                               | **Sample** 마포구 갑/을 + 종로구 district mapping, generated from `testdata/`. Not verified against [별표 1]. |
 | `supabase/functions/_shared/`                     | API clients, normalizers (one per source), envelope, provenance, PostgREST client                             |
-| `supabase/functions/ingest-assembly/`             | Members (daily), bills and plenary votes (every 6 h)                                                          |
+| `supabase/functions/ingest-assembly/`             | Members (daily), bills and plenary votes (every 6 h), 21대 bills (`?mode=bills_backfill&age=21`)              |
 | `supabase/functions/ingest-nec/`                  | Election and district codes and candidates (weekly), historical winners (`?mode=backfill`)                    |
 | `supabase/functions/bff/`                         | The API. `contract.ts` mirrors the app's Dart parsers. `account.ts`, `residency.ts`: signed-in.               |
 | `scripts/`                                        | One-off importers that write SQL to stdout; `build_district_areas.ts` builds the mapping CSV                  |
@@ -163,6 +163,16 @@ cached (`no-store`). "Me" below is `{profile|null, consents, residency|null}`:
      `select * from net._http_response order by id desc limit 5;`.
    - Votes backfill 40 bills per call. The hourly `ingest-assembly-votes` job works through the 22대
      backlog.
+   - 21대 bills, for the direction view's term comparison, are a by-hand backfill. It runs after
+     `mode=members`, keeps only bills led by a sitting member, and fetches 10 pages of 1000 per
+     call. Repeat with the `nextPage` from each summary until `done` is `true` (about three calls):
+     ```sql
+     select public.call_ingest('ingest-assembly', 'mode=bills_backfill&age=21&page=1');
+     select public.call_ingest('ingest-assembly', 'mode=bills_backfill&age=21&page=11');
+     select public.call_ingest('ingest-assembly', 'mode=bills_backfill&age=21&page=21');
+     ```
+     The 6-hourly `bills_votes` job stays on the 22대 and never touches these rows. Re-run the
+     backfill after a by-election brings in a member who also sat in the 21대.
    - Row-count guards refuse to apply fewer than 250 members or 250 districts.
 6. **Load the district mapping.** `data/district_areas_20240410.csv` is the 22대 mapping, already
    built. Rebuild it only when 행안부 publishes new 행정동 codes or for a new election.

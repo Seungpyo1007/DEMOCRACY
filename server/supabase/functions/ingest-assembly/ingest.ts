@@ -1,7 +1,8 @@
-// 열린국회정보 ingest: members (daily), bills + plenary votes (every 6h).
+// 열린국회정보 ingest: members (daily), bills + plenary votes (every 6h), and a
+// by-hand backfill of an earlier term's bills (`mode=bills_backfill`).
 // Every run writes raw pages first, then upserts normalized rows. Idempotent.
 
-import { ASSEMBLY_SERVICES, fetchAssemblyAll } from "../_shared/assembly.ts";
+import { ASSEMBLY_SERVICES, fetchAssemblyAll, fetchAssemblyPages } from "../_shared/assembly.ts";
 import { CURRENT_DISTRICT_SG_ID } from "../_shared/district_names.ts";
 import type { FetchLike, RetryOptions } from "../_shared/http.ts";
 import { writeRaw } from "../_shared/ingest_common.ts";
@@ -31,6 +32,11 @@ export interface AssemblyIngestDeps {
 }
 
 const AGE = "22";
+
+/** The earliest term a backfill may ask for. */
+const OLDEST_BACKFILL_AGE = 17;
+/** Pages per backfill call: 10 x 1000 rows keeps one call well under the time limit. */
+const BACKFILL_PAGES = 10;
 
 function rawSink(
   deps: AssemblyIngestDeps,
@@ -140,6 +146,89 @@ export async function ingestBills(deps: AssemblyIngestDeps) {
   return { bills: bills.length };
 }
 
+export interface BillsBackfillOptions {
+  /** 대수, e.g. 21. Must be an earlier term than the current one. */
+  age: number;
+  /** First page to fetch (1-based): the previous call's `nextPage`. */
+  page?: number;
+  /** Pages to fetch in this call. */
+  pages?: number;
+}
+
+/**
+ * Backfills an earlier term's bills for members who sit now.
+ *
+ * The direction view compares an incumbent's 대표발의 bills across terms, so it
+ * needs the 21대 rows the 6-hourly job never fetched (that job stays on the
+ * current term and is unchanged). A whole term is ~25 pages of 1000, too many
+ * for one function call, so this fetches a window of pages and reports
+ * `nextPage` until `done`.
+ *
+ * Only bills led by a current member are kept: a former member has no
+ * district page to show them on. MONA_CD identifies the person across terms,
+ * so a re-elected member's 21대 bills carry the same RST_MONA_CD as their 22대
+ * ones; a member first elected in 22대 simply has no 21대 rows.
+ */
+export async function ingestBillsBackfill(deps: AssemblyIngestDeps, opts: BillsBackfillOptions) {
+  const current = Number(AGE);
+  if (!Number.isInteger(opts.age) || opts.age < OLDEST_BACKFILL_AGE || opts.age >= current) {
+    throw new RangeError(
+      `age must be an earlier term (${OLDEST_BACKFILL_AGE}-${current - 1}); ` +
+        `the current term is loaded by mode=bills`,
+    );
+  }
+  const firstPage = opts.page ?? 1;
+  const maxPages = opts.pages ?? BACKFILL_PAGES;
+  if (
+    !Number.isInteger(firstPage) || firstPage < 1 || !Number.isInteger(maxPages) || maxPages < 1
+  ) {
+    throw new RangeError("page and pages must be positive integers");
+  }
+
+  const sitting = await deps.db.select<{ mona_cd: string }>("members", {
+    select: "mona_cd",
+    is_current: "eq.true",
+  });
+  if (sitting.length === 0) {
+    throw new Error("no current members on record; run mode=members first");
+  }
+  const keep = new Set(sitting.map((m) => m.mona_cd));
+
+  const fetchedAt = (deps.now?.() ?? new Date()).toISOString();
+  const params = { AGE: String(opts.age) };
+  const run = await fetchAssemblyPages(ASSEMBLY_SERVICES.bills, params, {
+    fetch: deps.fetch,
+    key: deps.key,
+    retry: deps.retry,
+    pageSize: deps.pageSize,
+    firstPage,
+    maxPages,
+    onPage: rawSink(deps, ASSEMBLY_SERVICES.bills, params, SOURCES.assemblyBills.url, fetchedAt),
+  });
+  const bills = run.rows
+    .map((r) => normalizeBill(r, fetchedAt))
+    .filter((b) => b !== null)
+    .filter((b) => b.age === opts.age && b.rst_mona_cd !== null && keep.has(b.rst_mona_cd));
+  await deps.db.upsert("bills", bills, "bill_id");
+  return {
+    age: opts.age,
+    pages: [firstPage, run.lastPage],
+    fetched: run.rows.length,
+    kept: bills.length,
+    total: run.total,
+    done: run.done,
+    nextPage: run.done ? null : run.lastPage + 1,
+  };
+}
+
+/** An integer query parameter: absent is undefined, anything else not a number is refused. */
+function intParam(params: URLSearchParams | undefined, name: string): number | undefined {
+  const raw = params?.get(name);
+  if (raw === null || raw === undefined || raw === "") return undefined;
+  if (!/^\d+$/.test(raw)) throw new RangeError(`${name} must be an integer`);
+  return Number(raw);
+}
+
 /**
  * Plenary votes for bills decided in plenary that have not been fetched yet
  * (or came back empty recently, since vote data can lag the decision).
@@ -182,7 +271,11 @@ export async function ingestVotes(deps: AssemblyIngestDeps) {
   return { billsChecked: todo.length, votes };
 }
 
-export async function runAssemblyIngest(mode: string, deps: AssemblyIngestDeps) {
+export async function runAssemblyIngest(
+  mode: string,
+  deps: AssemblyIngestDeps,
+  params?: URLSearchParams,
+) {
   switch (mode) {
     case "members":
       return await ingestMembers(deps);
@@ -192,7 +285,18 @@ export async function runAssemblyIngest(mode: string, deps: AssemblyIngestDeps) 
       return await ingestVotes(deps);
     case "bills_votes":
       return { bills: await ingestBills(deps), votes: await ingestVotes(deps) };
+    case "bills_backfill": {
+      const age = intParam(params, "age");
+      if (age === undefined) throw new RangeError("bills_backfill needs age, e.g. age=21");
+      return await ingestBillsBackfill(deps, {
+        age,
+        page: intParam(params, "page"),
+        pages: intParam(params, "pages"),
+      });
+    }
     default:
-      throw new RangeError(`unknown mode "${mode}" (members | bills | votes | bills_votes)`);
+      throw new RangeError(
+        `unknown mode "${mode}" (members | bills | votes | bills_votes | bills_backfill)`,
+      );
   }
 }

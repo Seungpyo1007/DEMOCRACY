@@ -16,6 +16,10 @@ How far each shape is verified:
 | juso 검색 API                                                                               | `roadAddr`, `admCd`, `siNm`, `sggNm`, `emdNm` are documented. `hemdNm` (with `addInfoYn=Y`) checked live 2026-09-27: the whole name ("서울특별시 마포구 서교동"), several 행정동 joined by "," for a building in more than one. | `results.common.errorCode`                                                                                                                                         |
 | V-World 지오코더 2.0 `getAddress`                                                           | From the vworld.kr reverse-geocoding reference: `response.status`, `result[].structure.level4AC` (행정동 code, road entries only), `level4LC` (법정동 code). **Not yet checked against a keyed call.**                          | `status` "OK" / "NOT_FOUND" / "ERROR" with `error.code`                                                                                                            |
 
+`assembly_bills_21.json` is the same bills shape for `AGE=21`, served by `fake_upstream.ts` when the
+request asks for that term. It holds a bill with no 소관위원회 and one led by a member who no longer
+sits, so the backfill's filter and the direction view's exclusion both have something to act on.
+
 Field mapping lives in one normalizer per source
 (`supabase/functions/_shared/normalize_assembly.ts`, `normalize_nec.ts`, `geo.ts`). If a live call
 differs, fix it there, then update the sample here.
