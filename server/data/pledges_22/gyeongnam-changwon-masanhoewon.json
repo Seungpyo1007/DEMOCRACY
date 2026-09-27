@@ -1,0 +1,99 @@
+{
+  "_note": "제22대 국회의원선거 경남 창원시마산회원구 당선인 윤한홍 (국민의힘). 책자형 선거공보 PDF 5쪽 「회원구 발전을 위한 4대 기반사업 완성하겠습니다!」 4개와 PDF 9쪽 「마산의 더 큰 도약 이뤄내겠습니다!」 1–4. 각 제목 아래 설명, PDF 6쪽 「윤한홍이 해냈습니다!」 쪽의 문장, PDF 10쪽 동별 공약은 넣지 않았다. 두 줄로 나뉜 제목은 한 줄로 이었고 문장 안의 !는 그대로 두었다. 제목은 원문 문구를 따랐고 바꾼 것은 위에 적은 구호·수식어 덜어내기뿐이다. 분류(category)는 앱에 정해진 분류 체계가 없어 비워 두었다. 이행 여부는 판정하지 않았다(notJudged).",
+  "districtId": "nec-121bcd81",
+  "source": {
+    "sourceUrl": "https://policy.nec.go.kr/policy_pdf/20240410/PDF/PBINFO_PUB/4824/003_100152903_20240402_3.pdf",
+    "fetchedAt": "2026-09-28T03:00:00Z",
+    "publisher": "중앙선거관리위원회"
+  },
+  "pledges": [
+    {
+      "id": "22-gyeongnam-changwon-masanhoewon-01",
+      "title": "회성동 복합행정타운",
+      "category": "",
+      "status": "notJudged",
+      "source": {
+        "sourceUrl": "https://policy.nec.go.kr/policy_pdf/20240410/PDF/PBINFO_PUB/4824/003_100152903_20240402_3.pdf",
+        "fetchedAt": "2026-09-28T03:00:00Z",
+        "publisher": "중앙선거관리위원회"
+      }
+    },
+    {
+      "id": "22-gyeongnam-changwon-masanhoewon-02",
+      "title": "창원교도소 이전",
+      "category": "",
+      "status": "notJudged",
+      "source": {
+        "sourceUrl": "https://policy.nec.go.kr/policy_pdf/20240410/PDF/PBINFO_PUB/4824/003_100152903_20240402_3.pdf",
+        "fetchedAt": "2026-09-28T03:00:00Z",
+        "publisher": "중앙선거관리위원회"
+      }
+    },
+    {
+      "id": "22-gyeongnam-changwon-masanhoewon-03",
+      "title": "서마산IC 구조개선",
+      "category": "",
+      "status": "notJudged",
+      "source": {
+        "sourceUrl": "https://policy.nec.go.kr/policy_pdf/20240410/PDF/PBINFO_PUB/4824/003_100152903_20240402_3.pdf",
+        "fetchedAt": "2026-09-28T03:00:00Z",
+        "publisher": "중앙선거관리위원회"
+      }
+    },
+    {
+      "id": "22-gyeongnam-changwon-masanhoewon-04",
+      "title": "마산역 미래형 환승센터",
+      "category": "",
+      "status": "notJudged",
+      "source": {
+        "sourceUrl": "https://policy.nec.go.kr/policy_pdf/20240410/PDF/PBINFO_PUB/4824/003_100152903_20240402_3.pdf",
+        "fetchedAt": "2026-09-28T03:00:00Z",
+        "publisher": "중앙선거관리위원회"
+      }
+    },
+    {
+      "id": "22-gyeongnam-changwon-masanhoewon-05",
+      "title": "KTX 고속화! 서울~마산 2시간 30분 시대 개막",
+      "category": "",
+      "status": "notJudged",
+      "source": {
+        "sourceUrl": "https://policy.nec.go.kr/policy_pdf/20240410/PDF/PBINFO_PUB/4824/003_100152903_20240402_3.pdf",
+        "fetchedAt": "2026-09-28T03:00:00Z",
+        "publisher": "중앙선거관리위원회"
+      }
+    },
+    {
+      "id": "22-gyeongnam-changwon-masanhoewon-06",
+      "title": "고속버스터미널을 마산역과 통합·이전",
+      "category": "",
+      "status": "notJudged",
+      "source": {
+        "sourceUrl": "https://policy.nec.go.kr/policy_pdf/20240410/PDF/PBINFO_PUB/4824/003_100152903_20240402_3.pdf",
+        "fetchedAt": "2026-09-28T03:00:00Z",
+        "publisher": "중앙선거관리위원회"
+      }
+    },
+    {
+      "id": "22-gyeongnam-changwon-masanhoewon-07",
+      "title": "지역 숙원사업 의과대학, 마산회원구에 유치",
+      "category": "",
+      "status": "notJudged",
+      "source": {
+        "sourceUrl": "https://policy.nec.go.kr/policy_pdf/20240410/PDF/PBINFO_PUB/4824/003_100152903_20240402_3.pdf",
+        "fetchedAt": "2026-09-28T03:00:00Z",
+        "publisher": "중앙선거관리위원회"
+      }
+    },
+    {
+      "id": "22-gyeongnam-changwon-masanhoewon-08",
+      "title": "거제~마산 해상구간 건설(국도 5호선) 조속 추진",
+      "category": "",
+      "status": "notJudged",
+      "source": {
+        "sourceUrl": "https://policy.nec.go.kr/policy_pdf/20240410/PDF/PBINFO_PUB/4824/003_100152903_20240402_3.pdf",
+        "fetchedAt": "2026-09-28T03:00:00Z",
+        "publisher": "중앙선거관리위원회"
+      }
+    }
+  ]
+}

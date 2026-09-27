@@ -1,0 +1,66 @@
+{
+  "_note": "제22대 국회의원선거 경북 포항시북구 당선인 김정재 (국민의힘). 책자형 선거공보 PDF 5–9쪽 「공약 1」–「공약 5」의 제목 5개. 각 공약 아래 세부 항목, PDF 8쪽 「우리동네 지역공약」의 동별 항목, PDF 9쪽 공약 5 아래 어르신·아이 돌봄 세부 항목은 넣지 않았다. 공약 5는 제목 자리에 「3대가 함께하는 포항!」만 있어 그것을 옮기고 끝의 !만 덜어냈다. 제목은 원문 문구를 따랐고 바꾼 것은 위에 적은 구호·수식어 덜어내기뿐이다. 분류(category)는 앱에 정해진 분류 체계가 없어 비워 두었다. 이행 여부는 판정하지 않았다(notJudged).",
+  "districtId": "nec-6bc97ea9",
+  "source": {
+    "sourceUrl": "https://policy.nec.go.kr/policy_pdf/20240410/PDF/PBINFO_PUB/4701/003_100152560_20240402_2.pdf",
+    "fetchedAt": "2026-09-28T03:00:00Z",
+    "publisher": "중앙선거관리위원회"
+  },
+  "pledges": [
+    {
+      "id": "22-gyeongbuk-pohang-buk-01",
+      "title": "사통팔달 교통망으로 물류·관광 인프라 구축",
+      "category": "",
+      "status": "notJudged",
+      "source": {
+        "sourceUrl": "https://policy.nec.go.kr/policy_pdf/20240410/PDF/PBINFO_PUB/4701/003_100152560_20240402_2.pdf",
+        "fetchedAt": "2026-09-28T03:00:00Z",
+        "publisher": "중앙선거관리위원회"
+      }
+    },
+    {
+      "id": "22-gyeongbuk-pohang-buk-02",
+      "title": "의과대학, 포항 유치를 통한 바이오·헬스 산업 육성",
+      "category": "",
+      "status": "notJudged",
+      "source": {
+        "sourceUrl": "https://policy.nec.go.kr/policy_pdf/20240410/PDF/PBINFO_PUB/4701/003_100152560_20240402_2.pdf",
+        "fetchedAt": "2026-09-28T03:00:00Z",
+        "publisher": "중앙선거관리위원회"
+      }
+    },
+    {
+      "id": "22-gyeongbuk-pohang-buk-03",
+      "title": "이차전지·수소산업 전주기 완성으로 첨단미래산업 메카 포항 완성",
+      "category": "",
+      "status": "notJudged",
+      "source": {
+        "sourceUrl": "https://policy.nec.go.kr/policy_pdf/20240410/PDF/PBINFO_PUB/4701/003_100152560_20240402_2.pdf",
+        "fetchedAt": "2026-09-28T03:00:00Z",
+        "publisher": "중앙선거관리위원회"
+      }
+    },
+    {
+      "id": "22-gyeongbuk-pohang-buk-04",
+      "title": "포항시민 삶의 질 향상을 위한 우리동네 지역공약",
+      "category": "",
+      "status": "notJudged",
+      "source": {
+        "sourceUrl": "https://policy.nec.go.kr/policy_pdf/20240410/PDF/PBINFO_PUB/4701/003_100152560_20240402_2.pdf",
+        "fetchedAt": "2026-09-28T03:00:00Z",
+        "publisher": "중앙선거관리위원회"
+      }
+    },
+    {
+      "id": "22-gyeongbuk-pohang-buk-05",
+      "title": "3대가 함께하는 포항",
+      "category": "",
+      "status": "notJudged",
+      "source": {
+        "sourceUrl": "https://policy.nec.go.kr/policy_pdf/20240410/PDF/PBINFO_PUB/4701/003_100152560_20240402_2.pdf",
+        "fetchedAt": "2026-09-28T03:00:00Z",
+        "publisher": "중앙선거관리위원회"
+      }
+    }
+  ]
+}
