@@ -47,10 +47,11 @@ compileSdk만 37인 건 `flutter_secure_storage` 11 때문. bootstrap 스크립�
 그냥 `flutter run` 하면 전부 샘플 데이터로 뜸. 실제 서버에 붙이려면:
 
 ```bash
-flutter run \
-  --dart-define=BFF_URL=https://<ref>.supabase.co/functions/v1/bff \
-  --dart-define=BFF_ANON_KEY=<anon key>
+cp app/dart_defines.example.json app/dart_defines.json   # 주소랑 anon 키 채움. gitignore라 커밋 안 됨
+cd app && flutter run --dart-define-from-file=dart_defines.json
 ```
+
+폰에 릴리스로 넣을 때도 `flutter build ios --release --dart-define-from-file=dart_defines.json`. 이거 빼고 빌드하면 전부 샘플 데이터로 뜸
 
 로그인 제공자 키(카카오, Google, Android에서 Apple)는 따로 넣어야 함. 키 없는 제공자는 버튼이 안 나오고 이메일 로그인만 됨. 넣는 곳은 `app/ios/Flutter/Keys.xcconfig.example`, `server/README.md` 참고.
 
@@ -68,7 +69,8 @@ cd server && deno task ci
   - 주민 인증: 서버가 주소로 선거구 확인하고 토큰 발급. 자기 신고라 실거주 증명은 아님. 주소는 안 남김
 - 서버는 Supabase에 배포돼 있고 국회·선관위 실데이터 들어가 있음 (지역구 254, 의원 299, 20~22대 당선인, 법안·표결)
 - 주소 → 선거구: 공직선거법 [별표 1] 구역표를 지금 행정동 코드로 옮긴 매핑표(`server/data/`)로 찾음. 한 건물이 선거구 두 개에 걸치면 결과에서 뺌
-- 실데이터 없는 기능(AI, 개표, 평가, 채팅)은 서버 모드에서 「준비 중」. 샘플로 채우지 않음
+- 개표 탭은 서버 모드에서 22대 최종 결과를 보여 줌 (254개 선거구, 선관위 투·개표 정보, `mode=counts` 적재 후). 실시간 개표는 아직 없음
+- 실데이터 없는 기능(AI, 평가, 채팅)은 서버 모드에서 「준비 중」. 샘플로 채우지 않음
 - 모든 외부 수치는 원문 주소랑 가져온 시각이 있어야만 화면에 나옴. 출처 배지 누르면 원문 열림
 - 지도 타일은 Google Maps 키가 없어서 회색 격자. 개표율 색칠, 선택, 내 지역구 테두리는 동작함
 

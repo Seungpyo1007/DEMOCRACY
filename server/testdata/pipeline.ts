@@ -14,6 +14,7 @@ import {
   DEFAULT_BACKFILL_SG_IDS,
   ingestCandidates,
   ingestCodes,
+  ingestCounts,
   ingestWinners,
 } from "../supabase/functions/ingest-nec/ingest.ts";
 import { emptyTables, type MemoryTables } from "../supabase/functions/bff/store.ts";
@@ -51,11 +52,20 @@ export async function runPipeline(): Promise<{ db: MemoryPostgrest; requests: st
   const up = fakeUpstream();
   const now = () => NOW;
   const retry = { retries: 0 };
-  const nec = { db, fetch: up.fetch, serviceKey: "TEST-NEC-KEY", now, retry, minDistricts: 1 };
+  const nec = {
+    db,
+    fetch: up.fetch,
+    serviceKey: "TEST-NEC-KEY",
+    now,
+    retry,
+    minDistricts: 1,
+    minCountDistricts: 1,
+  };
   const asm = { db, fetch: up.fetch, key: "TEST-ASSEMBLY-KEY", now, retry, minMembers: 1 };
 
   await ingestCodes(nec);
   await ingestWinners(nec, DEFAULT_BACKFILL_SG_IDS);
+  await ingestCounts(nec, DEFAULT_BACKFILL_SG_IDS);
   await ingestCandidates(nec);
   await ingestMembers(asm);
   await ingestBills(asm);
@@ -116,6 +126,11 @@ export async function runPipeline(): Promise<{ db: MemoryPostgrest; requests: st
     district_id: MAPO_B,
     source_url: "https://policy.nec.go.kr/",
     fetched_at: at,
+  }, {
+    // A list-only board: every pledge 「판정 전」.
+    district_id: MAPO_A,
+    source_url: "https://policy.nec.go.kr/policy_pdf/mapo-a.pdf",
+    fetched_at: at,
   }], "district_id");
   await db.upsert("pledges", [
     {
@@ -143,6 +158,47 @@ export async function runPipeline(): Promise<{ db: MemoryPostgrest; requests: st
       },
       sort: 1,
       source_url: "https://policy.nec.go.kr/p2",
+      fetched_at: at,
+    },
+    // Not judged: listed, but left out of 공약 이행 (still 1 of 2 judged).
+    {
+      id: "p5",
+      district_id: MAPO_B,
+      title: "판정 전 공약",
+      category: "",
+      status: "notJudged",
+      evidence_url: null,
+      judgement: null,
+      sort: 4,
+      source_url: "https://policy.nec.go.kr/p5",
+      fetched_at: at,
+    },
+    {
+      id: "j1",
+      district_id: MAPO_A,
+      title: "마포 갑 공약 하나",
+      category: null,
+      status: "notJudged",
+      evidence_url: null,
+      judgement: null,
+      sort: 0,
+      source_url: "https://policy.nec.go.kr/policy_pdf/mapo-a.pdf",
+      fetched_at: at,
+    },
+    {
+      id: "j2",
+      district_id: MAPO_A,
+      title: "마포 갑 공약 둘",
+      category: null,
+      status: "notJudged",
+      // Forbidden by the migration; the BFF must still not pass it on.
+      evidence_url: "https://policy.nec.go.kr/j2-evidence",
+      judgement: {
+        steps: [{ actor: "누군가", detail: "", stamp: "" }],
+        source: { sourceUrl: "https://policy.nec.go.kr/j2", fetchedAt: at },
+      },
+      sort: 1,
+      source_url: "https://policy.nec.go.kr/policy_pdf/mapo-a.pdf",
       fetched_at: at,
     },
     // Dropped by the BFF: reversed without evidence, and one without a source.
@@ -186,6 +242,7 @@ export function toTables(db: MemoryPostgrest): MemoryTables {
   t.attendance = r("plenary_attendance");
   t.elections = db.rows("elections").map((e) => ({ count_status: "none", ...e })) as never[];
   t.results = r("election_results");
+  t.counts = r("district_counts");
   t.candidates = r("candidates");
   t.regionTimelines = r("region_timelines");
   t.regionEvents = r("region_events");

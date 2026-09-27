@@ -1,5 +1,5 @@
 // Entry point for `ingest-nec`. Called by pg_cron via pg_net:
-//   POST /functions/v1/ingest-nec?mode=codes|candidates|backfill[&sgIds=20160413,20200415]
+//   POST /functions/v1/ingest-nec?mode=codes|candidates|backfill|counts[&sgIds=20160413,20200415]
 //   header x-ingest-secret: <INGEST_SECRET>
 import { ingestHandler } from "../_shared/ingest_common.ts";
 import { createPostgrest } from "../_shared/postgrest.ts";

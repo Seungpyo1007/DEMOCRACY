@@ -7,7 +7,8 @@ import 'package:democracy/src/features/results/domain/election_results.dart';
 import 'package:democracy/src/features/results/domain/publication_gate.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
-/// Overridden in tests and, later, wherever the real SSE client is wired.
+/// Overridden in tests, and by `RemoteResultsRepository` in a build with a
+/// BFF (`live_data.dart`).
 final resultsRepositoryProvider = Provider<ResultsRepository>(
   (ref) => const FakeResultsRepository(),
 );

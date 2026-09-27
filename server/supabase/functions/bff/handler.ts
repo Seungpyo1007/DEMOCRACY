@@ -1,12 +1,14 @@
 // BFF router. Paths (after /functions/v1/bff):
-//   GET /districts/{id}/profile | /history | /pledges | /direction
+//   GET /districts/{id}/profile | /history | /pledges | /results | /direction
 //   GET /address/search?q=
 //   GET /location/district?lat=&lng=
 //   /me/... (account routes, signed-in only; see account.ts)
 //   POST /residency/verify, DELETE /residency (signed-in; see residency.ts)
+//   GET|POST /districts/{id}/reviews, GET /districts/{id}/community,
+//   POST /districts/{id}/messages, DELETE /reviews/{id} | /messages/{id} (see community.ts)
 //
 // The public routes are GET only and need no account. Signed-in routes are no-store.
-// Privacy: the address query and coordinates are never logged or stored.
+// Privacy: the address query and coordinates are never logged or stored, nor are post bodies.
 
 import type { Auth } from "../_shared/auth.ts";
 import { ApiError, CORS_HEADERS, fail, ok } from "../_shared/envelope.ts";
@@ -17,9 +19,12 @@ import { UpstreamError } from "../_shared/http.ts";
 import { findKeyedUrls } from "../_shared/provenance.ts";
 import { type AccountContext, handleAccount } from "./account.ts";
 import type { AccountStore } from "./account_store.ts";
+import { type CommunityContext, handleCommunity } from "./community.ts";
+import type { CommunityStore } from "./community_store.ts";
 import { buildHistory, buildPledges, buildProfile } from "./builders.ts";
 import { buildDirection } from "./direction.ts";
 import { districtForPlace, suggestionsFor } from "./mapping.ts";
+import { buildResults } from "./results.ts";
 import { handleResidency, type ResidencyContext } from "./residency.ts";
 import type { ReadStore } from "./store.ts";
 
@@ -31,6 +36,7 @@ export interface BffDeps {
   /** The service URL the V-World key was issued for, when the key asks for it. */
   vworldDomain?: string;
   accounts: AccountStore;
+  community: CommunityStore;
   auth: Auth;
   /** Source of randomness for 활동명 draws and tokens; crypto.getRandomValues by default. */
   randomBytes?: (n: number) => Uint8Array;
@@ -56,9 +62,10 @@ function parseCoord(raw: string | null, min: number, max: number): number | null
 
 export function createHandler(deps: BffDeps): (req: Request) => Promise<Response> {
   const now = deps.now ?? (() => new Date());
-  const account: AccountContext = {
+  const account: AccountContext & CommunityContext = {
     store: deps.store,
     accounts: deps.accounts,
+    community: deps.community,
     auth: deps.auth,
     randomBytes: deps.randomBytes ?? ((n) => crypto.getRandomValues(new Uint8Array(n))),
     now,
@@ -89,9 +96,13 @@ export function createHandler(deps: BffDeps): (req: Request) => Promise<Response
       if (mine !== null) return respond(mine);
       const verified = await handleResidency(residency, req, path);
       if (verified !== null) return respond(verified);
+      const posted = await handleCommunity(account, req, path);
+      if (posted !== null) return respond(posted.data, posted.cache);
       if (req.method !== "GET") throw new ApiError("bad_request", "Only GET is supported.");
 
-      const district = /^\/districts\/([^/]+)\/(profile|history|pledges|direction)$/.exec(path);
+      const district = /^\/districts\/([^/]+)\/(profile|history|pledges|results|direction)$/.exec(
+        path,
+      );
       if (district) {
         const [, id, what] = district;
         if (!isDistrictId(id)) throw new ApiError("bad_request", "Malformed district id.");
@@ -102,6 +113,9 @@ export function createHandler(deps: BffDeps): (req: Request) => Promise<Response
         if (what === "direction") {
           return respond(await buildDirection(deps.store, id), PROFILE_CACHE);
         }
+        // A final count, so the public cache is safe. A live count will need a
+        // short max-age and must never be cached across pollsClose.
+        if (what === "results") return respond(await buildResults(deps.store, id), PROFILE_CACHE);
         return respond(await buildPledges(deps.store, id), PROFILE_CACHE);
       }
 

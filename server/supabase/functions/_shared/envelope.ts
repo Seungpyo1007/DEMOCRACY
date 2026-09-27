@@ -1,6 +1,7 @@
 // The BFF response envelope.
 // 200 {"servedAt": ISO, "data": {...}}; non-2xx {"servedAt": ISO, "error": {code, message}}.
-// too_soon errors also carry error.availableAt (ISO) so the app can say when to retry.
+// too_soon errors also carry error.availableAt (ISO) so the app can say when to retry;
+// content_rejected carries error.reason (hate), never the matched text.
 
 export type ErrorCode =
   | "not_found"
@@ -13,7 +14,10 @@ export type ErrorCode =
   | "forbidden"
   | "consent_required"
   | "conflict"
-  | "too_soon";
+  | "too_soon"
+  | "residency_required"
+  | "content_rejected"
+  | "rate_limited";
 
 const STATUS: Record<ErrorCode, number> = {
   not_found: 404,
@@ -27,6 +31,9 @@ const STATUS: Record<ErrorCode, number> = {
   consent_required: 403,
   conflict: 409,
   too_soon: 429,
+  residency_required: 403,
+  content_rejected: 422,
+  rate_limited: 429,
 };
 
 export const CORS_HEADERS: Record<string, string> = {
@@ -70,7 +77,7 @@ export class ApiError extends Error {
   constructor(
     readonly code: ErrorCode,
     message: string,
-    /** Extra fields for the error object, e.g. {availableAt} on too_soon. */
+    /** Extra fields for the error object, e.g. {availableAt} on too_soon, {reason} on content_rejected. */
     readonly extra?: Record<string, string>,
   ) {
     super(message);

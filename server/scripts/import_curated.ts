@@ -1,21 +1,25 @@
 // Curated content (pilot districts only) → SQL.
 //
 //   --kind pledges : pledges typed in by hand from 선거공보 / 5대공약 PDFs.
+//                    Files live in data/pledges_22/, one per district.
 //   --kind region  : a district's chronology from a district office's records.
 //
 // pledges JSON:
 //   { "districtId": "nec-xxxxxxxx",
-//     "source": { "sourceUrl": "https://policy.nec.go.kr/...", "fetchedAt": "2026-09-24T00:00:00Z" },
+//     "source": { "sourceUrl": "https://policy.nec.go.kr/...", "fetchedAt": "2026-09-24T00:00:00Z",
+//                 "publisher": "중앙선거관리위원회" },     // optional; defaults to the URL host
 //     "monaCd": "ABC1234D",
 //     "pledges": [ { "id": "mapo-b-01", "title": "...", "category": "교통",
-//                    "status": "fulfilled|inProgress|unfulfilled|reversed",
+//                    "status": "notJudged|fulfilled|inProgress|unfulfilled|reversed",
 //                    "evidenceUrl": "https://...",           // required for reversed
 //                    "billIds": ["PRC_..."],                 // bills cited as evidence
 //                    "judgement": { "steps": [{ "actor": "...", "detail": "...", "stamp": "..." }],
 //                                   "source": { "sourceUrl": "...", "fetchedAt": "..." } },
 //                    "source": { "sourceUrl": "...", "fetchedAt": "..." } } ] }
 //   Status is a curator's descriptive call backed by evidence; the backend
-//   never scores or ranks.
+//   never scores or ranks. notJudged (「판정 전」) is a pledge listed from the
+//   document with no call made: it must carry no judgement, evidenceUrl or
+//   billIds, so a list-only board cannot smuggle a verdict in.
 //
 // region JSON:
 //   { "districtId": "nec-xxxxxxxx", "source": {...},
@@ -34,14 +38,19 @@ function source(v: unknown, field: string): { url: string; at: string; publisher
   if (!s || !isPresentableSourceUrl(s.sourceUrl) || !isTimestamp(s.fetchedAt)) {
     throw new Error(`${field}: source {sourceUrl, fetchedAt} required`);
   }
+  if (s.publisher !== undefined && (typeof s.publisher !== "string" || !s.publisher.trim())) {
+    throw new Error(`${field}: publisher must be a non-empty string when given`);
+  }
   return {
     url: s.sourceUrl,
     at: new Date(s.fetchedAt).toISOString(),
-    publisher: new URL(s.sourceUrl).host.replace(/^www\./, ""),
+    publisher: typeof s.publisher === "string"
+      ? s.publisher.trim()
+      : new URL(s.sourceUrl).host.replace(/^www\./, ""),
   };
 }
 
-const STATUSES = new Set(["fulfilled", "inProgress", "unfulfilled", "reversed"]);
+const STATUSES = new Set(["notJudged", "fulfilled", "inProgress", "unfulfilled", "reversed"]);
 
 export function pledgesToSql(doc: J): string {
   const districtId = String(doc.districtId ?? "");
@@ -56,6 +65,13 @@ export function pledgesToSql(doc: J): string {
       throw new Error(`${f}: id and title required`);
     }
     if (!STATUSES.has(String(p.status))) throw new Error(`${f}: bad status`);
+    if (
+      p.status === "notJudged" &&
+      (p.judgement !== undefined || p.evidenceUrl !== undefined ||
+        (Array.isArray(p.billIds) && p.billIds.length > 0))
+    ) {
+      throw new Error(`${f}: notJudged carries no judgement, evidenceUrl or billIds`);
+    }
     if (p.status === "reversed" && !isPresentableSourceUrl(p.evidenceUrl)) {
       throw new Error(`${f}: reversed requires evidenceUrl`);
     }
