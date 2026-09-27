@@ -61,6 +61,10 @@ class ReviewSummary {
   final int respondents;
   final List<ReviewAxis> axes;
 
+  /// No one has rated this seat yet. A live district starts here, and the
+  /// board says so rather than showing a 0.0 that reads like a verdict.
+  bool get isEmpty => respondents == 0;
+
   String get averageDisplay => average.toStringAsFixed(1);
 
   String get respondentsDisplay => '주민 $respondents명 평가';

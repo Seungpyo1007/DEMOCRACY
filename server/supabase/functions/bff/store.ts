@@ -40,6 +40,8 @@ export interface BillRec extends Sourced {
   committee_dt: string | null;
   cmt_proc_dt: string | null;
   proc_result: string | null;
+  /** The bill's own page on likms, when the Assembly gave one. */
+  detail_link?: string | null;
 }
 
 export interface VoteRec extends Sourced {

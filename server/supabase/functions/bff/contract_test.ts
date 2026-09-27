@@ -5,10 +5,12 @@ import { assert, assertEquals } from "@std/assert";
 import { findKeyedUrls } from "../_shared/provenance.ts";
 import {
   validateAddressSuggestions,
+  validateCommunity,
   validateDistrictProfile,
   validateEnvelope,
   validateHistoryRecord,
   validatePledgeBoard,
+  validateReviewBoard,
 } from "./contract.ts";
 import { createHandler } from "./handler.ts";
 import { MemoryStore } from "./store.ts";
@@ -247,6 +249,14 @@ Deno.test("the app's own fixtures pass the validator (validator is not too stric
     [],
   );
   assertEquals(validateAddressSuggestions(JSON.parse(await text("address_suggestions.json"))), []);
+  assertEquals(
+    validateReviewBoard(JSON.parse(await text("reviews_fixture-seoul-mapo-b.json"))),
+    [],
+  );
+  assertEquals(
+    validateCommunity(JSON.parse(await text("community_fixture-seoul-mapo-b.json"))),
+    [],
+  );
 });
 
 Deno.test("validator catches what the Dart parsers reject", () => {
