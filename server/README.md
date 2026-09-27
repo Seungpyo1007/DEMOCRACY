@@ -19,7 +19,7 @@ Reading needs no account; the account routes need a Supabase Auth sign-in.
 | ---------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------- |
 | `supabase/migrations/20260924000000_init.sql`              | Schema, RLS, BFF SQL helpers, purge functions, cron schedules                                                 |
 | `supabase/migrations/20260926000000_accounts.sql`          | Profiles, consents, 활동명 offers, residency; account SQL functions; orphan-login purge                       |
-| `supabase/migrations/20260927000000_pledge_not_judged.sql` | Pledge status `notJudged` (「판정 전」), which may carry no evidence, judgement or bills                      |
+| `supabase/migrations/20260927130000_pledge_not_judged.sql` | Pledge status `notJudged` (「판정 전」), which may carry no evidence, judgement or bills                      |
 | `supabase/seed.sql`                                        | **Sample** 마포구 갑/을 + 종로구 district mapping, generated from `testdata/`. Not verified against [별표 1]. |
 | `supabase/functions/_shared/`                              | API clients, normalizers (one per source), envelope, provenance, PostgREST client                             |
 | `supabase/functions/ingest-assembly/`                      | Members (daily), bills and plenary votes (every 6 h)                                                          |
