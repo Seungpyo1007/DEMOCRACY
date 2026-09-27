@@ -5,6 +5,8 @@ import 'package:democracy/src/app/live_data.dart';
 import 'package:democracy/src/core/auth/address_state.dart';
 import 'package:democracy/src/core/auth/address_store.dart';
 import 'package:democracy/src/core/network/not_available.dart';
+import 'package:democracy/src/core/provenance/source_metadata.dart';
+import 'package:democracy/src/features/ai_match/data/remote_direction_repository.dart';
 import 'package:democracy/src/features/district/data/remote_district_repository.dart';
 import 'package:democracy/src/features/district/domain/legislator_record.dart';
 import 'package:democracy/src/features/history/data/remote_history_repository.dart';
@@ -114,6 +116,85 @@ void main() {
       RemotePledgeRepository(client).loadBoard(id),
       throwsA(isA<NotAvailableException>()),
     );
+  });
+
+  group('direction', () {
+    test('the fixture is a valid direction response', () async {
+      final client = fakeBffClient(
+        FakeBffAdapter({
+          '/districts/$id/direction': (
+            status: 200,
+            body: envelope(fixture('ai_direction_fixture-seoul-mapo-b')),
+          ),
+        }),
+      );
+
+      final report = await RemoteDirectionRepository(client).loadReport(id);
+
+      expect(report.trend, isNotNull);
+    });
+
+    test('the live shape: a trend, and the model blocks null', () async {
+      final trend =
+          fixture('ai_direction_fixture-seoul-mapo-b')['trend']
+              as Map<String, Object?>;
+      final adapter = FakeBffAdapter({
+        '/districts/$id/direction': (
+          status: 200,
+          body: envelope({
+            'district': {'id': id, 'displayName': '서울 마포구 을'},
+            'trend': trend,
+            'stances': null,
+            'issues': null,
+          }),
+        ),
+      });
+
+      final report = await RemoteDirectionRepository(
+        fakeBffClient(adapter),
+      ).loadReport(id);
+
+      expect(report.trend!.billCount, 31);
+      expect(report.stances, isNull);
+      expect(report.issues, isNull);
+      expect(adapter.requests.single.path, '/districts/$id/direction');
+    });
+
+    test('a district with no incumbent is not available', () async {
+      final client = fakeBffClient(
+        FakeBffAdapter({
+          '/districts/$id/direction': (
+            status: 404,
+            body: errorEnvelope('not_found'),
+          ),
+        }),
+      );
+
+      await expectLater(
+        RemoteDirectionRepository(client).loadReport(id),
+        throwsA(isA<NotAvailableException>()),
+      );
+    });
+
+    test('a trend without a source is refused', () async {
+      final trend = Map<String, Object?>.of(
+        fixture('ai_direction_fixture-seoul-mapo-b')['trend']
+            as Map<String, Object?>,
+      )..remove('source');
+      final client = fakeBffClient(
+        FakeBffAdapter({
+          '/districts/$id/direction': (
+            status: 200,
+            body: envelope({'trend': trend}),
+          ),
+        }),
+      );
+
+      await expectLater(
+        RemoteDirectionRepository(client).loadReport(id),
+        throwsA(isA<MissingSourceException>()),
+      );
+    });
   });
 
   // Provenance holds on the wire as it does in the fixtures.
