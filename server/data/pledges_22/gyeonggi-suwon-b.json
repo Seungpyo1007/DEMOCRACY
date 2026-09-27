@@ -1,0 +1,66 @@
+{
+  "_note": "제22대 국회의원선거 경기 수원시 을 당선인 백혜련 (더불어민주당). 책자형 선거공보 PDF 3쪽 「백혜련의 서수원시대, 시작합니다.」 지도 위 「백혜련의 5대 구상」 5개. 지도 위 배치라 번호가 없어서, 이를 풀어 쓴 PDF 4–8쪽의 순서(교통 → R&D사이언스파크 → 탑동 → 군공항 → 탄소중립)대로 두었다. 4–8쪽의 세부 사업(DRT 확대, 광역교통 특별대책, 제로에너지도시 등)은 5대 구상을 풀어 쓴 것이라, PDF 9–10쪽 동별 공약과 교육·안전·복지 항목은 더 긴 목록이라 넣지 않았다. 제목은 원문 문구를 따랐고 바꾼 것은 위에 적은 구호·수식어 덜어내기뿐이다. 분류(category)는 앱에 정해진 분류 체계가 없어 비워 두었다. 이행 여부는 판정하지 않았다(notJudged).",
+  "districtId": "nec-e5dcaffb",
+  "source": {
+    "sourceUrl": "https://policy.nec.go.kr/policy_pdf/20240410/PDF/PBINFO_PUB/4102/003_100152712_20240402_2.pdf",
+    "fetchedAt": "2026-09-27T17:34:00Z",
+    "publisher": "중앙선거관리위원회"
+  },
+  "pledges": [
+    {
+      "id": "22-gyeonggi-suwon-b-01",
+      "title": "신분당선 연장선 & 구운역 신설",
+      "category": "",
+      "status": "notJudged",
+      "source": {
+        "sourceUrl": "https://policy.nec.go.kr/policy_pdf/20240410/PDF/PBINFO_PUB/4102/003_100152712_20240402_2.pdf",
+        "fetchedAt": "2026-09-27T17:34:00Z",
+        "publisher": "중앙선거관리위원회"
+      }
+    },
+    {
+      "id": "22-gyeonggi-suwon-b-02",
+      "title": "첨단 R&D사이언스 파크",
+      "category": "",
+      "status": "notJudged",
+      "source": {
+        "sourceUrl": "https://policy.nec.go.kr/policy_pdf/20240410/PDF/PBINFO_PUB/4102/003_100152712_20240402_2.pdf",
+        "fetchedAt": "2026-09-27T17:34:00Z",
+        "publisher": "중앙선거관리위원회"
+      }
+    },
+    {
+      "id": "22-gyeonggi-suwon-b-03",
+      "title": "탑동 이노베이션 밸리",
+      "category": "",
+      "status": "notJudged",
+      "source": {
+        "sourceUrl": "https://policy.nec.go.kr/policy_pdf/20240410/PDF/PBINFO_PUB/4102/003_100152712_20240402_2.pdf",
+        "fetchedAt": "2026-09-27T17:34:00Z",
+        "publisher": "중앙선거관리위원회"
+      }
+    },
+    {
+      "id": "22-gyeonggi-suwon-b-04",
+      "title": "군공항 이전 스마트시티 조성",
+      "category": "",
+      "status": "notJudged",
+      "source": {
+        "sourceUrl": "https://policy.nec.go.kr/policy_pdf/20240410/PDF/PBINFO_PUB/4102/003_100152712_20240402_2.pdf",
+        "fetchedAt": "2026-09-27T17:34:00Z",
+        "publisher": "중앙선거관리위원회"
+      }
+    },
+    {
+      "id": "22-gyeonggi-suwon-b-05",
+      "title": "탄소중립 그린도시",
+      "category": "",
+      "status": "notJudged",
+      "source": {
+        "sourceUrl": "https://policy.nec.go.kr/policy_pdf/20240410/PDF/PBINFO_PUB/4102/003_100152712_20240402_2.pdf",
+        "fetchedAt": "2026-09-27T17:34:00Z",
+        "publisher": "중앙선거관리위원회"
+      }
+    }
+  ]
+}
