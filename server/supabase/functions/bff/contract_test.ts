@@ -110,7 +110,8 @@ Deno.test("profile: attendance/votes omitted when there is no data; bills kept",
   assertEquals(record.votes.points, [{ label: "5월", value: 100 }]); // 기권 is participation
   assertEquals(record.bills.items, []);
   const labels = body.data.incumbent.stats.map((s: { label: string }) => s.label);
-  assertEquals(labels, ["발의 법안"]); // no attendance, no curated pledges
+  // No attendance; the pledge board lists only 「판정 전」 pledges, so no 공약 이행.
+  assertEquals(labels, ["발의 법안"]);
   assertClean(body);
 });
 
@@ -253,14 +254,39 @@ Deno.test("pledges: curated board with unsourced / unevidenced items dropped", a
   const { res, body } = await get(`/districts/${MAPO_B}/pledges`);
   assertEquals(res.status, 200);
   assertEquals(validatePledgeBoard(body.data), []);
-  assertEquals(body.data.pledges.map((p: { id: string }) => p.id), ["p1", "p2"]);
+  assertEquals(body.data.pledges.map((p: { id: string }) => p.id), ["p1", "p2", "p5"]);
+  assertEquals(body.data.pledges[2].status, "notJudged");
   assertEquals(body.data.pledges[1].judgement.steps[0].actor, "큐레이터 검토");
   assertClean(body);
 
-  const other = await get(`/districts/${MAPO_A}/pledges`);
+  const other = await get(`/districts/${JONGNO}/pledges`);
   assertEquals(other.res.status, 404);
   assertEquals(other.body.error.code, "not_curated");
   assertEquals(validateEnvelope(other.body, true), []);
+});
+
+Deno.test("pledges: a list-only board carries no part of a verdict", async () => {
+  const { get } = await setup();
+  const { res, body } = await get(`/districts/${MAPO_A}/pledges`);
+  assertEquals(res.status, 200);
+  assertEquals(validatePledgeBoard(body.data), []);
+  assertEquals(body.data.pledges.map((p: { id: string }) => p.id), ["j1", "j2"]);
+  for (const p of body.data.pledges) {
+    assertEquals(p.status, "notJudged");
+    assert(!("judgement" in p), "no judgement on a 판정 전 pledge");
+    assert(!("evidenceUrl" in p), "no evidence on a 판정 전 pledge");
+  }
+  assertClean(body);
+});
+
+Deno.test("profile: no 공약 이행 when nothing on the board is judged", async () => {
+  const { get } = await setup();
+  // MAPO_A has a curated board, but every pledge on it is 「판정 전」.
+  assertEquals((await get(`/districts/${MAPO_A}/pledges`)).res.status, 200);
+  const { body } = await get(`/districts/${MAPO_A}/profile`);
+  assertEquals(validateDistrictProfile(body.data), []);
+  const labels = body.data.incumbent.stats.map((s: { label: string }) => s.label);
+  assert(!labels.includes("공약 이행"), `got ${labels}`);
 });
 
 Deno.test("address search: juso proxy mapped to districts, unmapped dropped", async () => {
@@ -394,4 +420,22 @@ Deno.test("validator catches what the Dart parsers reject", () => {
   assert(errs2.some((e) => e.includes("tallies[0]")));
   assert(errs2.some((e) => e.includes("historical[0]")));
   assert(errs2.some((e) => e.includes("nesdcRegistration")));
+  assert(
+    validatePledgeBoard({
+      pledges: [{
+        id: "1",
+        title: "t",
+        status: "notJudged",
+        evidenceUrl: "https://a.kr/e",
+        source: src,
+      }],
+      source: src,
+    }).some((e) => e.includes("notJudged")),
+  );
+  assert(
+    validatePledgeBoard({
+      pledges: [{ id: "1", title: "t", status: "kept", source: src }],
+      source: src,
+    }).some((e) => e.includes("unknown status")),
+  );
 });

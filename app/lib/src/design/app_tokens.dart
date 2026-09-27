@@ -63,11 +63,16 @@ abstract final class AppColors {
   static const unfulfilled = neutral300;
   static const reversed = accent700;
 
+  /// 「판정 전」 is not a verdict, so it sits outside the ink ramp: the
+  /// quietest neutral, which no verdict uses.
+  static const notJudged = neutral200;
+
   /// Text colour for each status, where the bar colour is too light to read.
   static const fulfilledText = ink;
   static const inProgressText = neutral700;
   static const unfulfilledText = neutral600;
   static const reversedText = accent700;
+  static const notJudgedText = neutral600;
 
   // The chips tint their own background, so each status carries a pair.
   static const fulfilledChipBackground = ground;

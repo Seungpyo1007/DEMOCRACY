@@ -174,6 +174,7 @@ class PledgeStatusChip extends StatelessWidget {
     PledgeStatus.inProgress => AppColors.inProgress,
     PledgeStatus.unfulfilled => AppColors.unfulfilled,
     PledgeStatus.reversed => AppColors.reversed,
+    PledgeStatus.notJudged => AppColors.notJudged,
   };
 
   /// The colour the status carries as text, which the lighter bar colours
@@ -183,6 +184,7 @@ class PledgeStatusChip extends StatelessWidget {
     PledgeStatus.inProgress => AppColors.inProgressText,
     PledgeStatus.unfulfilled => AppColors.unfulfilledText,
     PledgeStatus.reversed => AppColors.reversedText,
+    PledgeStatus.notJudged => AppColors.notJudgedText,
   };
 
   @override

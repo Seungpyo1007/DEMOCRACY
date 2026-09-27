@@ -17,6 +17,7 @@ import { parseCsv } from "./lib/csv.ts";
 import { lit, requireHttpUrl } from "./lib/sql.ts";
 import { sample } from "../testdata/fake_upstream.ts";
 import { MAPO_A, MAPO_B } from "../testdata/pipeline.ts";
+import { districtIdFor, necSggCode } from "../supabase/functions/_shared/district_names.ts";
 
 const opts = {
   sourceUrl: "https://www.law.go.kr/법령/공직선거법",
@@ -231,6 +232,48 @@ Deno.test("curated pledges / region importers enforce sources and evidence", () 
     Error,
     "source",
   );
+  // 「판정 전」: accepted plain, with the publisher named rather than the host…
+  const listed = pledgesToSql({
+    districtId: MAPO_B,
+    source: { ...src, publisher: "중앙선거관리위원회" },
+    pledges: [{ id: "n1", title: "t", category: "", status: "notJudged", source: src }],
+  });
+  assertStringIncludes(listed, "'notJudged'");
+  assertStringIncludes(listed, "'중앙선거관리위원회'");
+  // …and refused with any part of a verdict attached.
+  for (
+    const extra of [
+      { evidenceUrl: "https://policy.nec.go.kr/e" },
+      {
+        judgement: {
+          steps: [{ actor: "큐레이터", detail: "", stamp: "" }],
+          source: src,
+        },
+      },
+      { billIds: ["PRC_1"] },
+    ]
+  ) {
+    assertThrows(
+      () =>
+        pledgesToSql({
+          districtId: MAPO_B,
+          source: src,
+          pledges: [{ id: "n", title: "t", status: "notJudged", source: src, ...extra }],
+        }),
+      Error,
+      "notJudged",
+    );
+  }
+  assertThrows(
+    () =>
+      pledgesToSql({
+        districtId: MAPO_B,
+        source: { ...src, publisher: " " },
+        pledges: [{ id: "n", title: "t", status: "notJudged", source: src }],
+      }),
+    Error,
+    "publisher",
+  );
   assertThrows(
     () => pledgesToSql({ districtId: "fixture-x", source: src, pledges: [] }),
     Error,
@@ -248,4 +291,39 @@ Deno.test("curated pledges / region importers enforce sources and evidence", () 
     Error,
     "year",
   );
+});
+
+Deno.test("22대 pilot pledge lists: 선거공보 only, nothing judged, importable", async () => {
+  const dir = new URL("../data/pledges_22/", import.meta.url);
+  const expected: Record<string, [string, string]> = {
+    "seoul-mapo-b.json": ["서울특별시", "마포구을"],
+    "seoul-yeongdeungpo-a.json": ["서울특별시", "영등포구갑"],
+    "seoul-jongno.json": ["서울특별시", "종로구"],
+    "gwangju-seo-a.json": ["광주광역시", "서구갑"],
+    "gyeonggi-hwaseong-d.json": ["경기도", "화성시정"],
+  };
+  const seen = new Set<string>();
+  const ids = new Set<string>();
+  for await (const entry of Deno.readDir(dir)) {
+    if (!entry.name.endsWith(".json")) continue;
+    seen.add(entry.name);
+    const doc = JSON.parse(await Deno.readTextFile(new URL(entry.name, dir)));
+    const [sd, sgg] = expected[entry.name] ?? [];
+    assert(sd, `unexpected file ${entry.name}`);
+    assertEquals(doc.districtId, districtIdFor(necSggCode(sd, sgg)), entry.name);
+    const pdf = doc.source.sourceUrl as string;
+    assertMatch(pdf, /^https:\/\/policy\.nec\.go\.kr\/policy_pdf\/20240410\/.+\.pdf$/);
+    assertEquals(doc.source.publisher, "중앙선거관리위원회");
+    for (const p of doc.pledges) {
+      assert(!ids.has(p.id), `duplicate id ${p.id}`);
+      ids.add(p.id);
+      assertEquals(p.status, "notJudged", p.id);
+      assertEquals(p.source.sourceUrl, pdf, p.id);
+      for (const k of ["judgement", "evidenceUrl", "billIds"]) assert(!(k in p), `${p.id}.${k}`);
+      assertEquals(p.title, p.title.trim(), p.id);
+    }
+    const sql = pledgesToSql(doc);
+    assert(!/'(fulfilled|inProgress|unfulfilled|reversed)'/.test(sql), entry.name);
+  }
+  assertEquals([...seen].sort(), Object.keys(expected).sort());
 });

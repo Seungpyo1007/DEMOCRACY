@@ -16,20 +16,21 @@ Reading needs no account; the account routes need a Supabase Auth sign-in.
 
 ## Layout
 
-| Path                                                     | What                                                                                                                      |
-| -------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------- |
-| `supabase/migrations/20260924000000_init.sql`            | Schema, RLS, BFF SQL helpers, purge functions, cron schedules                                                             |
-| `supabase/migrations/20260926000000_accounts.sql`        | Profiles, consents, 활동명 offers, residency; account SQL functions; orphan-login purge                                   |
-| `supabase/migrations/20260927000000_community.sql`       | Reviews, channel messages, bill threads and replies; write functions (residency, rate limit); thread sync                 |
-| `supabase/migrations/20260927120000_district_counts.sql` | Final 개표 per 선거구 per election (`district_counts`)                                                                    |
-| `supabase/seed.sql`                                      | **Sample** 마포구 갑/을 + 종로구 district mapping, generated from `testdata/`. Not verified against [별표 1].             |
-| `supabase/functions/_shared/`                            | API clients, normalizers (one per source), envelope, provenance, PostgREST client                                         |
-| `supabase/functions/ingest-assembly/`                    | Members (daily), bills and plenary votes (every 6 h)                                                                      |
-| `supabase/functions/ingest-nec/`                         | Election and district codes and candidates (weekly), historical winners (`?mode=backfill`), final counts (`?mode=counts`) |
-| `supabase/functions/bff/`                                | The API. `contract.ts` mirrors the app's Dart parsers. `account.ts`, `residency.ts`: signed-in. `community.ts`: posts.    |
-| `scripts/`                                               | One-off importers that write SQL to stdout; `build_district_areas.ts` builds the mapping CSV                              |
-| `data/`                                                  | Generated inputs kept in git: the 22대 district mapping                                                                   |
-| `testdata/`                                              | Hand-written API samples and district-mapping samples. See `testdata/README.md`.                                          |
+| Path                                                       | What                                                                                                                      |
+| ---------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------- |
+| `supabase/migrations/20260924000000_init.sql`              | Schema, RLS, BFF SQL helpers, purge functions, cron schedules                                                             |
+| `supabase/migrations/20260926000000_accounts.sql`          | Profiles, consents, 활동명 offers, residency; account SQL functions; orphan-login purge                                   |
+| `supabase/migrations/20260927000000_community.sql`         | Reviews, channel messages, bill threads and replies; write functions (residency, rate limit); thread sync                 |
+| `supabase/migrations/20260927120000_district_counts.sql`   | Final 개표 per 선거구 per election (`district_counts`)                                                                    |
+| `supabase/migrations/20260927130000_pledge_not_judged.sql` | Pledge status `notJudged` (「판정 전」), which may carry no evidence, judgement or bills                                  |
+| `supabase/seed.sql`                                        | **Sample** 마포구 갑/을 + 종로구 district mapping, generated from `testdata/`. Not verified against [별표 1].             |
+| `supabase/functions/_shared/`                              | API clients, normalizers (one per source), envelope, provenance, PostgREST client                                         |
+| `supabase/functions/ingest-assembly/`                      | Members (daily), bills and plenary votes (every 6 h)                                                                      |
+| `supabase/functions/ingest-nec/`                           | Election and district codes and candidates (weekly), historical winners (`?mode=backfill`), final counts (`?mode=counts`) |
+| `supabase/functions/bff/`                                  | The API. `contract.ts` mirrors the app's Dart parsers. `account.ts`, `residency.ts`: signed-in. `community.ts`: posts.    |
+| `scripts/`                                                 | One-off importers that write SQL to stdout; `build_district_areas.ts` builds the mapping CSV                              |
+| `data/`                                                    | Inputs kept in git: the 22대 district mapping; `pledges_22/`, pilot pledge lists from 선거공보                            |
+| `testdata/`                                                | Hand-written API samples and district-mapping samples. See `testdata/README.md`.                                          |
 
 ## Develop
 
@@ -78,7 +79,8 @@ text) and `rate_limited` (429).
   - 출석률 = meetings with status 출석 ÷ meetings on record since 2024-05-30.
   - votes = monthly share of the member's recorded plenary votes that are not 불참.
   - 발의 법안 = bills where the member is 대표발의자 (`RST_MONA_CD`).
-  - 공약 이행 = fulfilled ÷ curated pledges. It appears only when curated pledges exist.
+  - 공약 이행 = fulfilled ÷ judged pledges. A `notJudged` (「판정 전」) pledge counts on neither
+    side, and a board with no judged pledge shows no 공약 이행 at all.
   - 개표 share = a candidate's votes ÷ the 선거구's valid votes (유효투표수), to one decimal.
     `historical` is the winner's share per election for the same 선거구 (by name or curated
     lineage); a year that does not match is left out.
@@ -262,7 +264,10 @@ write function.
    - `import_historical_results.ts`: older results from CSV.
    - `import_geojson.ts`: 22대 boundaries. Confirm the OhmyNews `2024_22_elec_map` license first;
      `--license` is required.
-   - `import_curated.ts --kind pledges|region`: pilot districts only.
+   - `import_curated.ts --kind pledges|region`: pilot districts only. The 22대 pilot pledge lists
+     are in `data/pledges_22/`, one file per district, taken from each winner's 선거공보 and marked
+     `notJudged`:
+     `for f in data/pledges_22/*.json; do deno run --allow-read scripts/import_curated.ts --kind pledges "$f"; done > pledges_22.sql`
 8. **Handle election periods.** Switch candidates to hourly:
    `select cron.alter_job((select jobid from cron.job where jobname='ingest-nec-candidates'), schedule := '5 * * * *');`
    - While a count runs, set

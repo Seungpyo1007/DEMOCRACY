@@ -154,6 +154,8 @@ export function validateHistoryRecord(json: unknown): string[] {
   return errs;
 }
 
+const PLEDGE_STATUSES = ["notJudged", "fulfilled", "inProgress", "unfulfilled", "reversed"];
+
 export function validatePledgeBoard(json: unknown): string[] {
   const errs: string[] = [];
   if (!isMap(json)) return ["pledges: not an object"];
@@ -161,6 +163,13 @@ export function validatePledgeBoard(json: unknown): string[] {
     const f = `pledges[${i}]`;
     if (!isMap(p) || typeof p.id !== "string" || !nonEmpty(p.title)) {
       return errs.push(`${f}: id and title`);
+    }
+    if (!PLEDGE_STATUSES.includes(p.status as string)) errs.push(`${f}: unknown status`);
+    if (
+      p.status === "notJudged" &&
+      (p.judgement !== undefined || p.evidenceUrl !== undefined)
+    ) {
+      errs.push(`${f}: notJudged carries no judgement or evidenceUrl`);
     }
     if (p.status === "reversed") {
       let okUrl = false;

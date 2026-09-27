@@ -1,0 +1,187 @@
+{
+  "_note": "제22대 국회의원선거 경기 화성시 정 당선인 전용기 (더불어민주당). 책자형 선거공보 PDF 8쪽(인쇄 9쪽) 「교통혁신 이뤄내겠습니다!」 체크 항목 9개와 PDF 10쪽(인쇄 11쪽) 「공통공약」 7개. PDF의 글자층이 깨져 있어(스캔 이미지) 쪽 이미지를 보고 옮겼다. PDF 9–10쪽의 동별 공약과 PDF 4쪽의 「국정을 바로잡겠습니다. 민주당이 하겠습니다.」 전국 공약은 넣지 않았다. 두 목록에 똑버스 증차 항목이 따로 있어 둘 다 두었다. 끝의 !만 덜어냈다. 제목은 원문 문구를 따랐고 바꾼 것은 위에 적은 구호·수식어 덜어내기뿐이다. 분류(category)는 앱에 정해진 분류 체계가 없어 비워 두었다. 이행 여부는 판정하지 않았다(notJudged).",
+  "districtId": "nec-7fa49c83",
+  "source": {
+    "sourceUrl": "https://policy.nec.go.kr/policy_pdf/20240410/PDF/PBINFO_PUB/4149/003_100152303_20240402_2.pdf",
+    "fetchedAt": "2026-09-27T08:04:00Z",
+    "publisher": "중앙선거관리위원회"
+  },
+  "pledges": [
+    {
+      "id": "22-gyeonggi-hwaseong-d-01",
+      "title": "서동탄역 화성 편입 및 교통 문제 근본 해결 추진",
+      "category": "",
+      "status": "notJudged",
+      "source": {
+        "sourceUrl": "https://policy.nec.go.kr/policy_pdf/20240410/PDF/PBINFO_PUB/4149/003_100152303_20240402_2.pdf",
+        "fetchedAt": "2026-09-27T08:04:00Z",
+        "publisher": "중앙선거관리위원회"
+      }
+    },
+    {
+      "id": "22-gyeonggi-hwaseong-d-02",
+      "title": "동탄~인덕원선 조기 개통",
+      "category": "",
+      "status": "notJudged",
+      "source": {
+        "sourceUrl": "https://policy.nec.go.kr/policy_pdf/20240410/PDF/PBINFO_PUB/4149/003_100152303_20240402_2.pdf",
+        "fetchedAt": "2026-09-27T08:04:00Z",
+        "publisher": "중앙선거관리위원회"
+      }
+    },
+    {
+      "id": "22-gyeonggi-hwaseong-d-03",
+      "title": "솔빛나루역 신설",
+      "category": "",
+      "status": "notJudged",
+      "source": {
+        "sourceUrl": "https://policy.nec.go.kr/policy_pdf/20240410/PDF/PBINFO_PUB/4149/003_100152303_20240402_2.pdf",
+        "fetchedAt": "2026-09-27T08:04:00Z",
+        "publisher": "중앙선거관리위원회"
+      }
+    },
+    {
+      "id": "22-gyeonggi-hwaseong-d-04",
+      "title": "서동탄역 GTX-C 승하차 추진",
+      "category": "",
+      "status": "notJudged",
+      "source": {
+        "sourceUrl": "https://policy.nec.go.kr/policy_pdf/20240410/PDF/PBINFO_PUB/4149/003_100152303_20240402_2.pdf",
+        "fetchedAt": "2026-09-27T08:04:00Z",
+        "publisher": "중앙선거관리위원회"
+      }
+    },
+    {
+      "id": "22-gyeonggi-hwaseong-d-05",
+      "title": "M버스 증차 및 광역 버스노선 확대",
+      "category": "",
+      "status": "notJudged",
+      "source": {
+        "sourceUrl": "https://policy.nec.go.kr/policy_pdf/20240410/PDF/PBINFO_PUB/4149/003_100152303_20240402_2.pdf",
+        "fetchedAt": "2026-09-27T08:04:00Z",
+        "publisher": "중앙선거관리위원회"
+      }
+    },
+    {
+      "id": "22-gyeonggi-hwaseong-d-06",
+      "title": "동탄트램 조기 개통",
+      "category": "",
+      "status": "notJudged",
+      "source": {
+        "sourceUrl": "https://policy.nec.go.kr/policy_pdf/20240410/PDF/PBINFO_PUB/4149/003_100152303_20240402_2.pdf",
+        "fetchedAt": "2026-09-27T08:04:00Z",
+        "publisher": "중앙선거관리위원회"
+      }
+    },
+    {
+      "id": "22-gyeonggi-hwaseong-d-07",
+      "title": "택시 문제 해결 추진",
+      "category": "",
+      "status": "notJudged",
+      "source": {
+        "sourceUrl": "https://policy.nec.go.kr/policy_pdf/20240410/PDF/PBINFO_PUB/4149/003_100152303_20240402_2.pdf",
+        "fetchedAt": "2026-09-27T08:04:00Z",
+        "publisher": "중앙선거관리위원회"
+      }
+    },
+    {
+      "id": "22-gyeonggi-hwaseong-d-08",
+      "title": "동탄반월순환버스 도입",
+      "category": "",
+      "status": "notJudged",
+      "source": {
+        "sourceUrl": "https://policy.nec.go.kr/policy_pdf/20240410/PDF/PBINFO_PUB/4149/003_100152303_20240402_2.pdf",
+        "fetchedAt": "2026-09-27T08:04:00Z",
+        "publisher": "중앙선거관리위원회"
+      }
+    },
+    {
+      "id": "22-gyeonggi-hwaseong-d-09",
+      "title": "동탄·반월 똑버스 증차 및 노선 확대",
+      "category": "",
+      "status": "notJudged",
+      "source": {
+        "sourceUrl": "https://policy.nec.go.kr/policy_pdf/20240410/PDF/PBINFO_PUB/4149/003_100152303_20240402_2.pdf",
+        "fetchedAt": "2026-09-27T08:04:00Z",
+        "publisher": "중앙선거관리위원회"
+      }
+    },
+    {
+      "id": "22-gyeonggi-hwaseong-d-10",
+      "title": "교육특구 지정, 동탄반월형 돌봄·교육 지원 강화",
+      "category": "",
+      "status": "notJudged",
+      "source": {
+        "sourceUrl": "https://policy.nec.go.kr/policy_pdf/20240410/PDF/PBINFO_PUB/4149/003_100152303_20240402_2.pdf",
+        "fetchedAt": "2026-09-27T08:04:00Z",
+        "publisher": "중앙선거관리위원회"
+      }
+    },
+    {
+      "id": "22-gyeonggi-hwaseong-d-11",
+      "title": "반도체산업 육성법 제정 및 특화도시 지원 신설 추진",
+      "category": "",
+      "status": "notJudged",
+      "source": {
+        "sourceUrl": "https://policy.nec.go.kr/policy_pdf/20240410/PDF/PBINFO_PUB/4149/003_100152303_20240402_2.pdf",
+        "fetchedAt": "2026-09-27T08:04:00Z",
+        "publisher": "중앙선거관리위원회"
+      }
+    },
+    {
+      "id": "22-gyeonggi-hwaseong-d-12",
+      "title": "반도체 퇴직자 연계 미래인재 멘토링센터 설치 추진",
+      "category": "",
+      "status": "notJudged",
+      "source": {
+        "sourceUrl": "https://policy.nec.go.kr/policy_pdf/20240410/PDF/PBINFO_PUB/4149/003_100152303_20240402_2.pdf",
+        "fetchedAt": "2026-09-27T08:04:00Z",
+        "publisher": "중앙선거관리위원회"
+      }
+    },
+    {
+      "id": "22-gyeonggi-hwaseong-d-13",
+      "title": "동탄 멀티스포츠콤플렉스 건립 추진",
+      "category": "",
+      "status": "notJudged",
+      "source": {
+        "sourceUrl": "https://policy.nec.go.kr/policy_pdf/20240410/PDF/PBINFO_PUB/4149/003_100152303_20240402_2.pdf",
+        "fetchedAt": "2026-09-27T08:04:00Z",
+        "publisher": "중앙선거관리위원회"
+      }
+    },
+    {
+      "id": "22-gyeonggi-hwaseong-d-14",
+      "title": "권역별 구청제 도입 및 동탄구청 설립 추진",
+      "category": "",
+      "status": "notJudged",
+      "source": {
+        "sourceUrl": "https://policy.nec.go.kr/policy_pdf/20240410/PDF/PBINFO_PUB/4149/003_100152303_20240402_2.pdf",
+        "fetchedAt": "2026-09-27T08:04:00Z",
+        "publisher": "중앙선거관리위원회"
+      }
+    },
+    {
+      "id": "22-gyeonggi-hwaseong-d-15",
+      "title": "동탄반월형 똑버스 증차 및 노선 확대",
+      "category": "",
+      "status": "notJudged",
+      "source": {
+        "sourceUrl": "https://policy.nec.go.kr/policy_pdf/20240410/PDF/PBINFO_PUB/4149/003_100152303_20240402_2.pdf",
+        "fetchedAt": "2026-09-27T08:04:00Z",
+        "publisher": "중앙선거관리위원회"
+      }
+    },
+    {
+      "id": "22-gyeonggi-hwaseong-d-16",
+      "title": "도심공원 캠핑축제 등 문화예술 향유 기회 확대",
+      "category": "",
+      "status": "notJudged",
+      "source": {
+        "sourceUrl": "https://policy.nec.go.kr/policy_pdf/20240410/PDF/PBINFO_PUB/4149/003_100152303_20240402_2.pdf",
+        "fetchedAt": "2026-09-27T08:04:00Z",
+        "publisher": "중앙선거관리위원회"
+      }
+    }
+  ]
+}
