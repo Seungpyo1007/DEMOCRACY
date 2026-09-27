@@ -17,6 +17,7 @@ import 'package:democracy/src/features/results/presentation/results_charts.dart'
 import 'package:democracy/src/features/shared/presentation/embargo_notice.dart';
 import 'package:democracy/src/features/shared/presentation/provenance_widgets.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/rendering.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 /// Live counting, with a map that cannot become a map of who is winning.
@@ -60,9 +61,19 @@ class _ElectionResultsScreenState extends ConsumerState<ElectionResultsScreen> {
             Published(:final value) => value.live,
             Withheld() => false,
           };
+          // A published count that is not running is a finished one -- off
+          // election, the last general election's. Calling it 실시간 would
+          // misdate it. A withheld count is an election in progress.
+          final finished = switch (data.counts) {
+            Published(:final value) => !value.live,
+            Withheld() => false,
+          };
+          final segments = finished
+              ? const ['최종 결과', '역대 결과', '여론조사 비교']
+              : _segments;
 
           return EditorialScrollView(
-            title: '실시간 개표',
+            title: finished ? '개표 결과' : '실시간 개표',
             kicker: data.electionName,
             trailing: live ? const _LiveMark() : null,
             slivers: [
@@ -87,7 +98,7 @@ class _ElectionResultsScreenState extends ConsumerState<ElectionResultsScreen> {
                     // UISegmentedControl on iOS, SegmentedButton on Android:
                     // the one control on the page is the platform's own.
                     child: AppSegmentedControl(
-                      segments: _segments,
+                      segments: segments,
                       selectedIndex: _segment,
                       onSelected: (index) => setState(() => _segment = index),
                     ),
@@ -280,6 +291,33 @@ class _LiveCount extends StatelessWidget {
     final id = selectedId ?? homeId ?? counts.districts.firstOrNull?.districtId;
     final selected = id == null ? null : counts.byId(id);
 
+    // A national count is 254 districts: as one grid it is a wall the reader
+    // scrolls past to reach their own. The map shows one 시도 at a time,
+    // starting with the selected district's, and the chips move between them.
+    final regions = {for (final d in counts.districts) CountMap.regionOf(d)};
+    final region = selected == null
+        ? regions.firstOrNull
+        : CountMap.regionOf(selected);
+    final shown = regions.length > 1
+        ? [
+            for (final d in counts.districts)
+              if (CountMap.regionOf(d) == region) d,
+          ]
+        : counts.districts;
+
+    void selectRegion(String name) {
+      final inRegion = [
+        for (final d in counts.districts)
+          if (CountMap.regionOf(d) == name) d,
+      ];
+      onSelected(
+        inRegion.firstWhere(
+          (d) => d.districtId == homeId,
+          orElse: () => inRegion.first,
+        ),
+      );
+    }
+
     final panel = selected == null
         ? null
         : AnimatedSwitcher(
@@ -299,6 +337,12 @@ class _LiveCount extends StatelessWidget {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.stretch,
       children: [
+        if (regions.length > 1 && region != null)
+          _RegionChips(
+            regions: regions.toList(),
+            selected: region,
+            onSelected: selectRegion,
+          ),
         Padding(
           padding: const EdgeInsets.fromLTRB(
             AppSpacing.screen,
@@ -307,7 +351,7 @@ class _LiveCount extends StatelessWidget {
             0,
           ),
           child: CountMap(
-            districts: counts.districts,
+            districts: shown,
             selectedId: id,
             homeId: homeId,
             onSelected: onSelected,
@@ -367,6 +411,98 @@ class _LiveCount extends StatelessWidget {
   }
 }
 
+/// One chip per 시도, in the payload's order, scrolled so the selected one is
+/// in view: the reader's 시도 is usually not the first.
+class _RegionChips extends StatefulWidget {
+  const _RegionChips({
+    required this.regions,
+    required this.selected,
+    required this.onSelected,
+  });
+
+  final List<String> regions;
+  final String selected;
+  final ValueChanged<String> onSelected;
+
+  @override
+  State<_RegionChips> createState() => _RegionChipsState();
+}
+
+class _RegionChipsState extends State<_RegionChips> {
+  final _selectedKey = GlobalKey();
+  final _controller = ScrollController();
+
+  @override
+  void dispose() {
+    _controller.dispose();
+    super.dispose();
+  }
+
+  @override
+  void initState() {
+    super.initState();
+    _reveal();
+  }
+
+  @override
+  void didUpdateWidget(_RegionChips oldWidget) {
+    super.didUpdateWidget(oldWidget);
+    if (oldWidget.selected != widget.selected) {
+      _reveal();
+    }
+  }
+
+  /// Centres the selected chip in this row only. `Scrollable.ensureVisible`
+  /// would also scroll the page it sits in.
+  void _reveal() {
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      final chip = _selectedKey.currentContext?.findRenderObject();
+      if (!mounted || chip == null || !_controller.hasClients) {
+        return;
+      }
+      final viewport = RenderAbstractViewport.maybeOf(chip);
+      if (viewport == null) {
+        return;
+      }
+      final position = _controller.position;
+      _controller.jumpTo(
+        viewport
+            .getOffsetToReveal(chip, 0.5)
+            .offset
+            .clamp(position.minScrollExtent, position.maxScrollExtent),
+      );
+    });
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return SingleChildScrollView(
+      controller: _controller,
+      scrollDirection: Axis.horizontal,
+      padding: const EdgeInsets.fromLTRB(
+        AppSpacing.screen,
+        AppSpacing.x4,
+        AppSpacing.screen,
+        0,
+      ),
+      child: Row(
+        children: [
+          for (final name in widget.regions)
+            Padding(
+              key: name == widget.selected ? _selectedKey : null,
+              padding: const EdgeInsets.only(right: AppSpacing.x2),
+              child: AppFilterChip(
+                label: name,
+                selected: name == widget.selected,
+                onSelected: (_) => widget.onSelected(name),
+              ),
+            ),
+        ],
+      ),
+    );
+  }
+}
+
 class _CountPanel extends StatelessWidget {
   const _CountPanel({required this.count, super.key});
 
@@ -402,6 +538,12 @@ class _CountPanel extends StatelessWidget {
               ),
             ),
           ],
+        ),
+        const SizedBox(height: AppSpacing.x1),
+        // The order is the only ranking on the panel, so it says what it is.
+        Text(
+          '득표율 높은 순',
+          style: AppTextStyles.disclaimer.copyWith(color: AppColors.neutral600),
         ),
         const SizedBox(height: AppSpacing.x3 + 2),
         for (var i = 0; i < count.tallies.length; i++) ...[
@@ -518,6 +660,13 @@ class _Historical extends StatelessWidget {
         crossAxisAlignment: CrossAxisAlignment.stretch,
         children: [
           const SectionHeader(label: '역대 득표율'),
+          const SizedBox(height: AppSpacing.x2),
+          Text(
+            '당선자 득표율 기준. 선거구가 이어지지 않는 해는 빠집니다.',
+            style: AppTextStyles.disclaimer.copyWith(
+              color: AppColors.neutral600,
+            ),
+          ),
           const SizedBox(height: AppSpacing.x4),
           if (points.isEmpty)
             Text(
@@ -549,10 +698,11 @@ class _PollComparison extends StatelessWidget {
       0,
       (most, poll) => poll.points.length > most ? poll.points.length : most,
     );
-    final longest = polls.firstWhere(
-      (poll) => poll.points.length == waves,
-      orElse: () => polls.first,
-    );
+    // Null for no polls, which is what the BFF sends until it can verify a
+    // 심의위 registration.
+    final longest = polls
+        .where((poll) => poll.points.length == waves)
+        .firstOrNull;
 
     return Padding(
       padding: const EdgeInsets.fromLTRB(
@@ -566,7 +716,7 @@ class _PollComparison extends StatelessWidget {
         children: [
           const SectionHeader(label: '조사별 추이'),
           const SizedBox(height: AppSpacing.x4),
-          if (polls.isNotEmpty) ...[
+          if (longest != null) ...[
             RevealIn(
               index: 1,
               child: ResultsLineChart(
@@ -589,6 +739,14 @@ class _PollComparison extends StatelessWidget {
                       child: _PollLegendRow(series: polls[i], style: styles[i]),
                     ),
                 ],
+              ),
+            ),
+            const SizedBox(height: AppSpacing.x4),
+          ] else ...[
+            Text(
+              '표시할 여론조사가 없습니다.',
+              style: AppTextStyles.cardBody.copyWith(
+                color: AppColors.neutral600,
               ),
             ),
             const SizedBox(height: AppSpacing.x4),

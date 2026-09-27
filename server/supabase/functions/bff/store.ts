@@ -19,6 +19,8 @@ export interface DistrictRec extends Sourced {
   sgg_name: string;
   display_name: string;
   name_key: string;
+  /** NEC's display order; read only where the whole list is drawn. */
+  s_order?: number | null;
 }
 
 export interface MemberRec extends Sourced {
@@ -40,6 +42,8 @@ export interface BillRec extends Sourced {
   committee_dt: string | null;
   cmt_proc_dt: string | null;
   proc_result: string | null;
+  /** The bill's own page on likms, when the Assembly gave one. */
+  detail_link?: string | null;
 }
 
 export interface VoteRec extends Sourced {
@@ -89,6 +93,30 @@ export interface LineageRec {
   district_id: string;
   sg_id: string;
   name_key: string;
+}
+
+/** A 선거구's final count (district_counts). `candidates` is [{name, party, votes}]. */
+export interface CountRec extends Sourced {
+  sg_id: string;
+  sg_typecode: number;
+  name_key: string;
+  district_id: string | null;
+  valid_votes: number;
+  candidates: unknown;
+  counted_share: number;
+}
+
+/**
+ * Which past-election rows belong to a district: its curated lineage for an
+ * election when there is one, else the same name_key.
+ */
+function inLineage(district: DistrictRec, lineage: LineageRec[]) {
+  return (r: { sg_id: string; name_key: string }) => {
+    const o = lineage.filter((l) => l.sg_id === r.sg_id);
+    return o.length > 0
+      ? o.some((l) => l.name_key === r.name_key)
+      : r.name_key === district.name_key;
+  };
 }
 
 export interface CandidateRec extends Sourced {
@@ -158,6 +186,12 @@ export interface ReadStore {
   attendanceSince(monaCd: string, sinceIsoDate: string): Promise<MonthlyRate | null>;
   generalElections(): Promise<ElectionRec[]>;
   resultsFor(district: DistrictRec): Promise<ResultRec[]>;
+  /** Every district of an election, in NEC's order. */
+  districtsOf(sgId: string): Promise<DistrictRec[]>;
+  /** Every 선거구's final count in one election. */
+  countsOf(sgId: string): Promise<CountRec[]>;
+  /** This district's final counts across elections, through its lineage. */
+  countHistory(district: DistrictRec): Promise<CountRec[]>;
   upcomingCandidates(district: DistrictRec, todayIso: string): Promise<CandidateRec[]>;
   regionTimeline(
     districtId: string,
@@ -177,6 +211,7 @@ export interface MemoryTables {
   attendance: AttendanceRec[];
   elections: ElectionRec[];
   results: ResultRec[];
+  counts: CountRec[];
   lineage: LineageRec[];
   candidates: CandidateRec[];
   regionTimelines: RegionTimelineRec[];
@@ -196,6 +231,7 @@ export function emptyTables(): MemoryTables {
     attendance: [],
     elections: [],
     results: [],
+    counts: [],
     lineage: [],
     candidates: [],
     regionTimelines: [],
@@ -290,16 +326,30 @@ export class MemoryStore implements ReadStore {
     return Promise.resolve(this.t.elections.filter((e) => e.sg_typecode === 2 && e.term !== null));
   }
   resultsFor(district: DistrictRec) {
-    const overrides = this.t.lineage.filter((l) => l.district_id === district.id);
-    return Promise.resolve(
-      this.t.results.filter((r) => {
-        if (r.sg_typecode !== 2) return false;
-        const o = overrides.filter((l) => l.sg_id === r.sg_id);
-        return o.length > 0
-          ? o.some((l) => l.name_key === r.name_key)
-          : r.name_key === district.name_key;
-      }),
+    const belongs = inLineage(
+      district,
+      this.t.lineage.filter((l) => l.district_id === district.id),
     );
+    return Promise.resolve(this.t.results.filter((r) => r.sg_typecode === 2 && belongs(r)));
+  }
+  districtsOf(sgId: string) {
+    return Promise.resolve(
+      this.t.districts
+        .filter((d) => d.sg_id === sgId)
+        .sort((a, b) =>
+          (a.s_order ?? Infinity) - (b.s_order ?? Infinity) || a.id.localeCompare(b.id)
+        ),
+    );
+  }
+  countsOf(sgId: string) {
+    return Promise.resolve(this.t.counts.filter((c) => c.sg_id === sgId && c.sg_typecode === 2));
+  }
+  countHistory(district: DistrictRec) {
+    const belongs = inLineage(
+      district,
+      this.t.lineage.filter((l) => l.district_id === district.id),
+    );
+    return Promise.resolve(this.t.counts.filter((c) => c.sg_typecode === 2 && belongs(c)));
   }
   upcomingCandidates(district: DistrictRec, todayIso: string) {
     const upcoming = new Set(
@@ -429,12 +479,35 @@ export class PostgrestStore implements ReadStore {
       sg_typecode: "eq.2",
       name_key: inList(keys),
     });
-    return rows.filter((r) => {
-      const o = lineage.filter((l) => l.sg_id === r.sg_id);
-      return o.length > 0
-        ? o.some((l) => l.name_key === r.name_key)
-        : r.name_key === district.name_key;
+    return rows.filter(inLineage(district, lineage));
+  }
+  districtsOf(sgId: string) {
+    // 254 rows, under PostgREST's default row cap.
+    return this.db.select<DistrictRec>("districts", {
+      select: `id,sg_id,sgg_code,sd_name,sgg_name,display_name,name_key,s_order,${SRC}`,
+      sg_id: `eq.${sgId}`,
+      order: "s_order.asc.nullslast,id.asc",
     });
+  }
+  countsOf(sgId: string) {
+    return this.db.select<CountRec>("district_counts", {
+      select: `sg_id,sg_typecode,name_key,district_id,valid_votes,candidates,counted_share,${SRC}`,
+      sg_id: `eq.${sgId}`,
+      sg_typecode: "eq.2",
+    });
+  }
+  async countHistory(district: DistrictRec) {
+    const lineage = await this.db.select<LineageRec>("district_lineage", {
+      select: "district_id,sg_id,name_key",
+      district_id: `eq.${district.id}`,
+    });
+    const keys = [...new Set([district.name_key, ...lineage.map((l) => l.name_key)])];
+    const rows = await this.db.select<CountRec>("district_counts", {
+      select: `sg_id,sg_typecode,name_key,district_id,valid_votes,candidates,counted_share,${SRC}`,
+      sg_typecode: "eq.2",
+      name_key: inList(keys),
+    });
+    return rows.filter(inLineage(district, lineage));
   }
   async upcomingCandidates(district: DistrictRec, todayIso: string) {
     const elections = await this.db.select<{ sg_id: string }>("elections", {

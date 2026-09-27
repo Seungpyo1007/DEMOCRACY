@@ -5,10 +5,13 @@ import { assert, assertEquals } from "@std/assert";
 import { findKeyedUrls } from "../_shared/provenance.ts";
 import {
   validateAddressSuggestions,
+  validateCommunity,
   validateDistrictProfile,
+  validateElectionResults,
   validateEnvelope,
   validateHistoryRecord,
   validatePledgeBoard,
+  validateReviewBoard,
 } from "./contract.ts";
 import { createHandler } from "./handler.ts";
 import { MemoryStore } from "./store.ts";
@@ -168,6 +171,84 @@ Deno.test("history: ongoing row only while counting; empty region still sourced"
   assert(body.data.region.source.sourceUrl.startsWith("https://www.data.go.kr/"));
 });
 
+Deno.test("results: matches the RawElectionResults contract", async () => {
+  const { get } = await setup();
+  const { res, body } = await get(`/districts/${MAPO_B}/results`);
+  assertEquals(res.status, 200);
+  assertEquals(res.headers.get("Cache-Control"), "public, max-age=300");
+  assertEquals(validateEnvelope(body, false), []);
+  assertEquals(validateElectionResults(body.data), []);
+  assertClean(body);
+
+  const r = body.data;
+  assertEquals(r.electionName, "제22대 국회의원선거");
+  // Explicitly null: no election pending. A missing key would not parse.
+  assert("electionSchedule" in r);
+  assertEquals(r.electionSchedule, null);
+  assertEquals([r.overallCountedShare, r.live, r.polls], [100, false, []]);
+  // Every district with a count, in NEC's order; the app selects its own.
+  assertEquals(
+    r.districts.map((d: { districtName: string }) => d.districtName),
+    ["서울 종로구", "서울 마포구 갑", "서울 마포구 을", "대구 동구군위군 을"],
+  );
+  const mapo = r.districts.find((d: { districtId: string }) => d.districtId === MAPO_B);
+  assertEquals(mapo.countedShare, 100);
+  assertEquals(mapo.tallies, [
+    { name: "가상 의원", party: "가나당", share: 45.2 },
+    { name: "가상 후보 나", party: "나다당", share: 40.6 },
+    { name: "가상 후보 다", party: "무소속", share: 14.2 },
+  ]);
+  assertEquals(mapo.source.sourceUrl, "https://www.data.go.kr/data/15000900/openapi.do");
+  // The winner's share per election, from the counts: the same line the
+  // history route draws from the winners.
+  assertEquals(r.historical, [
+    { year: 2016, share: 44.1 },
+    { year: 2020, share: 46.8 },
+    { year: 2024, share: 45.2 },
+  ]);
+});
+
+Deno.test("results: unmatched years are left out; lineage decides; no count is not_found", async () => {
+  const { db } = await runPipeline();
+  const handlerFor = (t: ReturnType<typeof toTables>) =>
+    createHandler({
+      store: new MemoryStore(t),
+      fetch: fakeUpstream().fetch,
+      jusoKey: "",
+      vworldKey: "",
+      now: () => NOW,
+      ...signedOut(),
+    });
+  const get = async (t: ReturnType<typeof toTables>, id: string) => {
+    const res = await handlerFor(t)(
+      new Request(`https://r/functions/v1/bff/districts/${id}/results`),
+    );
+    return { status: res.status, body: await res.json() };
+  };
+
+  // 마포구 갑 has no 20·21대 count under its name: one point, not three.
+  let t = toTables(db);
+  assertEquals((await get(t, MAPO_A)).body.data.historical, [{ year: 2024, share: 50.3 }]);
+
+  // Curated lineage points 갑's 21대 at 을's 선거구.
+  t = toTables(db);
+  t.lineage = [{ district_id: MAPO_A, sg_id: "20200415", name_key: "서울마포구을" }];
+  assertEquals((await get(t, MAPO_A)).body.data.historical, [
+    { year: 2020, share: 46.8 },
+    { year: 2024, share: 50.3 },
+  ]);
+
+  // An unsourced count is dropped from the map, and the district it was for
+  // gets no half payload.
+  t = toTables(db);
+  t.counts = t.counts.map((c) => c.name_key === "서울마포구을" ? { ...c, source_url: null } : c);
+  const other = await get(t, JONGNO);
+  assertEquals(validateElectionResults(other.body.data), []);
+  assert(!other.body.data.districts.some((d: { districtId: string }) => d.districtId === MAPO_B));
+  const mine = await get(t, MAPO_B);
+  assertEquals([mine.status, mine.body.error.code], [404, "not_found"]);
+});
+
 Deno.test("pledges: curated board with unsourced / unevidenced items dropped", async () => {
   const { get } = await setup();
   const { res, body } = await get(`/districts/${MAPO_B}/pledges`);
@@ -273,6 +354,18 @@ Deno.test("the app's own fixtures pass the validator (validator is not too stric
     [],
   );
   assertEquals(validateAddressSuggestions(JSON.parse(await text("address_suggestions.json"))), []);
+  assertEquals(
+    validateReviewBoard(JSON.parse(await text("reviews_fixture-seoul-mapo-b.json"))),
+    [],
+  );
+  assertEquals(
+    validateCommunity(JSON.parse(await text("community_fixture-seoul-mapo-b.json"))),
+    [],
+  );
+  assertEquals(
+    validateElectionResults(JSON.parse(await text("results_fixture-seoul-mapo-b.json"))),
+    [],
+  );
 });
 
 Deno.test("validator catches what the Dart parsers reject", () => {
@@ -310,7 +403,23 @@ Deno.test("validator catches what the Dart parsers reject", () => {
       source: { sourceUrl: "https://a.kr", fetchedAt: "2026-01-01" },
     }).some((e) => e.includes("evidenceUrl")),
   );
-  const src = { sourceUrl: "https://a.kr", fetchedAt: "2026-01-01" };
+  const src = { sourceUrl: "https://a.kr", fetchedAt: "2026-01-01T00:00:00Z" };
+  assert(validateElectionResults({ districts: [] }).some((e) => e.includes("electionSchedule")));
+  assert(
+    validateElectionResults({
+      electionSchedule: { pollsClose: "2028-04-12T18:00:00", source: src },
+    }).some((e) => e.includes("pollsClose")),
+  );
+  const errs2 = validateElectionResults({
+    electionSchedule: null,
+    districts: [{ districtId: "nec-1", districtName: "x", countedShare: 100, tallies: [{}] }],
+    historical: [{ year: "2024", share: 1 }],
+    polls: [{ label: "앱 내 조사", points: [], disclosure: { source: src } }],
+  });
+  assert(errs2.some((e) => e.includes("districts[0]: no source")));
+  assert(errs2.some((e) => e.includes("tallies[0]")));
+  assert(errs2.some((e) => e.includes("historical[0]")));
+  assert(errs2.some((e) => e.includes("nesdcRegistration")));
   assert(
     validatePledgeBoard({
       pledges: [{

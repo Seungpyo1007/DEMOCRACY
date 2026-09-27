@@ -7,7 +7,7 @@
 //   GET    /me/handle/options   {handles: [5], expiresAt}; stored as the only valid picks
 //   POST   /me/handle           {handle} → /me   (30-day limit → 429 too_soon)
 //   PATCH  /me                  {notify} → /me
-//   GET    /me/export           everything held about the user, minus secrets
+//   GET    /me/export           everything held about the user, minus secrets, with posts
 //   DELETE /me?posts=keep|delete
 //
 // No route accepts or returns a real name, phone number or birth date.
@@ -24,6 +24,7 @@ import {
   type ProfileRec,
   type ResidencyRec,
 } from "./account_store.ts";
+import { type CommunityStore, exportPosts } from "./community_store.ts";
 import type { ReadStore } from "./store.ts";
 
 /** Version stamped on consent rows; bump when the terms or privacy text changes. */
@@ -40,6 +41,8 @@ const MAX_BODY = 2048;
 export interface AccountContext {
   store: ReadStore;
   accounts: AccountStore;
+  /** Resident posts: exported with the account and removed with it on posts=delete. */
+  community: CommunityStore;
   auth: Auth;
   randomBytes: (n: number) => Uint8Array;
   now: () => Date;
@@ -273,12 +276,14 @@ async function accountRoute(
     }
 
     case "GET /me/export": {
-      // What is held, not what is shown: includes an expired residency. Never the token
-      // hash, and there is no address or coordinate anywhere to export.
-      const [profile, consents, residency] = await Promise.all([
+      // What is held, not what is shown: includes an expired residency and every post,
+      // anonymous or not. Never the token hash, and there is no address or coordinate
+      // anywhere to export.
+      const [profile, consents, residency, posts] = await Promise.all([
         ctx.accounts.profile(user.id),
         ctx.accounts.consents(user.id),
         ctx.accounts.residency(user.id),
+        exportPosts(ctx.community, user.id),
       ]);
       return {
         exportedAt: now.toISOString(),
@@ -286,6 +291,7 @@ async function accountRoute(
         profile: profile ? profileView(profile) : null,
         consents: consents.map(consentView),
         residency: residency ? await residencyView(ctx, residency) : null,
+        posts,
       };
     }
 
@@ -294,8 +300,9 @@ async function accountRoute(
       if (posts !== "keep" && posts !== "delete") {
         throw new ApiError("bad_request", "posts must be keep or delete.");
       }
-      // There is no posts table yet. When there is, posts=delete removes the user's posts
-      // here, and posts=keep relies on author_id ... on delete set null (see migration).
+      // posts=delete removes the user's reviews, messages and replies first; posts=keep
+      // leaves them to author_id ... on delete set null, shown as 「탈퇴한 주민」.
+      if (posts === "delete") await ctx.community.deletePostsBy(user.id);
       await ctx.accounts.deleteAccount(user.id);
       await ctx.auth.deleteUser(user.id);
       return { deleted: true, posts };

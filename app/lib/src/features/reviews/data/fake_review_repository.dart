@@ -84,17 +84,7 @@ class FakeCommunityRepository implements CommunityRepository {
       final payload = await loader.load('community_$districtId');
       final raw = payload['messages'];
       if (raw is List) {
-        for (final message in raw.whereType<Map<String, Object?>>()) {
-          _messages.add(
-            ChatMessage(
-              id: message['id'] as String? ?? '',
-              author: message['author'] as String? ?? '익명 주민',
-              body: message['body'] as String? ?? '',
-              verifiedResident: message['verifiedResident'] as bool? ?? false,
-              mine: false,
-            ),
-          );
-        }
+        _messages.addAll(raw.map(ChatMessage.fromJson));
       }
       _seeded = true;
     }

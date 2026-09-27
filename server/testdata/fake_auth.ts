@@ -6,6 +6,7 @@
 import { type Auth, createAuth } from "../supabase/functions/_shared/auth.ts";
 import type { FetchLike } from "../supabase/functions/_shared/http.ts";
 import { MemoryAccountStore } from "../supabase/functions/bff/account_store.ts";
+import { MemoryCommunityStore } from "../supabase/functions/bff/community_store.ts";
 
 export const SUPABASE_URL = "https://ref.supabase.co";
 export const ANON_KEY = "test-anon-jwt";
@@ -78,5 +79,10 @@ export function seededBytes(seed: number): (n: number) => Uint8Array {
 
 /** Account dependencies for tests that only exercise the public routes. */
 export function signedOut() {
-  return { accounts: new MemoryAccountStore(), auth: fakeGotrue().auth };
+  const accounts = new MemoryAccountStore();
+  return {
+    accounts,
+    community: new MemoryCommunityStore(accounts.t),
+    auth: fakeGotrue().auth,
+  };
 }

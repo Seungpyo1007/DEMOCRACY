@@ -6,6 +6,7 @@ import { UpstreamError } from "../_shared/http.ts";
 import { createPostgrest, PostgrestError } from "../_shared/postgrest.ts";
 import { accountError, CONSENT_VERSION } from "./account.ts";
 import { MemoryAccountStore, PostgrestAccountStore } from "./account_store.ts";
+import { MemoryCommunityStore } from "./community_store.ts";
 import { validateEnvelope } from "./contract.ts";
 import { createHandler } from "./handler.ts";
 import { sha256Hex } from "./residency.ts";
@@ -29,10 +30,13 @@ async function setup(overrides: Record<string, () => Response> = {}) {
     [OTHER_TOKEN]: { id: OTHER, email: null, provider: "apple" },
   });
   const accounts = new MemoryAccountStore(undefined, now);
+  const tables = toTables(db);
+  const community = new MemoryCommunityStore(accounts.t, tables, undefined, now);
   const up = fakeUpstream(overrides);
   const logs: string[] = [];
   const h = createHandler({
-    store: new MemoryStore(toTables(db)),
+    store: new MemoryStore(tables),
+    community,
     fetch: up.fetch,
     jusoKey: "J",
     vworldKey: "V",

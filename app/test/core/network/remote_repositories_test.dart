@@ -5,16 +5,21 @@ import 'package:democracy/src/app/live_data.dart';
 import 'package:democracy/src/core/auth/address_state.dart';
 import 'package:democracy/src/core/auth/address_store.dart';
 import 'package:democracy/src/core/network/not_available.dart';
+import 'package:democracy/src/core/time/kst.dart';
 import 'package:democracy/src/features/district/data/remote_district_repository.dart';
 import 'package:democracy/src/features/district/domain/legislator_record.dart';
 import 'package:democracy/src/features/history/data/remote_history_repository.dart';
 import 'package:democracy/src/features/onboarding/data/remote_address_repositories.dart';
 import 'package:democracy/src/features/onboarding/domain/address_search.dart';
 import 'package:democracy/src/features/pledges/data/remote_pledge_repository.dart';
+import 'package:democracy/src/features/results/data/remote_results_repository.dart';
+import 'package:democracy/src/features/results/domain/election_schedule.dart';
+import 'package:democracy/src/features/results/domain/publication_gate.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:geolocator/geolocator.dart';
 
 import '../../support/fake_bff.dart';
+import '../../support/national_results.dart';
 
 /// The fixtures are the BFF contract: the server is written to send exactly
 /// these shapes inside the envelope, so every one of them must parse through
@@ -146,6 +151,77 @@ void main() {
     expect(record, isNotNull);
     expect(record!.attendance, isNull);
     expect(record.votes, isNull);
+  });
+
+  group('results', () {
+    FakeBffAdapter serving(Object body, {int status = 200}) => FakeBffAdapter({
+      '/districts/$id/results': (status: status, body: body),
+    });
+
+    test('the results fixture is a valid results response', () async {
+      final adapter = serving(
+        envelope(fixture('results_fixture-seoul-mapo-b')),
+      );
+
+      final emitted = await RemoteResultsRepository(
+        fakeBffClient(adapter),
+      ).watch(id).toList();
+
+      expect(emitted, hasLength(1));
+      expect(emitted.single.districts, isNotEmpty);
+      expect(emitted.single.schedule, isNotNull);
+    });
+
+    // Off election a final count does not move: one fetch, one value, done.
+    test('a national final count arrives once and publishes', () async {
+      final adapter = serving(envelope(nationalResultsPayload()));
+
+      final emitted = await RemoteResultsRepository(
+        fakeBffClient(adapter),
+      ).watch(id).toList();
+
+      expect(adapter.requests, hasLength(1));
+      final raw = emitted.single;
+      expect(raw.districts, hasLength(254));
+      expect(raw.schedule, isNull);
+      expect(raw.polls, isEmpty);
+
+      final view = PublicationGate.apply(
+        raw,
+        now: KstInstant.seoul(2026, 9, 27, 12),
+      );
+      switch (view.counts) {
+        case Published(:final value):
+          expect(value.districts, hasLength(254));
+          expect(value.live, isFalse);
+        case Withheld():
+          fail('No election is pending; nothing may be withheld.');
+      }
+      // Highest share first, whatever order the wire used.
+      final shares = [for (final t in raw.districts.first.tallies) t.share];
+      expect(shares, [51.2, 44.1, 4.7]);
+    });
+
+    // Silence about the schedule is not "no election": it fails to parse.
+    test('a payload silent about the schedule is refused', () async {
+      final silent = nationalResultsPayload()..remove('electionSchedule');
+
+      await expectLater(
+        RemoteResultsRepository(
+          fakeBffClient(serving(envelope(silent))),
+        ).watch(id),
+        emitsError(isA<MissingScheduleException>()),
+      );
+    });
+
+    test('a district without a count is not available', () async {
+      await expectLater(
+        RemoteResultsRepository(
+          fakeBffClient(serving(errorEnvelope('not_found'), status: 404)),
+        ).watch(id),
+        emitsError(isA<NotAvailableException>()),
+      );
+    });
   });
 
   group('address search', () {

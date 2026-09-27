@@ -13,6 +13,7 @@ import {
   DEFAULT_BACKFILL_SG_IDS,
   ingestCandidates,
   ingestCodes,
+  ingestCounts,
   ingestWinners,
 } from "../supabase/functions/ingest-nec/ingest.ts";
 import { emptyTables, type MemoryTables } from "../supabase/functions/bff/store.ts";
@@ -50,11 +51,20 @@ export async function runPipeline(): Promise<{ db: MemoryPostgrest; requests: st
   const up = fakeUpstream();
   const now = () => NOW;
   const retry = { retries: 0 };
-  const nec = { db, fetch: up.fetch, serviceKey: "TEST-NEC-KEY", now, retry, minDistricts: 1 };
+  const nec = {
+    db,
+    fetch: up.fetch,
+    serviceKey: "TEST-NEC-KEY",
+    now,
+    retry,
+    minDistricts: 1,
+    minCountDistricts: 1,
+  };
   const asm = { db, fetch: up.fetch, key: "TEST-ASSEMBLY-KEY", now, retry, minMembers: 1 };
 
   await ingestCodes(nec);
   await ingestWinners(nec, DEFAULT_BACKFILL_SG_IDS);
+  await ingestCounts(nec, DEFAULT_BACKFILL_SG_IDS);
   await ingestCandidates(nec);
   await ingestMembers(asm);
   await ingestBills(asm);
@@ -230,6 +240,7 @@ export function toTables(db: MemoryPostgrest): MemoryTables {
   t.attendance = r("plenary_attendance");
   t.elections = db.rows("elections").map((e) => ({ count_status: "none", ...e })) as never[];
   t.results = r("election_results");
+  t.counts = r("district_counts");
   t.candidates = r("candidates");
   t.regionTimelines = r("region_timelines");
   t.regionEvents = r("region_events");
