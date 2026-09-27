@@ -29,6 +29,16 @@ import { readFirstSheet } from "./lib/xlsx.ts";
 import { resultsToSql } from "./import_historical_results.ts";
 import { geojsonToSql } from "./import_geojson.ts";
 import { pledgesToSql, regionToSql } from "./import_curated.ts";
+import {
+  buildLineage,
+  compareTables,
+  joinLabels,
+  joinNames,
+  josa,
+  lineageCsv,
+  nameOf,
+} from "./build_district_lineage.ts";
+import { lineageToSql } from "./import_district_lineage.ts";
 import { parseCsv, parseCsvObjects } from "./lib/csv.ts";
 import { lit, requireHttpUrl } from "./lib/sql.ts";
 import { sample } from "../testdata/fake_upstream.ts";
@@ -307,6 +317,247 @@ Deno.test("curated pledges / region importers enforce sources and evidence", () 
     Error,
     "year",
   );
+  // An event may cite its own source; the timeline keeps the doc's.
+  const law = { sourceUrl: "https://www.law.go.kr/LSW/lsInfoP.do?lsiSeq=215523", fetchedAt: "x" };
+  assertThrows(
+    () => regionToSql({ districtId: MAPO_B, source: src, events: [{ title: "a", source: law }] }),
+    Error,
+    "events[0]",
+  );
+  const own = regionToSql({
+    districtId: MAPO_B,
+    source: src,
+    events: [{ year: 2020, title: "a", source: { ...law, fetchedAt: "2026-09-28T00:00:00Z" } }],
+  });
+  assertStringIncludes(own, "'https://www.law.go.kr/LSW/lsInfoP.do?lsiSeq=215523', 'law.go.kr'");
+  assertStringIncludes(own, "'https://policy.nec.go.kr/x', 'policy.nec.go.kr'");
+});
+
+// ------------------------------------------------------------------ 선거구 변천
+
+/** A made-up 시도 laid out so each relation shows up once. Every 동 lives from 1988. */
+function lineageFixture() {
+  const sido = "서울특별시";
+  const dongs: [string, string, string, string?][] = [
+    ["1199951000", "가상구", "가1동"],
+    ["1199952000", "가상구", "가2동"],
+    ["1199953000", "가상구", "가3동"],
+    ["1199954000", "가상구", "가4동"],
+    ["1199955000", "가상구", "가5동"],
+    ["1199956000", "가상구", "가6동"],
+    // Created in 2022 from nothing the fixture knows of: no origin, so what it touches is unknown.
+    ["1199957000", "가상구", "가7동", "20220101"],
+    ["1188851000", "나라구", "나1동"],
+    ["1188852000", "나라구", "나2동"],
+    ["1177751000", "다라구", "다1동"],
+    ["1166651000", "마바구", "마1동"],
+    ["1166652000", "마바구", "마2동"],
+    ["1166653000", "마바구", "마3동"],
+    ["1155551000", "사아구", "사1동"],
+  ];
+  const codes = dongs.map(([code, sgg, emd, born]) => ({
+    code,
+    sido,
+    sgg,
+    emd,
+    born: born ?? "19880423",
+    dead: "",
+  }));
+  const t = (rows: [string, string][]) => rows.map(([name, area]) => ({ sido, name, area }));
+  const law20 = t([
+    ["가상구갑", "가1동, 가2동, 가3동"],
+    ["가상구을", "가4동, 가5동, 가6동"],
+    ["나라구갑", "나1동"],
+    ["나라구을", "나2동"],
+    ["다라구", "다라구 일원"],
+    ["마바구", "마바구 일원"],
+    ["사아구", "사아구 일원"],
+  ]);
+  const law21 = t([
+    ["가상구갑", "가1동, 가2동"],
+    ["가상구을", "가3동, 가4동, 가5동, 가6동"],
+    ["나라구", "나라구 일원"],
+    ["다라구", "다라구 일원"],
+    ["마바구", "마바구 일원"],
+    ["사아구", "사아구 일원"],
+  ]);
+  const law22 = t([
+    ["가상구갑", "가1동, 가2동"],
+    ["가상구을", "가3동, 가4동"],
+    ["가상구병", "가5동, 가6동, 가7동"],
+    ["나라구갑", "나1동"],
+    ["나라구을", "나2동"],
+    ["다라마바구", "다라구 일원, 마바구 마3동"],
+    ["마바구갑", "마1동, 마2동"],
+    ["사아중앙", "사아구 일원"],
+  ]);
+  const t21 = compareTables({
+    oldLaw: law20,
+    newLaw: law21,
+    oldDay: "20160413",
+    newDay: "20200415",
+    codes,
+    mix: [],
+  });
+  const t22 = compareTables({
+    oldLaw: law21,
+    newLaw: law22,
+    oldDay: "20200415",
+    newDay: "20240410",
+    codes,
+    mix: [],
+  });
+  return { law22, t21, t22 };
+}
+
+const S = (name: string) => `서울특별시|${name}`;
+
+Deno.test("district lineage: each relation read off two tables", () => {
+  const { t21, t22 } = lineageFixture();
+  assertEquals(t21.relations.get(S("가상구갑")), {
+    kind: "boundary",
+    main: S("가상구갑"),
+    gained: [],
+    lost: [{ to: S("가상구을"), labels: ["가3동"] }],
+  });
+  assertEquals(t21.relations.get(S("나라구")), {
+    kind: "merged",
+    from: [S("나라구갑"), S("나라구을")],
+  });
+  assertEquals(t21.relations.get(S("다라구")), { kind: "same", from: S("다라구") });
+  assertEquals(t22.relations.get(S("나라구을")), {
+    kind: "split",
+    from: S("나라구"),
+    into: [S("나라구갑"), S("나라구을")],
+  });
+  assertEquals(t22.relations.get(S("사아중앙")), { kind: "same", from: S("사아구") });
+  assertEquals(t22.relations.get(S("다라마바구")), {
+    kind: "rebuilt",
+    parts: [
+      { from: S("다라구"), whole: true, labels: ["다라구"] },
+      { from: S("마바구"), whole: false, labels: ["마3동"], excluded: ["마1동", "마2동"] },
+    ],
+  });
+  // 가7동 has no 2020 선거구: nothing is said of 가상구병, and 을 names only whole items.
+  assertEquals(t22.relations.get(S("가상구병"))?.kind, "unknown");
+  assertEquals(t22.relations.get(S("가상구을")), {
+    kind: "boundary",
+    main: S("가상구을"),
+    gained: [],
+    lost: [{ to: S("가상구병"), labels: ["가5동", "가6동"] }],
+  });
+  assert(t22.problems.some((p) => p.includes("가7동: no origin")));
+  assertEquals(t22.predecessor.get(S("마바구갑")), S("마바구"));
+  assertEquals(t22.predecessor.get(S("다라마바구")), undefined);
+});
+
+Deno.test("district lineage: a 행정동 cut by the table is never named", () => {
+  const { law22 } = lineageFixture();
+  const sido = "서울특별시";
+  const codes = [
+    { code: "1199951000", sido, sgg: "가상구", emd: "가1동", born: "19880423", dead: "" },
+    { code: "1199952000", sido, sgg: "가상구", emd: "가2동", born: "19880423", dead: "" },
+  ];
+  const t = compareTables({
+    oldLaw: [{ sido, name: "가상구갑", area: "가1동, 가2동(가리, 나리)" }, {
+      sido,
+      name: "가상구을",
+      area: "가2동(다리)",
+    }],
+    newLaw: law22.slice(0, 1),
+    oldDay: "20200415",
+    newDay: "20240410",
+    codes,
+    mix: [],
+  });
+  assert(t.problems.some((p) => p.includes('"가2동(가리, 나리)" names part of a 행정동')));
+  assertEquals(t.relations.get(S("가상구갑"))?.kind, "unknown");
+});
+
+Deno.test("district lineage: events and lineage rows for the 22대 선거구", () => {
+  const { law22, t21, t22 } = lineageFixture();
+  const { docs, lineage } = buildLineage({
+    current: law22,
+    t21,
+    t22,
+    v21: { mst: "215523", year: 2020, prevTerm: 20 },
+    v22: { mst: "261101", year: 2024, prevTerm: 21 },
+    currentMst: "261101",
+    fetchedAt: "2026-09-27T15:00:00.000Z",
+  });
+  const events = (name: string) =>
+    docs.find((d) => d.districtId === districtIdFor(necSggCode("서울특별시", name)))?.events
+      .map((e) => `${e.year} ${e.title}: ${e.detail}`);
+  assertEquals(events("가상구을"), [
+    "2020 선거구 구역 변경: 가상구 갑에서 가3동 편입",
+    "2024 선거구 구역 변경: 가5동, 가6동은 가상구 병으로 옮겨감",
+  ]);
+  assertEquals(events("가상구갑"), [
+    "2020 선거구 구역 변경: 가3동은 가상구 을로 옮겨감",
+    "2024 선거구 구역 변동 없음: 제21대 총선과 같은 구역",
+  ]);
+  // Unknown in 2024; its 2020 선거구 had another name, so nothing at all.
+  assertEquals(events("가상구병"), undefined);
+  // 2020 event of 나라구 (another name) is not this one's.
+  assertEquals(events("나라구갑"), ["2024 선거구 분할: 나라구가 나라구 갑·을로 나뉨"]);
+  assertEquals(events("다라마바구"), [
+    "2024 선거구 구역 재편: 구성: 다라구 전체, 마바구 일부(마3동)",
+  ]);
+  assertEquals(events("마바구갑"), ["2024 선거구 구역 재편: 구성: 마바구(마3동 제외)"]);
+  assertEquals(events("사아중앙"), ["2024 선거구 이름 변경: 사아구 → 사아중앙, 구역은 그대로"]);
+  const doc = docs.find((d) => d.displayName === "서울 가상구 을")!;
+  assertEquals(doc.source.sourceUrl, "https://www.law.go.kr/LSW/lsInfoP.do?lsiSeq=261101");
+  assertEquals(doc.events.map((e) => e.source.sourceUrl.split("=")[1]), ["215523", "261101"]);
+  // Every doc goes through the importer.
+  for (const d of docs) regionToSql(d as unknown as Record<string, unknown>);
+
+  assertEquals(lineage.map((r) => `${r.display_name} ${r.sg_id} ${r.name_key}`), [
+    "서울 나라구 갑 20200415 서울나라구",
+    "서울 나라구 을 20200415 서울나라구",
+    "서울 마바구 갑 20200415 서울마바구",
+    "서울 마바구 갑 20160413 서울마바구",
+    "서울 사아중앙 20200415 서울사아구",
+    "서울 사아중앙 20160413 서울사아구",
+  ]);
+  const sql = lineageToSql(lineageCsv(lineage));
+  assertStringIncludes(sql, "delete from public.district_lineage where sg_id in");
+  assertStringIncludes(sql, "'서울마바구'");
+  assertThrows(() => lineageToSql("district_id,sg_id,name_key\nx,20200415,a\n"), Error, "line 2");
+});
+
+Deno.test("district lineage: wording helpers", () => {
+  assertEquals(josa("나라구", "이", "가"), "나라구가");
+  assertEquals(josa("화성시 갑", "으로", "로"), "화성시 갑으로");
+  assertEquals(josa("화성시 을", "으로", "로"), "화성시 을로");
+  assertEquals(josa("등 5곳", "은", "는"), "등 5곳은");
+  assertEquals(joinNames(["화성시 을", "화성시 정"]), "화성시 을·정");
+  assertEquals(joinNames(["남구 갑", "동구"]), "남구 갑·동구");
+  assertEquals(joinLabels(["불로ㆍ봉무동", "방촌동"]), "불로·봉무동, 방촌동");
+  assertEquals(joinLabels(["a", "b", "c", "d", "e"]), "a, b, c, d 등 5곳");
+  assertEquals(
+    nameOf("경상북도|군위군의성군청송군영덕군", "대구광역시|동구군위군을"),
+    "경북 군위군의성군청송군영덕군",
+  );
+  assertEquals(nameOf("강원도|춘천시", "강원특별자치도|춘천시갑"), "춘천시");
+});
+
+Deno.test("committed 선거구 변천: every region doc and the lineage CSV import", async () => {
+  const dir = new URL("../data/region_22/", import.meta.url);
+  let docs = 0;
+  for await (const f of Deno.readDir(dir)) {
+    const doc = JSON.parse(await Deno.readTextFile(new URL(f.name, dir)));
+    assertEquals(f.name, `${doc.districtId}.json`);
+    const sql = regionToSql(doc);
+    assertStringIncludes(sql, "https://www.law.go.kr/LSW/lsInfoP.do?lsiSeq=");
+    for (const e of doc.events) {
+      assert([2020, 2024].includes(e.year), `${f.name}: ${e.year}`);
+      assert(e.title.length <= 12 && !/[.!?]$/.test(e.detail), `${f.name}: ${e.title}`);
+    }
+    docs++;
+  }
+  assert(docs > 200, `${docs} docs`);
+  const csv = await Deno.readTextFile(new URL("../data/district_lineage_22.csv", import.meta.url));
+  assertStringIncludes(lineageToSql(csv), "insert into public.district_lineage");
 });
 
 Deno.test("22대 pilot pledge lists: 선거공보 only, nothing judged, importable", async () => {

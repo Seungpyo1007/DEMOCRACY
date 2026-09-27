@@ -36,18 +36,33 @@ const round1 = (x: number) => Math.round(x * 10) / 10;
 export const memberId = (monaCd: string) => `assembly-${monaCd}`;
 export const necPersonId = (sgId: string, huboid: string) => `nec-${sgId}-${huboid}`;
 
-export async function loadDistrictAndIncumbent(
+/**
+ * Who holds the seat, as far as the stored member list says:
+ * - `held`: a current member with a source;
+ * - `vacant`: nobody, and the list was read with every 지역구 member placed in a district, so
+ *   the absence is the Assembly's own (the source is that list);
+ * - `unknown`: nobody on record, but a member the list names could not be placed, or the list
+ *   was never read. Nothing is said about the seat then.
+ */
+export type Seat =
+  | { kind: "held"; member: MemberRec; source: SourceMeta }
+  | { kind: "vacant"; source: SourceMeta }
+  | { kind: "unknown" };
+
+export async function loadDistrictAndSeat(
   store: ReadStore,
   id: string,
-): Promise<{ district: DistrictRec; member: MemberRec; memberSource: SourceMeta }> {
+): Promise<{ district: DistrictRec; seat: Seat }> {
   const district = await store.district(id);
   if (!district) throw new ApiError("not_found", "Unknown district.");
   const member = await store.incumbent(id);
-  const memberSource = member ? sourceMeta(member.source_url, member.fetched_at) : null;
-  if (!member || !memberSource) {
-    throw new ApiError("not_found", "No sourced incumbent is on record for this district.");
+  if (member) {
+    const source = sourceMeta(member.source_url, member.fetched_at);
+    return { district, seat: source ? { kind: "held", member, source } : { kind: "unknown" } };
   }
-  return { district, member, memberSource };
+  const list = await store.memberList();
+  const source = list.unplaced ? null : sourceMeta(SOURCES.assemblyMembers.url, list.fetched_at);
+  return { district, seat: source ? { kind: "vacant", source } : { kind: "unknown" } };
 }
 
 function portrait(member: MemberRec): string | undefined {
@@ -183,7 +198,22 @@ function pickCandidates(rows: CandidateRec[]) {
 }
 
 export async function buildProfile(store: ReadStore, id: string, now: Date) {
-  const { district, member, memberSource } = await loadDistrictAndIncumbent(store, id);
+  const { district, seat } = await loadDistrictAndSeat(store, id);
+  if (seat.kind === "unknown") {
+    throw new ApiError("not_found", "No sourced incumbent is on record for this district.");
+  }
+  if (seat.kind === "vacant") {
+    // The seat is empty; candidates for a coming election may still be registered.
+    const candidates = await store.upcomingCandidates(district, kstToday(now));
+    return {
+      district: { id: district.id, displayName: district.display_name },
+      source: seat.source,
+      incumbent: null,
+      vacant: true,
+      candidates: pickCandidates(candidates),
+    };
+  }
+  const { member, source: memberSource } = seat;
   const mona = member.mona_cd;
 
   const [attendanceTotal, billCount, bills, attendance, votes, pledges, candidates] = await Promise
@@ -258,16 +288,19 @@ export async function buildProfile(store: ReadStore, id: string, now: Date) {
 // ------------------------------------------------------------------ history
 
 export async function buildHistory(store: ReadStore, id: string) {
-  const { district, member, memberSource } = await loadDistrictAndIncumbent(store, id);
-  const incumbentId = memberId(member.mona_cd);
+  // The place and its elections do not depend on who holds the seat; a vacant
+  // or unplaced seat changes only the legislator block.
+  const { district, seat } = await loadDistrictAndSeat(store, id);
+  const member = seat.kind === "held" ? seat.member : null;
+  const incumbentId = member ? memberId(member.mona_cd) : null;
   const districtSource = sourceMeta(district.source_url, district.fetched_at);
 
   const [elections, results, region, bills, billCount] = await Promise.all([
     store.generalElections(),
     store.resultsFor(district),
     store.regionTimeline(id),
-    store.recentBills(member.mona_cd, CURRENT_AGE, CHRONICLE_BILLS),
-    store.billCount(member.mona_cd, CURRENT_AGE),
+    member ? store.recentBills(member.mona_cd, CURRENT_AGE, CHRONICLE_BILLS) : [],
+    member ? store.billCount(member.mona_cd, CURRENT_AGE) : null,
   ]);
 
   // Elections: one row per general election with a sourced winner here, plus
@@ -291,7 +324,7 @@ export async function buildHistory(store: ReadStore, id: string) {
     );
     if (winners.length !== 1) continue; // none, or ambiguous: leave it out rather than guess
     const w = winners[0];
-    const isIncumbent = w.name === member.name;
+    const isIncumbent = member !== null && w.name === member.name;
     const party = w.party ?? "무소속";
     rows.push({
       term: e.term,
@@ -322,13 +355,42 @@ export async function buildHistory(store: ReadStore, id: string) {
       events: region.events
         .filter((e) => typeof e.title === "string" && e.title.trim() !== "")
         .filter((e) => e.year === null || Number.isInteger(e.year))
-        .map((e) => ({ year: e.year, title: e.title, ...(e.detail ? { detail: e.detail } : {}) })),
+        .map((e) => {
+          // An event read from another document than the timeline (the 공직선거법
+          // version that made a change) names it.
+          const own = sourceMeta(e.source_url, e.fetched_at);
+          return {
+            year: e.year,
+            title: e.title,
+            ...(e.detail ? { detail: e.detail } : {}),
+            ...(own && own.sourceUrl !== regionSource.sourceUrl ? { source: own } : {}),
+          };
+        }),
     };
   } else {
     regionBlock = { source: districtSource ?? electionsSource, events: [] };
   }
 
-  const billsSource = sourceMeta(SOURCES.assemblyBills.url, billCount.fetched_at);
+  return {
+    district: { id: district.id, displayName: district.display_name },
+    region: regionBlock,
+    elections: { source: electionsSource, basis: "득표율은 당선자 기준", rows },
+    legislator: seat.kind === "held"
+      ? legislatorBlock(seat.member, seat.source, wins, bills, billCount)
+      : seat.kind === "vacant"
+      ? { vacant: true, source: seat.source }
+      : null,
+  };
+}
+
+function legislatorBlock(
+  member: MemberRec,
+  memberSource: SourceMeta,
+  wins: { year: number; term: number; party: string; share: number }[],
+  bills: BillRec[],
+  billCount: { count: number; fetched_at: string | null } | null,
+) {
+  const billsSource = sourceMeta(SOURCES.assemblyBills.url, billCount?.fetched_at);
   const events = [
     ...wins.map((w) => ({
       mark: String(w.year),
@@ -345,22 +407,16 @@ export async function buildHistory(store: ReadStore, id: string) {
       };
     }).filter((e) => e.mark !== ""),
   ];
-
   const photo = portrait(member);
   return {
-    district: { id: district.id, displayName: district.display_name },
-    region: regionBlock,
-    elections: { source: electionsSource, basis: "득표율은 당선자 기준", rows },
-    legislator: {
-      source: billsSource ?? memberSource,
-      incumbent: {
-        id: incumbentId,
-        name: member.name,
-        party: member.party ?? "무소속",
-        summary: member.reele_gbn ?? "",
-        ...(photo ? { portraitUrl: photo } : {}),
-      },
-      events,
+    source: billsSource ?? memberSource,
+    incumbent: {
+      id: memberId(member.mona_cd),
+      name: member.name,
+      party: member.party ?? "무소속",
+      summary: member.reele_gbn ?? "",
+      ...(photo ? { portraitUrl: photo } : {}),
     },
+    events,
   };
 }

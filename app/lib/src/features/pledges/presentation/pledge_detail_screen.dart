@@ -29,7 +29,7 @@ class PledgeDetailScreen extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final board = ref.watch(pledgeBoardProvider);
-    final incumbent = ref.watch(districtProfileProvider).value?.incumbent.name;
+    final incumbent = ref.watch(districtProfileProvider).value?.incumbent?.name;
 
     final data = board.hasError || !board.hasValue ? null : board.requireValue;
     final pledge = data?.byId(pledgeId);

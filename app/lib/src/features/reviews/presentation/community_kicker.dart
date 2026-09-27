@@ -14,7 +14,7 @@ String? communityKicker(WidgetRef ref) {
     return null;
   }
 
-  final incumbent = ref.watch(districtProfileProvider).value?.incumbent.name;
+  final incumbent = ref.watch(districtProfileProvider).value?.incumbent?.name;
   if (incumbent == null || incumbent.isEmpty) {
     return district.displayName;
   }

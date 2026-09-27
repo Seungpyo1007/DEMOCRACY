@@ -1,0 +1,21 @@
+{
+  "districtId": "nec-1b0e7e35",
+  "displayName": "전북 완주군진안군무주군",
+  "source": {
+    "sourceUrl": "https://www.law.go.kr/LSW/lsInfoP.do?lsiSeq=261101",
+    "fetchedAt": "2026-09-27T15:00:00.000Z",
+    "publisher": "국가법령정보센터"
+  },
+  "events": [
+    {
+      "year": 2024,
+      "title": "선거구 구역 재편",
+      "detail": "구성: 완주군진안군무주군장수군(장수군 제외)",
+      "source": {
+        "sourceUrl": "https://www.law.go.kr/LSW/lsInfoP.do?lsiSeq=261101",
+        "fetchedAt": "2026-09-27T15:00:00.000Z",
+        "publisher": "국가법령정보센터"
+      }
+    }
+  ]
+}

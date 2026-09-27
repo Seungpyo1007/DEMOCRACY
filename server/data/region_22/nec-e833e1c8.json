@@ -1,0 +1,21 @@
+{
+  "districtId": "nec-e833e1c8",
+  "displayName": "전북 익산시 을",
+  "source": {
+    "sourceUrl": "https://www.law.go.kr/LSW/lsInfoP.do?lsiSeq=261101",
+    "fetchedAt": "2026-09-27T15:00:00.000Z",
+    "publisher": "국가법령정보센터"
+  },
+  "events": [
+    {
+      "year": 2024,
+      "title": "선거구 구역 변경",
+      "detail": "익산시 갑에서 웅포면, 성당면, 용안면, 망성면 등 5곳 편입. 삼기면, 영등2동은 익산시 갑으로 옮겨감",
+      "source": {
+        "sourceUrl": "https://www.law.go.kr/LSW/lsInfoP.do?lsiSeq=261101",
+        "fetchedAt": "2026-09-27T15:00:00.000Z",
+        "publisher": "국가법령정보센터"
+      }
+    }
+  ]
+}

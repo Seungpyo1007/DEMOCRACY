@@ -1,0 +1,31 @@
+{
+  "districtId": "nec-c93921d0",
+  "displayName": "강원 춘천시철원군화천군양구군 을",
+  "source": {
+    "sourceUrl": "https://www.law.go.kr/LSW/lsInfoP.do?lsiSeq=261101",
+    "fetchedAt": "2026-09-27T15:00:00.000Z",
+    "publisher": "국가법령정보센터"
+  },
+  "events": [
+    {
+      "year": 2020,
+      "title": "선거구 구역 재편",
+      "detail": "구성: 춘천시 일부(신북읍, 동면, 서면, 사북면 등 6곳), 홍천군철원군화천군양구군인제군(인제군, 홍천군 제외)",
+      "source": {
+        "sourceUrl": "https://www.law.go.kr/LSW/lsInfoP.do?lsiSeq=215523",
+        "fetchedAt": "2026-09-27T15:00:00.000Z",
+        "publisher": "국가법령정보센터"
+      }
+    },
+    {
+      "year": 2024,
+      "title": "선거구 구역 변동 없음",
+      "detail": "제21대 총선과 같은 구역",
+      "source": {
+        "sourceUrl": "https://www.law.go.kr/LSW/lsInfoP.do?lsiSeq=261101",
+        "fetchedAt": "2026-09-27T15:00:00.000Z",
+        "publisher": "국가법령정보센터"
+      }
+    }
+  ]
+}

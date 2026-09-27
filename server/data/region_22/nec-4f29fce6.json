@@ -1,0 +1,21 @@
+{
+  "districtId": "nec-4f29fce6",
+  "displayName": "경기 파주시 을",
+  "source": {
+    "sourceUrl": "https://www.law.go.kr/LSW/lsInfoP.do?lsiSeq=261101",
+    "fetchedAt": "2026-09-27T15:00:00.000Z",
+    "publisher": "국가법령정보센터"
+  },
+  "events": [
+    {
+      "year": 2024,
+      "title": "선거구 구역 변경",
+      "detail": "파주시 갑에서 조리읍, 광탄면, 탄현면 편입",
+      "source": {
+        "sourceUrl": "https://www.law.go.kr/LSW/lsInfoP.do?lsiSeq=261101",
+        "fetchedAt": "2026-09-27T15:00:00.000Z",
+        "publisher": "국가법령정보센터"
+      }
+    }
+  ]
+}

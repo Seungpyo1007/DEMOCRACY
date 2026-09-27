@@ -302,17 +302,32 @@ class LegislatorChronicle {
   final SourceMetadata source;
 }
 
+/// The seat has no member: the assembly's own member list names nobody for
+/// this district. Carries that list as its source, since the absence is a
+/// fact read from it, not an assumption.
+class SeatVacancy {
+  const SeatVacancy({required this.source});
+
+  final SourceMetadata source;
+}
+
 /// The history tab's payload: the place, its elections, its representative.
 ///
 /// Each part carries its own source because each comes from a different
 /// publisher -- the district office, the election commission, the assembly --
 /// and one badge for all three would misattribute two of them.
+///
+/// The place and its elections stand without a representative: a vacant seat
+/// still has a past. [legislator] is null when there is nobody in the seat;
+/// [vacancy] then says so with its source, or is null too when the feed could
+/// not tell (nothing is said about the seat at all).
 class HistoryRecord {
   const HistoryRecord({
     required this.district,
     required this.region,
     required this.elections,
     required this.legislator,
+    this.vacancy,
   });
 
   factory HistoryRecord.fromJson(Map<String, Object?> json) {
@@ -324,6 +339,11 @@ class HistoryRecord {
       );
     }
 
+    final legislatorJson = json['legislator'];
+    final vacancyJson =
+        legislatorJson is Map && legislatorJson['vacant'] == true
+        ? legislatorJson
+        : null;
     return HistoryRecord(
       district: DistrictRef(
         id: districtJson['id'] as String? ?? '',
@@ -331,16 +351,30 @@ class HistoryRecord {
       ),
       region: RegionTimeline.fromJson(json['region']),
       elections: ElectionHistory.fromJson(json['elections']),
-      legislator: LegislatorChronicle.fromJson(json['legislator']),
+      legislator: legislatorJson == null || vacancyJson != null
+          ? null
+          : LegislatorChronicle.fromJson(legislatorJson),
+      vacancy: vacancyJson == null
+          ? null
+          : SeatVacancy(
+              source: SourceMetadata.fromJson(
+                vacancyJson['source'],
+                field: 'legislator',
+              ),
+            ),
     );
   }
 
   final DistrictRef district;
   final RegionTimeline region;
   final ElectionHistory elections;
-  final LegislatorChronicle legislator;
+  final LegislatorChronicle? legislator;
+  final SeatVacancy? vacancy;
 
   /// The year the current incumbent first won this seat, if the election
-  /// record shows it.
-  int? get incumbentFirstWinYear => elections.firstWinYear(legislator.id);
+  /// record shows it. Null for a seat nobody holds.
+  int? get incumbentFirstWinYear => switch (legislator) {
+    final legislator? => elections.firstWinYear(legislator.id),
+    null => null,
+  };
 }

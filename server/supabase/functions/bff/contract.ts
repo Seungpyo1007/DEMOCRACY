@@ -90,7 +90,14 @@ export function validateDistrictProfile(json: unknown): string[] {
   const errs: string[] = [];
   if (!isMap(json)) return ["profile: not an object"];
   district(json.district, errs);
-  politician(json.incumbent ?? {}, "incumbent", errs);
+  // A vacant seat has no incumbent, and says so; anything else must name one.
+  if (json.vacant === true) {
+    if (json.incumbent !== null && json.incumbent !== undefined) {
+      errs.push("incumbent: a vacant seat has none");
+    }
+  } else {
+    politician(json.incumbent ?? {}, "incumbent", errs);
+  }
   if (json.candidates !== undefined && !Array.isArray(json.candidates)) {
     errs.push("candidates: not a list");
   }
@@ -115,6 +122,7 @@ export function validateHistoryRecord(json: unknown): string[] {
       if (e.year !== null && e.year !== undefined && !Number.isInteger(e.year)) {
         errs.push(`region.events[${i}]: year neither int nor null`);
       }
+      if (e.source !== undefined) source(e.source, `region.events[${i}]`, errs);
     });
     source(region.source, "region", errs);
   }
@@ -136,9 +144,15 @@ export function validateHistoryRecord(json: unknown): string[] {
     source(elections.source, "elections", errs);
   }
 
+  // null: nobody on record and nothing said; {vacant, source}: the seat is empty.
   const leg = json.legislator;
-  if (!isMap(leg)) {
-    errs.push("legislator: block required");
+  if (leg === null) {
+    // ok
+  } else if (!isMap(leg)) {
+    errs.push("legislator: block or null required");
+  } else if (leg.vacant === true) {
+    if (leg.incumbent !== undefined) errs.push("legislator: a vacant seat has no incumbent");
+    source(leg.source, "legislator", errs);
   } else {
     const inc = leg.incumbent;
     if (!isMap(inc) || typeof inc.id !== "string" || typeof inc.name !== "string") {

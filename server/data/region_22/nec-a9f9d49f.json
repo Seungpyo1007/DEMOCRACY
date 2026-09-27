@@ -1,0 +1,31 @@
+{
+  "districtId": "nec-a9f9d49f",
+  "displayName": "경기 광명시 을",
+  "source": {
+    "sourceUrl": "https://www.law.go.kr/LSW/lsInfoP.do?lsiSeq=261101",
+    "fetchedAt": "2026-09-27T15:00:00.000Z",
+    "publisher": "국가법령정보센터"
+  },
+  "events": [
+    {
+      "year": 2020,
+      "title": "선거구 구역 변경",
+      "detail": "철산3동은 광명시 갑으로 옮겨감",
+      "source": {
+        "sourceUrl": "https://www.law.go.kr/LSW/lsInfoP.do?lsiSeq=215523",
+        "fetchedAt": "2026-09-27T15:00:00.000Z",
+        "publisher": "국가법령정보센터"
+      }
+    },
+    {
+      "year": 2024,
+      "title": "선거구 구역 변경",
+      "detail": "학온동은 광명시 갑으로 옮겨감",
+      "source": {
+        "sourceUrl": "https://www.law.go.kr/LSW/lsInfoP.do?lsiSeq=261101",
+        "fetchedAt": "2026-09-27T15:00:00.000Z",
+        "publisher": "국가법령정보센터"
+      }
+    }
+  ]
+}

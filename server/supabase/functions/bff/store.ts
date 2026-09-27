@@ -31,6 +31,18 @@ export interface MemberRec extends Sourced {
   photo_url: string | null;
   district_id: string | null;
   is_current: boolean;
+  /** ORIG_NM as a name key; null for 비례대표. Read only by memberList. */
+  district_key?: string | null;
+}
+
+/**
+ * The Assembly's current member list as stored: when it was last read, and whether any
+ * 지역구 member in it names a 선거구 that no district matched. A seat is only called vacant
+ * when the list was read and every 지역구 member in it was placed.
+ */
+export interface MemberListStatus {
+  fetched_at: string | null;
+  unplaced: boolean;
 }
 
 export interface BillRec extends Sourced {
@@ -194,6 +206,7 @@ export interface ReadStore {
   district(id: string): Promise<DistrictRec | null>;
   districtsBySggCodes(sgId: string, codes: string[]): Promise<DistrictRec[]>;
   incumbent(districtId: string): Promise<MemberRec | null>;
+  memberList(): Promise<MemberListStatus>;
   billCount(monaCd: string, age: number): Promise<{ count: number; fetched_at: string | null }>;
   recentBills(monaCd: string, age: number, limit: number): Promise<BillRec[]>;
   /** The committee of every bill the member led in a term. */
@@ -279,6 +292,13 @@ export class MemoryStore implements ReadStore {
     return Promise.resolve(
       this.t.members.find((m) => m.is_current && m.district_id === districtId) ?? null,
     );
+  }
+  memberList() {
+    const current = this.t.members.filter((m) => m.is_current);
+    return Promise.resolve({
+      fetched_at: latest(...current.map((m) => m.fetched_at)),
+      unplaced: current.some((m) => !!m.district_key && !m.district_id),
+    });
   }
   billCount(monaCd: string, age: number) {
     // fetched_at falls back to the latest bills ingest for the term, so a
@@ -448,6 +468,24 @@ export class PostgrestStore implements ReadStore {
       limit: "1",
     });
     return rows[0] ?? null;
+  }
+  async memberList() {
+    const [last, unplaced] = await Promise.all([
+      this.db.select<{ fetched_at: string | null }>("members", {
+        select: "fetched_at",
+        is_current: "eq.true",
+        order: "fetched_at.desc",
+        limit: "1",
+      }),
+      this.db.select<{ mona_cd: string }>("members", {
+        select: "mona_cd",
+        is_current: "eq.true",
+        district_key: "not.is.null",
+        district_id: "is.null",
+        limit: "1",
+      }),
+    ]);
+    return { fetched_at: last[0]?.fetched_at ?? null, unplaced: unplaced.length > 0 };
   }
   async billCount(monaCd: string, age: number) {
     const rows = await this.db.rpc<{ count: number; fetched_at: string | null }[]>(

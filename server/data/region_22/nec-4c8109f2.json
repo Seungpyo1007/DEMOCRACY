@@ -1,0 +1,31 @@
+{
+  "districtId": "nec-4c8109f2",
+  "displayName": "경기 평택시 갑",
+  "source": {
+    "sourceUrl": "https://www.law.go.kr/LSW/lsInfoP.do?lsiSeq=261101",
+    "fetchedAt": "2026-09-27T15:00:00.000Z",
+    "publisher": "국가법령정보센터"
+  },
+  "events": [
+    {
+      "year": 2020,
+      "title": "선거구 구역 변경",
+      "detail": "평택시 을에서 비전1동 편입",
+      "source": {
+        "sourceUrl": "https://www.law.go.kr/LSW/lsInfoP.do?lsiSeq=215523",
+        "fetchedAt": "2026-09-27T15:00:00.000Z",
+        "publisher": "국가법령정보센터"
+      }
+    },
+    {
+      "year": 2024,
+      "title": "선거구 구역 변경",
+      "detail": "비전1동, 동삭동은 평택시 병으로 옮겨감",
+      "source": {
+        "sourceUrl": "https://www.law.go.kr/LSW/lsInfoP.do?lsiSeq=261101",
+        "fetchedAt": "2026-09-27T15:00:00.000Z",
+        "publisher": "국가법령정보센터"
+      }
+    }
+  ]
+}
