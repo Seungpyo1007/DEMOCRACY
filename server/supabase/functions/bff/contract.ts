@@ -1,6 +1,7 @@
 // A TS mirror of the app's Dart parsers' required-field rules
 // (app/lib/src/core/provenance/source_metadata.dart, features/district/domain/*,
-// features/history/domain/history_record.dart, features/pledges/domain/pledge.dart).
+// features/history/domain/history_record.dart, features/pledges/domain/pledge.dart,
+// features/results/domain/*).
 // Returns a list of violations; empty = the app would parse it.
 //
 // One deliberate difference: `record.attendance` / `record.votes` are optional
@@ -177,6 +178,112 @@ export function validatePledgeBoard(json: unknown): string[] {
     }
   });
   source(json.source, "pledgeBoard", errs);
+  return errs;
+}
+
+/** KstInstant.parse: parseable, and stating its offset (Z or ±hh:mm). */
+function offsetTimestamp(v: unknown): boolean {
+  return nonEmpty(v) && !Number.isNaN(Date.parse(v)) && /(Z|[+-]\d{2}:?\d{2})$/.test(v);
+}
+
+const isRate = (v: unknown, max = 100) => typeof v === "number" && v >= 0 && v <= max;
+
+/** PollDisclosure.fromJson: all the 제108조제5항 items, or the series does not parse. */
+function pollDisclosure(v: unknown, field: string, errs: string[]) {
+  if (!isMap(v)) return errs.push(`${field}.disclosure: required`);
+  for (const k of ["client", "pollster", "samplingMethod", "surveyMethod"]) {
+    if (!nonEmpty(v[k])) errs.push(`${field}.disclosure.${k}: required`);
+  }
+  for (const k of ["fieldStart", "fieldEnd"]) {
+    if (!offsetTimestamp(v[k])) errs.push(`${field}.disclosure.${k}: timestamp with offset`);
+  }
+  if (!Number.isInteger(v.sampleSize) || (v.sampleSize as number) <= 0) {
+    errs.push(`${field}.disclosure.sampleSize: positive int`);
+  }
+  if (!isRate(v.marginOfError, 50)) errs.push(`${field}.disclosure.marginOfError: 0..50`);
+  for (const k of ["confidenceLevel", "responseRate"]) {
+    if (!isRate(v[k])) errs.push(`${field}.disclosure.${k}: 0..100`);
+  }
+  for (const k of ["questionnaire", "nesdcRegistration"]) {
+    let okUrl = false;
+    try {
+      const u = new URL(v[k] as string);
+      okUrl = ["http:", "https:"].includes(u.protocol) && u.host !== "";
+    } catch { /* invalid */ }
+    if (!okUrl) errs.push(`${field}.disclosure.${k}: absolute http(s) URL`);
+  }
+  source(v.source, `${field}.disclosure`, errs);
+}
+
+/**
+ * RawElectionResults.fromJson (features/results/domain/election_results.dart,
+ * election_schedule.dart, poll_disclosure.dart). The schedule key must be
+ * present: null states that no election is pending, absence fails to parse.
+ */
+export function validateElectionResults(json: unknown): string[] {
+  const errs: string[] = [];
+  if (!isMap(json)) return ["results: not an object"];
+
+  if (!("electionSchedule" in json)) {
+    errs.push("electionSchedule: key required (null when no election is pending)");
+  } else if (json.electionSchedule !== null) {
+    const s = json.electionSchedule;
+    if (!isMap(s)) {
+      errs.push("electionSchedule: object or null");
+    } else {
+      if (!offsetTimestamp(s.pollsClose)) errs.push("electionSchedule.pollsClose: with offset");
+      if (
+        s.electionName !== undefined && s.electionName !== null &&
+        typeof s.electionName !== "string"
+      ) {
+        errs.push("electionSchedule.electionName: must be a string");
+      }
+      source(s.source, "electionSchedule", errs);
+    }
+  }
+  if (
+    json.electionName !== undefined && json.electionName !== null &&
+    typeof json.electionName !== "string"
+  ) {
+    errs.push("electionName: must be a string");
+  }
+  if (json.live !== undefined && json.live !== null && typeof json.live !== "boolean") {
+    errs.push("live: must be a boolean");
+  }
+
+  (Array.isArray(json.districts) ? json.districts : []).forEach((d, i) => {
+    const f = `districts[${i}]`;
+    if (!isMap(d) || !nonEmpty(d.districtId) || typeof d.districtName !== "string") {
+      return errs.push(`${f}: districtId and districtName`);
+    }
+    if (typeof d.countedShare !== "number") errs.push(`${f}: countedShare not a number`);
+    (Array.isArray(d.tallies) ? d.tallies : []).forEach((t, k) => {
+      if (!isMap(t) || !nonEmpty(t.name) || typeof t.share !== "number") {
+        return errs.push(`${f}.tallies[${k}]: name and share`);
+      }
+      if (t.party !== undefined && t.party !== null && typeof t.party !== "string") {
+        errs.push(`${f}.tallies[${k}].party: must be a string`);
+      }
+    });
+    source(d.source, f, errs);
+  });
+
+  (Array.isArray(json.historical) ? json.historical : []).forEach((p, i) => {
+    if (!isMap(p) || !Number.isInteger(p.year) || typeof p.share !== "number") {
+      errs.push(`historical[${i}]: int year and numeric share`);
+    }
+  });
+
+  (Array.isArray(json.polls) ? json.polls : []).forEach((p, i) => {
+    const f = `polls[${i}]`;
+    if (!isMap(p) || !nonEmpty(p.label)) return errs.push(`${f}: label`);
+    (Array.isArray(p.points) ? p.points : []).forEach((pt, k) => {
+      if (!isMap(pt) || !Number.isInteger(pt.year) || typeof pt.share !== "number") {
+        errs.push(`${f}.points[${k}]: int year and numeric share`);
+      }
+    });
+    pollDisclosure(p.disclosure, f, errs);
+  });
   return errs;
 }
 

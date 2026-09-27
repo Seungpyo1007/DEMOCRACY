@@ -157,7 +157,7 @@ Deno.test("empty database: every district route is a clean 404", async () => {
     now: () => NOW,
     ...signedOut(),
   });
-  for (const what of ["profile", "history", "pledges"]) {
+  for (const what of ["profile", "history", "pledges", "results"]) {
     const r = await call(h, `/districts/${MAPO_B}/${what}`);
     assertEquals(r.status, 404);
   }

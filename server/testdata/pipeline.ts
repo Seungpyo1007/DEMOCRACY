@@ -194,6 +194,7 @@ export function toTables(db: MemoryPostgrest): MemoryTables {
   t.attendance = r("plenary_attendance");
   t.elections = db.rows("elections").map((e) => ({ count_status: "none", ...e })) as never[];
   t.results = r("election_results");
+  t.counts = r("district_counts");
   t.candidates = r("candidates");
   t.regionTimelines = r("region_timelines");
   t.regionEvents = r("region_events");

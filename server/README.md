@@ -33,7 +33,7 @@ Reading needs no account; the account routes need a Supabase Auth sign-in.
 
 ```sh
 brew install deno
-deno task ci      # fmt --check, lint, check, test (offline; 80 tests)
+deno task ci      # fmt --check, lint, check, test (offline; 82 tests)
 ```
 
 ## BFF contract (fixed; the app is built against it)
@@ -51,6 +51,7 @@ A success is `200 {"servedAt": ISO-UTC, "data": {...}}`. An error is non-2xx
 | `GET /districts/{id}/profile`      | DistrictProfile. Cached 300 s.                                                           |
 | `GET /districts/{id}/history`      | HistoryRecord. Cached 300 s.                                                             |
 | `GET /districts/{id}/pledges`      | PledgeBoard, or `404 not_curated`                                                        |
+| `GET /districts/{id}/results`      | RawElectionResults: the 22대 final count. Cached 300 s.                                  |
 | `GET /address/search?q=`           | `{suggestions:[{address, district:{id, displayName}}]}`. Unmapped addresses are dropped. |
 | `GET /location/district?lat=&lng=` | `{district:{id, displayName}}`, or `404 no_match`                                        |
 
@@ -74,7 +75,21 @@ A success is `200 {"servedAt": ISO-UTC, "data": {...}}`. An error is non-2xx
   - votes = monthly share of the member's recorded plenary votes that are not 불참.
   - 발의 법안 = bills where the member is 대표발의자 (`RST_MONA_CD`).
   - 공약 이행 = fulfilled ÷ curated pledges. It appears only when curated pledges exist.
+  - 개표 share = a candidate's votes ÷ the 선거구's valid votes (유효투표수), to one decimal.
+    `historical` is the winner's share per election for the same 선거구 (by name or curated
+    lineage); a year that does not match is left out.
   - There are no rankings, scores or labels.
+- **Results** (`/results`) is RawElectionResults:
+  - `live: false` and `overallCountedShare: 100`; it is a final count.
+  - `districts` holds every 22대 district with a sourced count, in NEC's order; the app selects its
+    own. A district without one is `404 not_found`.
+  - `electionSchedule` is `null`, which tells the app no election is pending. Past results are not
+    restricted (docs/ELECTION_LAW.md). While a future election is pending the BFF must instead send
+    the authoritative schedule (`pollsClose` with any NEC extension, and its source) and must not
+    send that election's counts before `pollsClose`. That server-side block is the legal guarantee;
+    the app's gate is defence in depth.
+  - `polls` is always `[]`: 제108조제5항 needs a 심의위 registration behind each series, and nothing
+    here verifies one yet.
 
 ### Account routes
 
