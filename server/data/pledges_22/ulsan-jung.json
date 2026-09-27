@@ -1,0 +1,396 @@
+{
+  "_note": "제22대 국회의원선거 울산 중구 당선인 박성민 (국민의힘). 책자형 선거공보 PDF 7–8쪽 「5대 도시혁신 – 힘 있는 박성민이 설계합니다!」 1–5 아래 • 항목 35개. PDF에 글자층이 없어(이미지) 쪽 이미지를 보고 옮겼다. 번호 붙은 분야 제목(구호)과 사진 설명은 넣지 않았다. PDF 5–6쪽의 국회의원 4년 성과는 넣지 않았다. 제목은 원문 문구를 따랐고 바꾼 것은 위에 적은 구호·수식어 덜어내기뿐이다. 분류(category)는 앱에 정해진 분류 체계가 없어 비워 두었다. 이행 여부는 판정하지 않았다(notJudged).",
+  "districtId": "nec-6f236215",
+  "source": {
+    "sourceUrl": "https://policy.nec.go.kr/policy_pdf/20240410/PDF/PBINFO_PUB/3101/003_100152554_20240402_2.pdf",
+    "fetchedAt": "2026-09-27T17:14:30Z",
+    "publisher": "중앙선거관리위원회"
+  },
+  "pledges": [
+    {
+      "id": "22-ulsan-jung-01",
+      "title": "이차전지 국가첨단전략산업 특화단지 조기 조성",
+      "category": "",
+      "status": "notJudged",
+      "source": {
+        "sourceUrl": "https://policy.nec.go.kr/policy_pdf/20240410/PDF/PBINFO_PUB/3101/003_100152554_20240402_2.pdf",
+        "fetchedAt": "2026-09-27T17:14:30Z",
+        "publisher": "중앙선거관리위원회"
+      }
+    },
+    {
+      "id": "22-ulsan-jung-02",
+      "title": "성안·약사 첨단산단 조성",
+      "category": "",
+      "status": "notJudged",
+      "source": {
+        "sourceUrl": "https://policy.nec.go.kr/policy_pdf/20240410/PDF/PBINFO_PUB/3101/003_100152554_20240402_2.pdf",
+        "fetchedAt": "2026-09-27T17:14:30Z",
+        "publisher": "중앙선거관리위원회"
+      }
+    },
+    {
+      "id": "22-ulsan-jung-03",
+      "title": "글로벌숙련기술원 조기 건립",
+      "category": "",
+      "status": "notJudged",
+      "source": {
+        "sourceUrl": "https://policy.nec.go.kr/policy_pdf/20240410/PDF/PBINFO_PUB/3101/003_100152554_20240402_2.pdf",
+        "fetchedAt": "2026-09-27T17:14:30Z",
+        "publisher": "중앙선거관리위원회"
+      }
+    },
+    {
+      "id": "22-ulsan-jung-04",
+      "title": "그린벨트 대폭 해제",
+      "category": "",
+      "status": "notJudged",
+      "source": {
+        "sourceUrl": "https://policy.nec.go.kr/policy_pdf/20240410/PDF/PBINFO_PUB/3101/003_100152554_20240402_2.pdf",
+        "fetchedAt": "2026-09-27T17:14:30Z",
+        "publisher": "중앙선거관리위원회"
+      }
+    },
+    {
+      "id": "22-ulsan-jung-05",
+      "title": "글로컬 대학 육성 지원",
+      "category": "",
+      "status": "notJudged",
+      "source": {
+        "sourceUrl": "https://policy.nec.go.kr/policy_pdf/20240410/PDF/PBINFO_PUB/3101/003_100152554_20240402_2.pdf",
+        "fetchedAt": "2026-09-27T17:14:30Z",
+        "publisher": "중앙선거관리위원회"
+      }
+    },
+    {
+      "id": "22-ulsan-jung-06",
+      "title": "제2차 공공기관 지방이전 유치 추진",
+      "category": "",
+      "status": "notJudged",
+      "source": {
+        "sourceUrl": "https://policy.nec.go.kr/policy_pdf/20240410/PDF/PBINFO_PUB/3101/003_100152554_20240402_2.pdf",
+        "fetchedAt": "2026-09-27T17:14:30Z",
+        "publisher": "중앙선거관리위원회"
+      }
+    },
+    {
+      "id": "22-ulsan-jung-07",
+      "title": "장현도시첨단산단 조기 조성",
+      "category": "",
+      "status": "notJudged",
+      "source": {
+        "sourceUrl": "https://policy.nec.go.kr/policy_pdf/20240410/PDF/PBINFO_PUB/3101/003_100152554_20240402_2.pdf",
+        "fetchedAt": "2026-09-27T17:14:30Z",
+        "publisher": "중앙선거관리위원회"
+      }
+    },
+    {
+      "id": "22-ulsan-jung-08",
+      "title": "울산공항 고도제한 완화",
+      "category": "",
+      "status": "notJudged",
+      "source": {
+        "sourceUrl": "https://policy.nec.go.kr/policy_pdf/20240410/PDF/PBINFO_PUB/3101/003_100152554_20240402_2.pdf",
+        "fetchedAt": "2026-09-27T17:14:30Z",
+        "publisher": "중앙선거관리위원회"
+      }
+    },
+    {
+      "id": "22-ulsan-jung-09",
+      "title": "도시철도 1호선(트램) 조기 착공",
+      "category": "",
+      "status": "notJudged",
+      "source": {
+        "sourceUrl": "https://policy.nec.go.kr/policy_pdf/20240410/PDF/PBINFO_PUB/3101/003_100152554_20240402_2.pdf",
+        "fetchedAt": "2026-09-27T17:14:30Z",
+        "publisher": "중앙선거관리위원회"
+      }
+    },
+    {
+      "id": "22-ulsan-jung-10",
+      "title": "거점형 스마트시티 조성",
+      "category": "",
+      "status": "notJudged",
+      "source": {
+        "sourceUrl": "https://policy.nec.go.kr/policy_pdf/20240410/PDF/PBINFO_PUB/3101/003_100152554_20240402_2.pdf",
+        "fetchedAt": "2026-09-27T17:14:30Z",
+        "publisher": "중앙선거관리위원회"
+      }
+    },
+    {
+      "id": "22-ulsan-jung-11",
+      "title": "제2명촌교 건설 (중구 반구동~남구 삼산동)",
+      "category": "",
+      "status": "notJudged",
+      "source": {
+        "sourceUrl": "https://policy.nec.go.kr/policy_pdf/20240410/PDF/PBINFO_PUB/3101/003_100152554_20240402_2.pdf",
+        "fetchedAt": "2026-09-27T17:14:30Z",
+        "publisher": "중앙선거관리위원회"
+      }
+    },
+    {
+      "id": "22-ulsan-jung-12",
+      "title": "제2다운교 건설 (중구 다운동~남구 무거동 굴화)",
+      "category": "",
+      "status": "notJudged",
+      "source": {
+        "sourceUrl": "https://policy.nec.go.kr/policy_pdf/20240410/PDF/PBINFO_PUB/3101/003_100152554_20240402_2.pdf",
+        "fetchedAt": "2026-09-27T17:14:30Z",
+        "publisher": "중앙선거관리위원회"
+      }
+    },
+    {
+      "id": "22-ulsan-jung-13",
+      "title": "원전안전체계 지원 예산 확대",
+      "category": "",
+      "status": "notJudged",
+      "source": {
+        "sourceUrl": "https://policy.nec.go.kr/policy_pdf/20240410/PDF/PBINFO_PUB/3101/003_100152554_20240402_2.pdf",
+        "fetchedAt": "2026-09-27T17:14:30Z",
+        "publisher": "중앙선거관리위원회"
+      }
+    },
+    {
+      "id": "22-ulsan-jung-14",
+      "title": "신세계 복합쇼핑몰 조기 착공",
+      "category": "",
+      "status": "notJudged",
+      "source": {
+        "sourceUrl": "https://policy.nec.go.kr/policy_pdf/20240410/PDF/PBINFO_PUB/3101/003_100152554_20240402_2.pdf",
+        "fetchedAt": "2026-09-27T17:14:30Z",
+        "publisher": "중앙선거관리위원회"
+      }
+    },
+    {
+      "id": "22-ulsan-jung-15",
+      "title": "도심융합특구 신속 추진",
+      "category": "",
+      "status": "notJudged",
+      "source": {
+        "sourceUrl": "https://policy.nec.go.kr/policy_pdf/20240410/PDF/PBINFO_PUB/3101/003_100152554_20240402_2.pdf",
+        "fetchedAt": "2026-09-27T17:14:30Z",
+        "publisher": "중앙선거관리위원회"
+      }
+    },
+    {
+      "id": "22-ulsan-jung-16",
+      "title": "분산에너지 특화지역 지정",
+      "category": "",
+      "status": "notJudged",
+      "source": {
+        "sourceUrl": "https://policy.nec.go.kr/policy_pdf/20240410/PDF/PBINFO_PUB/3101/003_100152554_20240402_2.pdf",
+        "fetchedAt": "2026-09-27T17:14:30Z",
+        "publisher": "중앙선거관리위원회"
+      }
+    },
+    {
+      "id": "22-ulsan-jung-17",
+      "title": "시장 현대화사업 및 주차 교통환경 개선",
+      "category": "",
+      "status": "notJudged",
+      "source": {
+        "sourceUrl": "https://policy.nec.go.kr/policy_pdf/20240410/PDF/PBINFO_PUB/3101/003_100152554_20240402_2.pdf",
+        "fetchedAt": "2026-09-27T17:14:30Z",
+        "publisher": "중앙선거관리위원회"
+      }
+    },
+    {
+      "id": "22-ulsan-jung-18",
+      "title": "중소기업 경영안정자금 지원",
+      "category": "",
+      "status": "notJudged",
+      "source": {
+        "sourceUrl": "https://policy.nec.go.kr/policy_pdf/20240410/PDF/PBINFO_PUB/3101/003_100152554_20240402_2.pdf",
+        "fetchedAt": "2026-09-27T17:14:30Z",
+        "publisher": "중앙선거관리위원회"
+      }
+    },
+    {
+      "id": "22-ulsan-jung-19",
+      "title": "청년 맞춤형 취업 지원 확대",
+      "category": "",
+      "status": "notJudged",
+      "source": {
+        "sourceUrl": "https://policy.nec.go.kr/policy_pdf/20240410/PDF/PBINFO_PUB/3101/003_100152554_20240402_2.pdf",
+        "fetchedAt": "2026-09-27T17:14:30Z",
+        "publisher": "중앙선거관리위원회"
+      }
+    },
+    {
+      "id": "22-ulsan-jung-20",
+      "title": "도심지 상급병원 유치",
+      "category": "",
+      "status": "notJudged",
+      "source": {
+        "sourceUrl": "https://policy.nec.go.kr/policy_pdf/20240410/PDF/PBINFO_PUB/3101/003_100152554_20240402_2.pdf",
+        "fetchedAt": "2026-09-27T17:14:30Z",
+        "publisher": "중앙선거관리위원회"
+      }
+    },
+    {
+      "id": "22-ulsan-jung-21",
+      "title": "실내종합체육관 건립",
+      "category": "",
+      "status": "notJudged",
+      "source": {
+        "sourceUrl": "https://policy.nec.go.kr/policy_pdf/20240410/PDF/PBINFO_PUB/3101/003_100152554_20240402_2.pdf",
+        "fetchedAt": "2026-09-27T17:14:30Z",
+        "publisher": "중앙선거관리위원회"
+      }
+    },
+    {
+      "id": "22-ulsan-jung-22",
+      "title": "십리대밭 축구장 대체 구장 조성",
+      "category": "",
+      "status": "notJudged",
+      "source": {
+        "sourceUrl": "https://policy.nec.go.kr/policy_pdf/20240410/PDF/PBINFO_PUB/3101/003_100152554_20240402_2.pdf",
+        "fetchedAt": "2026-09-27T17:14:30Z",
+        "publisher": "중앙선거관리위원회"
+      }
+    },
+    {
+      "id": "22-ulsan-jung-23",
+      "title": "보건소 골밀도 측정기 보급",
+      "category": "",
+      "status": "notJudged",
+      "source": {
+        "sourceUrl": "https://policy.nec.go.kr/policy_pdf/20240410/PDF/PBINFO_PUB/3101/003_100152554_20240402_2.pdf",
+        "fetchedAt": "2026-09-27T17:14:30Z",
+        "publisher": "중앙선거관리위원회"
+      }
+    },
+    {
+      "id": "22-ulsan-jung-24",
+      "title": "반려동물 건강문화센터 조기 조성",
+      "category": "",
+      "status": "notJudged",
+      "source": {
+        "sourceUrl": "https://policy.nec.go.kr/policy_pdf/20240410/PDF/PBINFO_PUB/3101/003_100152554_20240402_2.pdf",
+        "fetchedAt": "2026-09-27T17:14:30Z",
+        "publisher": "중앙선거관리위원회"
+      }
+    },
+    {
+      "id": "22-ulsan-jung-25",
+      "title": "지역심뇌혈관센터 유치",
+      "category": "",
+      "status": "notJudged",
+      "source": {
+        "sourceUrl": "https://policy.nec.go.kr/policy_pdf/20240410/PDF/PBINFO_PUB/3101/003_100152554_20240402_2.pdf",
+        "fetchedAt": "2026-09-27T17:14:30Z",
+        "publisher": "중앙선거관리위원회"
+      }
+    },
+    {
+      "id": "22-ulsan-jung-26",
+      "title": "노인복지관 2곳 신설",
+      "category": "",
+      "status": "notJudged",
+      "source": {
+        "sourceUrl": "https://policy.nec.go.kr/policy_pdf/20240410/PDF/PBINFO_PUB/3101/003_100152554_20240402_2.pdf",
+        "fetchedAt": "2026-09-27T17:14:30Z",
+        "publisher": "중앙선거관리위원회"
+      }
+    },
+    {
+      "id": "22-ulsan-jung-27",
+      "title": "파크 골프장 추가 조성",
+      "category": "",
+      "status": "notJudged",
+      "source": {
+        "sourceUrl": "https://policy.nec.go.kr/policy_pdf/20240410/PDF/PBINFO_PUB/3101/003_100152554_20240402_2.pdf",
+        "fetchedAt": "2026-09-27T17:14:30Z",
+        "publisher": "중앙선거관리위원회"
+      }
+    },
+    {
+      "id": "22-ulsan-jung-28",
+      "title": "작은 도서관 확충",
+      "category": "",
+      "status": "notJudged",
+      "source": {
+        "sourceUrl": "https://policy.nec.go.kr/policy_pdf/20240410/PDF/PBINFO_PUB/3101/003_100152554_20240402_2.pdf",
+        "fetchedAt": "2026-09-27T17:14:30Z",
+        "publisher": "중앙선거관리위원회"
+      }
+    },
+    {
+      "id": "22-ulsan-jung-29",
+      "title": "태화역사문화특구 조기 조성",
+      "category": "",
+      "status": "notJudged",
+      "source": {
+        "sourceUrl": "https://policy.nec.go.kr/policy_pdf/20240410/PDF/PBINFO_PUB/3101/003_100152554_20240402_2.pdf",
+        "fetchedAt": "2026-09-27T17:14:30Z",
+        "publisher": "중앙선거관리위원회"
+      }
+    },
+    {
+      "id": "22-ulsan-jung-30",
+      "title": "도심 속 야영장 운영 활성화",
+      "category": "",
+      "status": "notJudged",
+      "source": {
+        "sourceUrl": "https://policy.nec.go.kr/policy_pdf/20240410/PDF/PBINFO_PUB/3101/003_100152554_20240402_2.pdf",
+        "fetchedAt": "2026-09-27T17:14:30Z",
+        "publisher": "중앙선거관리위원회"
+      }
+    },
+    {
+      "id": "22-ulsan-jung-31",
+      "title": "병영성, 울산왜성·읍성, 학성산 유적 정비",
+      "category": "",
+      "status": "notJudged",
+      "source": {
+        "sourceUrl": "https://policy.nec.go.kr/policy_pdf/20240410/PDF/PBINFO_PUB/3101/003_100152554_20240402_2.pdf",
+        "fetchedAt": "2026-09-27T17:14:30Z",
+        "publisher": "중앙선거관리위원회"
+      }
+    },
+    {
+      "id": "22-ulsan-jung-32",
+      "title": "입화산 자연휴양림 조성 활성화",
+      "category": "",
+      "status": "notJudged",
+      "source": {
+        "sourceUrl": "https://policy.nec.go.kr/policy_pdf/20240410/PDF/PBINFO_PUB/3101/003_100152554_20240402_2.pdf",
+        "fetchedAt": "2026-09-27T17:14:30Z",
+        "publisher": "중앙선거관리위원회"
+      }
+    },
+    {
+      "id": "22-ulsan-jung-33",
+      "title": "국제정원박람회 개최",
+      "category": "",
+      "status": "notJudged",
+      "source": {
+        "sourceUrl": "https://policy.nec.go.kr/policy_pdf/20240410/PDF/PBINFO_PUB/3101/003_100152554_20240402_2.pdf",
+        "fetchedAt": "2026-09-27T17:14:30Z",
+        "publisher": "중앙선거관리위원회"
+      }
+    },
+    {
+      "id": "22-ulsan-jung-34",
+      "title": "선사유적관 건립",
+      "category": "",
+      "status": "notJudged",
+      "source": {
+        "sourceUrl": "https://policy.nec.go.kr/policy_pdf/20240410/PDF/PBINFO_PUB/3101/003_100152554_20240402_2.pdf",
+        "fetchedAt": "2026-09-27T17:14:30Z",
+        "publisher": "중앙선거관리위원회"
+      }
+    },
+    {
+      "id": "22-ulsan-jung-35",
+      "title": "태화강 철새 실내 관찰대 설치",
+      "category": "",
+      "status": "notJudged",
+      "source": {
+        "sourceUrl": "https://policy.nec.go.kr/policy_pdf/20240410/PDF/PBINFO_PUB/3101/003_100152554_20240402_2.pdf",
+        "fetchedAt": "2026-09-27T17:14:30Z",
+        "publisher": "중앙선거관리위원회"
+      }
+    }
+  ]
+}

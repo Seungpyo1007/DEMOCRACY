@@ -1,0 +1,66 @@
+{
+  "_note": "제22대 국회의원선거 광주 광산구 을 당선인 민형배 (더불어민주당). 책자형 선거공보 PDF 9쪽 「광산과 광주 제대로 키우겠습니다」 머리글자(메·인·지·상·주) 공약 제목 5개. 제목 아래 • 세부 항목과 9–10쪽의 동별 공약은 넣지 않았다. PDF 8쪽 「민형배가 합니다!」 1–4(정권 조기종식·검찰개혁·5·18 헌법 수록·자치분권)는 전국 정치 공약이라 넣지 않았고, 7쪽 「민형배가 했습니다!」(지난 활동)도 넣지 않았다. 끝의 !만 덜어냈다. 제목은 원문 문구를 따랐고 바꾼 것은 위에 적은 구호·수식어 덜어내기뿐이다. 분류(category)는 앱에 정해진 분류 체계가 없어 비워 두었다. 이행 여부는 판정하지 않았다(notJudged).",
+  "districtId": "nec-41ea4bd2",
+  "source": {
+    "sourceUrl": "https://policy.nec.go.kr/policy_pdf/20240410/PDF/PBINFO_PUB/2905/003_100151839_20240402_2.pdf",
+    "fetchedAt": "2026-09-27T17:14:30Z",
+    "publisher": "중앙선거관리위원회"
+  },
+  "pledges": [
+    {
+      "id": "22-gwangju-gwangsan-b-01",
+      "title": "광주전남 에너지 메가시티 추진",
+      "category": "",
+      "status": "notJudged",
+      "source": {
+        "sourceUrl": "https://policy.nec.go.kr/policy_pdf/20240410/PDF/PBINFO_PUB/2905/003_100151839_20240402_2.pdf",
+        "fetchedAt": "2026-09-27T17:14:30Z",
+        "publisher": "중앙선거관리위원회"
+      }
+    },
+    {
+      "id": "22-gwangju-gwangsan-b-02",
+      "title": "인공지능·미래차로 광주 미래먹거리 확보",
+      "category": "",
+      "status": "notJudged",
+      "source": {
+        "sourceUrl": "https://policy.nec.go.kr/policy_pdf/20240410/PDF/PBINFO_PUB/2905/003_100151839_20240402_2.pdf",
+        "fetchedAt": "2026-09-27T17:14:30Z",
+        "publisher": "중앙선거관리위원회"
+      }
+    },
+    {
+      "id": "22-gwangju-gwangsan-b-03",
+      "title": "지하철 공사 시민불편 최소화, 내집까지 편리한 교통체계 마련",
+      "category": "",
+      "status": "notJudged",
+      "source": {
+        "sourceUrl": "https://policy.nec.go.kr/policy_pdf/20240410/PDF/PBINFO_PUB/2905/003_100151839_20240402_2.pdf",
+        "fetchedAt": "2026-09-27T17:14:30Z",
+        "publisher": "중앙선거관리위원회"
+      }
+    },
+    {
+      "id": "22-gwangju-gwangsan-b-04",
+      "title": "골목상권 살리는 중소상공인 지원정책 강화",
+      "category": "",
+      "status": "notJudged",
+      "source": {
+        "sourceUrl": "https://policy.nec.go.kr/policy_pdf/20240410/PDF/PBINFO_PUB/2905/003_100151839_20240402_2.pdf",
+        "fetchedAt": "2026-09-27T17:14:30Z",
+        "publisher": "중앙선거관리위원회"
+      }
+    },
+    {
+      "id": "22-gwangju-gwangsan-b-05",
+      "title": "주권자 시민뜻대로! 교육·복지·문화 중심도시 광산",
+      "category": "",
+      "status": "notJudged",
+      "source": {
+        "sourceUrl": "https://policy.nec.go.kr/policy_pdf/20240410/PDF/PBINFO_PUB/2905/003_100151839_20240402_2.pdf",
+        "fetchedAt": "2026-09-27T17:14:30Z",
+        "publisher": "중앙선거관리위원회"
+      }
+    }
+  ]
+}

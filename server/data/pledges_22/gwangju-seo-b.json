@@ -1,0 +1,44 @@
+{
+  "_note": "제22대 국회의원선거 광주 서구 을 당선인 양부남 (더불어민주당). 책자형 선거공보 PDF 5–6쪽 「양부남의 약속 – 희망의 지도를 그리겠습니다 3대 정책」 제목 3개. 각 정책 아래 ①–④ 세부 항목, PDF 7–8쪽의 동별 공약, 9쪽의 분야별 간담회 발언, 10쪽의 더불어민주당 공통 공약은 넣지 않았다. 제목은 원문 문구를 따랐고 바꾼 것은 위에 적은 구호·수식어 덜어내기뿐이다. 분류(category)는 앱에 정해진 분류 체계가 없어 비워 두었다. 이행 여부는 판정하지 않았다(notJudged).",
+  "districtId": "nec-a1baa515",
+  "source": {
+    "sourceUrl": "https://policy.nec.go.kr/policy_pdf/20240410/PDF/PBINFO_PUB/2902/003_100151615_20240402_2.pdf",
+    "fetchedAt": "2026-09-27T17:14:30Z",
+    "publisher": "중앙선거관리위원회"
+  },
+  "pledges": [
+    {
+      "id": "22-gwangju-seo-b-01",
+      "title": "밀리언시티 기반 구축",
+      "category": "",
+      "status": "notJudged",
+      "source": {
+        "sourceUrl": "https://policy.nec.go.kr/policy_pdf/20240410/PDF/PBINFO_PUB/2902/003_100151615_20240402_2.pdf",
+        "fetchedAt": "2026-09-27T17:14:30Z",
+        "publisher": "중앙선거관리위원회"
+      }
+    },
+    {
+      "id": "22-gwangju-seo-b-02",
+      "title": "AI기반 교통체증 해소",
+      "category": "",
+      "status": "notJudged",
+      "source": {
+        "sourceUrl": "https://policy.nec.go.kr/policy_pdf/20240410/PDF/PBINFO_PUB/2902/003_100151615_20240402_2.pdf",
+        "fetchedAt": "2026-09-27T17:14:30Z",
+        "publisher": "중앙선거관리위원회"
+      }
+    },
+    {
+      "id": "22-gwangju-seo-b-03",
+      "title": "불공정한 수사시스템 개혁",
+      "category": "",
+      "status": "notJudged",
+      "source": {
+        "sourceUrl": "https://policy.nec.go.kr/policy_pdf/20240410/PDF/PBINFO_PUB/2902/003_100151615_20240402_2.pdf",
+        "fetchedAt": "2026-09-27T17:14:30Z",
+        "publisher": "중앙선거관리위원회"
+      }
+    }
+  ]
+}
