@@ -28,8 +28,8 @@ Reading needs no account; the account routes need a Supabase Auth sign-in.
 | `supabase/functions/ingest-assembly/`                      | Members (daily), bills and plenary votes (every 6 h), 21대 bills (`?mode=bills_backfill&age=21`)                          |
 | `supabase/functions/ingest-nec/`                           | Election and district codes and candidates (weekly), historical winners (`?mode=backfill`), final counts (`?mode=counts`) |
 | `supabase/functions/bff/`                                  | The API. `contract.ts` mirrors the app's Dart parsers. `account.ts`, `residency.ts`: signed-in. `community.ts`: posts.    |
-| `scripts/`                                                 | One-off importers that write SQL to stdout; `build_district_areas.ts` builds the mapping CSV                              |
-| `data/`                                                    | Inputs kept in git: the 22대 district mapping; `pledges_22/`, pilot pledge lists from 선거공보                            |
+| `scripts/`                                                 | One-off importers that write SQL to stdout; `build_district_*.ts` build the mapping and 선거구 변천 data                  |
+| `data/`                                                    | Inputs kept in git: the 22대 district mapping; `pledges_22/`, pilot pledge lists; `region_22/` + lineage, 선거구 변천     |
 | `testdata/`                                                | Hand-written API samples and district-mapping samples. See `testdata/README.md`.                                          |
 
 ## Develop
@@ -305,10 +305,35 @@ write function.
    - `import_historical_results.ts`: older results from CSV.
    - `import_geojson.ts`: 22대 boundaries. Confirm the OhmyNews `2024_22_elec_map` license first;
      `--license` is required.
-   - `import_curated.ts --kind pledges|region`: pilot districts only. The 22대 pilot pledge lists
-     are in `data/pledges_22/`, one file per district, taken from each winner's 선거공보 and marked
+   - `import_curated.ts --kind pledges|region`. The 22대 pilot pledge lists are in
+     `data/pledges_22/`, one file per district, taken from each winner's 선거공보 and marked
      `notJudged`:
      `for f in data/pledges_22/*.json; do deno run --allow-read scripts/import_curated.ts --kind pledges "$f"; done > pledges_22.sql`
+   - 선거구 변천 (history tab 「지역의 역사」, and past elections of renamed or split 선거구):
+     `data/region_22/<districtId>.json` and `data/district_lineage_22.csv`, already built.
+     ```sh
+     for f in data/region_22/*.json; do deno run --allow-read scripts/import_curated.ts --kind region "$f"; done > region_22.sql
+     deno run --allow-read scripts/import_district_lineage.ts data/district_lineage_22.csv > lineage_22.sql
+     psql "$SUPABASE_DB_URL" -f region_22.sql -f lineage_22.sql
+     ```
+     - `scripts/build_district_lineage.ts` compares the 구역표 in force on each election day (20대
+       `MST=181619`, 21대 `216091`, 22대 `261101`) on the 행정동 of the later day, with the same
+       KIKcd_H / KIKmix as step 6. Events say only what the two tables show: 구역 변동 없음, 이름
+       변경, 분할, 통합, 구역 변경 (by whole 구역표 items), 구역 재편 (what a newly named 선거구 is
+       made of). Anything the tables do not settle, such as a 행정동 cut later or 봉담읍's 리 in
+       2020, gets no event. Each event cites the version whose table made the change (2020:
+       `215523`, 2024: `261101`; the versions between change only 가운뎃점 and 시도 names).
+     - A lineage row says a 22대 선거구 lay wholly inside one earlier 선거구 of another name; the
+       BFF then shows that 선거구's winner for that year. The rest keep matching by name.
+     ```sh
+     for m in 181619 216091 261101; do
+       curl -o law_$m.json "https://www.law.go.kr/DRF/lawService.do?OC=test&target=law&MST=$m&type=JSON"
+     done
+     deno run --allow-read --allow-write scripts/build_district_lineage.ts \
+       --law20 law_181619.json --law21 law_216091.json --law22 law_261101.json \
+       --changed21 215523 --changed22 261101 --fetched-at 2026-09-28 \
+       --codes KIKcd_H.20260720 --mix KIKmix.20260720 --out data
+     ```
 8. **Handle election periods.** Switch candidates to hourly:
    `select cron.alter_job((select jobid from cron.job where jobname='ingest-nec-candidates'), schedule := '5 * * * *');`
    - While a count runs, set

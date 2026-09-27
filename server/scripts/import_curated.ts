@@ -1,8 +1,8 @@
-// Curated content (pilot districts only) → SQL.
+// Curated content → SQL.
 //
 //   --kind pledges : pledges typed in by hand from 선거공보 / 5대공약 PDFs.
 //                    Files live in data/pledges_22/, one per district.
-//   --kind region  : a district's chronology from a district office's records.
+//   --kind region  : a district's chronology, from the 구역표 or a district office's records.
 //
 // pledges JSON:
 //   { "districtId": "nec-xxxxxxxx",
@@ -23,7 +23,10 @@
 //
 // region JSON:
 //   { "districtId": "nec-xxxxxxxx", "source": {...},
-//     "events": [ { "year": 1944 | null, "title": "...", "detail": "..." } ] }
+//     "events": [ { "year": 1944 | null, "title": "...", "detail": "...",
+//                   "source": {...} } ] }           // optional; defaults to the doc's source
+//   data/region_22/ holds one per 22대 선거구 (선거구 변천 from the 구역표), built by
+//   scripts/build_district_lineage.ts.
 //
 // Usage: deno run --allow-read scripts/import_curated.ts --kind pledges pledges.json > p.sql
 
@@ -127,15 +130,16 @@ export function regionToSql(doc: J): string {
     if (e.year !== null && e.year !== undefined && !Number.isInteger(e.year)) {
       throw new Error(`events[${i}]: year must be an integer or null`);
     }
+    const es = e.source === undefined ? s : source(e.source, `events[${i}]`);
     return {
       district_id: districtId,
       year: (e.year as number | null | undefined) ?? null,
       title: e.title,
       detail: typeof e.detail === "string" ? e.detail : null,
       sort: i,
-      source_url: s.url,
-      publisher: s.publisher,
-      fetched_at: s.at,
+      source_url: es.url,
+      publisher: es.publisher,
+      fetched_at: es.at,
     };
   });
   const insert = rows.length === 0 ? "" : upsertSql("region_events", rows, []).trim();
