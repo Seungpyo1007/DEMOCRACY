@@ -1,0 +1,88 @@
+{
+  "_note": "제22대 국회의원선거 경기 광주시 을 당선인 안태준 (더불어민주당). 책자형 선거공보 PDF 4쪽 「광주발전을 위한 7대 과제」 1–7. 5번 가운데의 !는 원문대로 두었고 끝의 마침표만 덜어냈다. PDF 5–8쪽의 분야별 세부 공약은 7대 과제를 풀어 쓴 것이라, PDF 9–10쪽은 읍·면·동별 공약이라 넣지 않았다. 제목은 원문 문구를 따랐고 바꾼 것은 위에 적은 구호·수식어 덜어내기뿐이다. 분류(category)는 앱에 정해진 분류 체계가 없어 비워 두었다. 이행 여부는 판정하지 않았다(notJudged).",
+  "districtId": "nec-a749fad0",
+  "source": {
+    "sourceUrl": "https://policy.nec.go.kr/policy_pdf/20240410/PDF/PBINFO_PUB/4140/003_100151654_20240402_3.pdf",
+    "fetchedAt": "2026-09-28T02:00:00Z",
+    "publisher": "중앙선거관리위원회"
+  },
+  "pledges": [
+    {
+      "id": "22-gyeonggi-gwangju-b-01",
+      "title": "도로 위에서의 시간을 가족과 함께하는 시간으로 돌려 드리겠습니다",
+      "category": "",
+      "status": "notJudged",
+      "source": {
+        "sourceUrl": "https://policy.nec.go.kr/policy_pdf/20240410/PDF/PBINFO_PUB/4140/003_100151654_20240402_3.pdf",
+        "fetchedAt": "2026-09-28T02:00:00Z",
+        "publisher": "중앙선거관리위원회"
+      }
+    },
+    {
+      "id": "22-gyeonggi-gwangju-b-02",
+      "title": "촘촘한 복지망을 통해 모두가 행복한 삶을 준비하겠습니다",
+      "category": "",
+      "status": "notJudged",
+      "source": {
+        "sourceUrl": "https://policy.nec.go.kr/policy_pdf/20240410/PDF/PBINFO_PUB/4140/003_100151654_20240402_3.pdf",
+        "fetchedAt": "2026-09-28T02:00:00Z",
+        "publisher": "중앙선거관리위원회"
+      }
+    },
+    {
+      "id": "22-gyeonggi-gwangju-b-03",
+      "title": "세대별 교육인프라 확충, 누구나 원하는 교육을 받을 수 있어야 합니다",
+      "category": "",
+      "status": "notJudged",
+      "source": {
+        "sourceUrl": "https://policy.nec.go.kr/policy_pdf/20240410/PDF/PBINFO_PUB/4140/003_100151654_20240402_3.pdf",
+        "fetchedAt": "2026-09-28T02:00:00Z",
+        "publisher": "중앙선거관리위원회"
+      }
+    },
+    {
+      "id": "22-gyeonggi-gwangju-b-04",
+      "title": "모든 광주시민이 언제나 자유롭게 문화와 체육을 즐길 수 있어야 합니다",
+      "category": "",
+      "status": "notJudged",
+      "source": {
+        "sourceUrl": "https://policy.nec.go.kr/policy_pdf/20240410/PDF/PBINFO_PUB/4140/003_100151654_20240402_3.pdf",
+        "fetchedAt": "2026-09-28T02:00:00Z",
+        "publisher": "중앙선거관리위원회"
+      }
+    },
+    {
+      "id": "22-gyeonggi-gwangju-b-05",
+      "title": "소상공인 중소기업에 활력을! 첨단산업 연구개발(R&D)단지 유치 추진",
+      "category": "",
+      "status": "notJudged",
+      "source": {
+        "sourceUrl": "https://policy.nec.go.kr/policy_pdf/20240410/PDF/PBINFO_PUB/4140/003_100151654_20240402_3.pdf",
+        "fetchedAt": "2026-09-28T02:00:00Z",
+        "publisher": "중앙선거관리위원회"
+      }
+    },
+    {
+      "id": "22-gyeonggi-gwangju-b-06",
+      "title": "청년이 살아 움직이는 광주, 취업·창업 경쟁력을 높이겠습니다",
+      "category": "",
+      "status": "notJudged",
+      "source": {
+        "sourceUrl": "https://policy.nec.go.kr/policy_pdf/20240410/PDF/PBINFO_PUB/4140/003_100151654_20240402_3.pdf",
+        "fetchedAt": "2026-09-28T02:00:00Z",
+        "publisher": "중앙선거관리위원회"
+      }
+    },
+    {
+      "id": "22-gyeonggi-gwangju-b-07",
+      "title": "도시 개발과 환경 보존이 균형을 이루는 지속 가능한 광주를 만들겠습니다",
+      "category": "",
+      "status": "notJudged",
+      "source": {
+        "sourceUrl": "https://policy.nec.go.kr/policy_pdf/20240410/PDF/PBINFO_PUB/4140/003_100151654_20240402_3.pdf",
+        "fetchedAt": "2026-09-28T02:00:00Z",
+        "publisher": "중앙선거관리위원회"
+      }
+    }
+  ]
+}

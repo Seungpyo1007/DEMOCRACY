@@ -1,0 +1,352 @@
+{
+  "_note": "제22대 국회의원선거 경기 화성시 을 당선인 이준석 (개혁신당). 책자형 선거공보 PDF 9–10쪽 「동탄의 가치를 올리기 위해 이준석이 드리는 약속!」의 체크 항목 31개(사통팔달 동탄 교통 9, 대한민국이 투자하는 동탄 교육 8, 문화가 넘실대는 동탄 8, 건강한 동탄, 따뜻한 동탄 6). 각 항목은 콜론 뒤 설명까지 원문 한 줄 그대로 두었다. 글자층이 지도 글씨와 섞여 있어 쪽 이미지를 보고 순서와 문구를 맞췄고, 글자층의 깨진 글자(스퐅포츠)는 이미지대로 고쳤다. PDF 2–8쪽의 정치 소회와 공약 설명 글은 넣지 않았다. 제목은 원문 문구를 따랐고 바꾼 것은 위에 적은 구호·수식어 덜어내기뿐이다. 분류(category)는 앱에 정해진 분류 체계가 없어 비워 두었다. 이행 여부는 판정하지 않았다(notJudged).",
+  "districtId": "nec-74633845",
+  "source": {
+    "sourceUrl": "https://policy.nec.go.kr/policy_pdf/20240410/PDF/PBINFO_PUB/4149/003_100152972_20240402_2.pdf",
+    "fetchedAt": "2026-09-28T02:00:00Z",
+    "publisher": "중앙선거관리위원회"
+  },
+  "pledges": [
+    {
+      "id": "22-gyeonggi-hwaseong-b-01",
+      "title": "남동탄IC 설치: 남동탄 주민들이 기흥IC까지 올라가야 하는 문제 해결",
+      "category": "",
+      "status": "notJudged",
+      "source": {
+        "sourceUrl": "https://policy.nec.go.kr/policy_pdf/20240410/PDF/PBINFO_PUB/4149/003_100152972_20240402_2.pdf",
+        "fetchedAt": "2026-09-28T02:00:00Z",
+        "publisher": "중앙선거관리위원회"
+      }
+    },
+    {
+      "id": "22-gyeonggi-hwaseong-b-02",
+      "title": "남사터널 설치: 용인 남사 반도체 단지와 동탄 신동 신주거단지를 연결해 동반성장",
+      "category": "",
+      "status": "notJudged",
+      "source": {
+        "sourceUrl": "https://policy.nec.go.kr/policy_pdf/20240410/PDF/PBINFO_PUB/4149/003_100152972_20240402_2.pdf",
+        "fetchedAt": "2026-09-28T02:00:00Z",
+        "publisher": "중앙선거관리위원회"
+      }
+    },
+    {
+      "id": "22-gyeonggi-hwaseong-b-03",
+      "title": "신리IC, 중리IC 진출입로 개선: 만성적 교통 정체 해소",
+      "category": "",
+      "status": "notJudged",
+      "source": {
+        "sourceUrl": "https://policy.nec.go.kr/policy_pdf/20240410/PDF/PBINFO_PUB/4149/003_100152972_20240402_2.pdf",
+        "fetchedAt": "2026-09-28T02:00:00Z",
+        "publisher": "중앙선거관리위원회"
+      }
+    },
+    {
+      "id": "22-gyeonggi-hwaseong-b-04",
+      "title": "분당선 동탄 연장 및 분당선 호수공원역 설치",
+      "category": "",
+      "status": "notJudged",
+      "source": {
+        "sourceUrl": "https://policy.nec.go.kr/policy_pdf/20240410/PDF/PBINFO_PUB/4149/003_100152972_20240402_2.pdf",
+        "fetchedAt": "2026-09-28T02:00:00Z",
+        "publisher": "중앙선거관리위원회"
+      }
+    },
+    {
+      "id": "22-gyeonggi-hwaseong-b-05",
+      "title": "동탄2신도시 신호체계 전면 개혁: 지능형 교통체계 도입으로 만성 교통 정체 해소",
+      "category": "",
+      "status": "notJudged",
+      "source": {
+        "sourceUrl": "https://policy.nec.go.kr/policy_pdf/20240410/PDF/PBINFO_PUB/4149/003_100152972_20240402_2.pdf",
+        "fetchedAt": "2026-09-28T02:00:00Z",
+        "publisher": "중앙선거관리위원회"
+      }
+    },
+    {
+      "id": "22-gyeonggi-hwaseong-b-06",
+      "title": "비통학시간 30Km 제한 해체: 등하교 외 시간은 속도 제한 완화",
+      "category": "",
+      "status": "notJudged",
+      "source": {
+        "sourceUrl": "https://policy.nec.go.kr/policy_pdf/20240410/PDF/PBINFO_PUB/4149/003_100152972_20240402_2.pdf",
+        "fetchedAt": "2026-09-28T02:00:00Z",
+        "publisher": "중앙선거관리위원회"
+      }
+    },
+    {
+      "id": "22-gyeonggi-hwaseong-b-07",
+      "title": "GTX-A 정기권 도입: 정기권 도입으로 편도 4,450원 교통비 부담 경감",
+      "category": "",
+      "status": "notJudged",
+      "source": {
+        "sourceUrl": "https://policy.nec.go.kr/policy_pdf/20240410/PDF/PBINFO_PUB/4149/003_100152972_20240402_2.pdf",
+        "fetchedAt": "2026-09-28T02:00:00Z",
+        "publisher": "중앙선거관리위원회"
+      }
+    },
+    {
+      "id": "22-gyeonggi-hwaseong-b-08",
+      "title": "동탄발 SRT 추진: 부족한 선로용량 문제 해결하여 동탄 주민의 이동편의 극대화",
+      "category": "",
+      "status": "notJudged",
+      "source": {
+        "sourceUrl": "https://policy.nec.go.kr/policy_pdf/20240410/PDF/PBINFO_PUB/4149/003_100152972_20240402_2.pdf",
+        "fetchedAt": "2026-09-28T02:00:00Z",
+        "publisher": "중앙선거관리위원회"
+      }
+    },
+    {
+      "id": "22-gyeonggi-hwaseong-b-09",
+      "title": "동탄 트램, 동탄-인덕원선, 수도권 내륙선(동탄-청주공항), 동탄-부발선 적기 개통",
+      "category": "",
+      "status": "notJudged",
+      "source": {
+        "sourceUrl": "https://policy.nec.go.kr/policy_pdf/20240410/PDF/PBINFO_PUB/4149/003_100152972_20240402_2.pdf",
+        "fetchedAt": "2026-09-28T02:00:00Z",
+        "publisher": "중앙선거관리위원회"
+      }
+    },
+    {
+      "id": "22-gyeonggi-hwaseong-b-10",
+      "title": "동탄 과학고와 예술고 설치",
+      "category": "",
+      "status": "notJudged",
+      "source": {
+        "sourceUrl": "https://policy.nec.go.kr/policy_pdf/20240410/PDF/PBINFO_PUB/4149/003_100152972_20240402_2.pdf",
+        "fetchedAt": "2026-09-28T02:00:00Z",
+        "publisher": "중앙선거관리위원회"
+      }
+    },
+    {
+      "id": "22-gyeonggi-hwaseong-b-11",
+      "title": "왕배중학교, 아인중학교(가) 신설: 학교 과밀 해결",
+      "category": "",
+      "status": "notJudged",
+      "source": {
+        "sourceUrl": "https://policy.nec.go.kr/policy_pdf/20240410/PDF/PBINFO_PUB/4149/003_100152972_20240402_2.pdf",
+        "fetchedAt": "2026-09-28T02:00:00Z",
+        "publisher": "중앙선거관리위원회"
+      }
+    },
+    {
+      "id": "22-gyeonggi-hwaseong-b-12",
+      "title": "동탄 교육특화지구 지정: 특별법 제정으로 동탄의 첨단 산업 여건을 교육환경에 활용",
+      "category": "",
+      "status": "notJudged",
+      "source": {
+        "sourceUrl": "https://policy.nec.go.kr/policy_pdf/20240410/PDF/PBINFO_PUB/4149/003_100152972_20240402_2.pdf",
+        "fetchedAt": "2026-09-28T02:00:00Z",
+        "publisher": "중앙선거관리위원회"
+      }
+    },
+    {
+      "id": "22-gyeonggi-hwaseong-b-13",
+      "title": "수학교육 국가책임제 시범 실시: 동탄 학생들의 수학 성취도 상승 도모",
+      "category": "",
+      "status": "notJudged",
+      "source": {
+        "sourceUrl": "https://policy.nec.go.kr/policy_pdf/20240410/PDF/PBINFO_PUB/4149/003_100152972_20240402_2.pdf",
+        "fetchedAt": "2026-09-28T02:00:00Z",
+        "publisher": "중앙선거관리위원회"
+      }
+    },
+    {
+      "id": "22-gyeonggi-hwaseong-b-14",
+      "title": "통학 시간대 전용 순환 버스 운영: 라이딩 부담 줄이고 아이들의 교육 통학권 증대",
+      "category": "",
+      "status": "notJudged",
+      "source": {
+        "sourceUrl": "https://policy.nec.go.kr/policy_pdf/20240410/PDF/PBINFO_PUB/4149/003_100152972_20240402_2.pdf",
+        "fetchedAt": "2026-09-28T02:00:00Z",
+        "publisher": "중앙선거관리위원회"
+      }
+    },
+    {
+      "id": "22-gyeonggi-hwaseong-b-15",
+      "title": "권역별 청소년 콤플렉스 센터 건립: 창의력 넘치는 동탄 아이들 되도록",
+      "category": "",
+      "status": "notJudged",
+      "source": {
+        "sourceUrl": "https://policy.nec.go.kr/policy_pdf/20240410/PDF/PBINFO_PUB/4149/003_100152972_20240402_2.pdf",
+        "fetchedAt": "2026-09-28T02:00:00Z",
+        "publisher": "중앙선거관리위원회"
+      }
+    },
+    {
+      "id": "22-gyeonggi-hwaseong-b-16",
+      "title": "동탄2신도시 화성교육지원청 설립: 더 이상 오산교육지원청이 동탄을 관할하지 않도록",
+      "category": "",
+      "status": "notJudged",
+      "source": {
+        "sourceUrl": "https://policy.nec.go.kr/policy_pdf/20240410/PDF/PBINFO_PUB/4149/003_100152972_20240402_2.pdf",
+        "fetchedAt": "2026-09-28T02:00:00Z",
+        "publisher": "중앙선거관리위원회"
+      }
+    },
+    {
+      "id": "22-gyeonggi-hwaseong-b-17",
+      "title": "권역거점돌봄센터 설치: 방과 후 사교육 말고도 안심하고 맡길 수 있는 돌봄센터 설치",
+      "category": "",
+      "status": "notJudged",
+      "source": {
+        "sourceUrl": "https://policy.nec.go.kr/policy_pdf/20240410/PDF/PBINFO_PUB/4149/003_100152972_20240402_2.pdf",
+        "fetchedAt": "2026-09-28T02:00:00Z",
+        "publisher": "중앙선거관리위원회"
+      }
+    },
+    {
+      "id": "22-gyeonggi-hwaseong-b-18",
+      "title": "동탄 잡월드 설치: 수도권 유일 국립직업체험관 분당 잡월드 동탄에 유치",
+      "category": "",
+      "status": "notJudged",
+      "source": {
+        "sourceUrl": "https://policy.nec.go.kr/policy_pdf/20240410/PDF/PBINFO_PUB/4149/003_100152972_20240402_2.pdf",
+        "fetchedAt": "2026-09-28T02:00:00Z",
+        "publisher": "중앙선거관리위원회"
+      }
+    },
+    {
+      "id": "22-gyeonggi-hwaseong-b-19",
+      "title": "동탄역앞 복합문화센터: 공연장,전시관, 도서관이 어우러진 문화 공간(아르떼 뮤지엄)",
+      "category": "",
+      "status": "notJudged",
+      "source": {
+        "sourceUrl": "https://policy.nec.go.kr/policy_pdf/20240410/PDF/PBINFO_PUB/4149/003_100152972_20240402_2.pdf",
+        "fetchedAt": "2026-09-28T02:00:00Z",
+        "publisher": "중앙선거관리위원회"
+      }
+    },
+    {
+      "id": "22-gyeonggi-hwaseong-b-20",
+      "title": "종합경기타운 건립: 축구, 테니스장 빌리러 멀리 나가시지 않도록",
+      "category": "",
+      "status": "notJudged",
+      "source": {
+        "sourceUrl": "https://policy.nec.go.kr/policy_pdf/20240410/PDF/PBINFO_PUB/4149/003_100152972_20240402_2.pdf",
+        "fetchedAt": "2026-09-28T02:00:00Z",
+        "publisher": "중앙선거관리위원회"
+      }
+    },
+    {
+      "id": "22-gyeonggi-hwaseong-b-21",
+      "title": "경부고속도로 상부에 공원 ’굿모닝파크’(가) 개발: 동탄 한가운데에 울창한 쉼터를",
+      "category": "",
+      "status": "notJudged",
+      "source": {
+        "sourceUrl": "https://policy.nec.go.kr/policy_pdf/20240410/PDF/PBINFO_PUB/4149/003_100152972_20240402_2.pdf",
+        "fetchedAt": "2026-09-28T02:00:00Z",
+        "publisher": "중앙선거관리위원회"
+      }
+    },
+    {
+      "id": "22-gyeonggi-hwaseong-b-22",
+      "title": "호수공원 옆 국제규격 수영장 신설: 동탄 시민의 건강은 소중하니까",
+      "category": "",
+      "status": "notJudged",
+      "source": {
+        "sourceUrl": "https://policy.nec.go.kr/policy_pdf/20240410/PDF/PBINFO_PUB/4149/003_100152972_20240402_2.pdf",
+        "fetchedAt": "2026-09-28T02:00:00Z",
+        "publisher": "중앙선거관리위원회"
+      }
+    },
+    {
+      "id": "22-gyeonggi-hwaseong-b-23",
+      "title": "동탄호수-여울공원-자라뫼 공원 특성화 축제 및 둘레길 개발: 신명 나는 동탄을 만듭니다",
+      "category": "",
+      "status": "notJudged",
+      "source": {
+        "sourceUrl": "https://policy.nec.go.kr/policy_pdf/20240410/PDF/PBINFO_PUB/4149/003_100152972_20240402_2.pdf",
+        "fetchedAt": "2026-09-28T02:00:00Z",
+        "publisher": "중앙선거관리위원회"
+      }
+    },
+    {
+      "id": "22-gyeonggi-hwaseong-b-24",
+      "title": "고교 스포츠 리그전 활성화: 스포츠 속에 꽃피는 우리 아이들의 리더십과 팔로우십",
+      "category": "",
+      "status": "notJudged",
+      "source": {
+        "sourceUrl": "https://policy.nec.go.kr/policy_pdf/20240410/PDF/PBINFO_PUB/4149/003_100152972_20240402_2.pdf",
+        "fetchedAt": "2026-09-28T02:00:00Z",
+        "publisher": "중앙선거관리위원회"
+      }
+    },
+    {
+      "id": "22-gyeonggi-hwaseong-b-25",
+      "title": "카라반 캠핑장 및 글램핑장과 피크닉 존 조성: 동탄 시민들의 ‘불멍’할 권리",
+      "category": "",
+      "status": "notJudged",
+      "source": {
+        "sourceUrl": "https://policy.nec.go.kr/policy_pdf/20240410/PDF/PBINFO_PUB/4149/003_100152972_20240402_2.pdf",
+        "fetchedAt": "2026-09-28T02:00:00Z",
+        "publisher": "중앙선거관리위원회"
+      }
+    },
+    {
+      "id": "22-gyeonggi-hwaseong-b-26",
+      "title": "24시간 소아 어린이병원 신설: 아이 많은 동탄에 필수, 경기 남부 권역 최대 규모 어린이병원",
+      "category": "",
+      "status": "notJudged",
+      "source": {
+        "sourceUrl": "https://policy.nec.go.kr/policy_pdf/20240410/PDF/PBINFO_PUB/4149/003_100152972_20240402_2.pdf",
+        "fetchedAt": "2026-09-28T02:00:00Z",
+        "publisher": "중앙선거관리위원회"
+      }
+    },
+    {
+      "id": "22-gyeonggi-hwaseong-b-27",
+      "title": "국립 동탄 암센터와 함께 K대학병원 신설: 동탄을 의료 완판 도시로",
+      "category": "",
+      "status": "notJudged",
+      "source": {
+        "sourceUrl": "https://policy.nec.go.kr/policy_pdf/20240410/PDF/PBINFO_PUB/4149/003_100152972_20240402_2.pdf",
+        "fetchedAt": "2026-09-28T02:00:00Z",
+        "publisher": "중앙선거관리위원회"
+      }
+    },
+    {
+      "id": "22-gyeonggi-hwaseong-b-28",
+      "title": "동탄구청 신설: 출장소로는 감당할 수 없는 100만 도시의 행정 수요, 핑계말고 즉각 설치",
+      "category": "",
+      "status": "notJudged",
+      "source": {
+        "sourceUrl": "https://policy.nec.go.kr/policy_pdf/20240410/PDF/PBINFO_PUB/4149/003_100152972_20240402_2.pdf",
+        "fetchedAt": "2026-09-28T02:00:00Z",
+        "publisher": "중앙선거관리위원회"
+      }
+    },
+    {
+      "id": "22-gyeonggi-hwaseong-b-29",
+      "title": "달빛어린이병원 추가 유치: 현재 동탄에 2곳 + 알파",
+      "category": "",
+      "status": "notJudged",
+      "source": {
+        "sourceUrl": "https://policy.nec.go.kr/policy_pdf/20240410/PDF/PBINFO_PUB/4149/003_100152972_20240402_2.pdf",
+        "fetchedAt": "2026-09-28T02:00:00Z",
+        "publisher": "중앙선거관리위원회"
+      }
+    },
+    {
+      "id": "22-gyeonggi-hwaseong-b-30",
+      "title": "문화공연장 ‘트라이엠파크’ 업그레이드: 오페라하우스 급 공연장으로",
+      "category": "",
+      "status": "notJudged",
+      "source": {
+        "sourceUrl": "https://policy.nec.go.kr/policy_pdf/20240410/PDF/PBINFO_PUB/4149/003_100152972_20240402_2.pdf",
+        "fetchedAt": "2026-09-28T02:00:00Z",
+        "publisher": "중앙선거관리위원회"
+      }
+    },
+    {
+      "id": "22-gyeonggi-hwaseong-b-31",
+      "title": "화성시립미술관 및 공공청사부지 평생교육문화원(가) 조속 건립 추진",
+      "category": "",
+      "status": "notJudged",
+      "source": {
+        "sourceUrl": "https://policy.nec.go.kr/policy_pdf/20240410/PDF/PBINFO_PUB/4149/003_100152972_20240402_2.pdf",
+        "fetchedAt": "2026-09-28T02:00:00Z",
+        "publisher": "중앙선거관리위원회"
+      }
+    }
+  ]
+}

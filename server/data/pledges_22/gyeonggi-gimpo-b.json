@@ -1,0 +1,66 @@
+{
+  "_note": "제22대 국회의원선거 경기 김포시 을 당선인 박상혁 (더불어민주당). 책자형 선거공보 PDF 5쪽 「발전하는 김포! 멈출 수 없습니다!」 'NEW김포 프로젝트' 1–5. 각 프로젝트 아래 세부 항목(1번의 체크 항목 등)은 넣지 않았다. PDF 4쪽은 지난 4년 실적이라, PDF 6쪽 「박상혁의 행복한 김포 만들기」는 읍·면·동별 공약(같은 쪽 「생활밀착 특별 공약」 4개 포함)이라, PDF 2–3쪽은 정권심판 글이라 넣지 않았다. 끝의 !만 덜어냈다. 제목은 원문 문구를 따랐고 바꾼 것은 위에 적은 구호·수식어 덜어내기뿐이다. 분류(category)는 앱에 정해진 분류 체계가 없어 비워 두었다. 이행 여부는 판정하지 않았다(notJudged).",
+  "districtId": "nec-d1226bc9",
+  "source": {
+    "sourceUrl": "https://policy.nec.go.kr/policy_pdf/20240410/PDF/PBINFO_PUB/4139/003_100152035_20240401_2.pdf",
+    "fetchedAt": "2026-09-28T02:00:00Z",
+    "publisher": "중앙선거관리위원회"
+  },
+  "pledges": [
+    {
+      "id": "22-gyeonggi-gimpo-b-01",
+      "title": "김포-서울 출퇴근 30분시대",
+      "category": "",
+      "status": "notJudged",
+      "source": {
+        "sourceUrl": "https://policy.nec.go.kr/policy_pdf/20240410/PDF/PBINFO_PUB/4139/003_100152035_20240401_2.pdf",
+        "fetchedAt": "2026-09-28T02:00:00Z",
+        "publisher": "중앙선거관리위원회"
+      }
+    },
+    {
+      "id": "22-gyeonggi-gimpo-b-02",
+      "title": "수도권 대표 국제교육 특화도시",
+      "category": "",
+      "status": "notJudged",
+      "source": {
+        "sourceUrl": "https://policy.nec.go.kr/policy_pdf/20240410/PDF/PBINFO_PUB/4139/003_100152035_20240401_2.pdf",
+        "fetchedAt": "2026-09-28T02:00:00Z",
+        "publisher": "중앙선거관리위원회"
+      }
+    },
+    {
+      "id": "22-gyeonggi-gimpo-b-03",
+      "title": "콤팩트시티로 신도시 완성, 김포발전 원동력으로",
+      "category": "",
+      "status": "notJudged",
+      "source": {
+        "sourceUrl": "https://policy.nec.go.kr/policy_pdf/20240410/PDF/PBINFO_PUB/4139/003_100152035_20240401_2.pdf",
+        "fetchedAt": "2026-09-28T02:00:00Z",
+        "publisher": "중앙선거관리위원회"
+      }
+    },
+    {
+      "id": "22-gyeonggi-gimpo-b-04",
+      "title": "건강하게 마음놓고, 아이키우기 좋은 도시 김포",
+      "category": "",
+      "status": "notJudged",
+      "source": {
+        "sourceUrl": "https://policy.nec.go.kr/policy_pdf/20240410/PDF/PBINFO_PUB/4139/003_100152035_20240401_2.pdf",
+        "fetchedAt": "2026-09-28T02:00:00Z",
+        "publisher": "중앙선거관리위원회"
+      }
+    },
+    {
+      "id": "22-gyeonggi-gimpo-b-05",
+      "title": "색깔있는 관광·여가 도시",
+      "category": "",
+      "status": "notJudged",
+      "source": {
+        "sourceUrl": "https://policy.nec.go.kr/policy_pdf/20240410/PDF/PBINFO_PUB/4139/003_100152035_20240401_2.pdf",
+        "fetchedAt": "2026-09-28T02:00:00Z",
+        "publisher": "중앙선거관리위원회"
+      }
+    }
+  ]
+}

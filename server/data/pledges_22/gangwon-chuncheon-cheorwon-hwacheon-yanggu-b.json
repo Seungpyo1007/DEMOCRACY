@@ -1,0 +1,418 @@
+{
+  "_note": "제22대 국회의원선거 강원 춘천시철원군화천군양구군 을 당선인 한기호 (국민의힘). 책자형 선거공보 PDF 7–8쪽(인쇄 08–09쪽) 「한기호는 … 약속합니다!」의 ● 항목 37개(미래성장동력 확보를 통한 지역소멸에 대응하겠습니다 12, 먹고사는 문제 해결! 살기 좋은 내 고장을 만들겠습니다 9, 부모와 자녀 모두 행복한 촘촘한 돌봄과 교육 환경을 조성하겠습니다 7, 수도권 1시간대 생활권을 구축하겠습니다 9). ● 아래 - 세부 설명은 넣지 않았다. PDF 2쪽 「출사표」 1–7은 1–3이 후보 자기소개이고 4–7이 위 목록의 제목을 요약한 것이라 넣지 않았다. PDF 5–6쪽은 의정 성과라, PDF 9–10쪽은 국민의힘 전국 공약이라 넣지 않았다. 제목은 원문 문구를 따랐고 바꾼 것은 위에 적은 구호·수식어 덜어내기뿐이다. 분류(category)는 앱에 정해진 분류 체계가 없어 비워 두었다. 이행 여부는 판정하지 않았다(notJudged).",
+  "districtId": "nec-c93921d0",
+  "source": {
+    "sourceUrl": "https://policy.nec.go.kr/policy_pdf/20240410/PDF/PBINFO_PUB/5201/003_100153083_20240402_2.pdf",
+    "fetchedAt": "2026-09-28T02:00:00Z",
+    "publisher": "중앙선거관리위원회"
+  },
+  "pledges": [
+    {
+      "id": "22-gangwon-chuncheon-cheorwon-hwacheon-yanggu-b-01",
+      "title": "서울-지방상생형 ‘골드시티’ 유치",
+      "category": "",
+      "status": "notJudged",
+      "source": {
+        "sourceUrl": "https://policy.nec.go.kr/policy_pdf/20240410/PDF/PBINFO_PUB/5201/003_100153083_20240402_2.pdf",
+        "fetchedAt": "2026-09-28T02:00:00Z",
+        "publisher": "중앙선거관리위원회"
+      }
+    },
+    {
+      "id": "22-gangwon-chuncheon-cheorwon-hwacheon-yanggu-b-02",
+      "title": "민간군사기업법 제정을 통한 지역 일자리 창출",
+      "category": "",
+      "status": "notJudged",
+      "source": {
+        "sourceUrl": "https://policy.nec.go.kr/policy_pdf/20240410/PDF/PBINFO_PUB/5201/003_100153083_20240402_2.pdf",
+        "fetchedAt": "2026-09-28T02:00:00Z",
+        "publisher": "중앙선거관리위원회"
+      }
+    },
+    {
+      "id": "22-gangwon-chuncheon-cheorwon-hwacheon-yanggu-b-03",
+      "title": "강원특화형 방산혁신클러스터 조성",
+      "category": "",
+      "status": "notJudged",
+      "source": {
+        "sourceUrl": "https://policy.nec.go.kr/policy_pdf/20240410/PDF/PBINFO_PUB/5201/003_100153083_20240402_2.pdf",
+        "fetchedAt": "2026-09-28T02:00:00Z",
+        "publisher": "중앙선거관리위원회"
+      }
+    },
+    {
+      "id": "22-gangwon-chuncheon-cheorwon-hwacheon-yanggu-b-04",
+      "title": "미활용 군용지, 국가사업 및 테마산업 유치",
+      "category": "",
+      "status": "notJudged",
+      "source": {
+        "sourceUrl": "https://policy.nec.go.kr/policy_pdf/20240410/PDF/PBINFO_PUB/5201/003_100153083_20240402_2.pdf",
+        "fetchedAt": "2026-09-28T02:00:00Z",
+        "publisher": "중앙선거관리위원회"
+      }
+    },
+    {
+      "id": "22-gangwon-chuncheon-cheorwon-hwacheon-yanggu-b-05",
+      "title": "춘천 강북지역, 교육·문화 복합타운 조성 및 국제학교 설립",
+      "category": "",
+      "status": "notJudged",
+      "source": {
+        "sourceUrl": "https://policy.nec.go.kr/policy_pdf/20240410/PDF/PBINFO_PUB/5201/003_100153083_20240402_2.pdf",
+        "fetchedAt": "2026-09-28T02:00:00Z",
+        "publisher": "중앙선거관리위원회"
+      }
+    },
+    {
+      "id": "22-gangwon-chuncheon-cheorwon-hwacheon-yanggu-b-06",
+      "title": "접경지역 경제특구 조성",
+      "category": "",
+      "status": "notJudged",
+      "source": {
+        "sourceUrl": "https://policy.nec.go.kr/policy_pdf/20240410/PDF/PBINFO_PUB/5201/003_100153083_20240402_2.pdf",
+        "fetchedAt": "2026-09-28T02:00:00Z",
+        "publisher": "중앙선거관리위원회"
+      }
+    },
+    {
+      "id": "22-gangwon-chuncheon-cheorwon-hwacheon-yanggu-b-07",
+      "title": "지역활력타운(주거+생활인프라+생활서비스) 조성",
+      "category": "",
+      "status": "notJudged",
+      "source": {
+        "sourceUrl": "https://policy.nec.go.kr/policy_pdf/20240410/PDF/PBINFO_PUB/5201/003_100153083_20240402_2.pdf",
+        "fetchedAt": "2026-09-28T02:00:00Z",
+        "publisher": "중앙선거관리위원회"
+      }
+    },
+    {
+      "id": "22-gangwon-chuncheon-cheorwon-hwacheon-yanggu-b-08",
+      "title": "軍 아파트 및 공공임대주택 건립",
+      "category": "",
+      "status": "notJudged",
+      "source": {
+        "sourceUrl": "https://policy.nec.go.kr/policy_pdf/20240410/PDF/PBINFO_PUB/5201/003_100153083_20240402_2.pdf",
+        "fetchedAt": "2026-09-28T02:00:00Z",
+        "publisher": "중앙선거관리위원회"
+      }
+    },
+    {
+      "id": "22-gangwon-chuncheon-cheorwon-hwacheon-yanggu-b-09",
+      "title": "춘천 신북읍 항공대 이전",
+      "category": "",
+      "status": "notJudged",
+      "source": {
+        "sourceUrl": "https://policy.nec.go.kr/policy_pdf/20240410/PDF/PBINFO_PUB/5201/003_100153083_20240402_2.pdf",
+        "fetchedAt": "2026-09-28T02:00:00Z",
+        "publisher": "중앙선거관리위원회"
+      }
+    },
+    {
+      "id": "22-gangwon-chuncheon-cheorwon-hwacheon-yanggu-b-10",
+      "title": "동서고속화철도 역세권(화천·양구) 거점지구 조성",
+      "category": "",
+      "status": "notJudged",
+      "source": {
+        "sourceUrl": "https://policy.nec.go.kr/policy_pdf/20240410/PDF/PBINFO_PUB/5201/003_100153083_20240402_2.pdf",
+        "fetchedAt": "2026-09-28T02:00:00Z",
+        "publisher": "중앙선거관리위원회"
+      }
+    },
+    {
+      "id": "22-gangwon-chuncheon-cheorwon-hwacheon-yanggu-b-11",
+      "title": "화천·양구 제2농공단지 조성",
+      "category": "",
+      "status": "notJudged",
+      "source": {
+        "sourceUrl": "https://policy.nec.go.kr/policy_pdf/20240410/PDF/PBINFO_PUB/5201/003_100153083_20240402_2.pdf",
+        "fetchedAt": "2026-09-28T02:00:00Z",
+        "publisher": "중앙선거관리위원회"
+      }
+    },
+    {
+      "id": "22-gangwon-chuncheon-cheorwon-hwacheon-yanggu-b-12",
+      "title": "반려동물 테마파크 조성",
+      "category": "",
+      "status": "notJudged",
+      "source": {
+        "sourceUrl": "https://policy.nec.go.kr/policy_pdf/20240410/PDF/PBINFO_PUB/5201/003_100153083_20240402_2.pdf",
+        "fetchedAt": "2026-09-28T02:00:00Z",
+        "publisher": "중앙선거관리위원회"
+      }
+    },
+    {
+      "id": "22-gangwon-chuncheon-cheorwon-hwacheon-yanggu-b-13",
+      "title": "군납 안정화 및 농산물 제값받기·농자재 반값 정책 확대",
+      "category": "",
+      "status": "notJudged",
+      "source": {
+        "sourceUrl": "https://policy.nec.go.kr/policy_pdf/20240410/PDF/PBINFO_PUB/5201/003_100153083_20240402_2.pdf",
+        "fetchedAt": "2026-09-28T02:00:00Z",
+        "publisher": "중앙선거관리위원회"
+      }
+    },
+    {
+      "id": "22-gangwon-chuncheon-cheorwon-hwacheon-yanggu-b-14",
+      "title": "소양호, 파로호! 테마관광지 및 지역연계 관광 네트워크 조성",
+      "category": "",
+      "status": "notJudged",
+      "source": {
+        "sourceUrl": "https://policy.nec.go.kr/policy_pdf/20240410/PDF/PBINFO_PUB/5201/003_100153083_20240402_2.pdf",
+        "fetchedAt": "2026-09-28T02:00:00Z",
+        "publisher": "중앙선거관리위원회"
+      }
+    },
+    {
+      "id": "22-gangwon-chuncheon-cheorwon-hwacheon-yanggu-b-15",
+      "title": "軍 시설공사 및 군수품 조달, 지역업체 참여 확대",
+      "category": "",
+      "status": "notJudged",
+      "source": {
+        "sourceUrl": "https://policy.nec.go.kr/policy_pdf/20240410/PDF/PBINFO_PUB/5201/003_100153083_20240402_2.pdf",
+        "fetchedAt": "2026-09-28T02:00:00Z",
+        "publisher": "중앙선거관리위원회"
+      }
+    },
+    {
+      "id": "22-gangwon-chuncheon-cheorwon-hwacheon-yanggu-b-16",
+      "title": "절대농지 해제 및 주민 체감형 농지규제 완화",
+      "category": "",
+      "status": "notJudged",
+      "source": {
+        "sourceUrl": "https://policy.nec.go.kr/policy_pdf/20240410/PDF/PBINFO_PUB/5201/003_100153083_20240402_2.pdf",
+        "fetchedAt": "2026-09-28T02:00:00Z",
+        "publisher": "중앙선거관리위원회"
+      }
+    },
+    {
+      "id": "22-gangwon-chuncheon-cheorwon-hwacheon-yanggu-b-17",
+      "title": "지역 특산업 가업 잇기 귀향 프로젝트 지원",
+      "category": "",
+      "status": "notJudged",
+      "source": {
+        "sourceUrl": "https://policy.nec.go.kr/policy_pdf/20240410/PDF/PBINFO_PUB/5201/003_100153083_20240402_2.pdf",
+        "fetchedAt": "2026-09-28T02:00:00Z",
+        "publisher": "중앙선거관리위원회"
+      }
+    },
+    {
+      "id": "22-gangwon-chuncheon-cheorwon-hwacheon-yanggu-b-18",
+      "title": "군사시설보호구역 해제 및 민통선 북상, 출입 간소화 추진",
+      "category": "",
+      "status": "notJudged",
+      "source": {
+        "sourceUrl": "https://policy.nec.go.kr/policy_pdf/20240410/PDF/PBINFO_PUB/5201/003_100153083_20240402_2.pdf",
+        "fetchedAt": "2026-09-28T02:00:00Z",
+        "publisher": "중앙선거관리위원회"
+      }
+    },
+    {
+      "id": "22-gangwon-chuncheon-cheorwon-hwacheon-yanggu-b-19",
+      "title": "여성, 어르신, 장애인을 위한 종합사회복지관 건립",
+      "category": "",
+      "status": "notJudged",
+      "source": {
+        "sourceUrl": "https://policy.nec.go.kr/policy_pdf/20240410/PDF/PBINFO_PUB/5201/003_100153083_20240402_2.pdf",
+        "fetchedAt": "2026-09-28T02:00:00Z",
+        "publisher": "중앙선거관리위원회"
+      }
+    },
+    {
+      "id": "22-gangwon-chuncheon-cheorwon-hwacheon-yanggu-b-20",
+      "title": "軍 특수성을 반영한 처우 현실화",
+      "category": "",
+      "status": "notJudged",
+      "source": {
+        "sourceUrl": "https://policy.nec.go.kr/policy_pdf/20240410/PDF/PBINFO_PUB/5201/003_100153083_20240402_2.pdf",
+        "fetchedAt": "2026-09-28T02:00:00Z",
+        "publisher": "중앙선거관리위원회"
+      }
+    },
+    {
+      "id": "22-gangwon-chuncheon-cheorwon-hwacheon-yanggu-b-21",
+      "title": "군무원 근무수당 인상 및 격오지 근무 군무원 주거시설 지원",
+      "category": "",
+      "status": "notJudged",
+      "source": {
+        "sourceUrl": "https://policy.nec.go.kr/policy_pdf/20240410/PDF/PBINFO_PUB/5201/003_100153083_20240402_2.pdf",
+        "fetchedAt": "2026-09-28T02:00:00Z",
+        "publisher": "중앙선거관리위원회"
+      }
+    },
+    {
+      "id": "22-gangwon-chuncheon-cheorwon-hwacheon-yanggu-b-22",
+      "title": "늘봄학교 전면 확대 및 사교육비 부담 경감을 위한 단계적 전면 무상 추진",
+      "category": "",
+      "status": "notJudged",
+      "source": {
+        "sourceUrl": "https://policy.nec.go.kr/policy_pdf/20240410/PDF/PBINFO_PUB/5201/003_100153083_20240402_2.pdf",
+        "fetchedAt": "2026-09-28T02:00:00Z",
+        "publisher": "중앙선거관리위원회"
+      }
+    },
+    {
+      "id": "22-gangwon-chuncheon-cheorwon-hwacheon-yanggu-b-23",
+      "title": "안전한 학교 조성",
+      "category": "",
+      "status": "notJudged",
+      "source": {
+        "sourceUrl": "https://policy.nec.go.kr/policy_pdf/20240410/PDF/PBINFO_PUB/5201/003_100153083_20240402_2.pdf",
+        "fetchedAt": "2026-09-28T02:00:00Z",
+        "publisher": "중앙선거관리위원회"
+      }
+    },
+    {
+      "id": "22-gangwon-chuncheon-cheorwon-hwacheon-yanggu-b-24",
+      "title": "든든한 학교 만들기",
+      "category": "",
+      "status": "notJudged",
+      "source": {
+        "sourceUrl": "https://policy.nec.go.kr/policy_pdf/20240410/PDF/PBINFO_PUB/5201/003_100153083_20240402_2.pdf",
+        "fetchedAt": "2026-09-28T02:00:00Z",
+        "publisher": "중앙선거관리위원회"
+      }
+    },
+    {
+      "id": "22-gangwon-chuncheon-cheorwon-hwacheon-yanggu-b-25",
+      "title": "군인자녀 고등학교 설립 추진",
+      "category": "",
+      "status": "notJudged",
+      "source": {
+        "sourceUrl": "https://policy.nec.go.kr/policy_pdf/20240410/PDF/PBINFO_PUB/5201/003_100153083_20240402_2.pdf",
+        "fetchedAt": "2026-09-28T02:00:00Z",
+        "publisher": "중앙선거관리위원회"
+      }
+    },
+    {
+      "id": "22-gangwon-chuncheon-cheorwon-hwacheon-yanggu-b-26",
+      "title": "지역 내 미래형 마이스터교 지정 추진",
+      "category": "",
+      "status": "notJudged",
+      "source": {
+        "sourceUrl": "https://policy.nec.go.kr/policy_pdf/20240410/PDF/PBINFO_PUB/5201/003_100153083_20240402_2.pdf",
+        "fetchedAt": "2026-09-28T02:00:00Z",
+        "publisher": "중앙선거관리위원회"
+      }
+    },
+    {
+      "id": "22-gangwon-chuncheon-cheorwon-hwacheon-yanggu-b-27",
+      "title": "취약계층 유·청소년(만5세~만18세)에게 ‘첫걸음 문화예술교육’ 이용권 신설",
+      "category": "",
+      "status": "notJudged",
+      "source": {
+        "sourceUrl": "https://policy.nec.go.kr/policy_pdf/20240410/PDF/PBINFO_PUB/5201/003_100153083_20240402_2.pdf",
+        "fetchedAt": "2026-09-28T02:00:00Z",
+        "publisher": "중앙선거관리위원회"
+      }
+    },
+    {
+      "id": "22-gangwon-chuncheon-cheorwon-hwacheon-yanggu-b-28",
+      "title": "다문화가족 자녀 돌봄 지원 강화",
+      "category": "",
+      "status": "notJudged",
+      "source": {
+        "sourceUrl": "https://policy.nec.go.kr/policy_pdf/20240410/PDF/PBINFO_PUB/5201/003_100153083_20240402_2.pdf",
+        "fetchedAt": "2026-09-28T02:00:00Z",
+        "publisher": "중앙선거관리위원회"
+      }
+    },
+    {
+      "id": "22-gangwon-chuncheon-cheorwon-hwacheon-yanggu-b-29",
+      "title": "제2경춘국도·춘천 서면대교·소양8교 완공",
+      "category": "",
+      "status": "notJudged",
+      "source": {
+        "sourceUrl": "https://policy.nec.go.kr/policy_pdf/20240410/PDF/PBINFO_PUB/5201/003_100153083_20240402_2.pdf",
+        "fetchedAt": "2026-09-28T02:00:00Z",
+        "publisher": "중앙선거관리위원회"
+      }
+    },
+    {
+      "id": "22-gangwon-chuncheon-cheorwon-hwacheon-yanggu-b-30",
+      "title": "철원~포천 고속도로, 화천 광덕터널 착공",
+      "category": "",
+      "status": "notJudged",
+      "source": {
+        "sourceUrl": "https://policy.nec.go.kr/policy_pdf/20240410/PDF/PBINFO_PUB/5201/003_100153083_20240402_2.pdf",
+        "fetchedAt": "2026-09-28T02:00:00Z",
+        "publisher": "중앙선거관리위원회"
+      }
+    },
+    {
+      "id": "22-gangwon-chuncheon-cheorwon-hwacheon-yanggu-b-31",
+      "title": "GTX-B 국비지원, 동서고속화철도 완공, 경원선(연천~백마고지역) 전철화 사업 추진",
+      "category": "",
+      "status": "notJudged",
+      "source": {
+        "sourceUrl": "https://policy.nec.go.kr/policy_pdf/20240410/PDF/PBINFO_PUB/5201/003_100153083_20240402_2.pdf",
+        "fetchedAt": "2026-09-28T02:00:00Z",
+        "publisher": "중앙선거관리위원회"
+      }
+    },
+    {
+      "id": "22-gangwon-chuncheon-cheorwon-hwacheon-yanggu-b-32",
+      "title": "DMZ고속도로(철원~고성), 강원내륙고속도로(양구~영월) 건설",
+      "category": "",
+      "status": "notJudged",
+      "source": {
+        "sourceUrl": "https://policy.nec.go.kr/policy_pdf/20240410/PDF/PBINFO_PUB/5201/003_100153083_20240402_2.pdf",
+        "fetchedAt": "2026-09-28T02:00:00Z",
+        "publisher": "중앙선거관리위원회"
+      }
+    },
+    {
+      "id": "22-gangwon-chuncheon-cheorwon-hwacheon-yanggu-b-33",
+      "title": "접경지역 초광역권 도로 연결(지촌~사내, 구만~화천, 방천~월명)",
+      "category": "",
+      "status": "notJudged",
+      "source": {
+        "sourceUrl": "https://policy.nec.go.kr/policy_pdf/20240410/PDF/PBINFO_PUB/5201/003_100153083_20240402_2.pdf",
+        "fetchedAt": "2026-09-28T02:00:00Z",
+        "publisher": "중앙선거관리위원회"
+      }
+    },
+    {
+      "id": "22-gangwon-chuncheon-cheorwon-hwacheon-yanggu-b-34",
+      "title": "춘천 추곡~양구 공리, 국도 46호선 4차선 확장",
+      "category": "",
+      "status": "notJudged",
+      "source": {
+        "sourceUrl": "https://policy.nec.go.kr/policy_pdf/20240410/PDF/PBINFO_PUB/5201/003_100153083_20240402_2.pdf",
+        "fetchedAt": "2026-09-28T02:00:00Z",
+        "publisher": "중앙선거관리위원회"
+      }
+    },
+    {
+      "id": "22-gangwon-chuncheon-cheorwon-hwacheon-yanggu-b-35",
+      "title": "춘천 조교리~추전리 교량 및 도로 건설",
+      "category": "",
+      "status": "notJudged",
+      "source": {
+        "sourceUrl": "https://policy.nec.go.kr/policy_pdf/20240410/PDF/PBINFO_PUB/5201/003_100153083_20240402_2.pdf",
+        "fetchedAt": "2026-09-28T02:00:00Z",
+        "publisher": "중앙선거관리위원회"
+      }
+    },
+    {
+      "id": "22-gangwon-chuncheon-cheorwon-hwacheon-yanggu-b-36",
+      "title": "수도권 광역버스 노선, 강원 북부지역까지 연장",
+      "category": "",
+      "status": "notJudged",
+      "source": {
+        "sourceUrl": "https://policy.nec.go.kr/policy_pdf/20240410/PDF/PBINFO_PUB/5201/003_100153083_20240402_2.pdf",
+        "fetchedAt": "2026-09-28T02:00:00Z",
+        "publisher": "중앙선거관리위원회"
+      }
+    },
+    {
+      "id": "22-gangwon-chuncheon-cheorwon-hwacheon-yanggu-b-37",
+      "title": "화천 동촌터널(동촌~풍산) 추진",
+      "category": "",
+      "status": "notJudged",
+      "source": {
+        "sourceUrl": "https://policy.nec.go.kr/policy_pdf/20240410/PDF/PBINFO_PUB/5201/003_100153083_20240402_2.pdf",
+        "fetchedAt": "2026-09-28T02:00:00Z",
+        "publisher": "중앙선거관리위원회"
+      }
+    }
+  ]
+}
