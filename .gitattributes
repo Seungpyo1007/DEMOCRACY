@@ -31,6 +31,9 @@ gradlew.bat text eol=crlf
 *.keystore binary
 *.jks      binary
 
+# 행안부 code-file fixtures: CP949 bytes with CRLF, exactly as published.
+*.cp949    binary
+
 # The design handoff bundle is an imported reference, not authored app code.
 # Excluding it from language statistics keeps the repository classified as
 # Dart rather than as the mockup's HTML/JavaScript.

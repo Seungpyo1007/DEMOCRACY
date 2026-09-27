@@ -10,22 +10,23 @@ Reading needs no account; the account routes need a Supabase Auth sign-in.
                                                      ──▶ bff (GET) ──▶ app
 [juso.go.kr / Kakao Local] ◀── proxied live by bff (query never logged or stored)
 [Supabase Auth: Apple / Kakao / Google / email] ──user JWT──▶ bff /me ──▶ profiles, consents
-[공직선거법 별표2, 출결 file, curated pledges/region] ──scripts/*.ts──▶ SQL ──▶ tables
+[공직선거법 [별표 1], 출결 file, curated pledges/region] ──scripts/*.ts──▶ SQL ──▶ tables
 ```
 
 ## Layout
 
-| Path                                              | What                                                                                                       |
-| ------------------------------------------------- | ---------------------------------------------------------------------------------------------------------- |
-| `supabase/migrations/20260924000000_init.sql`     | Schema, RLS, BFF SQL helpers, purge functions, cron schedules                                              |
-| `supabase/migrations/20260926000000_accounts.sql` | Profiles, consents, 활동명 offers, residency; account SQL functions; orphan-login purge                    |
-| `supabase/seed.sql`                               | **Sample** 마포구 갑/을 + 종로구 district mapping, generated from `testdata/`. Not verified against 별표2. |
-| `supabase/functions/_shared/`                     | API clients, normalizers (one per source), envelope, provenance, PostgREST client                          |
-| `supabase/functions/ingest-assembly/`             | Members (daily), bills and plenary votes (every 6 h)                                                       |
-| `supabase/functions/ingest-nec/`                  | Election and district codes and candidates (weekly), historical winners (`?mode=backfill`)                 |
-| `supabase/functions/bff/`                         | The API. `contract.ts` mirrors the app's Dart parsers. `account.ts`, `residency.ts`: signed-in.            |
-| `scripts/`                                        | One-off importers that write SQL to stdout                                                                 |
-| `testdata/`                                       | Hand-written API samples and district-mapping samples. See `testdata/README.md`.                           |
+| Path                                              | What                                                                                                          |
+| ------------------------------------------------- | ------------------------------------------------------------------------------------------------------------- |
+| `supabase/migrations/20260924000000_init.sql`     | Schema, RLS, BFF SQL helpers, purge functions, cron schedules                                                 |
+| `supabase/migrations/20260926000000_accounts.sql` | Profiles, consents, 활동명 offers, residency; account SQL functions; orphan-login purge                       |
+| `supabase/seed.sql`                               | **Sample** 마포구 갑/을 + 종로구 district mapping, generated from `testdata/`. Not verified against [별표 1]. |
+| `supabase/functions/_shared/`                     | API clients, normalizers (one per source), envelope, provenance, PostgREST client                             |
+| `supabase/functions/ingest-assembly/`             | Members (daily), bills and plenary votes (every 6 h)                                                          |
+| `supabase/functions/ingest-nec/`                  | Election and district codes and candidates (weekly), historical winners (`?mode=backfill`)                    |
+| `supabase/functions/bff/`                         | The API. `contract.ts` mirrors the app's Dart parsers. `account.ts`, `residency.ts`: signed-in.               |
+| `scripts/`                                        | One-off importers that write SQL to stdout; `build_district_areas.ts` builds the mapping CSV                  |
+| `data/`                                           | Generated inputs kept in git: the 22대 district mapping                                                       |
+| `testdata/`                                       | Hand-written API samples and district-mapping samples. See `testdata/README.md`.                              |
 
 ## Develop
 
@@ -97,10 +98,10 @@ cached (`no-store`). "Me" below is `{profile|null, consents, residency|null}`:
 | `DELETE /residency`             | → `{deleted:true}`                                                                                  |
 
 - **주민 인증** (`/residency/verify`) needs a profile (`403 consent_required`).
-  - The server derives the district itself: juso plus the 별표2 mapping for an address, Kakao plus
-    the mapping for coordinates. It never accepts a district id from the client. An address must
-    equal one juso `roadAddr` (or be juso's only result) and map to exactly one district; anything
-    ambiguous or unmapped is `404 no_match`.
+  - The server derives the district itself: juso plus the [별표 1] mapping for an address, Kakao
+    plus the mapping for coordinates. It never accepts a district id from the client. An address
+    must equal one juso `roadAddr` (or be juso's only result) and map to exactly one district;
+    anything ambiguous or unmapped is `404 no_match`.
   - The token is 32 random bytes (base64url). Only its SHA-256 is stored, with the district, the
     method (`address_self_declared`) and an expiry 180 days out (`RESIDENCY_TTL_DAYS`). Verifying
     again replaces the old row and token.
@@ -162,21 +163,31 @@ cached (`no-store`). "Me" below is `{profile|null, consents, residency|null}`:
    - Votes backfill 40 bills per call. The hourly `ingest-assembly-votes` job works through the 22대
      backlog.
    - Row-count guards refuse to apply fewer than 250 members or 250 districts.
-6. **Build the district mapping.** This is the step that needs care.
-   - Build a CSV from 공직선거법 [별표2] (the 22대 version) plus 행정동 codes. The format is in
-     `scripts/import_district_areas.ts`.
-     - Use one row per 행정동 for 시군구 split across 선거구.
-     - Use one row with a blank `hdong_code` for a whole 시군구.
-     - Use `sd_name` and `sggName` exactly as NEC spells them.
-   - Load the 법정동↔행정동 bridge from 행안부 KIKmix.
+6. **Load the district mapping.** `data/district_areas_20240410.csv` is the 22대 mapping, already
+   built. Rebuild it only when 행안부 publishes new 행정동 codes or for a new election.
+   - Inputs, all public:
+     - 공직선거법 as in force on the election day, from law.go.kr's API (22대: `MST=261101`, 법률
+       제20370호). Its [별표 1] is the 구역표. The current text renames 광주/전남 to
+       전남광주통합특별시 but keeps the same 254 구역.
+     - 행안부 `jscode<date>(말소코드포함).zip` (KIKcd_H, KIKmix), from the 「행정기관(행정동) 및
+       관할구역(법정동) 변경내역」 posts on mois.go.kr.
+   - `scripts/build_district_areas.ts` reads the 구역표 against the 행정동 of the election day and
+     carries each to today's code: same code, then the same 동 name in the 시군구 it came from, then
+     법정동 overlap. It stops on anything it cannot place. When a 시도 or 시군구 is renamed again,
+     add it to `SIDO_BEFORE` or `SGG_BEFORE`.
    ```sh
-   deno run --allow-read scripts/import_district_areas.ts byeolpyo2.csv --source-url <law.go.kr page> > areas.sql
-   deno run --allow-read scripts/import_bjdong_hdong.ts KIKmix.csv --source-url <mois page> > bridge.sql
+   curl -o law.json 'https://www.law.go.kr/DRF/lawService.do?OC=test&target=law&MST=261101&type=JSON'
+   deno run --allow-read scripts/build_district_areas.ts --law law.json \
+     --codes KIKcd_H.20260720 --mix KIKmix.20260720 > data/district_areas_20240410.csv
+   deno run --allow-read scripts/build_district_areas.ts --emit bridge --mix KIKmix.20260720 > bridge.csv
+   deno run --allow-read scripts/import_district_areas.ts data/district_areas_20240410.csv \
+     --source-url 'https://www.law.go.kr/LSW/lsInfoP.do?lsiSeq=261101' > areas.sql
+   deno run --allow-read scripts/import_bjdong_hdong.ts bridge.csv --source-url <mois post> > bridge.sql
    psql "$SUPABASE_DB_URL" -f areas.sql -f bridge.sql
    ```
-   - Verify with ~20 sample addresses, including split 구 such as 마포 and 노고산동, against
-     info.nec.go.kr's 선거구 lookup.
+   - Rows are upserts. After new 행정동 codes, clear both tables first so retired codes go.
    - Check that every `districts.sgg_code` appears in `district_areas`.
+   - Spot-check addresses in split 구 (마포, 강서, 광주 서구, 화성 동탄구, 인천 영종구).
    - Do **not** push `seed.sql` to production. It is an unverified sample.
 7. **Run the other imports as needed.** Each prints SQL. Apply it with psql.
    - `import_attendance.ts`: 본회의 출결. This is a file dataset: convert it to the documented CSV
