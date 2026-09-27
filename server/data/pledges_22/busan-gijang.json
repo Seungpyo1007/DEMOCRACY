@@ -1,0 +1,286 @@
+{
+  "_note": "제22대 국회의원선거 부산 기장군 당선인 정동만 (국민의힘). 책자형 선거공보 PDF 5쪽(인쇄 8–9쪽) 「일 잘하는 정동만이 흘린 땀! 기대되는 기장의 변화!」 여섯 분야(교통·교육·관광·균형 발전·전력반도체·원전) 항목 25개. 분야 제목·설명 문장과 '- …' 세부 줄은 넣지 않았다. 3–4쪽의 의정 성과, PDF 6쪽의 읍면별 공약과 「약속합니다」(국민의힘 전국 공약)는 넣지 않았다. 제목은 원문 문구를 따랐고 바꾼 것은 위에 적은 구호·수식어 덜어내기뿐이다. 분류(category)는 앱에 정해진 분류 체계가 없어 비워 두었다. 이행 여부는 판정하지 않았다(notJudged).",
+  "districtId": "nec-4df79ea2",
+  "source": {
+    "sourceUrl": "https://policy.nec.go.kr/policy_pdf/20240410/PDF/PBINFO_PUB/2610/003_100152631_20240401_2.pdf",
+    "fetchedAt": "2026-09-28T02:20:00Z",
+    "publisher": "중앙선거관리위원회"
+  },
+  "pledges": [
+    {
+      "id": "22-busan-gijang-01",
+      "title": "정관선, 기장선 도시철도망 구축",
+      "category": "",
+      "status": "notJudged",
+      "source": {
+        "sourceUrl": "https://policy.nec.go.kr/policy_pdf/20240410/PDF/PBINFO_PUB/2610/003_100152631_20240401_2.pdf",
+        "fetchedAt": "2026-09-28T02:20:00Z",
+        "publisher": "중앙선거관리위원회"
+      }
+    },
+    {
+      "id": "22-busan-gijang-02",
+      "title": "KTX-이음 기장군 내 정차, KTX 정차",
+      "category": "",
+      "status": "notJudged",
+      "source": {
+        "sourceUrl": "https://policy.nec.go.kr/policy_pdf/20240410/PDF/PBINFO_PUB/2610/003_100152631_20240401_2.pdf",
+        "fetchedAt": "2026-09-28T02:20:00Z",
+        "publisher": "중앙선거관리위원회"
+      }
+    },
+    {
+      "id": "22-busan-gijang-03",
+      "title": "동해선 ‘삼성역’ 신설(일광신도시)",
+      "category": "",
+      "status": "notJudged",
+      "source": {
+        "sourceUrl": "https://policy.nec.go.kr/policy_pdf/20240410/PDF/PBINFO_PUB/2610/003_100152631_20240401_2.pdf",
+        "fetchedAt": "2026-09-28T02:20:00Z",
+        "publisher": "중앙선거관리위원회"
+      }
+    },
+    {
+      "id": "22-busan-gijang-04",
+      "title": "기장 반송터널, 도시철도 오시리아 연장선 조기 건설",
+      "category": "",
+      "status": "notJudged",
+      "source": {
+        "sourceUrl": "https://policy.nec.go.kr/policy_pdf/20240410/PDF/PBINFO_PUB/2610/003_100152631_20240401_2.pdf",
+        "fetchedAt": "2026-09-28T02:20:00Z",
+        "publisher": "중앙선거관리위원회"
+      }
+    },
+    {
+      "id": "22-busan-gijang-05",
+      "title": "부산~양산~울산 광역철도 건설",
+      "category": "",
+      "status": "notJudged",
+      "source": {
+        "sourceUrl": "https://policy.nec.go.kr/policy_pdf/20240410/PDF/PBINFO_PUB/2610/003_100152631_20240401_2.pdf",
+        "fetchedAt": "2026-09-28T02:20:00Z",
+        "publisher": "중앙선거관리위원회"
+      }
+    },
+    {
+      "id": "22-busan-gijang-06",
+      "title": "의학전문대학원(의대) 유치 추진",
+      "category": "",
+      "status": "notJudged",
+      "source": {
+        "sourceUrl": "https://policy.nec.go.kr/policy_pdf/20240410/PDF/PBINFO_PUB/2610/003_100152631_20240401_2.pdf",
+        "fetchedAt": "2026-09-28T02:20:00Z",
+        "publisher": "중앙선거관리위원회"
+      }
+    },
+    {
+      "id": "22-busan-gijang-07",
+      "title": "일광, 정관신도시 고등학교 조기 개교",
+      "category": "",
+      "status": "notJudged",
+      "source": {
+        "sourceUrl": "https://policy.nec.go.kr/policy_pdf/20240410/PDF/PBINFO_PUB/2610/003_100152631_20240401_2.pdf",
+        "fetchedAt": "2026-09-28T02:20:00Z",
+        "publisher": "중앙선거관리위원회"
+      }
+    },
+    {
+      "id": "22-busan-gijang-08",
+      "title": "반도체 및 원전 특성화 고등학교 설립",
+      "category": "",
+      "status": "notJudged",
+      "source": {
+        "sourceUrl": "https://policy.nec.go.kr/policy_pdf/20240410/PDF/PBINFO_PUB/2610/003_100152631_20240401_2.pdf",
+        "fetchedAt": "2026-09-28T02:20:00Z",
+        "publisher": "중앙선거관리위원회"
+      }
+    },
+    {
+      "id": "22-busan-gijang-09",
+      "title": "육아·교육 환경개선(특성화 어린이집, 청소년 복지관)",
+      "category": "",
+      "status": "notJudged",
+      "source": {
+        "sourceUrl": "https://policy.nec.go.kr/policy_pdf/20240410/PDF/PBINFO_PUB/2610/003_100152631_20240401_2.pdf",
+        "fetchedAt": "2026-09-28T02:20:00Z",
+        "publisher": "중앙선거관리위원회"
+      }
+    },
+    {
+      "id": "22-busan-gijang-10",
+      "title": "K컬쳐 타운 조성(도예촌 부지) 추진",
+      "category": "",
+      "status": "notJudged",
+      "source": {
+        "sourceUrl": "https://policy.nec.go.kr/policy_pdf/20240410/PDF/PBINFO_PUB/2610/003_100152631_20240401_2.pdf",
+        "fetchedAt": "2026-09-28T02:20:00Z",
+        "publisher": "중앙선거관리위원회"
+      }
+    },
+    {
+      "id": "22-busan-gijang-11",
+      "title": "정관 병산주변 테마관광지 조성",
+      "category": "",
+      "status": "notJudged",
+      "source": {
+        "sourceUrl": "https://policy.nec.go.kr/policy_pdf/20240410/PDF/PBINFO_PUB/2610/003_100152631_20240401_2.pdf",
+        "fetchedAt": "2026-09-28T02:20:00Z",
+        "publisher": "중앙선거관리위원회"
+      }
+    },
+    {
+      "id": "22-busan-gijang-12",
+      "title": "동해남부선 폐선부지 관광자원화 조기 추진",
+      "category": "",
+      "status": "notJudged",
+      "source": {
+        "sourceUrl": "https://policy.nec.go.kr/policy_pdf/20240410/PDF/PBINFO_PUB/2610/003_100152631_20240401_2.pdf",
+        "fetchedAt": "2026-09-28T02:20:00Z",
+        "publisher": "중앙선거관리위원회"
+      }
+    },
+    {
+      "id": "22-busan-gijang-13",
+      "title": "기장8경·해안명소 주변환경 및 교통인프라 개선(달음산, 일광해수욕장 등)",
+      "category": "",
+      "status": "notJudged",
+      "source": {
+        "sourceUrl": "https://policy.nec.go.kr/policy_pdf/20240410/PDF/PBINFO_PUB/2610/003_100152631_20240401_2.pdf",
+        "fetchedAt": "2026-09-28T02:20:00Z",
+        "publisher": "중앙선거관리위원회"
+      }
+    },
+    {
+      "id": "22-busan-gijang-14",
+      "title": "500병상 규모 종합병원 확대 추진",
+      "category": "",
+      "status": "notJudged",
+      "source": {
+        "sourceUrl": "https://policy.nec.go.kr/policy_pdf/20240410/PDF/PBINFO_PUB/2610/003_100152631_20240401_2.pdf",
+        "fetchedAt": "2026-09-28T02:20:00Z",
+        "publisher": "중앙선거관리위원회"
+      }
+    },
+    {
+      "id": "22-busan-gijang-15",
+      "title": "그린벨트 해제를 통한 주거단지 조성",
+      "category": "",
+      "status": "notJudged",
+      "source": {
+        "sourceUrl": "https://policy.nec.go.kr/policy_pdf/20240410/PDF/PBINFO_PUB/2610/003_100152631_20240401_2.pdf",
+        "fetchedAt": "2026-09-28T02:20:00Z",
+        "publisher": "중앙선거관리위원회"
+      }
+    },
+    {
+      "id": "22-busan-gijang-16",
+      "title": "어촌마을 정비사업 조기완공",
+      "category": "",
+      "status": "notJudged",
+      "source": {
+        "sourceUrl": "https://policy.nec.go.kr/policy_pdf/20240410/PDF/PBINFO_PUB/2610/003_100152631_20240401_2.pdf",
+        "fetchedAt": "2026-09-28T02:20:00Z",
+        "publisher": "중앙선거관리위원회"
+      }
+    },
+    {
+      "id": "22-busan-gijang-17",
+      "title": "철마 도시농업공원 완공 및 활성화(맞춤형 도시농업 육성)",
+      "category": "",
+      "status": "notJudged",
+      "source": {
+        "sourceUrl": "https://policy.nec.go.kr/policy_pdf/20240410/PDF/PBINFO_PUB/2610/003_100152631_20240401_2.pdf",
+        "fetchedAt": "2026-09-28T02:20:00Z",
+        "publisher": "중앙선거관리위원회"
+      }
+    },
+    {
+      "id": "22-busan-gijang-18",
+      "title": "부산전력반도체밸리 조성 - 전력반도체 빅센터 건립",
+      "category": "",
+      "status": "notJudged",
+      "source": {
+        "sourceUrl": "https://policy.nec.go.kr/policy_pdf/20240410/PDF/PBINFO_PUB/2610/003_100152631_20240401_2.pdf",
+        "fetchedAt": "2026-09-28T02:20:00Z",
+        "publisher": "중앙선거관리위원회"
+      }
+    },
+    {
+      "id": "22-busan-gijang-19",
+      "title": "방사선 융합 클러스터 조성, 수출용신형연구로 완공",
+      "category": "",
+      "status": "notJudged",
+      "source": {
+        "sourceUrl": "https://policy.nec.go.kr/policy_pdf/20240410/PDF/PBINFO_PUB/2610/003_100152631_20240401_2.pdf",
+        "fetchedAt": "2026-09-28T02:20:00Z",
+        "publisher": "중앙선거관리위원회"
+      }
+    },
+    {
+      "id": "22-busan-gijang-20",
+      "title": "중입자가속기 치료센터 완공 및 의료휴양산업 육성(기장형 의료관광특구 추진)",
+      "category": "",
+      "status": "notJudged",
+      "source": {
+        "sourceUrl": "https://policy.nec.go.kr/policy_pdf/20240410/PDF/PBINFO_PUB/2610/003_100152631_20240401_2.pdf",
+        "fetchedAt": "2026-09-28T02:20:00Z",
+        "publisher": "중앙선거관리위원회"
+      }
+    },
+    {
+      "id": "22-busan-gijang-21",
+      "title": "이차전지, 모빌리티 기회발전특구 추진",
+      "category": "",
+      "status": "notJudged",
+      "source": {
+        "sourceUrl": "https://policy.nec.go.kr/policy_pdf/20240410/PDF/PBINFO_PUB/2610/003_100152631_20240401_2.pdf",
+        "fetchedAt": "2026-09-28T02:20:00Z",
+        "publisher": "중앙선거관리위원회"
+      }
+    },
+    {
+      "id": "22-busan-gijang-22",
+      "title": "고준위특별법 제정을 통해 사용후핵연료 조속 처분",
+      "category": "",
+      "status": "notJudged",
+      "source": {
+        "sourceUrl": "https://policy.nec.go.kr/policy_pdf/20240410/PDF/PBINFO_PUB/2610/003_100152631_20240401_2.pdf",
+        "fetchedAt": "2026-09-28T02:20:00Z",
+        "publisher": "중앙선거관리위원회"
+      }
+    },
+    {
+      "id": "22-busan-gijang-23",
+      "title": "지역별 차등 전기요금제 조기시행(분산에너지)",
+      "category": "",
+      "status": "notJudged",
+      "source": {
+        "sourceUrl": "https://policy.nec.go.kr/policy_pdf/20240410/PDF/PBINFO_PUB/2610/003_100152631_20240401_2.pdf",
+        "fetchedAt": "2026-09-28T02:20:00Z",
+        "publisher": "중앙선거관리위원회"
+      }
+    },
+    {
+      "id": "22-busan-gijang-24",
+      "title": "원전해체연구소 건립",
+      "category": "",
+      "status": "notJudged",
+      "source": {
+        "sourceUrl": "https://policy.nec.go.kr/policy_pdf/20240410/PDF/PBINFO_PUB/2610/003_100152631_20240401_2.pdf",
+        "fetchedAt": "2026-09-28T02:20:00Z",
+        "publisher": "중앙선거관리위원회"
+      }
+    },
+    {
+      "id": "22-busan-gijang-25",
+      "title": "원전주변지역 지원 강화",
+      "category": "",
+      "status": "notJudged",
+      "source": {
+        "sourceUrl": "https://policy.nec.go.kr/policy_pdf/20240410/PDF/PBINFO_PUB/2610/003_100152631_20240401_2.pdf",
+        "fetchedAt": "2026-09-28T02:20:00Z",
+        "publisher": "중앙선거관리위원회"
+      }
+    }
+  ]
+}

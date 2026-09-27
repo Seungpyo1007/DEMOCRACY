@@ -1,0 +1,88 @@
+{
+  "_note": "제22대 국회의원선거 대구 북구 갑 당선인 우재준 (국민의힘). 책자형 선거공보 PDF 7–8쪽 「우재준의 7대 핵심공약」 공약 1–7. 제목 밑 세부 줄은 넣지 않았다. 5–6쪽 「국민의힘이 국민께 드리는 10대 약속」과 9–10쪽의 동별 공약은 넣지 않았다. 제목은 원문 문구를 따랐고 바꾼 것은 위에 적은 구호·수식어 덜어내기뿐이다. 분류(category)는 앱에 정해진 분류 체계가 없어 비워 두었다. 이행 여부는 판정하지 않았다(notJudged).",
+  "districtId": "nec-1815d941",
+  "source": {
+    "sourceUrl": "https://policy.nec.go.kr/policy_pdf/20240410/PDF/PBINFO_PUB/2705/003_100153120_20240402_3.pdf",
+    "fetchedAt": "2026-09-28T02:20:00Z",
+    "publisher": "중앙선거관리위원회"
+  },
+  "pledges": [
+    {
+      "id": "22-daegu-buk-a-01",
+      "title": "경북도청 후적지의 조속한 개발을 통한 도시기능 활성화",
+      "category": "",
+      "status": "notJudged",
+      "source": {
+        "sourceUrl": "https://policy.nec.go.kr/policy_pdf/20240410/PDF/PBINFO_PUB/2705/003_100153120_20240402_3.pdf",
+        "fetchedAt": "2026-09-28T02:20:00Z",
+        "publisher": "중앙선거관리위원회"
+      }
+    },
+    {
+      "id": "22-daegu-buk-a-02",
+      "title": "대구도시철도 4호선(엑스코선) 조기 착공 반드시 추진",
+      "category": "",
+      "status": "notJudged",
+      "source": {
+        "sourceUrl": "https://policy.nec.go.kr/policy_pdf/20240410/PDF/PBINFO_PUB/2705/003_100153120_20240402_3.pdf",
+        "fetchedAt": "2026-09-28T02:20:00Z",
+        "publisher": "중앙선거관리위원회"
+      }
+    },
+    {
+      "id": "22-daegu-buk-a-03",
+      "title": "도시정비사업의 원활하고 합리적인 추진",
+      "category": "",
+      "status": "notJudged",
+      "source": {
+        "sourceUrl": "https://policy.nec.go.kr/policy_pdf/20240410/PDF/PBINFO_PUB/2705/003_100153120_20240402_3.pdf",
+        "fetchedAt": "2026-09-28T02:20:00Z",
+        "publisher": "중앙선거관리위원회"
+      }
+    },
+    {
+      "id": "22-daegu-buk-a-04",
+      "title": "금호워터프론트 조성사업 적극 추진",
+      "category": "",
+      "status": "notJudged",
+      "source": {
+        "sourceUrl": "https://policy.nec.go.kr/policy_pdf/20240410/PDF/PBINFO_PUB/2705/003_100153120_20240402_3.pdf",
+        "fetchedAt": "2026-09-28T02:20:00Z",
+        "publisher": "중앙선거관리위원회"
+      }
+    },
+    {
+      "id": "22-daegu-buk-a-05",
+      "title": "도시 소상공인 지원 확대를 통한 지역 경제 활성화",
+      "category": "",
+      "status": "notJudged",
+      "source": {
+        "sourceUrl": "https://policy.nec.go.kr/policy_pdf/20240410/PDF/PBINFO_PUB/2705/003_100153120_20240402_3.pdf",
+        "fetchedAt": "2026-09-28T02:20:00Z",
+        "publisher": "중앙선거관리위원회"
+      }
+    },
+    {
+      "id": "22-daegu-buk-a-06",
+      "title": "지역 청년창업가 보육 및 육성을 통한 지역거점으로서의 경북대 인근 상권 활성화",
+      "category": "",
+      "status": "notJudged",
+      "source": {
+        "sourceUrl": "https://policy.nec.go.kr/policy_pdf/20240410/PDF/PBINFO_PUB/2705/003_100153120_20240402_3.pdf",
+        "fetchedAt": "2026-09-28T02:20:00Z",
+        "publisher": "중앙선거관리위원회"
+      }
+    },
+    {
+      "id": "22-daegu-buk-a-07",
+      "title": "북구에 방치된 해묵은 난제들 적극 해결",
+      "category": "",
+      "status": "notJudged",
+      "source": {
+        "sourceUrl": "https://policy.nec.go.kr/policy_pdf/20240410/PDF/PBINFO_PUB/2705/003_100153120_20240402_3.pdf",
+        "fetchedAt": "2026-09-28T02:20:00Z",
+        "publisher": "중앙선거관리위원회"
+      }
+    }
+  ]
+}
