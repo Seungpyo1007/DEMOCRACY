@@ -1,0 +1,21 @@
+{
+  "districtId": "nec-a56cc05e",
+  "displayName": "경기 평택시 병",
+  "source": {
+    "sourceUrl": "https://www.law.go.kr/LSW/lsInfoP.do?lsiSeq=261101",
+    "fetchedAt": "2026-09-27T15:00:00.000Z",
+    "publisher": "국가법령정보센터"
+  },
+  "events": [
+    {
+      "year": 2024,
+      "title": "선거구 구역 재편",
+      "detail": "구성: 평택시 갑 일부(비전1동, 동삭동), 평택시 을 일부(신평동, 원평동, 비전2동, 용이동)",
+      "source": {
+        "sourceUrl": "https://www.law.go.kr/LSW/lsInfoP.do?lsiSeq=261101",
+        "fetchedAt": "2026-09-27T15:00:00.000Z",
+        "publisher": "국가법령정보센터"
+      }
+    }
+  ]
+}

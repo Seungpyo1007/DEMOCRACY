@@ -1,0 +1,31 @@
+{
+  "districtId": "nec-3cc10800",
+  "displayName": "경북 안동시예천군",
+  "source": {
+    "sourceUrl": "https://www.law.go.kr/LSW/lsInfoP.do?lsiSeq=261101",
+    "fetchedAt": "2026-09-27T15:00:00.000Z",
+    "publisher": "국가법령정보센터"
+  },
+  "events": [
+    {
+      "year": 2020,
+      "title": "선거구 구역 재편",
+      "detail": "구성: 안동시 전체, 영주시문경시예천군 일부(예천군)",
+      "source": {
+        "sourceUrl": "https://www.law.go.kr/LSW/lsInfoP.do?lsiSeq=215523",
+        "fetchedAt": "2026-09-27T15:00:00.000Z",
+        "publisher": "국가법령정보센터"
+      }
+    },
+    {
+      "year": 2024,
+      "title": "선거구 구역 변동 없음",
+      "detail": "제21대 총선과 같은 구역",
+      "source": {
+        "sourceUrl": "https://www.law.go.kr/LSW/lsInfoP.do?lsiSeq=261101",
+        "fetchedAt": "2026-09-27T15:00:00.000Z",
+        "publisher": "국가법령정보센터"
+      }
+    }
+  ]
+}
