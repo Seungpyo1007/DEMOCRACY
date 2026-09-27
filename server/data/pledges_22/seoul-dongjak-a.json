@@ -1,0 +1,198 @@
+{
+  "_note": "제22대 국회의원선거 서울 동작구 갑 당선인 김병기 (더불어민주당). 책자형 선거공보 PDF 4–10쪽의 지역 공약 17개: 4쪽 서부선 착공 문장, 5쪽 노량진 수변복합개발 ☑ 항목 8개, 7쪽 보라매병원 제목, 8쪽 「원조 대치동 노량진 교육 특구 부활」 항목 5개와 학원가 육성 문장, 10쪽 아래 e-스포츠파크 문장. 쪽 대부분이 이미지라 쪽 이미지를 보고 옮겼다. 10쪽의 동별 공약과 그 오른쪽 아래 동 표시 없이 이어지는 목록(마을버스 노선 확장 등, 신대방2동 목록의 연속인지 공통 공약인지 분명하지 않음), PDF 11쪽 「22대 국회 10대 입법 약속」(전국 입법 공약), 9쪽의 지난 성과는 넣지 않았다. 제목은 원문 문구를 따랐고 바꾼 것은 위에 적은 구호·수식어 덜어내기뿐이다. 분류(category)는 앱에 정해진 분류 체계가 없어 비워 두었다. 이행 여부는 판정하지 않았다(notJudged).",
+  "districtId": "nec-9e0b5f80",
+  "source": {
+    "sourceUrl": "https://policy.nec.go.kr/policy_pdf/20240410/PDF/PBINFO_PUB/1120/003_100152775_20240402_3.pdf",
+    "fetchedAt": "2026-09-27T17:33:02Z",
+    "publisher": "중앙선거관리위원회"
+  },
+  "pledges": [
+    {
+      "id": "22-seoul-dongjak-a-01",
+      "title": "서부선 착공을 책임지고 완수하겠습니다",
+      "category": "",
+      "status": "notJudged",
+      "source": {
+        "sourceUrl": "https://policy.nec.go.kr/policy_pdf/20240410/PDF/PBINFO_PUB/1120/003_100152775_20240402_3.pdf",
+        "fetchedAt": "2026-09-27T17:33:02Z",
+        "publisher": "중앙선거관리위원회"
+      }
+    },
+    {
+      "id": "22-seoul-dongjak-a-02",
+      "title": "대형마트 및 수협중앙회 유치",
+      "category": "",
+      "status": "notJudged",
+      "source": {
+        "sourceUrl": "https://policy.nec.go.kr/policy_pdf/20240410/PDF/PBINFO_PUB/1120/003_100152775_20240402_3.pdf",
+        "fetchedAt": "2026-09-27T17:33:02Z",
+        "publisher": "중앙선거관리위원회"
+      }
+    },
+    {
+      "id": "22-seoul-dongjak-a-03",
+      "title": "어린이 수산 테마파크 조성",
+      "category": "",
+      "status": "notJudged",
+      "source": {
+        "sourceUrl": "https://policy.nec.go.kr/policy_pdf/20240410/PDF/PBINFO_PUB/1120/003_100152775_20240402_3.pdf",
+        "fetchedAt": "2026-09-27T17:33:02Z",
+        "publisher": "중앙선거관리위원회"
+      }
+    },
+    {
+      "id": "22-seoul-dongjak-a-04",
+      "title": "노량진과 여의도를 잇는 연륙교 신설",
+      "category": "",
+      "status": "notJudged",
+      "source": {
+        "sourceUrl": "https://policy.nec.go.kr/policy_pdf/20240410/PDF/PBINFO_PUB/1120/003_100152775_20240402_3.pdf",
+        "fetchedAt": "2026-09-27T17:33:02Z",
+        "publisher": "중앙선거관리위원회"
+      }
+    },
+    {
+      "id": "22-seoul-dongjak-a-05",
+      "title": "노량진-여의도 왕복 5차선 연결교량 건립",
+      "category": "",
+      "status": "notJudged",
+      "source": {
+        "sourceUrl": "https://policy.nec.go.kr/policy_pdf/20240410/PDF/PBINFO_PUB/1120/003_100152775_20240402_3.pdf",
+        "fetchedAt": "2026-09-27T17:33:02Z",
+        "publisher": "중앙선거관리위원회"
+      }
+    },
+    {
+      "id": "22-seoul-dongjak-a-06",
+      "title": "문화(수변)복합거점 개발",
+      "category": "",
+      "status": "notJudged",
+      "source": {
+        "sourceUrl": "https://policy.nec.go.kr/policy_pdf/20240410/PDF/PBINFO_PUB/1120/003_100152775_20240402_3.pdf",
+        "fetchedAt": "2026-09-27T17:33:02Z",
+        "publisher": "중앙선거관리위원회"
+      }
+    },
+    {
+      "id": "22-seoul-dongjak-a-07",
+      "title": "외국계 기업 등 첨단 우량 기업 유치",
+      "category": "",
+      "status": "notJudged",
+      "source": {
+        "sourceUrl": "https://policy.nec.go.kr/policy_pdf/20240410/PDF/PBINFO_PUB/1120/003_100152775_20240402_3.pdf",
+        "fetchedAt": "2026-09-27T17:33:02Z",
+        "publisher": "중앙선거관리위원회"
+      }
+    },
+    {
+      "id": "22-seoul-dongjak-a-08",
+      "title": "노량진 수산시장 고도화, 수산물 체험장 등 건립",
+      "category": "",
+      "status": "notJudged",
+      "source": {
+        "sourceUrl": "https://policy.nec.go.kr/policy_pdf/20240410/PDF/PBINFO_PUB/1120/003_100152775_20240402_3.pdf",
+        "fetchedAt": "2026-09-27T17:33:02Z",
+        "publisher": "중앙선거관리위원회"
+      }
+    },
+    {
+      "id": "22-seoul-dongjak-a-09",
+      "title": "미래산업 체험을 위한 천문전망대 건설 추진",
+      "category": "",
+      "status": "notJudged",
+      "source": {
+        "sourceUrl": "https://policy.nec.go.kr/policy_pdf/20240410/PDF/PBINFO_PUB/1120/003_100152775_20240402_3.pdf",
+        "fetchedAt": "2026-09-27T17:33:02Z",
+        "publisher": "중앙선거관리위원회"
+      }
+    },
+    {
+      "id": "22-seoul-dongjak-a-10",
+      "title": "보라매병원, 서남권 거점병원으로 더 키우겠습니다",
+      "category": "",
+      "status": "notJudged",
+      "source": {
+        "sourceUrl": "https://policy.nec.go.kr/policy_pdf/20240410/PDF/PBINFO_PUB/1120/003_100152775_20240402_3.pdf",
+        "fetchedAt": "2026-09-27T17:33:02Z",
+        "publisher": "중앙선거관리위원회"
+      }
+    },
+    {
+      "id": "22-seoul-dongjak-a-11",
+      "title": "노후어린이집 리모델링",
+      "category": "",
+      "status": "notJudged",
+      "source": {
+        "sourceUrl": "https://policy.nec.go.kr/policy_pdf/20240410/PDF/PBINFO_PUB/1120/003_100152775_20240402_3.pdf",
+        "fetchedAt": "2026-09-27T17:33:02Z",
+        "publisher": "중앙선거관리위원회"
+      }
+    },
+    {
+      "id": "22-seoul-dongjak-a-12",
+      "title": "돌봄 교실, 돌봄 시스템 확대",
+      "category": "",
+      "status": "notJudged",
+      "source": {
+        "sourceUrl": "https://policy.nec.go.kr/policy_pdf/20240410/PDF/PBINFO_PUB/1120/003_100152775_20240402_3.pdf",
+        "fetchedAt": "2026-09-27T17:33:02Z",
+        "publisher": "중앙선거관리위원회"
+      }
+    },
+    {
+      "id": "22-seoul-dongjak-a-13",
+      "title": "영어유치원 신규 건설 영어 조기교육 환경 마련",
+      "category": "",
+      "status": "notJudged",
+      "source": {
+        "sourceUrl": "https://policy.nec.go.kr/policy_pdf/20240410/PDF/PBINFO_PUB/1120/003_100152775_20240402_3.pdf",
+        "fetchedAt": "2026-09-27T17:33:02Z",
+        "publisher": "중앙선거관리위원회"
+      }
+    },
+    {
+      "id": "22-seoul-dongjak-a-14",
+      "title": "국제학교급 외국어타운 유치",
+      "category": "",
+      "status": "notJudged",
+      "source": {
+        "sourceUrl": "https://policy.nec.go.kr/policy_pdf/20240410/PDF/PBINFO_PUB/1120/003_100152775_20240402_3.pdf",
+        "fetchedAt": "2026-09-27T17:33:02Z",
+        "publisher": "중앙선거관리위원회"
+      }
+    },
+    {
+      "id": "22-seoul-dongjak-a-15",
+      "title": "어린이집·키움센터 확충, 예산증액",
+      "category": "",
+      "status": "notJudged",
+      "source": {
+        "sourceUrl": "https://policy.nec.go.kr/policy_pdf/20240410/PDF/PBINFO_PUB/1120/003_100152775_20240402_3.pdf",
+        "fetchedAt": "2026-09-27T17:33:02Z",
+        "publisher": "중앙선거관리위원회"
+      }
+    },
+    {
+      "id": "22-seoul-dongjak-a-16",
+      "title": "노량진 학원가를 서남권 최고의 초중고 명품학원가로 집중육성",
+      "category": "",
+      "status": "notJudged",
+      "source": {
+        "sourceUrl": "https://policy.nec.go.kr/policy_pdf/20240410/PDF/PBINFO_PUB/1120/003_100152775_20240402_3.pdf",
+        "fetchedAt": "2026-09-27T17:33:02Z",
+        "publisher": "중앙선거관리위원회"
+      }
+    },
+    {
+      "id": "22-seoul-dongjak-a-17",
+      "title": "e-스포츠파크 및 어린이 수산 테마파크 조성",
+      "category": "",
+      "status": "notJudged",
+      "source": {
+        "sourceUrl": "https://policy.nec.go.kr/policy_pdf/20240410/PDF/PBINFO_PUB/1120/003_100152775_20240402_3.pdf",
+        "fetchedAt": "2026-09-27T17:33:02Z",
+        "publisher": "중앙선거관리위원회"
+      }
+    }
+  ]
+}

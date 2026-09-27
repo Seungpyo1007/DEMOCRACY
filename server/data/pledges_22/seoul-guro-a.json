@@ -1,0 +1,88 @@
+{
+  "_note": "제22대 국회의원선거 서울 구로구 갑 당선인 이인영 (더불어민주당). 책자형 선거공보의 번호 붙은 대표 공약 「이인영의 1」 1호선 지하화(PDF 5쪽), 「이인영의 2」 신구로선(PDF 6쪽), 「이인영의 3」 사람중심 재개발·재건축(PDF 8쪽)과 PDF 7쪽 「이인영의 구로 공약」의 「전지역」 공약 3개, 같은 쪽 「공동공약」 1개. 7–8쪽 동별 공약(완료 표시 항목 포함)과 3번 아래 네 문단의 설명, PDF 9–10쪽 「민주당의 약속」은 넣지 않았다. 제목은 원문 문구를 따랐고 바꾼 것은 위에 적은 구호·수식어 덜어내기뿐이다. 분류(category)는 앱에 정해진 분류 체계가 없어 비워 두었다. 이행 여부는 판정하지 않았다(notJudged).",
+  "districtId": "nec-b2d6cb33",
+  "source": {
+    "sourceUrl": "https://policy.nec.go.kr/policy_pdf/20240410/PDF/PBINFO_PUB/1117/003_100152973_20240402_3.pdf",
+    "fetchedAt": "2026-09-27T17:33:02Z",
+    "publisher": "중앙선거관리위원회"
+  },
+  "pledges": [
+    {
+      "id": "22-seoul-guro-a-01",
+      "title": "1호선 지하화",
+      "category": "",
+      "status": "notJudged",
+      "source": {
+        "sourceUrl": "https://policy.nec.go.kr/policy_pdf/20240410/PDF/PBINFO_PUB/1117/003_100152973_20240402_3.pdf",
+        "fetchedAt": "2026-09-27T17:33:02Z",
+        "publisher": "중앙선거관리위원회"
+      }
+    },
+    {
+      "id": "22-seoul-guro-a-02",
+      "title": "신구로선",
+      "category": "",
+      "status": "notJudged",
+      "source": {
+        "sourceUrl": "https://policy.nec.go.kr/policy_pdf/20240410/PDF/PBINFO_PUB/1117/003_100152973_20240402_3.pdf",
+        "fetchedAt": "2026-09-27T17:33:02Z",
+        "publisher": "중앙선거관리위원회"
+      }
+    },
+    {
+      "id": "22-seoul-guro-a-03",
+      "title": "사람중심 재개발·재건축",
+      "category": "",
+      "status": "notJudged",
+      "source": {
+        "sourceUrl": "https://policy.nec.go.kr/policy_pdf/20240410/PDF/PBINFO_PUB/1117/003_100152973_20240402_3.pdf",
+        "fetchedAt": "2026-09-27T17:33:02Z",
+        "publisher": "중앙선거관리위원회"
+      }
+    },
+    {
+      "id": "22-seoul-guro-a-04",
+      "title": "바닥신호등 설치 확대",
+      "category": "",
+      "status": "notJudged",
+      "source": {
+        "sourceUrl": "https://policy.nec.go.kr/policy_pdf/20240410/PDF/PBINFO_PUB/1117/003_100152973_20240402_3.pdf",
+        "fetchedAt": "2026-09-27T17:33:02Z",
+        "publisher": "중앙선거관리위원회"
+      }
+    },
+    {
+      "id": "22-seoul-guro-a-05",
+      "title": "공중전선 지중화",
+      "category": "",
+      "status": "notJudged",
+      "source": {
+        "sourceUrl": "https://policy.nec.go.kr/policy_pdf/20240410/PDF/PBINFO_PUB/1117/003_100152973_20240402_3.pdf",
+        "fetchedAt": "2026-09-27T17:33:02Z",
+        "publisher": "중앙선거관리위원회"
+      }
+    },
+    {
+      "id": "22-seoul-guro-a-06",
+      "title": "전지역 주택가 밀집지역 주차난 해소",
+      "category": "",
+      "status": "notJudged",
+      "source": {
+        "sourceUrl": "https://policy.nec.go.kr/policy_pdf/20240410/PDF/PBINFO_PUB/1117/003_100152973_20240402_3.pdf",
+        "fetchedAt": "2026-09-27T17:33:02Z",
+        "publisher": "중앙선거관리위원회"
+      }
+    },
+    {
+      "id": "22-seoul-guro-a-07",
+      "title": "친환경 제로에너지 고등학교 건립",
+      "category": "",
+      "status": "notJudged",
+      "source": {
+        "sourceUrl": "https://policy.nec.go.kr/policy_pdf/20240410/PDF/PBINFO_PUB/1117/003_100152973_20240402_3.pdf",
+        "fetchedAt": "2026-09-27T17:33:02Z",
+        "publisher": "중앙선거관리위원회"
+      }
+    }
+  ]
+}
