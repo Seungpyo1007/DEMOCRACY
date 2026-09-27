@@ -3,6 +3,7 @@ import 'package:democracy/src/app/font_licenses.dart';
 import 'package:democracy/src/app/live_data.dart';
 import 'package:democracy/src/core/account/device_services.dart';
 import 'package:democracy/src/core/network/bff_config.dart';
+import 'package:democracy/src/core/network/retry_policy.dart';
 import 'package:democracy/src/core/tips/tip_providers.dart';
 import 'package:democracy/src/core/tips/tip_store.dart';
 import 'package:flutter/material.dart';
@@ -13,6 +14,7 @@ void main() {
   registerFontLicenses();
   runApp(
     ProviderScope(
+      retry: appRetry,
       // The one place tips are switched on; everywhere else the store
       // reports them as seen.
       overrides: [

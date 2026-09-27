@@ -320,17 +320,12 @@ class _LiveCount extends StatelessWidget {
 
     final panel = selected == null
         ? null
-        : AnimatedSwitcher(
-            duration: AppMotion.reduced(context)
-                ? Duration.zero
-                : AppMotion.fast,
-            layoutBuilder: (current, previous) => Stack(
-              alignment: Alignment.topCenter,
-              children: [...previous, ?current],
-            ),
-            child: _CountPanel(
-              key: ValueKey(selected.districtId),
-              count: selected,
+        : MotionSize(
+            child: _Arrive(
+              child: _CountPanel(
+                key: ValueKey(selected.districtId),
+                count: selected,
+              ),
             ),
           );
 
@@ -350,11 +345,21 @@ class _LiveCount extends StatelessWidget {
             AppSpacing.screen,
             0,
           ),
-          child: CountMap(
-            districts: shown,
-            selectedId: id,
-            homeId: homeId,
-            onSelected: onSelected,
+          // Keyed by 시도, not by district: picking another district in the
+          // same 시도 only moves the selection, while another 시도 is a new
+          // page of the map and arrives as one.
+          child: MotionSize(
+            child: _Arrive(
+              child: KeyedSubtree(
+                key: ValueKey(region),
+                child: CountMap(
+                  districts: shown,
+                  selectedId: id,
+                  homeId: homeId,
+                  onSelected: onSelected,
+                ),
+              ),
+            ),
           ),
         ),
         if (panel != null)
@@ -411,6 +416,42 @@ class _LiveCount extends StatelessWidget {
   }
 }
 
+/// A replaced block: the old one goes at once, the new one rises into place.
+///
+/// The same rule as the tabs ([AppMotion.leave]): the outgoing map fading
+/// while the incoming one arrives would put two 시도 on the page at once.
+class _Arrive extends StatelessWidget {
+  const _Arrive({required this.child});
+
+  final Widget child;
+
+  @override
+  Widget build(BuildContext context) {
+    final reduced = AppMotion.reduced(context);
+    return AnimatedSwitcher(
+      duration: reduced ? Duration.zero : AppMotion.base,
+      reverseDuration: AppMotion.leave,
+      switchInCurve: AppMotion.settle,
+      layoutBuilder: (current, previous) => Stack(
+        alignment: Alignment.topCenter,
+        children: [...previous, ?current],
+      ),
+      transitionBuilder: (child, animation) => FadeTransition(
+        opacity: animation,
+        child: AnimatedBuilder(
+          animation: animation,
+          builder: (context, child) => Transform.translate(
+            offset: Offset(0, AppMotion.rise * (1 - animation.value)),
+            child: child,
+          ),
+          child: child,
+        ),
+      ),
+      child: child,
+    );
+  }
+}
+
 /// One chip per 시도, in the payload's order, scrolled so the selected one is
 /// in view: the reader's 시도 is usually not the first.
 class _RegionChips extends StatefulWidget {
@@ -441,20 +482,22 @@ class _RegionChipsState extends State<_RegionChips> {
   @override
   void initState() {
     super.initState();
-    _reveal();
+    _reveal(animate: false);
   }
 
   @override
   void didUpdateWidget(_RegionChips oldWidget) {
     super.didUpdateWidget(oldWidget);
     if (oldWidget.selected != widget.selected) {
-      _reveal();
+      _reveal(animate: true);
     }
   }
 
   /// Centres the selected chip in this row only. `Scrollable.ensureVisible`
   /// would also scroll the page it sits in.
-  void _reveal() {
+  /// Glides on a change, so the row is seen to follow the tap; jumps on the
+  /// first frame, where there is nothing yet to follow.
+  void _reveal({required bool animate}) {
     WidgetsBinding.instance.addPostFrameCallback((_) {
       final chip = _selectedKey.currentContext?.findRenderObject();
       if (!mounted || chip == null || !_controller.hasClients) {
@@ -465,12 +508,19 @@ class _RegionChipsState extends State<_RegionChips> {
         return;
       }
       final position = _controller.position;
-      _controller.jumpTo(
-        viewport
-            .getOffsetToReveal(chip, 0.5)
-            .offset
-            .clamp(position.minScrollExtent, position.maxScrollExtent),
-      );
+      final target = viewport
+          .getOffsetToReveal(chip, 0.5)
+          .offset
+          .clamp(position.minScrollExtent, position.maxScrollExtent);
+      if (animate && !AppMotion.reduced(context)) {
+        _controller.animateTo(
+          target,
+          duration: AppMotion.base,
+          curve: AppMotion.settle,
+        );
+      } else {
+        _controller.jumpTo(target);
+      }
     });
   }
 
