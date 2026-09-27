@@ -6,6 +6,7 @@ import { MemoryPostgrest } from "../supabase/functions/_shared/memory_postgrest.
 import { districtIdFor, necSggCode } from "../supabase/functions/_shared/district_names.ts";
 import {
   ingestBills,
+  ingestBillsBackfill,
   ingestMembers,
   ingestVotes,
 } from "../supabase/functions/ingest-assembly/ingest.ts";
@@ -68,6 +69,7 @@ export async function runPipeline(): Promise<{ db: MemoryPostgrest; requests: st
   await ingestCandidates(nec);
   await ingestMembers(asm);
   await ingestBills(asm);
+  await ingestBillsBackfill(asm, { age: 21 });
   await ingestVotes(asm);
 
   const opts = { sourceUrl: "https://www.law.go.kr/법령/공직선거법", fetchedAt: NOW.toISOString() };

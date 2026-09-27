@@ -36,7 +36,7 @@ const round1 = (x: number) => Math.round(x * 10) / 10;
 export const memberId = (monaCd: string) => `assembly-${monaCd}`;
 export const necPersonId = (sgId: string, huboid: string) => `nec-${sgId}-${huboid}`;
 
-async function loadDistrictAndIncumbent(
+export async function loadDistrictAndIncumbent(
   store: ReadStore,
   id: string,
 ): Promise<{ district: DistrictRec; member: MemberRec; memberSource: SourceMeta }> {

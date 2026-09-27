@@ -10,8 +10,8 @@ import 'package:democracy/src/core/network/not_available.dart';
 import 'package:democracy/src/core/network/response_cache.dart';
 import 'package:democracy/src/features/ai_match/application/direction_providers.dart';
 import 'package:democracy/src/features/ai_match/application/match_providers.dart';
+import 'package:democracy/src/features/ai_match/data/remote_direction_repository.dart';
 import 'package:democracy/src/features/ai_match/domain/candidate_match.dart';
-import 'package:democracy/src/features/ai_match/domain/direction_report.dart';
 import 'package:democracy/src/features/district/application/district_providers.dart';
 import 'package:democracy/src/features/district/data/remote_district_repository.dart';
 import 'package:democracy/src/features/history/application/history_providers.dart';
@@ -29,11 +29,14 @@ import 'package:flutter_riverpod/misc.dart';
 
 /// Every override a build with a BFF needs, or none without one.
 ///
-/// Features with a live source read it. The rest -- AI -- are still
-/// fixture-only, and a fixture keyed to a sample district has
-/// nothing to say about a real one: they answer NotAvailableException, which
-/// the screens show as 준비 중, rather than show sample candidates under a
-/// real district's name.
+/// Features with a live source read it. The AI match is still fixture-only,
+/// and a fixture keyed to a sample district has nothing to say about a real
+/// one: it answers NotAvailableException, which the screen shows as 준비 중,
+/// rather than show sample candidates under a real district's name.
+///
+/// The direction view is live in part: the BFF counts the incumbent's bills
+/// by committee (no model) and leaves the two model-derived blocks null, so
+/// those show 준비 중 while the count renders.
 List<Override> liveDataOverrides(BffConfig? config) {
   if (config == null) {
     return const [];
@@ -74,7 +77,7 @@ List<Override> liveDataOverrides(BffConfig? config) {
     ),
     matchRepositoryProvider.overrideWithValue(const _UnavailableMatch()),
     directionRepositoryProvider.overrideWithValue(
-      const _UnavailableDirection(),
+      RemoteDirectionRepository(client),
     ),
     resultsRepositoryProvider.overrideWithValue(
       RemoteResultsRepository(client),
@@ -137,12 +140,4 @@ class _UnavailableMatch implements MatchRepository {
   @override
   Stream<String> streamReasoning(String districtId, String candidateId) =>
       Stream.error(const NotAvailableException('ai reasoning'));
-}
-
-class _UnavailableDirection implements DirectionRepository {
-  const _UnavailableDirection();
-
-  @override
-  Future<DirectionReport> loadReport(String districtId) =>
-      Future.error(const NotAvailableException('ai direction'));
 }

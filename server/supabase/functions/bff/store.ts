@@ -38,6 +38,8 @@ export interface BillRec extends Sourced {
   bill_name: string;
   age: number;
   rst_mona_cd: string | null;
+  /** 소관위원회. Read by the direction view; the profile does not select it. */
+  committee?: string | null;
   propose_dt: string | null;
   committee_dt: string | null;
   cmt_proc_dt: string | null;
@@ -45,6 +47,19 @@ export interface BillRec extends Sourced {
   /** The bill's own page on likms, when the Assembly gave one. */
   detail_link?: string | null;
 }
+
+/** One 대표발의 bill as the direction view counts it: its 소관위원회 only. */
+export interface BillCommitteeRec {
+  committee: string | null;
+  fetched_at: string | null;
+}
+
+/**
+ * The most bills one member's term is read with. PostgREST caps a response at
+ * the project's max-rows (1000 by default); no member has come near that many
+ * 대표발의 bills in one term.
+ */
+export const MAX_TERM_BILLS = 1000;
 
 export interface VoteRec extends Sourced {
   bill_id: string;
@@ -181,6 +196,8 @@ export interface ReadStore {
   incumbent(districtId: string): Promise<MemberRec | null>;
   billCount(monaCd: string, age: number): Promise<{ count: number; fetched_at: string | null }>;
   recentBills(monaCd: string, age: number, limit: number): Promise<BillRec[]>;
+  /** The committee of every bill the member led in a term. */
+  billCommittees(monaCd: string, age: number): Promise<BillCommitteeRec[]>;
   monthlyVoteParticipation(monaCd: string, months: number): Promise<MonthlyRate[]>;
   monthlyAttendance(monaCd: string, months: number): Promise<MonthlyRate[]>;
   attendanceSince(monaCd: string, sinceIsoDate: string): Promise<MonthlyRate | null>;
@@ -283,6 +300,14 @@ export class MemoryStore implements ReadStore {
           b.bill_id.localeCompare(a.bill_id)
         )
         .slice(0, limit),
+    );
+  }
+  billCommittees(monaCd: string, age: number) {
+    return Promise.resolve(
+      this.t.bills
+        .filter((b) => b.rst_mona_cd === monaCd && b.age === age)
+        .slice(0, MAX_TERM_BILLS)
+        .map((b) => ({ committee: b.committee ?? null, fetched_at: b.fetched_at })),
     );
   }
   monthlyVoteParticipation(monaCd: string, months: number) {
@@ -439,6 +464,14 @@ export class PostgrestStore implements ReadStore {
       age: `eq.${age}`,
       order: "propose_dt.desc.nullslast,bill_id.desc",
       limit: String(limit),
+    });
+  }
+  billCommittees(monaCd: string, age: number) {
+    return this.db.select<BillCommitteeRec>("bills", {
+      select: "committee,fetched_at",
+      rst_mona_cd: `eq.${monaCd}`,
+      age: `eq.${age}`,
+      limit: String(MAX_TERM_BILLS),
     });
   }
   monthlyVoteParticipation(monaCd: string, months: number) {

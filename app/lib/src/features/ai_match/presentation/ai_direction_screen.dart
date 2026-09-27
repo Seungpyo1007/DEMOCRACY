@@ -15,13 +15,21 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 /// Direction analysis: where the candidates' pledges sit, how the incumbent's
-/// bills have moved, which local issues are rising.
+/// bills split across fields, which local issues are rising.
 ///
-/// The same disclosure as the match, because it is the same kind of output:
-/// the model read wording and placed it. Every section says what it was read
-/// from, and nothing on it ranks a candidate -- the plot draws every point the
-/// same, and the issue list is ordered by how often an issue came up, which is
-/// said in so many words.
+/// Two kinds of output share this page. The stance plot and the issue flow
+/// are model output -- the model read wording and placed or classified it --
+/// and carry the same disclosure as the match: an `AI 참고 자료` label where
+/// each opens, and a scope every figure in them requires. The bill trend is
+/// not: it is a count of the incumbent's bills by the committee each was
+/// referred to, so it carries its basis instead of the AI label, and calling
+/// it AI would misdescribe it.
+///
+/// Each block renders on its own. One the payload leaves out shows 준비 중
+/// under its header while the others draw; a live build today has the trend
+/// only. Every section says what it was read from, and nothing on it ranks a
+/// candidate -- the plot draws every point the same, and the issue list is
+/// ordered by how often an issue came up, which is said in so many words.
 class AiDirectionScreen extends ConsumerWidget {
   const AiDirectionScreen({super.key});
 
@@ -47,7 +55,7 @@ class AiDirectionScreen extends ConsumerWidget {
               padding: const EdgeInsets.all(AppSpacing.screen),
               child: Text(
                 error is NotAvailableException
-                    ? '이 지역구의 AI 분석은 아직 준비 중입니다.'
+                    ? '이 지역구의 방향 분석은 아직 준비 중입니다.'
                     : '분석 결과를 불러오지 못했습니다.',
                 style: AppTextStyles.cardBody.copyWith(
                   color: AppColors.neutral700,
@@ -64,11 +72,40 @@ class AiDirectionScreen extends ConsumerWidget {
             ),
             sliver: SliverList.list(
               children: [
-                RevealIn(child: _StanceSection(stances: data.stances)),
+                RevealIn(
+                  child: switch (data.stances) {
+                    final stances? => _StanceSection(stances: stances),
+                    null => const _PendingSection(
+                      number: '01',
+                      label: _stanceLabel,
+                      note: '후보 공약 문구의 정책 성향 분석은 아직 준비 중입니다.',
+                    ),
+                  },
+                ),
                 const SizedBox(height: AppSpacing.x8),
-                RevealIn(index: 1, child: _TrendSection(trend: data.trend)),
+                RevealIn(
+                  index: 1,
+                  child: switch (data.trend) {
+                    final trend? => _TrendSection(trend: trend),
+                    null => const _PendingSection(
+                      number: '02',
+                      label: _trendLabel,
+                      note: '현직 의원의 대표발의 법안 집계는 아직 준비 중입니다.',
+                    ),
+                  },
+                ),
                 const SizedBox(height: AppSpacing.x8),
-                RevealIn(index: 2, child: _IssueSection(flow: data.issues)),
+                RevealIn(
+                  index: 2,
+                  child: switch (data.issues) {
+                    final flow? => _IssueSection(flow: flow),
+                    null => const _PendingSection(
+                      number: '03',
+                      label: _issueLabel,
+                      note: '지역 쟁점 흐름 분석은 아직 준비 중입니다.',
+                    ),
+                  },
+                ),
               ],
             ),
           ),
@@ -78,11 +115,49 @@ class AiDirectionScreen extends ConsumerWidget {
   }
 }
 
+const _stanceLabel = '후보 정책 성향';
+const _trendLabel = '의원 행보 추세';
+const _issueLabel = '지역 쟁점 흐름';
+
+/// What the bill trend was counted from, said under the chart in place of
+/// the AI label it does not carry.
+const trendBasis = '대표발의 법안의 소관 위원회 기준 집계 · 위원회 미정 법안 제외';
+
+/// A block this district has no data for yet: its header, and 준비 중 in
+/// words. No label and no figure, so nothing here asks for the disclosure.
+class _PendingSection extends StatelessWidget {
+  const _PendingSection({
+    required this.number,
+    required this.label,
+    required this.note,
+  });
+
+  final String number;
+  final String label;
+  final String note;
+
+  @override
+  Widget build(BuildContext context) {
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.stretch,
+      children: [
+        SectionHeader(number: number, label: label),
+        const SizedBox(height: AppSpacing.x3),
+        Text(
+          note,
+          style: AppTextStyles.cardBody.copyWith(color: AppColors.neutral700),
+        ),
+      ],
+    );
+  }
+}
+
 /// A section header's trailing line with the `AI 참고 자료` label before it.
 ///
-/// All three sections are model output -- a placement, a summary, a
-/// classification -- so each one is marked where it opens, next to the
-/// figure it introduces rather than once at the top of the page.
+/// The stance plot and the issue flow are model output -- a placement and a
+/// classification -- so each is marked where it opens, next to the figure it
+/// introduces rather than once at the top of the page. The bill trend is a
+/// count and does not use this.
 class _AiTrailing extends StatelessWidget {
   const _AiTrailing(this.child);
 
@@ -128,7 +203,7 @@ class _StanceSection extends StatelessWidget {
       children: [
         SectionHeader(
           number: '01',
-          label: '후보 정책 성향',
+          label: _stanceLabel,
           trailing: _AiTrailing(
             TextLink(
               label: '축 정의 공개 ↗',
@@ -432,17 +507,32 @@ class _TrendSection extends StatelessWidget {
 
   final LegislatorTrend trend;
 
+  /// How many bills each term was counted from, and how many were left out.
+  String get _counts {
+    final from = trend.fromCount;
+    final to = trend.toCount;
+    final excluded = trend.excludedCount ?? 0;
+    return [
+      if (from != null && to != null)
+        '${trend.fromTerm} $from건 · ${trend.toTerm} $to건'
+      else
+        '대표발의 법안 ${trend.billCount}건',
+      if (excluded > 0) '위원회 미정 $excluded건 제외',
+    ].join(' · ');
+  }
+
   @override
   Widget build(BuildContext context) {
-    AiDisclosureScope.require(context, widget: '_TrendSection');
-
+    // Deliberately no AiReferenceLabel and no AiDisclosureScope.require: this
+    // is a count over committee referrals, not model output, and marking it
+    // as AI would misdescribe it. Its basis line says what it is instead.
     return Column(
       crossAxisAlignment: CrossAxisAlignment.stretch,
       children: [
         SectionHeader(
           number: '02',
-          label: '의원 행보 추세',
-          trailing: _AiTrailing(SourceLine('${trend.legislatorName} · 발의 비중')),
+          label: _trendLabel,
+          trailing: SourceLine('${trend.legislatorName} · 대표발의 비중'),
         ),
         const SizedBox(height: AppSpacing.x4),
         _SlopeChart(trend: trend),
@@ -452,7 +542,8 @@ class _TrendSection extends StatelessWidget {
           style: AppTextStyles.reading.copyWith(color: AppColors.ink),
         ),
         const SizedBox(height: AppSpacing.x2),
-        SourceLine('발의 법안 ${trend.billCount}건 · AI 요약'),
+        const SourceLine(trendBasis),
+        SourceLine(_counts),
         SourceBadge(source: trend.source),
       ],
     );
@@ -463,28 +554,34 @@ class _TrendSection extends StatelessWidget {
 ///
 /// The field with the largest share in the later term is set in ink, because
 /// it is the one the summary under the chart names; the rest are grey. The
-/// lines draw themselves left to right, one after another.
+/// lines draw themselves left to right, one after another. A term with no
+/// counted bills has no dots at all and says 집계 없음 under its heading,
+/// rather than a column of zeros.
 class _SlopeChart extends StatelessWidget {
   const _SlopeChart({required this.trend});
 
   final LegislatorTrend trend;
+
+  static String _share(double? value) =>
+      value == null ? '집계 없음' : '${value.round()}%';
 
   @override
   Widget build(BuildContext context) {
     final fields = trend.fields;
     final description = [
       for (final field in fields)
-        '${field.label} ${field.from.round()}에서 ${field.to.round()}',
+        '${field.label} ${_share(field.from)}에서 ${_share(field.to)}',
     ].join(', ');
     final base = DefaultTextStyle.of(context).style;
 
     return Semantics(
       label:
-          '분야별 발의 비중 ${trend.fromTerm}에서 ${trend.toTerm}로: '
+          '분야별 대표발의 비중 ${trend.fromTerm}에서 ${trend.toTerm}로: '
           '$description',
       excludeSemantics: true,
       child: SizedBox(
-        height: 180,
+        // Room for every label once they are pushed apart.
+        height: math.max(180, 48.0 + fields.length * _SlopePainter._labelGap),
         child: MotionIn(
           duration: AppMotion.slow,
           delay: AppMotion.staggerFor(2),
@@ -549,22 +646,25 @@ class _SlopePainter extends CustomPainter {
   )..layout();
 
   /// Pushes labels apart so two close values do not print on top of each
-  /// other. The dots stay where the values are; only the words move.
-  List<double> _spread(List<double> ys, double bottom) {
-    final order = List.generate(ys.length, (i) => i)
-      ..sort((a, b) => ys[a].compareTo(ys[b]));
+  /// other. The dots stay where the values are; only the words move. A field
+  /// with no value in this term has no label and keeps its null.
+  List<double?> _spread(List<double?> ys, double bottom) {
+    final order = [
+      for (var i = 0; i < ys.length; i++)
+        if (ys[i] != null) i,
+    ]..sort((a, b) => ys[a]!.compareTo(ys[b]!));
     final out = List.of(ys);
     for (var k = 1; k < order.length; k++) {
-      final prev = out[order[k - 1]];
-      if (out[order[k]] - prev < _labelGap) {
+      final prev = out[order[k - 1]]!;
+      if (out[order[k]]! - prev < _labelGap) {
         out[order[k]] = prev + _labelGap;
       }
     }
     // If that pushed the last one off the bottom, shift the stack back up.
-    final overflow = order.isEmpty ? 0.0 : out[order.last] - bottom;
+    final overflow = order.isEmpty ? 0.0 : out[order.last]! - bottom;
     if (overflow > 0) {
-      for (var i = 0; i < out.length; i++) {
-        out[i] -= overflow;
+      for (final i in order) {
+        out[i] = out[i]! - overflow;
       }
     }
     return out;
@@ -572,30 +672,61 @@ class _SlopePainter extends CustomPainter {
 
   @override
   void paint(Canvas canvas, Size size) {
-    if (fields.isEmpty) {
+    final values = [
+      for (final f in fields) ...[?f.from, ?f.to],
+    ];
+    if (values.isEmpty) {
       return;
     }
 
     const top = 32.0;
     final bottom = size.height - 10;
-    final leftX = math.min(76.0, size.width * 0.24);
-    final rightX = size.width - leftX;
+    // Each side is as wide as its longest label needs (법사·행정 38% is wider
+    // than the chart's default gutter), so no label runs off the edge.
+    double widest(Iterable<String> labels) => labels.fold(
+      0,
+      (width, label) =>
+          math.max(width, _text(label, leadingLabelStyle).width + 12),
+    );
+    final gutter = math.min(76.0, size.width * 0.24);
+    final leftX = math.max(
+      gutter,
+      widest([
+        for (final f in fields)
+          if (f.from != null) '${f.label} ${f.from!.round()}%',
+      ]),
+    );
+    final rightX =
+        size.width -
+        math.max(
+          gutter,
+          widest([
+            for (final f in fields)
+              if (f.to != null) '${f.to!.round()}% ${f.label}',
+          ]),
+        );
 
-    final values = [
-      for (final f in fields) ...[f.from, f.to],
-    ];
     final low = values.reduce(math.min);
     final high = values.reduce(math.max);
     final span = high - low == 0 ? 1 : high - low;
     double yOf(double v) => top + (high - v) / span * (bottom - top);
+    double? yOrNull(double? v) => v == null ? null : yOf(v);
 
-    for (final (x, term) in [(leftX, fromTerm), (rightX, toTerm)]) {
+    for (final (x, term, present) in [
+      (leftX, fromTerm, fields.any((f) => f.from != null)),
+      (rightX, toTerm, fields.any((f) => f.to != null)),
+    ]) {
       final heading = _text(term, headingStyle);
       heading.paint(canvas, Offset(x - heading.width / 2, 0));
+      if (!present) {
+        // Said in words, not left as a blank that could read as zero.
+        final none = _text('집계 없음', labelStyle);
+        none.paint(canvas, Offset(x - none.width / 2, heading.height + 4));
+      }
     }
 
-    final leftYs = _spread([for (final f in fields) yOf(f.from)], bottom);
-    final rightYs = _spread([for (final f in fields) yOf(f.to)], bottom);
+    final leftYs = _spread([for (final f in fields) yOrNull(f.from)], bottom);
+    final rightYs = _spread([for (final f in fields) yOrNull(f.to)], bottom);
 
     // Grey lines first so the ink one is drawn over them where they cross.
     final order = [
@@ -618,32 +749,37 @@ class _SlopePainter extends CustomPainter {
         continue;
       }
 
-      final from = Offset(leftX, yOf(field.from));
-      final to = Offset(rightX, yOf(field.to));
-      final end = Offset.lerp(from, to, t)!;
-
+      final fromShare = field.from;
+      final toShare = field.to;
+      final from = fromShare == null ? null : Offset(leftX, yOf(fromShare));
+      final to = toShare == null ? null : Offset(rightX, yOf(toShare));
       final dot = Paint()..color = color;
-      canvas
-        ..drawLine(
+
+      if (from != null) {
+        canvas.drawCircle(from, 3.5, dot);
+        final left = _text('${field.label} ${fromShare!.round()}%', style);
+        left.paint(
+          canvas,
+          Offset(from.dx - 10 - left.width, leftYs[i]! - left.height / 2),
+        );
+      }
+
+      // A line only joins two points; a field with one term is a lone dot.
+      if (from != null && to != null) {
+        canvas.drawLine(
           from,
-          end,
+          Offset.lerp(from, to, t)!,
           Paint()
             ..color = color
             ..strokeWidth = isLeading ? 2.6 : 1.6
             ..strokeCap = StrokeCap.round,
-        )
-        ..drawCircle(from, 3.5, dot);
+        );
+      }
 
-      final left = _text('${field.label} ${field.from.round()}%', style);
-      left.paint(
-        canvas,
-        Offset(from.dx - 10 - left.width, leftYs[i] - left.height / 2),
-      );
-
-      if (t >= 1) {
+      if (to != null && (from == null || t >= 1)) {
         canvas.drawCircle(to, 3.5, dot);
-        final right = _text('${field.to.round()}% ${field.label}', style);
-        right.paint(canvas, Offset(to.dx + 10, rightYs[i] - right.height / 2));
+        final right = _text('${toShare!.round()}% ${field.label}', style);
+        right.paint(canvas, Offset(to.dx + 10, rightYs[i]! - right.height / 2));
       }
     }
   }
@@ -671,7 +807,7 @@ class _IssueSection extends StatelessWidget {
       children: [
         SectionHeader(
           number: '03',
-          label: '지역 쟁점 흐름',
+          label: _issueLabel,
           trailing: _AiTrailing(SourceLine(flow.period)),
         ),
         const SizedBox(height: AppSpacing.x2),

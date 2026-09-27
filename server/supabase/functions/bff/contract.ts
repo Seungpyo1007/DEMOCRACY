@@ -191,6 +191,47 @@ export function validatePledgeBoard(json: unknown): string[] {
   return errs;
 }
 
+/**
+ * DirectionReport (features/ai_match/domain/direction_report.dart). Each block
+ * is optional -- null or absent is 준비 중 -- but a block that is present must
+ * parse. The BFF serves `trend` only; `stances` and `issues` are model output
+ * and must stay null until something produces them with a disclosure.
+ */
+export function validateDirectionReport(json: unknown): string[] {
+  const errs: string[] = [];
+  if (!isMap(json)) return ["direction: not an object"];
+  const t = json.trend;
+  if (t !== null && t !== undefined) {
+    if (!isMap(t)) {
+      errs.push("trend: not an object");
+    } else {
+      for (const k of ["legislatorName", "fromTerm", "toTerm", "summary"]) {
+        if (typeof t[k] !== "string") errs.push(`trend.${k}: must be a string`);
+      }
+      if (!Number.isInteger(t.billCount)) errs.push("trend.billCount: must be an int");
+      for (const k of ["fromCount", "toCount", "excludedCount"]) {
+        if (t[k] !== undefined && t[k] !== null && !Number.isInteger(t[k])) {
+          errs.push(`trend.${k}: must be an int when present`);
+        }
+      }
+      (Array.isArray(t.fields) ? t.fields : []).forEach((f, i) => {
+        const share = (v: unknown) => v === null || typeof v === "number";
+        if (!isMap(f) || !nonEmpty(f.label) || !share(f.from) || !share(f.to)) {
+          return errs.push(`trend.fields[${i}]: needs label and from/to as number or null`);
+        }
+        if (f.from === null && f.to === null) errs.push(`trend.fields[${i}]: no term at all`);
+      });
+      source(t.source, "direction.trend", errs);
+    }
+  }
+  for (const k of ["stances", "issues"]) {
+    if (json[k] !== null && json[k] !== undefined) {
+      errs.push(`${k}: model output is not served`);
+    }
+  }
+  return errs;
+}
+
 /** KstInstant.parse: parseable, and stating its offset (Z or ±hh:mm). */
 function offsetTimestamp(v: unknown): boolean {
   return nonEmpty(v) && !Number.isNaN(Date.parse(v)) && /(Z|[+-]\d{2}:?\d{2})$/.test(v);

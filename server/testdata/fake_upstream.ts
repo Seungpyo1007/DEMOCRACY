@@ -42,7 +42,11 @@ export function fakeUpstream(overrides: Record<string, () => Response> = {}): Fa
         case "ALLNAMEMBER":
           return Promise.resolve(json(sample("assembly_allmembers.json")));
         case "nzmimeepazxkubdpn":
-          return Promise.resolve(json(sample("assembly_bills.json")));
+          return Promise.resolve(json(
+            p.get("AGE") === "21"
+              ? sample("assembly_bills_21.json")
+              : sample("assembly_bills.json"),
+          ));
         case "nojepdqqaweusdfbi":
           return Promise.resolve(json(
             p.get("BILL_ID") === "PRC_FAKE0001"

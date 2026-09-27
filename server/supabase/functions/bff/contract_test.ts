@@ -6,6 +6,7 @@ import { findKeyedUrls } from "../_shared/provenance.ts";
 import {
   validateAddressSuggestions,
   validateCommunity,
+  validateDirectionReport,
   validateDistrictProfile,
   validateElectionResults,
   validateEnvelope,
@@ -265,6 +266,77 @@ Deno.test("pledges: curated board with unsourced / unevidenced items dropped", a
   assertEquals(validateEnvelope(other.body, true), []);
 });
 
+Deno.test("direction: 21대 vs 22대 field shares from 소관위원회, and nothing else", async () => {
+  const { get } = await setup();
+  const { res, body } = await get(`/districts/${MAPO_B}/direction`);
+  assertEquals(res.status, 200);
+  assertEquals(res.headers.get("Cache-Control"), "public, max-age=300");
+  assertEquals(validateEnvelope(body, false), []);
+  assertEquals(validateDirectionReport(body.data), []);
+  assertClean(body);
+
+  const t = body.data.trend;
+  // 21대: 보건복지 ×2, 국토교통 ×1, one bill not yet referred (left out).
+  // 22대: 국토교통 ×3.
+  assertEquals(
+    [t.legislatorName, t.fromTerm, t.toTerm, t.billCount, t.fromCount, t.toCount, t.excludedCount],
+    ["가상 의원", "21대", "22대", 6, 3, 3, 1],
+  );
+  assertEquals(t.fields, [
+    { label: "복지·보건", from: 66.7, to: 0 },
+    { label: "국토·교통", from: 33.3, to: 100 },
+  ]);
+  assertEquals(
+    t.summary,
+    "21대에는 복지·보건 분야 법안 비중이 가장 컸고(67%), 22대에는 국토·교통 분야 비중이 가장 큽니다(100%).",
+  );
+  assertEquals(
+    t.source.sourceUrl,
+    "https://open.assembly.go.kr/portal/data/service/selectAPIServicePage.do/OK7XM1000938DS17215",
+  );
+  // Model output is not produced here.
+  assertEquals([body.data.stances, body.data.issues], [null, null]);
+  assert(!JSON.stringify(body.data).includes("AI"));
+});
+
+Deno.test("direction: a term with no counted bills has no point, not a zero", async () => {
+  const { get } = await setup();
+  const { body } = await get(`/districts/${MAPO_A}/direction`);
+  assertEquals(validateDirectionReport(body.data), []);
+  const t = body.data.trend;
+  assertEquals([t.fromCount, t.toCount], [1, 0]);
+  assertEquals(t.fields, [{ label: "환경·노동", from: 100, to: null }]);
+  assertEquals(
+    t.summary,
+    "21대에는 환경·노동 분야 법안 비중이 가장 컸습니다(100%). 22대에는 집계된 대표발의 법안이 없습니다.",
+  );
+});
+
+Deno.test("direction: no trend until the 21대 has been loaded", async () => {
+  const { db } = await runPipeline();
+  const tables = toTables(db);
+  tables.bills = tables.bills.filter((b) => b.age !== 21);
+  const handler = createHandler({
+    store: new MemoryStore(tables),
+    fetch: fakeUpstream().fetch,
+    jusoKey: "",
+    vworldKey: "",
+    now: () => NOW,
+    ...signedOut(),
+  });
+  const res = await handler(
+    new Request(`https://r/functions/v1/bff/districts/${MAPO_B}/direction`),
+  );
+  const body = await res.json();
+  assertEquals(res.status, 200);
+  assertEquals(validateDirectionReport(body.data), []);
+  assertEquals(
+    body.data.trend,
+    null,
+    "no 21대 rows is a gap in the data, not a fact about the member",
+  );
+});
+
 Deno.test("pledges: a list-only board carries no part of a verdict", async () => {
   const { get } = await setup();
   const { res, body } = await get(`/districts/${MAPO_A}/pledges`);
@@ -366,6 +438,9 @@ Deno.test("the app's own fixtures pass the validator (validator is not too stric
     validateElectionResults(JSON.parse(await text("results_fixture-seoul-mapo-b.json"))),
     [],
   );
+  // The offline fixture also carries sample AI blocks; only its trend is the served shape.
+  const direction = JSON.parse(await text("ai_direction_fixture-seoul-mapo-b.json"));
+  assertEquals(validateDirectionReport({ trend: direction.trend }), []);
 });
 
 Deno.test("validator catches what the Dart parsers reject", () => {
@@ -438,4 +513,21 @@ Deno.test("validator catches what the Dart parsers reject", () => {
       source: src,
     }).some((e) => e.includes("unknown status")),
   );
+  const direction = validateDirectionReport({
+    trend: {
+      legislatorName: "a",
+      fromTerm: "21대",
+      toTerm: "22대",
+      billCount: 1.5,
+      summary: "",
+      fields: [{ label: "x", from: null, to: null }, { label: "", from: 1, to: 2 }],
+    },
+    stances: { candidates: [] },
+  });
+  assert(direction.some((e) => e.includes("billCount")));
+  assert(direction.some((e) => e.includes("no term at all")));
+  assert(direction.some((e) => e.includes("fields[1]")));
+  assert(direction.some((e) => e.includes("direction.trend: no source")));
+  assert(direction.some((e) => e.includes("stances")));
+  assertEquals(validateDirectionReport({ trend: null }), []);
 });

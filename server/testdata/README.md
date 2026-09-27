@@ -22,6 +22,10 @@ fictional people. Their votes add up (`yutusu` = the candidates' votes, `tusu` =
 `mutusu`) and give the winners the shares in `nec_winners_*.json`. The 20160413 sample answers only
 a call by 선거구 name, so the ingest's fallback is exercised.
 
+`assembly_bills_21.json` is the same bills shape for `AGE=21`, served by `fake_upstream.ts` when the
+request asks for that term. It holds a bill with no 소관위원회 and one led by a member who no longer
+sits, so the backfill's filter and the direction view's exclusion both have something to act on.
+
 Field mapping lives in one normalizer per source
 (`supabase/functions/_shared/normalize_assembly.ts`, `normalize_nec.ts`, `geo.ts`). If a live call
 differs, fix it there, then update the sample here.

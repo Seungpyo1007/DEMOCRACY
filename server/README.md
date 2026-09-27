@@ -25,7 +25,7 @@ Reading needs no account; the account routes need a Supabase Auth sign-in.
 | `supabase/migrations/20260927130000_pledge_not_judged.sql` | Pledge status `notJudged` (「판정 전」), which may carry no evidence, judgement or bills                                  |
 | `supabase/seed.sql`                                        | **Sample** 마포구 갑/을 + 종로구 district mapping, generated from `testdata/`. Not verified against [별표 1].             |
 | `supabase/functions/_shared/`                              | API clients, normalizers (one per source), envelope, provenance, PostgREST client                                         |
-| `supabase/functions/ingest-assembly/`                      | Members (daily), bills and plenary votes (every 6 h)                                                                      |
+| `supabase/functions/ingest-assembly/`                      | Members (daily), bills and plenary votes (every 6 h), 21대 bills (`?mode=bills_backfill&age=21`)                          |
 | `supabase/functions/ingest-nec/`                           | Election and district codes and candidates (weekly), historical winners (`?mode=backfill`), final counts (`?mode=counts`) |
 | `supabase/functions/bff/`                                  | The API. `contract.ts` mirrors the app's Dart parsers. `account.ts`, `residency.ts`: signed-in. `community.ts`: posts.    |
 | `scripts/`                                                 | One-off importers that write SQL to stdout; `build_district_areas.ts` builds the mapping CSV                              |
@@ -51,14 +51,15 @@ A success is `200 {"servedAt": ISO-UTC, "data": {...}}`. An error is non-2xx
 `residency_required` (403), `content_rejected` (422, with `error.reason`: `hate`, never the matched
 text) and `rate_limited` (429).
 
-| Route                              | data                                                                                     |
-| ---------------------------------- | ---------------------------------------------------------------------------------------- |
-| `GET /districts/{id}/profile`      | DistrictProfile. Cached 300 s.                                                           |
-| `GET /districts/{id}/history`      | HistoryRecord. Cached 300 s.                                                             |
-| `GET /districts/{id}/pledges`      | PledgeBoard, or `404 not_curated`                                                        |
-| `GET /districts/{id}/results`      | RawElectionResults: the 22대 final count. Cached 300 s.                                  |
-| `GET /address/search?q=`           | `{suggestions:[{address, district:{id, displayName}}]}`. Unmapped addresses are dropped. |
-| `GET /location/district?lat=&lng=` | `{district:{id, displayName}}`, or `404 no_match`                                        |
+| Route                              | data                                                                                        |
+| ---------------------------------- | ------------------------------------------------------------------------------------------- |
+| `GET /districts/{id}/profile`      | DistrictProfile. Cached 300 s.                                                              |
+| `GET /districts/{id}/history`      | HistoryRecord. Cached 300 s.                                                                |
+| `GET /districts/{id}/pledges`      | PledgeBoard, or `404 not_curated`                                                           |
+| `GET /districts/{id}/results`      | RawElectionResults: the 22대 final count. Cached 300 s.                                     |
+| `GET /districts/{id}/direction`    | DirectionReport: `trend` only (or `null`); `stances`, `issues` always `null`. Cached 300 s. |
+| `GET /address/search?q=`           | `{suggestions:[{address, district:{id, displayName}}]}`. Unmapped addresses are dropped.    |
+| `GET /location/district?lat=&lng=` | `{district:{id, displayName}}`, or `404 no_match`                                           |
 
 - **District ids** have the form `nec-<sggCode>`.
   - NEC's `getCommonSggCodeList` has **no code field**. It returns only sggName, sdName, wiwName,
@@ -84,6 +85,18 @@ text) and `rate_limited` (429).
   - 개표 share = a candidate's votes ÷ the 선거구's valid votes (유효투표수), to one decimal.
     `historical` is the winner's share per election for the same 선거구 (by name or curated
     lineage); a year that does not match is left out.
+  - direction `trend` = the incumbent's 대표발의 bills in the 21대 and in the 22대, each term split
+    into fields by the bill's 소관위원회 (`COMMITTEE`) through the fixed table in
+    `bff/bill_fields.ts`. Shares are percent of that term's bills that have a committee. Bills not
+    yet referred to a committee are left out and counted in `excludedCount`.
+    - `{legislatorName, fromTerm:"21대", toTerm:"22대", billCount, fromCount, toCount,
+      excludedCount, fields:[{label, from, to}], summary, source}`.
+      A term with no counted bills has `from` (or `to`) `null`: no point, not 0%.
+    - `summary` is a template over the numbers: which field had the largest share in each term.
+    - `trend` is `null` until the 21대 backfill has run (no 21대 rows at all), or when neither term
+      has a counted bill.
+    - No model is involved. `stances` and `issues` would need one and are not served; the app shows
+      them as 준비 중.
   - There are no rankings, scores or labels.
 - **Results** (`/results`) is RawElectionResults:
   - `live: false` and `overallCountedShare: 100`; it is a final count.
@@ -96,6 +109,24 @@ text) and `rate_limited` (429).
     the app's gate is defence in depth.
   - `polls` is always `[]`: 제108조제5항 needs a 심의위 registration behind each series, and nothing
     here verifies one yet.
+
+Committee → field (`bff/bill_fields.ts`; exact name first, then a stem, else 기타):
+
+| Field     | Committees                                                                     |
+| --------- | ------------------------------------------------------------------------------ |
+| 법사·행정 | 국회운영, 법제사법, 행정안전                                                   |
+| 경제·산업 | 정무, 기획재정 (재정경제기획), 산업통상자원중소벤처기업 (산업통상중소벤처기업) |
+| 과학·방송 | 과학기술정보방송통신                                                           |
+| 복지·보건 | 보건복지, 여성가족 (성평등가족)                                                |
+| 교육·문화 | 교육, 문화체육관광                                                             |
+| 국토·교통 | 국토교통                                                                       |
+| 농림·해양 | 농림축산식품해양수산                                                           |
+| 환경·노동 | 환경노동 (기후에너지환경노동)                                                  |
+| 외교·안보 | 외교통일, 국방, 정보                                                           |
+| 기타      | 예산결산특별, 윤리특별, and any committee neither the table nor a stem places  |
+
+Names in parentheses are the 22대 mid-term renames as recorded in the table. They are not yet
+checked against a live bill row; the stems (재정, 산업통상, 가족, 노동, …) place them either way.
 
 ### Account routes
 
@@ -225,6 +256,16 @@ write function.
      `select * from net._http_response order by id desc limit 5;`.
    - Votes backfill 40 bills per call. The hourly `ingest-assembly-votes` job works through the 22대
      backlog.
+   - 21대 bills, for the direction view's term comparison, are a by-hand backfill. It runs after
+     `mode=members`, keeps only bills led by a sitting member, and fetches 10 pages of 1000 per
+     call. Repeat with the `nextPage` from each summary until `done` is `true` (about three calls):
+     ```sql
+     select public.call_ingest('ingest-assembly', 'mode=bills_backfill&age=21&page=1');
+     select public.call_ingest('ingest-assembly', 'mode=bills_backfill&age=21&page=11');
+     select public.call_ingest('ingest-assembly', 'mode=bills_backfill&age=21&page=21');
+     ```
+     The 6-hourly `bills_votes` job stays on the 22대 and never touches these rows. Re-run the
+     backfill after a by-election brings in a member who also sat in the 21대.
    - Row-count guards refuse to apply fewer than 250 members, 250 districts or counts for fewer than
      250 선거구.
    - `mode=counts` asks each 시도 once and asks by 선거구 name for whatever that leaves out, so one
