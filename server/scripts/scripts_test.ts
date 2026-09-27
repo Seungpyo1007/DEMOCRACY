@@ -1,4 +1,11 @@
-import { assert, assertEquals, assertMatch, assertStringIncludes, assertThrows } from "@std/assert";
+import {
+  assert,
+  assertEquals,
+  assertMatch,
+  assertRejects,
+  assertStringIncludes,
+  assertThrows,
+} from "@std/assert";
 import { districtAreasToSql, parseDistrictAreas } from "./import_district_areas.ts";
 import { bridgeToSql, parseBridge } from "./import_bjdong_hdong.ts";
 import {
@@ -9,7 +16,16 @@ import {
   parseKikMix,
   parseLawTable,
 } from "./build_district_areas.ts";
-import { attendanceToSql } from "./import_attendance.ts";
+import { attendanceHeader, attendanceToSql, parseAttendance } from "./import_attendance.ts";
+import {
+  ATTENDANCE_SOURCE_URL,
+  holdsEveryExactMatch,
+  type MemberCandidate,
+  parseAttendanceSheet,
+  resolveMonaCodes,
+  sessionCsv,
+} from "./fetch_attendance.ts";
+import { readFirstSheet } from "./lib/xlsx.ts";
 import { resultsToSql } from "./import_historical_results.ts";
 import { geojsonToSql } from "./import_geojson.ts";
 import { pledgesToSql, regionToSql } from "./import_curated.ts";
@@ -23,7 +39,7 @@ import {
   nameOf,
 } from "./build_district_lineage.ts";
 import { lineageToSql } from "./import_district_lineage.ts";
-import { parseCsv } from "./lib/csv.ts";
+import { parseCsv, parseCsvObjects } from "./lib/csv.ts";
 import { lit, requireHttpUrl } from "./lib/sql.ts";
 import { sample } from "../testdata/fake_upstream.ts";
 import { MAPO_A, MAPO_B } from "../testdata/pipeline.ts";
@@ -577,4 +593,215 @@ Deno.test("22대 pilot pledge lists: 선거공보 only, nothing judged, importab
     assert(!/'(fulfilled|inProgress|unfulfilled|reversed)'/.test(sql), entry.name);
   }
   assertEquals([...seen].sort(), Object.keys(expected).sort());
+});
+
+// ------------------------------------------------------------------ 본회의 출결 xlsx
+
+/** A zip with one stored entry per file, or deflated ones when `deflate` is set. */
+async function zipOf(files: Record<string, string>, deflate = false): Promise<Uint8Array> {
+  const enc = new TextEncoder();
+  const locals: Uint8Array[] = [];
+  const centrals: Uint8Array[] = [];
+  let offset = 0;
+  for (const [name, text] of Object.entries(files)) {
+    const raw = enc.encode(text);
+    const data = deflate
+      ? new Uint8Array(
+        await new Response(
+          new Blob([raw]).stream().pipeThrough(new CompressionStream("deflate-raw")),
+        ).arrayBuffer(),
+      )
+      : raw;
+    const n = enc.encode(name);
+    const local = new Uint8Array(30 + n.length + data.length);
+    const lv = new DataView(local.buffer);
+    lv.setUint32(0, 0x04034b50, true);
+    lv.setUint16(8, deflate ? 8 : 0, true);
+    lv.setUint32(18, data.length, true);
+    lv.setUint32(22, raw.length, true);
+    lv.setUint16(26, n.length, true);
+    local.set(n, 30);
+    local.set(data, 30 + n.length);
+    const central = new Uint8Array(46 + n.length);
+    const cv = new DataView(central.buffer);
+    cv.setUint32(0, 0x02014b50, true);
+    cv.setUint16(10, deflate ? 8 : 0, true);
+    cv.setUint32(20, data.length, true);
+    cv.setUint32(24, raw.length, true);
+    cv.setUint16(28, n.length, true);
+    cv.setUint32(42, offset, true);
+    central.set(n, 46);
+    locals.push(local);
+    centrals.push(central);
+    offset += local.length;
+  }
+  const cdSize = centrals.reduce((s, c) => s + c.length, 0);
+  const eocd = new Uint8Array(22);
+  const ev = new DataView(eocd.buffer);
+  ev.setUint32(0, 0x06054b50, true);
+  ev.setUint16(8, centrals.length, true);
+  ev.setUint16(10, centrals.length, true);
+  ev.setUint32(12, cdSize, true);
+  ev.setUint32(16, offset, true);
+  const out = new Uint8Array(offset + cdSize + 22);
+  let p = 0;
+  for (const part of [...locals, ...centrals, eocd]) {
+    out.set(part, p);
+    p += part.length;
+  }
+  return out;
+}
+
+Deno.test("xlsx reader: shared, inline and numeric cells, stored or deflated", async () => {
+  const files = {
+    "xl/sharedStrings.xml":
+      '<sst><si><t>의원명</t></si><si><r><t>A&amp;</t></r><r><t xml:space="preserve">B</t></r></si></sst>',
+    "xl/worksheets/sheet1.xml": '<worksheet><sheetData><row r="1"><c r="A1" t="s"><v>0</v></c>' +
+      '<c r="C1" t="inlineStr"><is><t>&#51649;</t></is></c></row><row r="2"/>' +
+      '<row r="3"><c r="B3" t="s"><v>1</v></c><c r="C3"><v>2</v></c><c r="D3"/></row>' +
+      "</sheetData></worksheet>",
+  };
+  for (const deflate of [false, true]) {
+    assertEquals(await readFirstSheet(await zipOf(files, deflate)), [
+      ["의원명", "", "직"],
+      [],
+      ["", "A&B", "2"],
+    ]);
+  }
+  await assertRejects(() => readFirstSheet(new Uint8Array(40)), Error, "not a zip");
+});
+
+/** A 회기 file as the Assembly lays it out (see fetch_attendance.ts). */
+function attendanceRows(members: string[][]): string[][] {
+  return [
+    ["구분", "구분", "438회(임시)", "438회(임시)", "438회(임시)", "", "", "", "", "", "총 계"],
+    [
+      "의원명",
+      "소속정당",
+      "1차(본회의)",
+      "2차(본회의)",
+      "회의일수",
+      "출석",
+      "결석",
+      "청가",
+      "출장",
+      "결석신고서",
+    ],
+    ["의원명", "소속정당", "(2026년08월20일)", "(2026년08월26일)", "회의일수"],
+    ...members,
+    ["", "", "", "", "", "", "", "", "", "", "0"],
+  ];
+}
+
+Deno.test("attendance sheet: sittings, 차수 labels, '-' as not seated, self-check", () => {
+  const sheet = parseAttendanceSheet(attendanceRows([
+    ["가나다", "가당", "출석", "결석신고서", "2", "1", "0", "0", "0", "1", "119", "비고"],
+    ["라마바", "나당", "-", "청가", "1", "0", "0", "1", "0", "0"],
+  ]));
+  assertEquals(sheet.session, 438);
+  assertEquals(sheet.sittings, [
+    { label: "제438회 제1차", date: "2026-08-20" },
+    { label: "제438회 제2차", date: "2026-08-26" },
+  ]);
+  assertEquals(sheet.members[1], { name: "라마바", statuses: [null, "청가"] });
+
+  assertThrows(
+    () =>
+      parseAttendanceSheet(attendanceRows([
+        ["가나다", "가당", "출석", "출장", "2", "2", "0", "0", "0", "0"],
+      ])),
+    Error,
+    "cells give 2/1/0/0/1/0 but the file says 2/2/0/0/0/0",
+  );
+  assertThrows(
+    () =>
+      parseAttendanceSheet(attendanceRows([
+        ["가나다", "가당", "출석", "지각", "2", "1", "0", "0", "0", "0"],
+      ])),
+    Error,
+    "unknown status 지각",
+  );
+  const moved = attendanceRows([]);
+  moved[1][6] = "청가";
+  assertThrows(() => parseAttendanceSheet(moved), Error, "count columns changed");
+});
+
+Deno.test("attendance names: 22대 only, 한자 twin told apart as the source does", async () => {
+  const rows: Record<string, MemberCandidate[]> = {
+    박지원: [
+      { code: "H7X3372O", name: "박지원", hanja: "朴芝源", terms: "제22대" },
+      { code: "KFX3165F", name: "박지원", hanja: "朴志遠", terms: "제13대" },
+      { code: "8BF5855P", name: "박지원", hanja: "朴智元", terms: "제20대, 제22대" },
+    ],
+    김윤: [
+      { code: "5N65159P", name: "김윤", hanja: "金輪", terms: "제22대" },
+      { code: "JZY9937U", name: "김윤덕", hanja: "金潤德", terms: "제21대, 제22대" },
+    ],
+    동명: [
+      { code: "A", name: "동명", hanja: "同名", terms: "제22대" },
+      { code: "B", name: "동명", hanja: "洞明", terms: "제22대" },
+    ],
+  };
+  const lookup = (n: string) => Promise.resolve(rows[n] ?? []);
+  const codes = await resolveMonaCodes(["박지원", "朴芝源", "김윤", "박지원"], lookup);
+  assertEquals(Object.fromEntries(codes), {
+    박지원: "8BF5855P",
+    朴芝源: "H7X3372O",
+    김윤: "5N65159P",
+  });
+  await assertRejects(() => resolveMonaCodes(["동명"], lookup), Error, "동명: ambiguous A/B");
+  await assertRejects(() => resolveMonaCodes(["없음"], lookup), Error, "없음: no 22대 member");
+
+  // The keyless sample key stops at 5 rows; that is still complete once a longer name shows.
+  assert(holdsEveryExactMatch("김윤", rows.김윤));
+  assert(!holdsEveryExactMatch("동명", rows.동명));
+});
+
+Deno.test("attendance CSV: written per 회기, read back by the importer with its header", () => {
+  const sheet = parseAttendanceSheet(attendanceRows([
+    ["라마바", "나당", "-", "청가", "1", "0", "0", "1", "0", "0"],
+    ["가나다", "가당", "출석", "결석신고서", "2", "1", "0", "0", "0", "1"],
+  ]));
+  const csv = sessionCsv(sheet, new Map([["가나다", "AAA111"], ["라마바", "BBB222"]]), {
+    fileName: "제438회국회(임시회) 본회의 출결현황",
+    fileSeq: 10001952,
+    postedAt: "2026-08-31",
+    fetchedAt: "2026-09-28",
+  });
+  assertEquals(csv.split("\n").filter((l) => l && !l.startsWith("#")), [
+    "mona_cd,member_name,meeting_date,meeting_label,status",
+    "AAA111,가나다,2026-08-20,제438회 제1차,출석",
+    "AAA111,가나다,2026-08-26,제438회 제2차,결석신고서",
+    "BBB222,라마바,2026-08-26,제438회 제2차,청가",
+  ]);
+  const header = attendanceHeader(csv);
+  assertEquals(header, { sourceUrl: ATTENDANCE_SOURCE_URL, fetchedAt: "2026-09-28" });
+  const rows = parseAttendance(csv, { sourceUrl: header.sourceUrl!, fetchedAt: "2026-09-28" });
+  assertEquals(rows.length, 3);
+  assertEquals(rows[1].status, "결석신고서");
+  assertThrows(
+    () => parseAttendance("mona_cd,meeting_date,meeting_label,status\nX,2026-01-01,a,지각\n", opts),
+    Error,
+    "status 지각",
+  );
+});
+
+Deno.test("committed 22대 attendance files load and keep one code per name", async () => {
+  const byCode = new Map<string, string>();
+  let rows = 0;
+  for await (const e of Deno.readDir(new URL("../data/attendance_22", import.meta.url))) {
+    const csv = await Deno.readTextFile(
+      new URL(`../data/attendance_22/${e.name}`, import.meta.url),
+    );
+    const h = attendanceHeader(csv);
+    assertEquals(h.sourceUrl, ATTENDANCE_SOURCE_URL, e.name);
+    assertMatch(h.fetchedAt ?? "", /^\d{4}-\d{2}-\d{2}$/);
+    rows += parseAttendance(csv, { sourceUrl: h.sourceUrl!, fetchedAt: h.fetchedAt! }).length;
+    for (const r of parseCsvObjects(csv)) {
+      assertEquals(byCode.get(r.mona_cd) ?? r.member_name, r.member_name, r.mona_cd);
+      byCode.set(r.mona_cd, r.member_name);
+    }
+  }
+  assert(rows > 0);
+  assertEquals(new Set(byCode.values()).size, byCode.size);
 });
