@@ -374,6 +374,28 @@ void main() {
       expect(find.text('90', findRichText: true), findsOneWidget);
     });
 
+    // The underline used to restart when the writing finished: the reveal
+    // swapped its wrapper at the end, which rebuilt the note inside it.
+    testWidgets('a margin note keeps its underline when the writing ends', (
+      tester,
+    ) async {
+      await tester.pumpWidget(
+        MaterialApp(
+          theme: AppTheme.light(TargetPlatform.iOS),
+          home: const Scaffold(
+            body: Center(child: MarginNote('판정 근거는 모두 원문으로 연결됩니다')),
+          ),
+        ),
+      );
+      await tester.pump(AppMotion.write - const Duration(milliseconds: 50));
+      final before = tester.state(find.byType(MotionIn).last);
+
+      await tester.pump(const Duration(milliseconds: 100));
+      await tester.pumpAndSettle();
+
+      expect(tester.state(find.byType(MotionIn).last), same(before));
+    });
+
     test('a stagger never pushes an item past the entrance budget', () {
       for (final bars in [false, true]) {
         for (var i = 0; i < 100; i++) {

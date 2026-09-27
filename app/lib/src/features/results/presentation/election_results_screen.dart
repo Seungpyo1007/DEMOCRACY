@@ -97,6 +97,7 @@ class _ElectionResultsScreenState extends ConsumerState<ElectionResultsScreen> {
               SliverToBoxAdapter(
                 child: AnimatedSwitcher(
                   duration: reduced ? Duration.zero : AppMotion.base,
+                  reverseDuration: AppMotion.leave,
                   switchInCurve: AppMotion.settle,
                   switchOutCurve: AppMotion.settle,
                   layoutBuilder: (current, previous) => Stack(
