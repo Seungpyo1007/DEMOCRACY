@@ -1,0 +1,66 @@
+{
+  "_note": "제22대 국회의원선거 전남 순천시광양시곡성군구례군 을 당선인 권향엽 (더불어민주당). 책자형 선거공보 PDF 6쪽 「권향엽의 5대 공약」 01–05 제목. 제목 아래 세부 설명은 넣지 않았다. PDF 5쪽의 「민주당과 함께 해내겠습니다」 공약과 7–8쪽의 시·군·해룡면별 공약은 넣지 않았다. 제목은 원문 문구를 따랐고 바꾼 것은 앞 번호·끝의 !·장식 기호 덜어내기와 줄바꿈 이어 붙이기뿐이다. 분류(category)는 앱에 정해진 분류 체계가 없어 비워 두었다. 이행 여부는 판정하지 않았다(notJudged).",
+  "districtId": "nec-c9cc4b41",
+  "source": {
+    "sourceUrl": "https://policy.nec.go.kr/policy_pdf/20240410/PDF/PBINFO_PUB/4607/003_100151214_20240402_2.pdf",
+    "fetchedAt": "2026-09-28T02:30:00Z",
+    "publisher": "중앙선거관리위원회"
+  },
+  "pledges": [
+    {
+      "id": "22-jeonnam-suncheon-gwangyang-gokseong-gurye-b-01",
+      "title": "순천-광양-곡성-구례 상생클러스터 구축",
+      "category": "",
+      "status": "notJudged",
+      "source": {
+        "sourceUrl": "https://policy.nec.go.kr/policy_pdf/20240410/PDF/PBINFO_PUB/4607/003_100151214_20240402_2.pdf",
+        "fetchedAt": "2026-09-28T02:30:00Z",
+        "publisher": "중앙선거관리위원회"
+      }
+    },
+    {
+      "id": "22-jeonnam-suncheon-gwangyang-gokseong-gurye-b-02",
+      "title": "광양 제철 국가첨단전략산업 특화단지(특구) 조성",
+      "category": "",
+      "status": "notJudged",
+      "source": {
+        "sourceUrl": "https://policy.nec.go.kr/policy_pdf/20240410/PDF/PBINFO_PUB/4607/003_100151214_20240402_2.pdf",
+        "fetchedAt": "2026-09-28T02:30:00Z",
+        "publisher": "중앙선거관리위원회"
+      }
+    },
+    {
+      "id": "22-jeonnam-suncheon-gwangyang-gokseong-gurye-b-03",
+      "title": "전남 동부권 통합물류센터 건립",
+      "category": "",
+      "status": "notJudged",
+      "source": {
+        "sourceUrl": "https://policy.nec.go.kr/policy_pdf/20240410/PDF/PBINFO_PUB/4607/003_100151214_20240402_2.pdf",
+        "fetchedAt": "2026-09-28T02:30:00Z",
+        "publisher": "중앙선거관리위원회"
+      }
+    },
+    {
+      "id": "22-jeonnam-suncheon-gwangyang-gokseong-gurye-b-04",
+      "title": "전남권 의대 유치, 대학병원 설립 추진",
+      "category": "",
+      "status": "notJudged",
+      "source": {
+        "sourceUrl": "https://policy.nec.go.kr/policy_pdf/20240410/PDF/PBINFO_PUB/4607/003_100151214_20240402_2.pdf",
+        "fetchedAt": "2026-09-28T02:30:00Z",
+        "publisher": "중앙선거관리위원회"
+      }
+    },
+    {
+      "id": "22-jeonnam-suncheon-gwangyang-gokseong-gurye-b-05",
+      "title": "섬진강유역환경청 설립",
+      "category": "",
+      "status": "notJudged",
+      "source": {
+        "sourceUrl": "https://policy.nec.go.kr/policy_pdf/20240410/PDF/PBINFO_PUB/4607/003_100151214_20240402_2.pdf",
+        "fetchedAt": "2026-09-28T02:30:00Z",
+        "publisher": "중앙선거관리위원회"
+      }
+    }
+  ]
+}
