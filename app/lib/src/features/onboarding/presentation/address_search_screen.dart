@@ -144,15 +144,16 @@ class _AddressSearchScreenState extends ConsumerState<AddressSearchScreen> {
                   MediaQuery.paddingOf(context).bottom + AppSpacing.x6,
                 ),
                 children: [
-                  const RevealIn(child: _Helper()),
+                  // The guidance and the location button are there on the
+                  // first frame, with the search field: they are how the
+                  // page is used, not content to be revealed. Only results
+                  // arrive in order.
+                  const _Helper(),
                   const SizedBox(height: AppSpacing.x4),
                   const Divider(height: 1, color: AppColors.divider),
-                  RevealIn(
-                    index: 1,
-                    child: _LocationRow(
-                      detecting: _detecting,
-                      onTap: _detecting ? null : _detectLocation,
-                    ),
+                  _LocationRow(
+                    detecting: _detecting,
+                    onTap: _detecting ? null : _detectLocation,
                   ),
                   if (_locationFailure != null)
                     RevealIn(
