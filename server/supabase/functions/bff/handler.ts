@@ -11,14 +11,14 @@
 import type { Auth } from "../_shared/auth.ts";
 import { ApiError, CORS_HEADERS, fail, ok } from "../_shared/envelope.ts";
 import { isDistrictId } from "../_shared/district_names.ts";
-import { lookupHdong, searchJuso } from "../_shared/geo.ts";
+import { lookupPlace, searchJuso } from "../_shared/geo.ts";
 import type { FetchLike } from "../_shared/http.ts";
 import { UpstreamError } from "../_shared/http.ts";
 import { findKeyedUrls } from "../_shared/provenance.ts";
 import { type AccountContext, handleAccount } from "./account.ts";
 import type { AccountStore } from "./account_store.ts";
 import { buildHistory, buildPledges, buildProfile } from "./builders.ts";
-import { districtForHdong, suggestionsFor } from "./mapping.ts";
+import { districtForPlace, suggestionsFor } from "./mapping.ts";
 import { handleResidency, type ResidencyContext } from "./residency.ts";
 import type { ReadStore } from "./store.ts";
 
@@ -26,7 +26,9 @@ export interface BffDeps {
   store: ReadStore;
   fetch: FetchLike;
   jusoKey: string;
-  kakaoKey: string;
+  vworldKey: string;
+  /** The service URL the V-World key was issued for, when the key asks for it. */
+  vworldDomain?: string;
   accounts: AccountStore;
   auth: Auth;
   /** Source of randomness for 활동명 draws and tokens; crypto.getRandomValues by default. */
@@ -64,7 +66,8 @@ export function createHandler(deps: BffDeps): (req: Request) => Promise<Response
     ...account,
     fetch: deps.fetch,
     jusoKey: deps.jusoKey,
-    kakaoKey: deps.kakaoKey,
+    vworldKey: deps.vworldKey,
+    vworldDomain: deps.vworldDomain,
   };
 
   const respond = (data: unknown, cache?: string) => {
@@ -113,8 +116,8 @@ export function createHandler(deps: BffDeps): (req: Request) => Promise<Response
         if (lat === null || lng === null) {
           throw new ApiError("bad_request", "lat/lng must be coordinates within Korea.");
         }
-        const hdong = await lookupHdong(deps.fetch, deps.kakaoKey, lat, lng);
-        const d = hdong ? await districtForHdong(deps.store, hdong) : null;
+        const place = await lookupPlace(deps.fetch, deps.vworldKey, lat, lng, deps.vworldDomain);
+        const d = place ? await districtForPlace(deps.store, place) : null;
         if (!d) throw new ApiError("no_match", "No district matches this location.");
         return respond({ district: d });
       }

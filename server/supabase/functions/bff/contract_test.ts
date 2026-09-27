@@ -16,14 +16,14 @@ import { signedOut } from "../../../testdata/fake_auth.ts";
 import { fakeUpstream } from "../../../testdata/fake_upstream.ts";
 import { JONGNO, MAPO_A, MAPO_B, NOW, runPipeline, toTables } from "../../../testdata/pipeline.ts";
 
-async function setup() {
+async function setup(overrides: Record<string, () => Response> = {}) {
   const { db, requests } = await runPipeline();
-  const up = fakeUpstream();
+  const up = fakeUpstream(overrides);
   const handler = createHandler({
     store: new MemoryStore(toTables(db)),
     fetch: up.fetch,
     jusoKey: "JUSO-SECRET",
-    kakaoKey: "KAKAO-SECRET",
+    vworldKey: "VWORLD-SECRET",
     now: () => NOW,
     ...signedOut(),
   });
@@ -154,7 +154,7 @@ Deno.test("history: ongoing row only while counting; empty region still sourced"
     store: new MemoryStore(tables),
     fetch: fakeUpstream().fetch,
     jusoKey: "",
-    kakaoKey: "",
+    vworldKey: "",
     now: () => NOW,
     ...signedOut(),
   });
@@ -203,11 +203,26 @@ Deno.test("address search: juso proxy mapped to districts, unmapped dropped", as
   assert(up.requests.some((u) => u.includes("addInfoYn=Y")));
 });
 
-Deno.test("location: kakao 행정동 → district, and no_match", async () => {
+Deno.test("location: V-World 행정동 → district", async () => {
   const { get } = await setup();
   const { body } = await get("/location/district?lat=37.556&lng=126.901");
   assertEquals(body.data, { district: { id: MAPO_B, displayName: "서울 마포구 을" } });
   assertClean(body);
+});
+
+Deno.test("location: off any road, the 법정동 decides through the bridge", async () => {
+  const parcel = (bjd: string) => () =>
+    Response.json({
+      response: { status: "OK", result: [{ type: "parcel", structure: { level4LC: bjd } }] },
+    });
+  // 망원동 → 망원1동·망원2동, both 을.
+  let { get } = await setup({ "api.vworld.kr": parcel("1144012300") });
+  let { body } = await get("/location/district?lat=37.556&lng=126.901");
+  assertEquals(body.data, { district: { id: MAPO_B, displayName: "서울 마포구 을" } });
+  // 노고산동 straddles 갑/을: no guess.
+  ({ get } = await setup({ "api.vworld.kr": parcel("1144011000") }));
+  ({ body } = await get("/location/district?lat=37.556&lng=126.935"));
+  assertEquals(body.error.code, "no_match");
 });
 
 Deno.test("the app's own fixtures pass the validator (validator is not too strict)", async () => {

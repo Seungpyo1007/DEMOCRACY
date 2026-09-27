@@ -21,7 +21,8 @@ const handler = createHandler({
   ),
   fetch,
   jusoKey: env("JUSO_API_KEY"),
-  kakaoKey: env("KAKAO_REST_KEY"),
+  vworldKey: env("VWORLD_KEY"),
+  vworldDomain: Deno.env.get("VWORLD_DOMAIN") || undefined,
   // Error class names only: no query strings, coordinates or addresses.
   logError: (message) => console.error(message),
 });

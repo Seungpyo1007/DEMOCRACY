@@ -8,7 +8,7 @@ Reading needs no account; the account routes need a Supabase Auth sign-in.
 [열린국회정보 / 선관위(data.go.kr)] ──pg_cron→pg_net──▶ ingest-assembly / ingest-nec
         ──▶ raw_* (payload minus personal fields) ──▶ normalized tables (source_url, fetched_at)
                                                      ──▶ bff (GET) ──▶ app
-[juso.go.kr / Kakao Local] ◀── proxied live by bff (query never logged or stored)
+[juso.go.kr / V-World] ◀── proxied live by bff (query never logged or stored)
 [Supabase Auth: Apple / Kakao / Google / email] ──user JWT──▶ bff /me ──▶ profiles, consents
 [공직선거법 [별표 1], 출결 file, curated pledges/region] ──scripts/*.ts──▶ SQL ──▶ tables
 ```
@@ -98,7 +98,7 @@ cached (`no-store`). "Me" below is `{profile|null, consents, residency|null}`:
 | `DELETE /residency`             | → `{deleted:true}`                                                                                  |
 
 - **주민 인증** (`/residency/verify`) needs a profile (`403 consent_required`).
-  - The server derives the district itself: juso plus the [별표 1] mapping for an address, Kakao
+  - The server derives the district itself: juso plus the [별표 1] mapping for an address, V-World
     plus the mapping for coordinates. It never accepts a district id from the client. An address
     must equal one juso `roadAddr` (or be juso's only result) and map to exactly one district;
     anything ambiguous or unmapped is `404 no_match`.
@@ -120,7 +120,8 @@ cached (`no-store`). "Me" below is `{profile|null, consents, residency|null}`:
    - `DATA_GO_KR_KEY`: data.go.kr. Apply for 활용신청 on all four datasets: 15000897 (코드),
      15000864 (당선인), 15000908 (후보자) and 15000900 (투개표). Use the **Decoding** key.
    - `JUSO_API_KEY`: business.juso.go.kr → 도로명주소 검색 API. The key is for the operating domain.
-   - `KAKAO_REST_KEY`: developers.kakao.com → app → REST API key, with 로컬 API enabled.
+   - `VWORLD_KEY`: vworld.kr → 오픈API → 인증키 발급 (지오코더 API). Coordinates → 행정동 for 「현재
+     위치로 찾기」. If the key was issued for a service URL, also set `VWORLD_DOMAIN` to it.
    - `INGEST_SECRET`: generate one with `openssl rand -hex 32`.
    - `SUPABASE_URL`, `SUPABASE_ANON_KEY` and `SUPABASE_SERVICE_ROLE_KEY` are provided to every
      function by the platform. Do not set them.
@@ -130,7 +131,7 @@ cached (`no-store`). "Me" below is `{profile|null, consents, residency|null}`:
    supabase login && supabase link --project-ref <ref>
    supabase db push                                   # migrations: schema, RLS, functions, cron jobs
    supabase secrets set ASSEMBLY_API_KEY=... DATA_GO_KR_KEY=... JUSO_API_KEY=... \
-                        KAKAO_REST_KEY=... INGEST_SECRET=...
+                        VWORLD_KEY=... INGEST_SECRET=...
    supabase functions deploy bff
    supabase functions deploy ingest-assembly --no-verify-jwt
    supabase functions deploy ingest-nec --no-verify-jwt

@@ -73,7 +73,7 @@ export function fakeUpstream(overrides: Record<string, () => Response> = {}): Fa
     if (url.host === "business.juso.go.kr") {
       return Promise.resolve(json(sample("juso_search.json")));
     }
-    if (url.host === "dapi.kakao.com") return Promise.resolve(json(sample("kakao_region.json")));
+    if (url.host === "api.vworld.kr") return Promise.resolve(json(sample("vworld_address.json")));
     return Promise.resolve(new Response("not found", { status: 404 }));
   };
   return { fetch, requests };

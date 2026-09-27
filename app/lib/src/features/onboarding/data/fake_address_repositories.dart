@@ -3,7 +3,7 @@ import 'package:democracy/src/features/onboarding/domain/address_search.dart';
 
 /// Address lookup over the bundled sample list.
 ///
-/// The real one is a road-name/Kakao query behind the BFF. Matching is a
+/// The real one is a juso / V-World query behind the BFF. Matching is a
 /// substring test on purpose: the point of this stand-in is to exercise the
 /// screen's empty, single and multiple states, not to imitate a ranker.
 class FakeAddressSearchRepository implements AddressSearchRepository {

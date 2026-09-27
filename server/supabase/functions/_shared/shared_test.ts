@@ -30,7 +30,7 @@ import {
   normalizeWinner,
   redactNecPersonPayload,
 } from "./normalize_nec.ts";
-import { parseJuso, parseKakaoHdong } from "./geo.ts";
+import { parseJuso, parseVworldPlace, vworldAddressUrl } from "./geo.ts";
 import { findKeyedUrls, isPresentableSourceUrl, sourceMeta, SOURCES } from "./provenance.ts";
 import { sample } from "../../../testdata/fake_upstream.ts";
 
@@ -351,12 +351,31 @@ Deno.test("juso parsing", () => {
   assertThrows(() => parseJuso({ results: { common: { errorCode: "E0001" } } }), UpstreamError);
 });
 
-Deno.test("kakao parsing picks the H (행정동) region", () => {
-  assertEquals(parseKakaoHdong(JSON.parse(sample("kakao_region.json"))), {
-    code: "1144069000",
-    name: "망원1동",
+Deno.test("V-World parsing takes the road entry's 행정동 and the parcel's 법정동", () => {
+  assertEquals(parseVworldPlace(JSON.parse(sample("vworld_address.json"))), {
+    hdongCode: "1144069000",
+    hdongName: "망원1동",
+    bjdCode: "1144012300",
   });
-  assertEquals(parseKakaoHdong({ documents: [] }), null);
+  // Off any road: 법정동 only, left to the bridge.
+  assertEquals(
+    parseVworldPlace({
+      response: {
+        status: "OK",
+        result: [{ type: "parcel", structure: { level4LC: "1144012300" } }],
+      },
+    }),
+    { hdongCode: null, hdongName: null, bjdCode: "1144012300" },
+  );
+  assertEquals(parseVworldPlace({ response: { status: "NOT_FOUND" } }), null);
+  assertThrows(
+    () => parseVworldPlace({ response: { status: "ERROR", error: { code: "INVALID_KEY" } } }),
+    UpstreamError,
+    "INVALID_KEY",
+  );
+  const url = new URL(vworldAddressUrl("K", 37.5, 126.9, "https://example.org"));
+  assertEquals(url.searchParams.get("point"), "126.9,37.5"); // x = lng first
+  assertEquals(url.searchParams.get("domain"), "https://example.org");
 });
 
 // ------------------------------------------------------------ provenance

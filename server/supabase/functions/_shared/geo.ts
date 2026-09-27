@@ -1,10 +1,10 @@
-// juso.go.kr (address search) and Kakao Local (coordinate → 행정동) clients.
+// juso.go.kr (address search) and V-World (coordinate → 행정동) clients.
 // Neither the query nor the coordinates are ever logged or stored.
 
 import { fetchJsonWithRetry, type FetchLike, type RetryOptions, UpstreamError } from "./http.ts";
 
 export const JUSO_URL = "https://business.juso.go.kr/addrlink/addrLinkApi.do";
-export const KAKAO_REGION_URL = "https://dapi.kakao.com/v2/local/geo/coord2regioncode.json";
+export const VWORLD_ADDRESS_URL = "https://api.vworld.kr/req/address";
 
 export interface JusoAddress {
   roadAddr: string;
@@ -74,37 +74,73 @@ export async function searchJuso(
   return parseJuso(json);
 }
 
-export function kakaoRegionUrl(lat: number, lng: number): string {
-  const url = new URL(KAKAO_REGION_URL);
-  url.searchParams.set("x", String(lng));
-  url.searchParams.set("y", String(lat));
+/** Where a coordinate is, as far as the district mapping needs to know. */
+export interface PlaceCodes {
+  /** 10-digit 행정동 code; V-World gives it with road addresses only. */
+  hdongCode: string | null;
+  hdongName: string | null;
+  /** 10-digit 법정동 code, from the parcel result; the fallback through the bridge. */
+  bjdCode: string | null;
+}
+
+/** V-World reverse geocoding (Geocoder API 2.0, getAddress). */
+export function vworldAddressUrl(key: string, lat: number, lng: number, domain?: string): string {
+  const url = new URL(VWORLD_ADDRESS_URL);
+  url.searchParams.set("service", "address");
+  url.searchParams.set("request", "getAddress");
+  url.searchParams.set("version", "2.0");
+  url.searchParams.set("crs", "epsg:4326");
+  url.searchParams.set("point", `${lng},${lat}`);
+  url.searchParams.set("type", "both");
+  url.searchParams.set("zipcode", "false");
+  url.searchParams.set("simple", "false");
+  url.searchParams.set("format", "json");
+  url.searchParams.set("key", key);
+  if (domain) url.searchParams.set("domain", domain);
   return url.toString();
 }
 
-/** documents[] with region_type "H" = 행정동; its `code` is the 10-digit 행정동 code. */
-export function parseKakaoHdong(json: unknown): { code: string; name: string | null } | null {
-  const docs = (json as { documents?: unknown[] } | null)?.documents;
-  if (!Array.isArray(docs)) throw new UpstreamError("kakao: missing documents");
-  for (const d of docs) {
-    const doc = d as Record<string, unknown>;
-    if (doc.region_type === "H" && typeof doc.code === "string" && /^\d{10}$/.test(doc.code)) {
-      return { code: doc.code, name: s(doc.region_3depth_name) };
-    }
+/**
+ * response.status "OK" | "NOT_FOUND" | "ERROR". result[] holds a "road" and/or a "parcel"
+ * entry; structure.level4AC (행정동 code) is only on road entries, structure.level4LC
+ * (법정동 code) on both.
+ */
+export function parseVworldPlace(json: unknown): PlaceCodes | null {
+  const res = (json as { response?: Record<string, unknown> } | null)?.response;
+  if (!res) throw new UpstreamError("vworld: missing response");
+  if (res.status === "NOT_FOUND") return null;
+  if (res.status !== "OK") {
+    const code = (res.error as { code?: unknown } | undefined)?.code;
+    throw new UpstreamError(`vworld: ${typeof code === "string" ? code : "error"}`);
   }
-  return null;
+  const list = Array.isArray(res.result) ? res.result : [];
+  let hdongCode: string | null = null;
+  let hdongName: string | null = null;
+  let bjdCode: string | null = null;
+  for (const raw of list) {
+    const st = ((raw as Record<string, unknown>)?.structure ?? {}) as Record<string, unknown>;
+    const hc = s(st.level4AC);
+    if (!hdongCode && hc && /^\d{10}$/.test(hc)) {
+      hdongCode = hc;
+      hdongName = s(st.level4A);
+    }
+    const bc = s(st.level4LC);
+    if (!bjdCode && bc && /^\d{10}$/.test(bc)) bjdCode = bc;
+  }
+  return hdongCode || bjdCode ? { hdongCode, hdongName, bjdCode } : null;
 }
 
-export async function lookupHdong(
+export async function lookupPlace(
   fetchFn: FetchLike,
-  kakaoKey: string,
+  key: string,
   lat: number,
   lng: number,
+  domain?: string,
   retry?: RetryOptions,
-): Promise<{ code: string; name: string | null } | null> {
-  const json = await fetchJsonWithRetry(fetchFn, kakaoRegionUrl(lat, lng), {
+): Promise<PlaceCodes | null> {
+  const json = await fetchJsonWithRetry(fetchFn, vworldAddressUrl(key, lat, lng, domain), {
     retries: 1,
     ...retry,
-    init: { headers: { Authorization: `KakaoAK ${kakaoKey}` } },
   });
-  return parseKakaoHdong(json);
+  return parseVworldPlace(json);
 }

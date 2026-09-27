@@ -1,0 +1,55 @@
+{
+  "response": {
+    "service": {
+      "name": "address",
+      "version": "2.0",
+      "operation": "getAddress",
+      "time": "12(ms)"
+    },
+    "status": "OK",
+    "input": {
+      "point": {
+        "x": "126.901",
+        "y": "37.556"
+      },
+      "crs": "epsg:4326",
+      "type": "both"
+    },
+    "result": [
+      {
+        "zipcode": "",
+        "type": "parcel",
+        "text": "서울특별시 마포구 망원동 000-0",
+        "structure": {
+          "level0": "대한민국",
+          "level1": "서울특별시",
+          "level2": "마포구",
+          "level3": "",
+          "level4L": "망원동",
+          "level4LC": "1144012300",
+          "level4A": "",
+          "level4AC": "",
+          "level5": "000-0",
+          "detail": ""
+        }
+      },
+      {
+        "zipcode": "",
+        "type": "road",
+        "text": "서울특별시 마포구 가상로 00",
+        "structure": {
+          "level0": "대한민국",
+          "level1": "서울특별시",
+          "level2": "마포구",
+          "level3": "",
+          "level4L": "가상로",
+          "level4LC": "1144012300",
+          "level4A": "망원1동",
+          "level4AC": "1144069000",
+          "level5": "00",
+          "detail": ""
+        }
+      }
+    ]
+  }
+}
