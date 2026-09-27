@@ -55,13 +55,35 @@ export function districtNameKey(sdName: string, sggName: string): string {
   return `${sidoShortName(sdName)}${sggName}`.replace(/\s+/g, "");
 }
 
-/** ORIG_NM "서울 마포구을" → "서울마포구을"; "비례대표" → null. */
+/**
+ * The 22대 광주 선거구, by name. The Assembly now files members from the
+ * merged 전남광주통합특별시, while NEC's 22대 선거구 keep 광주광역시 and
+ * 전라남도; these are the ones that were in 광주.
+ */
+const GWANGJU_SGG = /^(동구남구|서구|북구|광산구)[갑을]?$/u;
+
+/**
+ * ORIG_NM "서울 마포구을" → "서울마포구을"; "비례대표" → null.
+ *
+ * Two spellings do not follow "<시도> <선거구>":
+ * - 세종 is one token, "세종특별자치시을", while NEC's 선거구 is named
+ *   "세종특별자치시을" inside 시도 세종특별자치시 -- so the key keeps it whole.
+ * - "전남광주통합특별시 <선거구>" is the merged 시도; it maps back to 광주 or
+ *   전남 by the 선거구 name, since the 22대 districts predate the merger.
+ */
 export function assemblyOrigKey(origNm: string | null | undefined): string | null {
   if (!origNm) return null;
   const trimmed = origNm.trim();
   if (trimmed === "" || trimmed === "비례대표") return null;
   const [first, ...rest] = trimmed.split(/\s+/);
-  return `${sidoShortName(first)}${rest.join("")}`;
+  const sgg = rest.join("");
+  if (sgg === "" && first.startsWith("세종특별자치시")) {
+    return `${sidoShortName("세종특별자치시")}${first}`;
+  }
+  if (first === "전남광주통합특별시") {
+    return `${GWANGJU_SGG.test(sgg) ? "광주" : "전남"}${sgg}`;
+  }
+  return `${sidoShortName(first)}${sgg}`;
 }
 
 /**
