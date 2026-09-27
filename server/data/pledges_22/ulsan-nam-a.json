@@ -1,0 +1,66 @@
+{
+  "_note": "제22대 국회의원선거 울산 남구 갑 당선인 김상욱 (국민의힘). 책자형 선거공보 PDF 5쪽 「남구의 미래가 울산의 미래가 됩니다」 1–3과 PDF 7쪽 「김상욱은 해냅니다!」 01–02의 제목 문장 5개. 각 제목 아래 설명 문단, PDF 6쪽의 동별·공통 공약(◆ 항목), 8쪽 「울산 구석구석 더 뛰겠습니다」 분야별 항목은 넣지 않았다. 끝의 !와 마침표만 덜어냈다. 제목은 원문 문구를 따랐고 바꾼 것은 위에 적은 구호·수식어 덜어내기뿐이다. 분류(category)는 앱에 정해진 분류 체계가 없어 비워 두었다. 이행 여부는 판정하지 않았다(notJudged).",
+  "districtId": "nec-3382f566",
+  "source": {
+    "sourceUrl": "https://policy.nec.go.kr/policy_pdf/20240410/PDF/PBINFO_PUB/3102/003_100152036_20240402_2.pdf",
+    "fetchedAt": "2026-09-27T17:14:30Z",
+    "publisher": "중앙선거관리위원회"
+  },
+  "pledges": [
+    {
+      "id": "22-ulsan-nam-a-01",
+      "title": "삶의 질과 직결되는 재건축을 앞당기겠습니다",
+      "category": "",
+      "status": "notJudged",
+      "source": {
+        "sourceUrl": "https://policy.nec.go.kr/policy_pdf/20240410/PDF/PBINFO_PUB/3102/003_100152036_20240402_2.pdf",
+        "fetchedAt": "2026-09-27T17:14:30Z",
+        "publisher": "중앙선거관리위원회"
+      }
+    },
+    {
+      "id": "22-ulsan-nam-a-02",
+      "title": "명품 교육 도시의 위상을 지키겠습니다",
+      "category": "",
+      "status": "notJudged",
+      "source": {
+        "sourceUrl": "https://policy.nec.go.kr/policy_pdf/20240410/PDF/PBINFO_PUB/3102/003_100152036_20240402_2.pdf",
+        "fetchedAt": "2026-09-27T17:14:30Z",
+        "publisher": "중앙선거관리위원회"
+      }
+    },
+    {
+      "id": "22-ulsan-nam-a-03",
+      "title": "여성·아동·어르신·장애인 모두 행복한 남구를 만들겠습니다",
+      "category": "",
+      "status": "notJudged",
+      "source": {
+        "sourceUrl": "https://policy.nec.go.kr/policy_pdf/20240410/PDF/PBINFO_PUB/3102/003_100152036_20240402_2.pdf",
+        "fetchedAt": "2026-09-27T17:14:30Z",
+        "publisher": "중앙선거관리위원회"
+      }
+    },
+    {
+      "id": "22-ulsan-nam-a-04",
+      "title": "울산산업특별자치시를 추진하겠습니다",
+      "category": "",
+      "status": "notJudged",
+      "source": {
+        "sourceUrl": "https://policy.nec.go.kr/policy_pdf/20240410/PDF/PBINFO_PUB/3102/003_100152036_20240402_2.pdf",
+        "fetchedAt": "2026-09-27T17:14:30Z",
+        "publisher": "중앙선거관리위원회"
+      }
+    },
+    {
+      "id": "22-ulsan-nam-a-05",
+      "title": "울산, 양산, 경주를 잇는 울산 중심 대생활권역을 건설하겠습니다",
+      "category": "",
+      "status": "notJudged",
+      "source": {
+        "sourceUrl": "https://policy.nec.go.kr/policy_pdf/20240410/PDF/PBINFO_PUB/3102/003_100152036_20240402_2.pdf",
+        "fetchedAt": "2026-09-27T17:14:30Z",
+        "publisher": "중앙선거관리위원회"
+      }
+    }
+  ]
+}

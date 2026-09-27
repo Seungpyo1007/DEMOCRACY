@@ -1,0 +1,297 @@
+{
+  "_note": "제22대 국회의원선거 인천 연수구 갑 당선인 박찬대 (더불어민주당). 책자형 선거공보 PDF 5–6쪽 「재개발·재건축을 넘어 연수 발전 – 연수의 재설계! 마스터플랜」 다섯 분야(교통·주거·건강·교육·경제)의 - 항목 26개. 분야 제목(구호)은 넣지 않았다. 5쪽 인천2호선 항목 끝의 '*가칭' 표시는 뺐다. PDF 7–8쪽의 동별 공약과 8쪽의 육아·어르신·보훈·장애인 공약, 4쪽의 의정 성과, 2·9–10쪽의 정부 비판은 넣지 않았다. 제목은 원문 문구를 따랐고 바꾼 것은 위에 적은 구호·수식어 덜어내기뿐이다. 분류(category)는 앱에 정해진 분류 체계가 없어 비워 두었다. 이행 여부는 판정하지 않았다(notJudged).",
+  "districtId": "nec-cea1445b",
+  "source": {
+    "sourceUrl": "https://policy.nec.go.kr/policy_pdf/20240410/PDF/PBINFO_PUB/2804/003_100152610_20240402_3.pdf",
+    "fetchedAt": "2026-09-27T17:14:30Z",
+    "publisher": "중앙선거관리위원회"
+  },
+  "pledges": [
+    {
+      "id": "22-incheon-yeonsu-a-01",
+      "title": "제2경인선, 민자 대안노선 추진으로 공기단축",
+      "category": "",
+      "status": "notJudged",
+      "source": {
+        "sourceUrl": "https://policy.nec.go.kr/policy_pdf/20240410/PDF/PBINFO_PUB/2804/003_100152610_20240402_3.pdf",
+        "fetchedAt": "2026-09-27T17:14:30Z",
+        "publisher": "중앙선거관리위원회"
+      }
+    },
+    {
+      "id": "22-incheon-yeonsu-a-02",
+      "title": "GTX-B 수인선 환승역 설치",
+      "category": "",
+      "status": "notJudged",
+      "source": {
+        "sourceUrl": "https://policy.nec.go.kr/policy_pdf/20240410/PDF/PBINFO_PUB/2804/003_100152610_20240402_3.pdf",
+        "fetchedAt": "2026-09-27T17:14:30Z",
+        "publisher": "중앙선거관리위원회"
+      }
+    },
+    {
+      "id": "22-incheon-yeonsu-a-03",
+      "title": "인천도시철도 2호선 주안-연수-송도 연장 (동춘동 내 신동춘역·봉재산역 신설)",
+      "category": "",
+      "status": "notJudged",
+      "source": {
+        "sourceUrl": "https://policy.nec.go.kr/policy_pdf/20240410/PDF/PBINFO_PUB/2804/003_100152610_20240402_3.pdf",
+        "fetchedAt": "2026-09-27T17:14:30Z",
+        "publisher": "중앙선거관리위원회"
+      }
+    },
+    {
+      "id": "22-incheon-yeonsu-a-04",
+      "title": "인천발KTX 2025년 적기개통·경강선 조기 완공",
+      "category": "",
+      "status": "notJudged",
+      "source": {
+        "sourceUrl": "https://policy.nec.go.kr/policy_pdf/20240410/PDF/PBINFO_PUB/2804/003_100152610_20240402_3.pdf",
+        "fetchedAt": "2026-09-27T17:14:30Z",
+        "publisher": "중앙선거관리위원회"
+      }
+    },
+    {
+      "id": "22-incheon-yeonsu-a-05",
+      "title": "트램노선 신설(송도~옥련~주안 구간)",
+      "category": "",
+      "status": "notJudged",
+      "source": {
+        "sourceUrl": "https://policy.nec.go.kr/policy_pdf/20240410/PDF/PBINFO_PUB/2804/003_100152610_20240402_3.pdf",
+        "fetchedAt": "2026-09-27T17:14:30Z",
+        "publisher": "중앙선거관리위원회"
+      }
+    },
+    {
+      "id": "22-incheon-yeonsu-a-06",
+      "title": "제2경인고속도로 혼잡구간 확장",
+      "category": "",
+      "status": "notJudged",
+      "source": {
+        "sourceUrl": "https://policy.nec.go.kr/policy_pdf/20240410/PDF/PBINFO_PUB/2804/003_100152610_20240402_3.pdf",
+        "fetchedAt": "2026-09-27T17:14:30Z",
+        "publisher": "중앙선거관리위원회"
+      }
+    },
+    {
+      "id": "22-incheon-yeonsu-a-07",
+      "title": "연수지구 및 인접지 '노후계획도시정비 선도지구' 지정",
+      "category": "",
+      "status": "notJudged",
+      "source": {
+        "sourceUrl": "https://policy.nec.go.kr/policy_pdf/20240410/PDF/PBINFO_PUB/2804/003_100152610_20240402_3.pdf",
+        "fetchedAt": "2026-09-27T17:14:30Z",
+        "publisher": "중앙선거관리위원회"
+      }
+    },
+    {
+      "id": "22-incheon-yeonsu-a-08",
+      "title": "재건축 세입자 이주비 지원, 우선 분양권 부여, 임대주택 세입자 입주권 부여, 저리대출 지원",
+      "category": "",
+      "status": "notJudged",
+      "source": {
+        "sourceUrl": "https://policy.nec.go.kr/policy_pdf/20240410/PDF/PBINFO_PUB/2804/003_100152610_20240402_3.pdf",
+        "fetchedAt": "2026-09-27T17:14:30Z",
+        "publisher": "중앙선거관리위원회"
+      }
+    },
+    {
+      "id": "22-incheon-yeonsu-a-09",
+      "title": "'1+1입주권' 면적 제한 완화 및 중과세 부담 면제",
+      "category": "",
+      "status": "notJudged",
+      "source": {
+        "sourceUrl": "https://policy.nec.go.kr/policy_pdf/20240410/PDF/PBINFO_PUB/2804/003_100152610_20240402_3.pdf",
+        "fetchedAt": "2026-09-27T17:14:30Z",
+        "publisher": "중앙선거관리위원회"
+      }
+    },
+    {
+      "id": "22-incheon-yeonsu-a-10",
+      "title": "재건축 반지하 주택 지하층 용적률 산정 포함 특례 적용",
+      "category": "",
+      "status": "notJudged",
+      "source": {
+        "sourceUrl": "https://policy.nec.go.kr/policy_pdf/20240410/PDF/PBINFO_PUB/2804/003_100152610_20240402_3.pdf",
+        "fetchedAt": "2026-09-27T17:14:30Z",
+        "publisher": "중앙선거관리위원회"
+      }
+    },
+    {
+      "id": "22-incheon-yeonsu-a-11",
+      "title": "수인선 지상 구간 공원화 및 승기천 공원 연계 센트럴파크 조성",
+      "category": "",
+      "status": "notJudged",
+      "source": {
+        "sourceUrl": "https://policy.nec.go.kr/policy_pdf/20240410/PDF/PBINFO_PUB/2804/003_100152610_20240402_3.pdf",
+        "fetchedAt": "2026-09-27T17:14:30Z",
+        "publisher": "중앙선거관리위원회"
+      }
+    },
+    {
+      "id": "22-incheon-yeonsu-a-12",
+      "title": "공원·도로·주민센터 등 공공시설 지하 공공주차장 건설",
+      "category": "",
+      "status": "notJudged",
+      "source": {
+        "sourceUrl": "https://policy.nec.go.kr/policy_pdf/20240410/PDF/PBINFO_PUB/2804/003_100152610_20240402_3.pdf",
+        "fetchedAt": "2026-09-27T17:14:30Z",
+        "publisher": "중앙선거관리위원회"
+      }
+    },
+    {
+      "id": "22-incheon-yeonsu-a-13",
+      "title": "심야 진료 '달빛어린이병원' 지정 의료기관 확대",
+      "category": "",
+      "status": "notJudged",
+      "source": {
+        "sourceUrl": "https://policy.nec.go.kr/policy_pdf/20240410/PDF/PBINFO_PUB/2804/003_100152610_20240402_3.pdf",
+        "fetchedAt": "2026-09-27T17:14:30Z",
+        "publisher": "중앙선거관리위원회"
+      }
+    },
+    {
+      "id": "22-incheon-yeonsu-a-14",
+      "title": "'아픈 아이 긴급 병원 동행' 서비스 도입",
+      "category": "",
+      "status": "notJudged",
+      "source": {
+        "sourceUrl": "https://policy.nec.go.kr/policy_pdf/20240410/PDF/PBINFO_PUB/2804/003_100152610_20240402_3.pdf",
+        "fetchedAt": "2026-09-27T17:14:30Z",
+        "publisher": "중앙선거관리위원회"
+      }
+    },
+    {
+      "id": "22-incheon-yeonsu-a-15",
+      "title": "간호·간병통합서비스 시행 의료기관 및 병상 수 확대",
+      "category": "",
+      "status": "notJudged",
+      "source": {
+        "sourceUrl": "https://policy.nec.go.kr/policy_pdf/20240410/PDF/PBINFO_PUB/2804/003_100152610_20240402_3.pdf",
+        "fetchedAt": "2026-09-27T17:14:30Z",
+        "publisher": "중앙선거관리위원회"
+      }
+    },
+    {
+      "id": "22-incheon-yeonsu-a-16",
+      "title": "치아 임플란트, 탈모, 아동·청소년 중증아토피 등 건강보험 적용 확대",
+      "category": "",
+      "status": "notJudged",
+      "source": {
+        "sourceUrl": "https://policy.nec.go.kr/policy_pdf/20240410/PDF/PBINFO_PUB/2804/003_100152610_20240402_3.pdf",
+        "fetchedAt": "2026-09-27T17:14:30Z",
+        "publisher": "중앙선거관리위원회"
+      }
+    },
+    {
+      "id": "22-incheon-yeonsu-a-17",
+      "title": "공공병원 설립 및 공공산후조리원 설립",
+      "category": "",
+      "status": "notJudged",
+      "source": {
+        "sourceUrl": "https://policy.nec.go.kr/policy_pdf/20240410/PDF/PBINFO_PUB/2804/003_100152610_20240402_3.pdf",
+        "fetchedAt": "2026-09-27T17:14:30Z",
+        "publisher": "중앙선거관리위원회"
+      }
+    },
+    {
+      "id": "22-incheon-yeonsu-a-18",
+      "title": "초·중·고 국제 바칼로레아(IB) 월드스쿨 학교 육성",
+      "category": "",
+      "status": "notJudged",
+      "source": {
+        "sourceUrl": "https://policy.nec.go.kr/policy_pdf/20240410/PDF/PBINFO_PUB/2804/003_100152610_20240402_3.pdf",
+        "fetchedAt": "2026-09-27T17:14:30Z",
+        "publisher": "중앙선거관리위원회"
+      }
+    },
+    {
+      "id": "22-incheon-yeonsu-a-19",
+      "title": "자율형 공립고 2.0 신규 지정",
+      "category": "",
+      "status": "notJudged",
+      "source": {
+        "sourceUrl": "https://policy.nec.go.kr/policy_pdf/20240410/PDF/PBINFO_PUB/2804/003_100152610_20240402_3.pdf",
+        "fetchedAt": "2026-09-27T17:14:30Z",
+        "publisher": "중앙선거관리위원회"
+      }
+    },
+    {
+      "id": "22-incheon-yeonsu-a-20",
+      "title": "중·고 통합 스쿨버스(학생성공버스) 운영",
+      "category": "",
+      "status": "notJudged",
+      "source": {
+        "sourceUrl": "https://policy.nec.go.kr/policy_pdf/20240410/PDF/PBINFO_PUB/2804/003_100152610_20240402_3.pdf",
+        "fetchedAt": "2026-09-27T17:14:30Z",
+        "publisher": "중앙선거관리위원회"
+      }
+    },
+    {
+      "id": "22-incheon-yeonsu-a-21",
+      "title": "준공 30~40년 경과 노후 학교 리모델링 추진",
+      "category": "",
+      "status": "notJudged",
+      "source": {
+        "sourceUrl": "https://policy.nec.go.kr/policy_pdf/20240410/PDF/PBINFO_PUB/2804/003_100152610_20240402_3.pdf",
+        "fetchedAt": "2026-09-27T17:14:30Z",
+        "publisher": "중앙선거관리위원회"
+      }
+    },
+    {
+      "id": "22-incheon-yeonsu-a-22",
+      "title": "지역화폐예산 대폭 확대, 이음카드 캐시백 비율 원상복구",
+      "category": "",
+      "status": "notJudged",
+      "source": {
+        "sourceUrl": "https://policy.nec.go.kr/policy_pdf/20240410/PDF/PBINFO_PUB/2804/003_100152610_20240402_3.pdf",
+        "fetchedAt": "2026-09-27T17:14:30Z",
+        "publisher": "중앙선거관리위원회"
+      }
+    },
+    {
+      "id": "22-incheon-yeonsu-a-23",
+      "title": "배달앱 등 '플랫폼 갑질'소상공인 보호 법제화",
+      "category": "",
+      "status": "notJudged",
+      "source": {
+        "sourceUrl": "https://policy.nec.go.kr/policy_pdf/20240410/PDF/PBINFO_PUB/2804/003_100152610_20240402_3.pdf",
+        "fetchedAt": "2026-09-27T17:14:30Z",
+        "publisher": "중앙선거관리위원회"
+      }
+    },
+    {
+      "id": "22-incheon-yeonsu-a-24",
+      "title": "해사·항공전문법원 유치, 법조타운 조성",
+      "category": "",
+      "status": "notJudged",
+      "source": {
+        "sourceUrl": "https://policy.nec.go.kr/policy_pdf/20240410/PDF/PBINFO_PUB/2804/003_100152610_20240402_3.pdf",
+        "fetchedAt": "2026-09-27T17:14:30Z",
+        "publisher": "중앙선거관리위원회"
+      }
+    },
+    {
+      "id": "22-incheon-yeonsu-a-25",
+      "title": "바이오산업 후속공정 지원 산업단지 조성",
+      "category": "",
+      "status": "notJudged",
+      "source": {
+        "sourceUrl": "https://policy.nec.go.kr/policy_pdf/20240410/PDF/PBINFO_PUB/2804/003_100152610_20240402_3.pdf",
+        "fetchedAt": "2026-09-27T17:14:30Z",
+        "publisher": "중앙선거관리위원회"
+      }
+    },
+    {
+      "id": "22-incheon-yeonsu-a-26",
+      "title": "중소기업 및 인천시민 지원 지역 공공은행 설립 추진",
+      "category": "",
+      "status": "notJudged",
+      "source": {
+        "sourceUrl": "https://policy.nec.go.kr/policy_pdf/20240410/PDF/PBINFO_PUB/2804/003_100152610_20240402_3.pdf",
+        "fetchedAt": "2026-09-27T17:14:30Z",
+        "publisher": "중앙선거관리위원회"
+      }
+    }
+  ]
+}

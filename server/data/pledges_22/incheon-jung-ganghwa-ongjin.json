@@ -1,0 +1,121 @@
+{
+  "_note": "제22대 국회의원선거 인천 중구강화군옹진군 당선인 배준영 (국민의힘). 책자형 선거공보 PDF 4–5쪽 「지역공약」 네 권역(영종·중구·강화·옹진) 아래쪽 제목 상자 10개(5쪽의 '강화 어장 신설, 서해5도 … 남은 군사규제도 확실히 풀겠습니다'는 상자 두 개에 걸친 한 문장이라 하나로 둠). 같은 쪽의 분야별 • 세부 항목(약 90개)은 긴 목록이라 넣지 않았다. 쪽 이미지를 보고 왼쪽부터 순서대로 옮겼다. PDF 2–3쪽의 지난 성과와 6쪽의 분야별(국민의힘) 공약은 넣지 않았다. 제목은 원문 문구를 따랐고 바꾼 것은 위에 적은 구호·수식어 덜어내기뿐이다. 분류(category)는 앱에 정해진 분류 체계가 없어 비워 두었다. 이행 여부는 판정하지 않았다(notJudged).",
+  "districtId": "nec-4d08e1e5",
+  "source": {
+    "sourceUrl": "https://policy.nec.go.kr/policy_pdf/20240410/PDF/PBINFO_PUB/2801/003_100152617_20240401_3.pdf",
+    "fetchedAt": "2026-09-27T17:14:30Z",
+    "publisher": "중앙선거관리위원회"
+  },
+  "pledges": [
+    {
+      "id": "22-incheon-jung-ganghwa-ongjin-01",
+      "title": "하늘도시 전철역, 배준영이 만들겠습니다",
+      "category": "",
+      "status": "notJudged",
+      "source": {
+        "sourceUrl": "https://policy.nec.go.kr/policy_pdf/20240410/PDF/PBINFO_PUB/2801/003_100152617_20240401_3.pdf",
+        "fetchedAt": "2026-09-27T17:14:30Z",
+        "publisher": "중앙선거관리위원회"
+      }
+    },
+    {
+      "id": "22-incheon-jung-ganghwa-ongjin-02",
+      "title": "영종-인천대교 통행료, 주민 무료화 달성했습니다 모든 차량이 무료화 될 수 있도록 만들겠습니다",
+      "category": "",
+      "status": "notJudged",
+      "source": {
+        "sourceUrl": "https://policy.nec.go.kr/policy_pdf/20240410/PDF/PBINFO_PUB/2801/003_100152617_20240401_3.pdf",
+        "fetchedAt": "2026-09-27T17:14:30Z",
+        "publisher": "중앙선거관리위원회"
+      }
+    },
+    {
+      "id": "22-incheon-jung-ganghwa-ongjin-03",
+      "title": "원도심 재개발·재건축 적극 지원하겠습니다",
+      "category": "",
+      "status": "notJudged",
+      "source": {
+        "sourceUrl": "https://policy.nec.go.kr/policy_pdf/20240410/PDF/PBINFO_PUB/2801/003_100152617_20240401_3.pdf",
+        "fetchedAt": "2026-09-27T17:14:30Z",
+        "publisher": "중앙선거관리위원회"
+      }
+    },
+    {
+      "id": "22-incheon-jung-ganghwa-ongjin-04",
+      "title": "KTX 인천역 유치, 반드시 해내겠습니다",
+      "category": "",
+      "status": "notJudged",
+      "source": {
+        "sourceUrl": "https://policy.nec.go.kr/policy_pdf/20240410/PDF/PBINFO_PUB/2801/003_100152617_20240401_3.pdf",
+        "fetchedAt": "2026-09-27T17:14:30Z",
+        "publisher": "중앙선거관리위원회"
+      }
+    },
+    {
+      "id": "22-incheon-jung-ganghwa-ongjin-05",
+      "title": "내항 1·8부두 재개발 인천의 중심으로 만들겠습니다",
+      "category": "",
+      "status": "notJudged",
+      "source": {
+        "sourceUrl": "https://policy.nec.go.kr/policy_pdf/20240410/PDF/PBINFO_PUB/2801/003_100152617_20240401_3.pdf",
+        "fetchedAt": "2026-09-27T17:14:30Z",
+        "publisher": "중앙선거관리위원회"
+      }
+    },
+    {
+      "id": "22-incheon-jung-ganghwa-ongjin-06",
+      "title": "강화 전철시대를 준비합니다",
+      "category": "",
+      "status": "notJudged",
+      "source": {
+        "sourceUrl": "https://policy.nec.go.kr/policy_pdf/20240410/PDF/PBINFO_PUB/2801/003_100152617_20240401_3.pdf",
+        "fetchedAt": "2026-09-27T17:14:30Z",
+        "publisher": "중앙선거관리위원회"
+      }
+    },
+    {
+      "id": "22-incheon-jung-ganghwa-ongjin-07",
+      "title": "강화~영종 대교 건설하고, 경제자유구역 지정하겠습니다",
+      "category": "",
+      "status": "notJudged",
+      "source": {
+        "sourceUrl": "https://policy.nec.go.kr/policy_pdf/20240410/PDF/PBINFO_PUB/2801/003_100152617_20240401_3.pdf",
+        "fetchedAt": "2026-09-27T17:14:30Z",
+        "publisher": "중앙선거관리위원회"
+      }
+    },
+    {
+      "id": "22-incheon-jung-ganghwa-ongjin-08",
+      "title": "강화 어장 신설, 서해5도 E어장 신설, 연평어장 확대 남은 군사규제도 확실히 풀겠습니다",
+      "category": "",
+      "status": "notJudged",
+      "source": {
+        "sourceUrl": "https://policy.nec.go.kr/policy_pdf/20240410/PDF/PBINFO_PUB/2801/003_100152617_20240401_3.pdf",
+        "fetchedAt": "2026-09-27T17:14:30Z",
+        "publisher": "중앙선거관리위원회"
+      }
+    },
+    {
+      "id": "22-incheon-jung-ganghwa-ongjin-09",
+      "title": "제2영흥대교 건설, 배준영이 해내겠습니다",
+      "category": "",
+      "status": "notJudged",
+      "source": {
+        "sourceUrl": "https://policy.nec.go.kr/policy_pdf/20240410/PDF/PBINFO_PUB/2801/003_100152617_20240401_3.pdf",
+        "fetchedAt": "2026-09-27T17:14:30Z",
+        "publisher": "중앙선거관리위원회"
+      }
+    },
+    {
+      "id": "22-incheon-jung-ganghwa-ongjin-10",
+      "title": "대형여객선 도입으로 결항일수 최소화 추진",
+      "category": "",
+      "status": "notJudged",
+      "source": {
+        "sourceUrl": "https://policy.nec.go.kr/policy_pdf/20240410/PDF/PBINFO_PUB/2801/003_100152617_20240401_3.pdf",
+        "fetchedAt": "2026-09-27T17:14:30Z",
+        "publisher": "중앙선거관리위원회"
+      }
+    }
+  ]
+}

@@ -1,0 +1,528 @@
+{
+  "_note": "제22대 국회의원선거 인천 연수구 을 당선인 정일영 (더불어민주당). 책자형 선거공보 PDF 5–6쪽 「FIVE-VISIONS」 01–05(교통·교육·산업·환경·보건·문화)의 굵은 제목(03–05는 부제목 포함)과 ● 항목 47개. - 로 시작하는 세부 줄(02 제목 아래 두 줄 포함)은 넣지 않았다. PDF 7–8쪽의 동별 공약, 9쪽의 '더불어민주당과 정일영의 10대 민생공약'(당 공통), 10쪽의 성과는 넣지 않았다. 제목은 원문 문구를 따랐고 바꾼 것은 위에 적은 구호·수식어 덜어내기뿐이다. 분류(category)는 앱에 정해진 분류 체계가 없어 비워 두었다. 이행 여부는 판정하지 않았다(notJudged).",
+  "districtId": "nec-c37de3d3",
+  "source": {
+    "sourceUrl": "https://policy.nec.go.kr/policy_pdf/20240410/PDF/PBINFO_PUB/2804/003_100151810_20240402_2.pdf",
+    "fetchedAt": "2026-09-27T17:14:30Z",
+    "publisher": "중앙선거관리위원회"
+  },
+  "pledges": [
+    {
+      "id": "22-incheon-yeonsu-b-01",
+      "title": "GTX-B노선 조기 완공(29년)과 강남직결",
+      "category": "",
+      "status": "notJudged",
+      "source": {
+        "sourceUrl": "https://policy.nec.go.kr/policy_pdf/20240410/PDF/PBINFO_PUB/2804/003_100151810_20240402_2.pdf",
+        "fetchedAt": "2026-09-27T17:14:30Z",
+        "publisher": "중앙선거관리위원회"
+      }
+    },
+    {
+      "id": "22-incheon-yeonsu-b-02",
+      "title": "제3경인고속화도로 개선 사업 통한 정체 구간 해소",
+      "category": "",
+      "status": "notJudged",
+      "source": {
+        "sourceUrl": "https://policy.nec.go.kr/policy_pdf/20240410/PDF/PBINFO_PUB/2804/003_100151810_20240402_2.pdf",
+        "fetchedAt": "2026-09-27T17:14:30Z",
+        "publisher": "중앙선거관리위원회"
+      }
+    },
+    {
+      "id": "22-incheon-yeonsu-b-03",
+      "title": "송도국제도시 내 불합리한 신호체계 개선",
+      "category": "",
+      "status": "notJudged",
+      "source": {
+        "sourceUrl": "https://policy.nec.go.kr/policy_pdf/20240410/PDF/PBINFO_PUB/2804/003_100151810_20240402_2.pdf",
+        "fetchedAt": "2026-09-27T17:14:30Z",
+        "publisher": "중앙선거관리위원회"
+      }
+    },
+    {
+      "id": "22-incheon-yeonsu-b-04",
+      "title": "인천1호선 송도5동 연장 조기 개통",
+      "category": "",
+      "status": "notJudged",
+      "source": {
+        "sourceUrl": "https://policy.nec.go.kr/policy_pdf/20240410/PDF/PBINFO_PUB/2804/003_100151810_20240402_2.pdf",
+        "fetchedAt": "2026-09-27T17:14:30Z",
+        "publisher": "중앙선거관리위원회"
+      }
+    },
+    {
+      "id": "22-incheon-yeonsu-b-05",
+      "title": "M버스 등 광역교통망 확충",
+      "category": "",
+      "status": "notJudged",
+      "source": {
+        "sourceUrl": "https://policy.nec.go.kr/policy_pdf/20240410/PDF/PBINFO_PUB/2804/003_100151810_20240402_2.pdf",
+        "fetchedAt": "2026-09-27T17:14:30Z",
+        "publisher": "중앙선거관리위원회"
+      }
+    },
+    {
+      "id": "22-incheon-yeonsu-b-06",
+      "title": "수도권제2순환고속도로 조속 착공",
+      "category": "",
+      "status": "notJudged",
+      "source": {
+        "sourceUrl": "https://policy.nec.go.kr/policy_pdf/20240410/PDF/PBINFO_PUB/2804/003_100151810_20240402_2.pdf",
+        "fetchedAt": "2026-09-27T17:14:30Z",
+        "publisher": "중앙선거관리위원회"
+      }
+    },
+    {
+      "id": "22-incheon-yeonsu-b-07",
+      "title": "송도 내부 트램 속도감 있는 재추진",
+      "category": "",
+      "status": "notJudged",
+      "source": {
+        "sourceUrl": "https://policy.nec.go.kr/policy_pdf/20240410/PDF/PBINFO_PUB/2804/003_100151810_20240402_2.pdf",
+        "fetchedAt": "2026-09-27T17:14:30Z",
+        "publisher": "중앙선거관리위원회"
+      }
+    },
+    {
+      "id": "22-incheon-yeonsu-b-08",
+      "title": "시내버스 교통망 확충·마을버스 운행 추진",
+      "category": "",
+      "status": "notJudged",
+      "source": {
+        "sourceUrl": "https://policy.nec.go.kr/policy_pdf/20240410/PDF/PBINFO_PUB/2804/003_100151810_20240402_2.pdf",
+        "fetchedAt": "2026-09-27T17:14:30Z",
+        "publisher": "중앙선거관리위원회"
+      }
+    },
+    {
+      "id": "22-incheon-yeonsu-b-09",
+      "title": "인천신항 진입도로 지하화 조속 추진",
+      "category": "",
+      "status": "notJudged",
+      "source": {
+        "sourceUrl": "https://policy.nec.go.kr/policy_pdf/20240410/PDF/PBINFO_PUB/2804/003_100151810_20240402_2.pdf",
+        "fetchedAt": "2026-09-27T17:14:30Z",
+        "publisher": "중앙선거관리위원회"
+      }
+    },
+    {
+      "id": "22-incheon-yeonsu-b-10",
+      "title": "송도국제도시 내 공유자전거·킥보드 관리 체계 강화",
+      "category": "",
+      "status": "notJudged",
+      "source": {
+        "sourceUrl": "https://policy.nec.go.kr/policy_pdf/20240410/PDF/PBINFO_PUB/2804/003_100151810_20240402_2.pdf",
+        "fetchedAt": "2026-09-27T17:14:30Z",
+        "publisher": "중앙선거관리위원회"
+      }
+    },
+    {
+      "id": "22-incheon-yeonsu-b-11",
+      "title": "아암지하차도 차질없는 25년 하반기 준공",
+      "category": "",
+      "status": "notJudged",
+      "source": {
+        "sourceUrl": "https://policy.nec.go.kr/policy_pdf/20240410/PDF/PBINFO_PUB/2804/003_100151810_20240402_2.pdf",
+        "fetchedAt": "2026-09-27T17:14:30Z",
+        "publisher": "중앙선거관리위원회"
+      }
+    },
+    {
+      "id": "22-incheon-yeonsu-b-12",
+      "title": "아암물류단지 진입도로 26년 3월 준공",
+      "category": "",
+      "status": "notJudged",
+      "source": {
+        "sourceUrl": "https://policy.nec.go.kr/policy_pdf/20240410/PDF/PBINFO_PUB/2804/003_100151810_20240402_2.pdf",
+        "fetchedAt": "2026-09-27T17:14:30Z",
+        "publisher": "중앙선거관리위원회"
+      }
+    },
+    {
+      "id": "22-incheon-yeonsu-b-13",
+      "title": "교육명품특구 조성",
+      "category": "",
+      "status": "notJudged",
+      "source": {
+        "sourceUrl": "https://policy.nec.go.kr/policy_pdf/20240410/PDF/PBINFO_PUB/2804/003_100151810_20240402_2.pdf",
+        "fetchedAt": "2026-09-27T17:14:30Z",
+        "publisher": "중앙선거관리위원회"
+      }
+    },
+    {
+      "id": "22-incheon-yeonsu-b-14",
+      "title": "중학교 근거리 우선 배정 및 원거리 학교 통학지원 확대",
+      "category": "",
+      "status": "notJudged",
+      "source": {
+        "sourceUrl": "https://policy.nec.go.kr/policy_pdf/20240410/PDF/PBINFO_PUB/2804/003_100151810_20240402_2.pdf",
+        "fetchedAt": "2026-09-27T17:14:30Z",
+        "publisher": "중앙선거관리위원회"
+      }
+    },
+    {
+      "id": "22-incheon-yeonsu-b-15",
+      "title": "송도국제도시 국립자연사박물관 설립",
+      "category": "",
+      "status": "notJudged",
+      "source": {
+        "sourceUrl": "https://policy.nec.go.kr/policy_pdf/20240410/PDF/PBINFO_PUB/2804/003_100151810_20240402_2.pdf",
+        "fetchedAt": "2026-09-27T17:14:30Z",
+        "publisher": "중앙선거관리위원회"
+      }
+    },
+    {
+      "id": "22-incheon-yeonsu-b-16",
+      "title": "송도국제도시 내 어린이박물관 건립",
+      "category": "",
+      "status": "notJudged",
+      "source": {
+        "sourceUrl": "https://policy.nec.go.kr/policy_pdf/20240410/PDF/PBINFO_PUB/2804/003_100151810_20240402_2.pdf",
+        "fetchedAt": "2026-09-27T17:14:30Z",
+        "publisher": "중앙선거관리위원회"
+      }
+    },
+    {
+      "id": "22-incheon-yeonsu-b-17",
+      "title": "영유아·학생 안전체험관 건립 추진",
+      "category": "",
+      "status": "notJudged",
+      "source": {
+        "sourceUrl": "https://policy.nec.go.kr/policy_pdf/20240410/PDF/PBINFO_PUB/2804/003_100151810_20240402_2.pdf",
+        "fetchedAt": "2026-09-27T17:14:30Z",
+        "publisher": "중앙선거관리위원회"
+      }
+    },
+    {
+      "id": "22-incheon-yeonsu-b-18",
+      "title": "생활수영활성화를 위한 실내 공공 수영장 확충",
+      "category": "",
+      "status": "notJudged",
+      "source": {
+        "sourceUrl": "https://policy.nec.go.kr/policy_pdf/20240410/PDF/PBINFO_PUB/2804/003_100151810_20240402_2.pdf",
+        "fetchedAt": "2026-09-27T17:14:30Z",
+        "publisher": "중앙선거관리위원회"
+      }
+    },
+    {
+      "id": "22-incheon-yeonsu-b-19",
+      "title": "어린이집 확충 및 영유아 보육 지원 위한 육아종합지원센터 설치",
+      "category": "",
+      "status": "notJudged",
+      "source": {
+        "sourceUrl": "https://policy.nec.go.kr/policy_pdf/20240410/PDF/PBINFO_PUB/2804/003_100151810_20240402_2.pdf",
+        "fetchedAt": "2026-09-27T17:14:30Z",
+        "publisher": "중앙선거관리위원회"
+      }
+    },
+    {
+      "id": "22-incheon-yeonsu-b-20",
+      "title": "세계 정상급 바이오클러스터 구축",
+      "category": "",
+      "status": "notJudged",
+      "source": {
+        "sourceUrl": "https://policy.nec.go.kr/policy_pdf/20240410/PDF/PBINFO_PUB/2804/003_100151810_20240402_2.pdf",
+        "fetchedAt": "2026-09-27T17:14:30Z",
+        "publisher": "중앙선거관리위원회"
+      }
+    },
+    {
+      "id": "22-incheon-yeonsu-b-21",
+      "title": "K-바이오 랩허브와 바이오공정 인력양성센터의 차질없는 완공",
+      "category": "",
+      "status": "notJudged",
+      "source": {
+        "sourceUrl": "https://policy.nec.go.kr/policy_pdf/20240410/PDF/PBINFO_PUB/2804/003_100151810_20240402_2.pdf",
+        "fetchedAt": "2026-09-27T17:14:30Z",
+        "publisher": "중앙선거관리위원회"
+      }
+    },
+    {
+      "id": "22-incheon-yeonsu-b-22",
+      "title": "국내 최대 규모 콜드체인 물류센터 조속 건립 통한 인천 물류 산업 활성화",
+      "category": "",
+      "status": "notJudged",
+      "source": {
+        "sourceUrl": "https://policy.nec.go.kr/policy_pdf/20240410/PDF/PBINFO_PUB/2804/003_100151810_20240402_2.pdf",
+        "fetchedAt": "2026-09-27T17:14:30Z",
+        "publisher": "중앙선거관리위원회"
+      }
+    },
+    {
+      "id": "22-incheon-yeonsu-b-23",
+      "title": "송도 경제자유구역 규제 완화를 통한 핵심전략산업 육성",
+      "category": "",
+      "status": "notJudged",
+      "source": {
+        "sourceUrl": "https://policy.nec.go.kr/policy_pdf/20240410/PDF/PBINFO_PUB/2804/003_100151810_20240402_2.pdf",
+        "fetchedAt": "2026-09-27T17:14:30Z",
+        "publisher": "중앙선거관리위원회"
+      }
+    },
+    {
+      "id": "22-incheon-yeonsu-b-24",
+      "title": "워터프론트 전 구간 차질없는 신속 추진",
+      "category": "",
+      "status": "notJudged",
+      "source": {
+        "sourceUrl": "https://policy.nec.go.kr/policy_pdf/20240410/PDF/PBINFO_PUB/2804/003_100151810_20240402_2.pdf",
+        "fetchedAt": "2026-09-27T17:14:30Z",
+        "publisher": "중앙선거관리위원회"
+      }
+    },
+    {
+      "id": "22-incheon-yeonsu-b-25",
+      "title": "AI분야 엔비디아와 같은 코어밸류(core-value) 해외기업 아시아헤드쿼터 유치",
+      "category": "",
+      "status": "notJudged",
+      "source": {
+        "sourceUrl": "https://policy.nec.go.kr/policy_pdf/20240410/PDF/PBINFO_PUB/2804/003_100151810_20240402_2.pdf",
+        "fetchedAt": "2026-09-27T17:14:30Z",
+        "publisher": "중앙선거관리위원회"
+      }
+    },
+    {
+      "id": "22-incheon-yeonsu-b-26",
+      "title": "규제혁신과 스타트업파크 확대 지원 통한 창업밸리 조성과 스타트업·벤처 육성",
+      "category": "",
+      "status": "notJudged",
+      "source": {
+        "sourceUrl": "https://policy.nec.go.kr/policy_pdf/20240410/PDF/PBINFO_PUB/2804/003_100151810_20240402_2.pdf",
+        "fetchedAt": "2026-09-27T17:14:30Z",
+        "publisher": "중앙선거관리위원회"
+      }
+    },
+    {
+      "id": "22-incheon-yeonsu-b-27",
+      "title": "바이오헬스산업 지원 확대 및 적극적 외국인 투자 유치 통한 일자리 창출",
+      "category": "",
+      "status": "notJudged",
+      "source": {
+        "sourceUrl": "https://policy.nec.go.kr/policy_pdf/20240410/PDF/PBINFO_PUB/2804/003_100151810_20240402_2.pdf",
+        "fetchedAt": "2026-09-27T17:14:30Z",
+        "publisher": "중앙선거관리위원회"
+      }
+    },
+    {
+      "id": "22-incheon-yeonsu-b-28",
+      "title": "송도 세브란스 차질없는 완성(26년 개원)",
+      "category": "",
+      "status": "notJudged",
+      "source": {
+        "sourceUrl": "https://policy.nec.go.kr/policy_pdf/20240410/PDF/PBINFO_PUB/2804/003_100151810_20240402_2.pdf",
+        "fetchedAt": "2026-09-27T17:14:30Z",
+        "publisher": "중앙선거관리위원회"
+      }
+    },
+    {
+      "id": "22-incheon-yeonsu-b-29",
+      "title": "송도 세브란스 내 모자보건 특화 센터 설치(산부인과·소아청소년과)",
+      "category": "",
+      "status": "notJudged",
+      "source": {
+        "sourceUrl": "https://policy.nec.go.kr/policy_pdf/20240410/PDF/PBINFO_PUB/2804/003_100151810_20240402_2.pdf",
+        "fetchedAt": "2026-09-27T17:14:30Z",
+        "publisher": "중앙선거관리위원회"
+      }
+    },
+    {
+      "id": "22-incheon-yeonsu-b-30",
+      "title": "국립 인천대 의과대학 신설",
+      "category": "",
+      "status": "notJudged",
+      "source": {
+        "sourceUrl": "https://policy.nec.go.kr/policy_pdf/20240410/PDF/PBINFO_PUB/2804/003_100151810_20240402_2.pdf",
+        "fetchedAt": "2026-09-27T17:14:30Z",
+        "publisher": "중앙선거관리위원회"
+      }
+    },
+    {
+      "id": "22-incheon-yeonsu-b-31",
+      "title": "송도 경찰서 설립 추진",
+      "category": "",
+      "status": "notJudged",
+      "source": {
+        "sourceUrl": "https://policy.nec.go.kr/policy_pdf/20240410/PDF/PBINFO_PUB/2804/003_100151810_20240402_2.pdf",
+        "fetchedAt": "2026-09-27T17:14:30Z",
+        "publisher": "중앙선거관리위원회"
+      }
+    },
+    {
+      "id": "22-incheon-yeonsu-b-32",
+      "title": "송도 맨발 힐링·황톳길 확충",
+      "category": "",
+      "status": "notJudged",
+      "source": {
+        "sourceUrl": "https://policy.nec.go.kr/policy_pdf/20240410/PDF/PBINFO_PUB/2804/003_100151810_20240402_2.pdf",
+        "fetchedAt": "2026-09-27T17:14:30Z",
+        "publisher": "중앙선거관리위원회"
+      }
+    },
+    {
+      "id": "22-incheon-yeonsu-b-33",
+      "title": "송도국제도시를 일주하는 자전거 둘레길 조성",
+      "category": "",
+      "status": "notJudged",
+      "source": {
+        "sourceUrl": "https://policy.nec.go.kr/policy_pdf/20240410/PDF/PBINFO_PUB/2804/003_100151810_20240402_2.pdf",
+        "fetchedAt": "2026-09-27T17:14:30Z",
+        "publisher": "중앙선거관리위원회"
+      }
+    },
+    {
+      "id": "22-incheon-yeonsu-b-34",
+      "title": "송도 건강생활지원센터 및 보건지소 확대 설치",
+      "category": "",
+      "status": "notJudged",
+      "source": {
+        "sourceUrl": "https://policy.nec.go.kr/policy_pdf/20240410/PDF/PBINFO_PUB/2804/003_100151810_20240402_2.pdf",
+        "fetchedAt": "2026-09-27T17:14:30Z",
+        "publisher": "중앙선거관리위원회"
+      }
+    },
+    {
+      "id": "22-incheon-yeonsu-b-35",
+      "title": "도심 내 통학차량버스 등 안전 확보",
+      "category": "",
+      "status": "notJudged",
+      "source": {
+        "sourceUrl": "https://policy.nec.go.kr/policy_pdf/20240410/PDF/PBINFO_PUB/2804/003_100151810_20240402_2.pdf",
+        "fetchedAt": "2026-09-27T17:14:30Z",
+        "publisher": "중앙선거관리위원회"
+      }
+    },
+    {
+      "id": "22-incheon-yeonsu-b-36",
+      "title": "송도국제도시 거주 중년층 여성위한 공공일자리 확충",
+      "category": "",
+      "status": "notJudged",
+      "source": {
+        "sourceUrl": "https://policy.nec.go.kr/policy_pdf/20240410/PDF/PBINFO_PUB/2804/003_100151810_20240402_2.pdf",
+        "fetchedAt": "2026-09-27T17:14:30Z",
+        "publisher": "중앙선거관리위원회"
+      }
+    },
+    {
+      "id": "22-incheon-yeonsu-b-37",
+      "title": "송도국제도시형 노인복지문화센터 확충",
+      "category": "",
+      "status": "notJudged",
+      "source": {
+        "sourceUrl": "https://policy.nec.go.kr/policy_pdf/20240410/PDF/PBINFO_PUB/2804/003_100151810_20240402_2.pdf",
+        "fetchedAt": "2026-09-27T17:14:30Z",
+        "publisher": "중앙선거관리위원회"
+      }
+    },
+    {
+      "id": "22-incheon-yeonsu-b-38",
+      "title": "달빛 어린이 병원 추진",
+      "category": "",
+      "status": "notJudged",
+      "source": {
+        "sourceUrl": "https://policy.nec.go.kr/policy_pdf/20240410/PDF/PBINFO_PUB/2804/003_100151810_20240402_2.pdf",
+        "fetchedAt": "2026-09-27T17:14:30Z",
+        "publisher": "중앙선거관리위원회"
+      }
+    },
+    {
+      "id": "22-incheon-yeonsu-b-39",
+      "title": "랜드마크 인천타워 건립 조속 추진",
+      "category": "",
+      "status": "notJudged",
+      "source": {
+        "sourceUrl": "https://policy.nec.go.kr/policy_pdf/20240410/PDF/PBINFO_PUB/2804/003_100151810_20240402_2.pdf",
+        "fetchedAt": "2026-09-27T17:14:30Z",
+        "publisher": "중앙선거관리위원회"
+      }
+    },
+    {
+      "id": "22-incheon-yeonsu-b-40",
+      "title": "글로벌 청년 문화의 거리 조성",
+      "category": "",
+      "status": "notJudged",
+      "source": {
+        "sourceUrl": "https://policy.nec.go.kr/policy_pdf/20240410/PDF/PBINFO_PUB/2804/003_100151810_20240402_2.pdf",
+        "fetchedAt": "2026-09-27T17:14:30Z",
+        "publisher": "중앙선거관리위원회"
+      }
+    },
+    {
+      "id": "22-incheon-yeonsu-b-41",
+      "title": "송도 국제도시 K-culture 허브 조성",
+      "category": "",
+      "status": "notJudged",
+      "source": {
+        "sourceUrl": "https://policy.nec.go.kr/policy_pdf/20240410/PDF/PBINFO_PUB/2804/003_100151810_20240402_2.pdf",
+        "fetchedAt": "2026-09-27T17:14:30Z",
+        "publisher": "중앙선거관리위원회"
+      }
+    },
+    {
+      "id": "22-incheon-yeonsu-b-42",
+      "title": "신세계백화점과 롯데몰 조속 완공",
+      "category": "",
+      "status": "notJudged",
+      "source": {
+        "sourceUrl": "https://policy.nec.go.kr/policy_pdf/20240410/PDF/PBINFO_PUB/2804/003_100151810_20240402_2.pdf",
+        "fetchedAt": "2026-09-27T17:14:30Z",
+        "publisher": "중앙선거관리위원회"
+      }
+    },
+    {
+      "id": "22-incheon-yeonsu-b-43",
+      "title": "워터프론트 남측구간 마리나·해양스포츠 단지 구축 추진",
+      "category": "",
+      "status": "notJudged",
+      "source": {
+        "sourceUrl": "https://policy.nec.go.kr/policy_pdf/20240410/PDF/PBINFO_PUB/2804/003_100151810_20240402_2.pdf",
+        "fetchedAt": "2026-09-27T17:14:30Z",
+        "publisher": "중앙선거관리위원회"
+      }
+    },
+    {
+      "id": "22-incheon-yeonsu-b-44",
+      "title": "달빛공원 파크골프장, 그라운드골프, 게이트볼 등 체육시설 확충",
+      "category": "",
+      "status": "notJudged",
+      "source": {
+        "sourceUrl": "https://policy.nec.go.kr/policy_pdf/20240410/PDF/PBINFO_PUB/2804/003_100151810_20240402_2.pdf",
+        "fetchedAt": "2026-09-27T17:14:30Z",
+        "publisher": "중앙선거관리위원회"
+      }
+    },
+    {
+      "id": "22-incheon-yeonsu-b-45",
+      "title": "드론, 무인비행기 등 첨단 비행체 에어쇼 추진",
+      "category": "",
+      "status": "notJudged",
+      "source": {
+        "sourceUrl": "https://policy.nec.go.kr/policy_pdf/20240410/PDF/PBINFO_PUB/2804/003_100151810_20240402_2.pdf",
+        "fetchedAt": "2026-09-27T17:14:30Z",
+        "publisher": "중앙선거관리위원회"
+      }
+    },
+    {
+      "id": "22-incheon-yeonsu-b-46",
+      "title": "송도명예시민권 도입으로 송도국제도시 주민의 글로벌 네트워킹 활성화",
+      "category": "",
+      "status": "notJudged",
+      "source": {
+        "sourceUrl": "https://policy.nec.go.kr/policy_pdf/20240410/PDF/PBINFO_PUB/2804/003_100151810_20240402_2.pdf",
+        "fetchedAt": "2026-09-27T17:14:30Z",
+        "publisher": "중앙선거관리위원회"
+      }
+    },
+    {
+      "id": "22-incheon-yeonsu-b-47",
+      "title": "첨단스마트 캠핑장 환경 개선 및 추가 조성(10공구)",
+      "category": "",
+      "status": "notJudged",
+      "source": {
+        "sourceUrl": "https://policy.nec.go.kr/policy_pdf/20240410/PDF/PBINFO_PUB/2804/003_100151810_20240402_2.pdf",
+        "fetchedAt": "2026-09-27T17:14:30Z",
+        "publisher": "중앙선거관리위원회"
+      }
+    }
+  ]
+}
