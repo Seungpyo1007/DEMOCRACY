@@ -1,0 +1,77 @@
+{
+  "_note": "제22대 국회의원선거 경남 김해시 을 당선인 김정호 (더불어민주당). 책자형 선거공보 PDF 4–5쪽 「김해발전 6대 공약」 1–6의 제목. 각 공약 아래 ❶–❺ 세부 항목, PDF 4쪽 왼쪽 「김해발전 비전과 전략」(동북아 물류 중심도시 육성, 부울경 메가시티 재추진, 부울경 광역교통망), PDF 6쪽 동별 공약과 더불어민주당 공약, 2–3쪽 정권 심판·의정활동 글은 넣지 않았다. 제목은 원문 문구를 따랐고 바꾼 것은 위에 적은 구호·수식어 덜어내기뿐이다. 분류(category)는 앱에 정해진 분류 체계가 없어 비워 두었다. 이행 여부는 판정하지 않았다(notJudged).",
+  "districtId": "nec-457dfe46",
+  "source": {
+    "sourceUrl": "https://policy.nec.go.kr/policy_pdf/20240410/PDF/PBINFO_PUB/4808/003_100152591_20240401_2.pdf",
+    "fetchedAt": "2026-09-28T03:00:00Z",
+    "publisher": "중앙선거관리위원회"
+  },
+  "pledges": [
+    {
+      "id": "22-gyeongnam-gimhae-b-01",
+      "title": "도심 대중교통난 획기적 혁신",
+      "category": "",
+      "status": "notJudged",
+      "source": {
+        "sourceUrl": "https://policy.nec.go.kr/policy_pdf/20240410/PDF/PBINFO_PUB/4808/003_100152591_20240401_2.pdf",
+        "fetchedAt": "2026-09-28T03:00:00Z",
+        "publisher": "중앙선거관리위원회"
+      }
+    },
+    {
+      "id": "22-gyeongnam-gimhae-b-02",
+      "title": "미래 전략산업 육성 및 청년 일자리 창출",
+      "category": "",
+      "status": "notJudged",
+      "source": {
+        "sourceUrl": "https://policy.nec.go.kr/policy_pdf/20240410/PDF/PBINFO_PUB/4808/003_100152591_20240401_2.pdf",
+        "fetchedAt": "2026-09-28T03:00:00Z",
+        "publisher": "중앙선거관리위원회"
+      }
+    },
+    {
+      "id": "22-gyeongnam-gimhae-b-03",
+      "title": "시민 건강권 및 주거환경 개선",
+      "category": "",
+      "status": "notJudged",
+      "source": {
+        "sourceUrl": "https://policy.nec.go.kr/policy_pdf/20240410/PDF/PBINFO_PUB/4808/003_100152591_20240401_2.pdf",
+        "fetchedAt": "2026-09-28T03:00:00Z",
+        "publisher": "중앙선거관리위원회"
+      }
+    },
+    {
+      "id": "22-gyeongnam-gimhae-b-04",
+      "title": "친환경 생태도시 조성 및 탄소중립도시 선도",
+      "category": "",
+      "status": "notJudged",
+      "source": {
+        "sourceUrl": "https://policy.nec.go.kr/policy_pdf/20240410/PDF/PBINFO_PUB/4808/003_100152591_20240401_2.pdf",
+        "fetchedAt": "2026-09-28T03:00:00Z",
+        "publisher": "중앙선거관리위원회"
+      }
+    },
+    {
+      "id": "22-gyeongnam-gimhae-b-05",
+      "title": "과밀·과대학교 해소 및 교육·문화시설 증설",
+      "category": "",
+      "status": "notJudged",
+      "source": {
+        "sourceUrl": "https://policy.nec.go.kr/policy_pdf/20240410/PDF/PBINFO_PUB/4808/003_100152591_20240401_2.pdf",
+        "fetchedAt": "2026-09-28T03:00:00Z",
+        "publisher": "중앙선거관리위원회"
+      }
+    },
+    {
+      "id": "22-gyeongnam-gimhae-b-06",
+      "title": "가야사 바로세우기 및 가야고분군 통합관리 기구 유치",
+      "category": "",
+      "status": "notJudged",
+      "source": {
+        "sourceUrl": "https://policy.nec.go.kr/policy_pdf/20240410/PDF/PBINFO_PUB/4808/003_100152591_20240401_2.pdf",
+        "fetchedAt": "2026-09-28T03:00:00Z",
+        "publisher": "중앙선거관리위원회"
+      }
+    }
+  ]
+}

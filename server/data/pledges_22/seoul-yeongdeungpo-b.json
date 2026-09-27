@@ -1,0 +1,121 @@
+{
+  "_note": "제22대 국회의원선거 서울 영등포구 을 당선인 김민석 (더불어민주당). 책자형 선거공보 PDF 5–6쪽 「김민석이」 번호 꼭지 1–10의 「해내겠습니다」 공약 문장 10개. 각 꼭지의 큰 제목(예: 「메낙골공원, 누가 해낼 수 있습니까?」)은 구호·질문이라 쓰지 않았고 「해냈습니다」 성과 줄도 넣지 않았다. PDF 7–8쪽의 권역별(여의·대림·신길) 목록은 이 10개를 권역별로 다시 풀어 쓴 것이라 넣지 않았고, 9쪽의 지난 정책 활동, 10쪽의 입법 준비 목록도 넣지 않았다. 제목은 원문 문구를 따랐고 바꾼 것은 위에 적은 구호·수식어 덜어내기뿐이다. 분류(category)는 앱에 정해진 분류 체계가 없어 비워 두었다. 이행 여부는 판정하지 않았다(notJudged).",
+  "districtId": "nec-2ae5cffe",
+  "source": {
+    "sourceUrl": "https://policy.nec.go.kr/policy_pdf/20240410/PDF/PBINFO_PUB/1119/003_100152475_20240402_2.pdf",
+    "fetchedAt": "2026-09-27T17:33:02Z",
+    "publisher": "중앙선거관리위원회"
+  },
+  "pledges": [
+    {
+      "id": "22-seoul-yeongdeungpo-b-01",
+      "title": "남부도로사업소 부지에 지역랜드마크 복합 개발",
+      "category": "",
+      "status": "notJudged",
+      "source": {
+        "sourceUrl": "https://policy.nec.go.kr/policy_pdf/20240410/PDF/PBINFO_PUB/1119/003_100152475_20240402_2.pdf",
+        "fetchedAt": "2026-09-27T17:33:02Z",
+        "publisher": "중앙선거관리위원회"
+      }
+    },
+    {
+      "id": "22-seoul-yeongdeungpo-b-02",
+      "title": "메낙골공원 · 고층복합건물 · 동서 보행로 추진",
+      "category": "",
+      "status": "notJudged",
+      "source": {
+        "sourceUrl": "https://policy.nec.go.kr/policy_pdf/20240410/PDF/PBINFO_PUB/1119/003_100152475_20240402_2.pdf",
+        "fetchedAt": "2026-09-27T17:33:02Z",
+        "publisher": "중앙선거관리위원회"
+      }
+    },
+    {
+      "id": "22-seoul-yeongdeungpo-b-03",
+      "title": "주민 뜻을 반영하는 브라이튼 민관협의체 추진",
+      "category": "",
+      "status": "notJudged",
+      "source": {
+        "sourceUrl": "https://policy.nec.go.kr/policy_pdf/20240410/PDF/PBINFO_PUB/1119/003_100152475_20240402_2.pdf",
+        "fetchedAt": "2026-09-27T17:33:02Z",
+        "publisher": "중앙선거관리위원회"
+      }
+    },
+    {
+      "id": "22-seoul-yeongdeungpo-b-04",
+      "title": "사러가사거리에 복합교육센터 설립",
+      "category": "",
+      "status": "notJudged",
+      "source": {
+        "sourceUrl": "https://policy.nec.go.kr/policy_pdf/20240410/PDF/PBINFO_PUB/1119/003_100152475_20240402_2.pdf",
+        "fetchedAt": "2026-09-27T17:33:02Z",
+        "publisher": "중앙선거관리위원회"
+      }
+    },
+    {
+      "id": "22-seoul-yeongdeungpo-b-05",
+      "title": "산업은행 이전 저지로 대한민국 금융 중심지 완성",
+      "category": "",
+      "status": "notJudged",
+      "source": {
+        "sourceUrl": "https://policy.nec.go.kr/policy_pdf/20240410/PDF/PBINFO_PUB/1119/003_100152475_20240402_2.pdf",
+        "fetchedAt": "2026-09-27T17:33:02Z",
+        "publisher": "중앙선거관리위원회"
+      }
+    },
+    {
+      "id": "22-seoul-yeongdeungpo-b-06",
+      "title": "영등포구간(신길-대방) 철도 지하화 본사업 최우선 착수 추진",
+      "category": "",
+      "status": "notJudged",
+      "source": {
+        "sourceUrl": "https://policy.nec.go.kr/policy_pdf/20240410/PDF/PBINFO_PUB/1119/003_100152475_20240402_2.pdf",
+        "fetchedAt": "2026-09-27T17:33:02Z",
+        "publisher": "중앙선거관리위원회"
+      }
+    },
+    {
+      "id": "22-seoul-yeongdeungpo-b-07",
+      "title": "국제학교 · 명문대 글로벌 융합 캠퍼스 · 복합스포츠센터 유치 추진",
+      "category": "",
+      "status": "notJudged",
+      "source": {
+        "sourceUrl": "https://policy.nec.go.kr/policy_pdf/20240410/PDF/PBINFO_PUB/1119/003_100152475_20240402_2.pdf",
+        "fetchedAt": "2026-09-27T17:33:02Z",
+        "publisher": "중앙선거관리위원회"
+      }
+    },
+    {
+      "id": "22-seoul-yeongdeungpo-b-08",
+      "title": "여의도 재건축 정비사업 지원",
+      "category": "",
+      "status": "notJudged",
+      "source": {
+        "sourceUrl": "https://policy.nec.go.kr/policy_pdf/20240410/PDF/PBINFO_PUB/1119/003_100152475_20240402_2.pdf",
+        "fetchedAt": "2026-09-27T17:33:02Z",
+        "publisher": "중앙선거관리위원회"
+      }
+    },
+    {
+      "id": "22-seoul-yeongdeungpo-b-09",
+      "title": "대림 지역 전체의 학력을 높이기 위해 맞춤형 학력 격차 해소 프로그램 강화",
+      "category": "",
+      "status": "notJudged",
+      "source": {
+        "sourceUrl": "https://policy.nec.go.kr/policy_pdf/20240410/PDF/PBINFO_PUB/1119/003_100152475_20240402_2.pdf",
+        "fetchedAt": "2026-09-27T17:33:02Z",
+        "publisher": "중앙선거관리위원회"
+      }
+    },
+    {
+      "id": "22-seoul-yeongdeungpo-b-10",
+      "title": "고품격 재개발 및 동명개정 주민투표 추진 (희망하는 동)",
+      "category": "",
+      "status": "notJudged",
+      "source": {
+        "sourceUrl": "https://policy.nec.go.kr/policy_pdf/20240410/PDF/PBINFO_PUB/1119/003_100152475_20240402_2.pdf",
+        "fetchedAt": "2026-09-27T17:33:02Z",
+        "publisher": "중앙선거관리위원회"
+      }
+    }
+  ]
+}

@@ -1,0 +1,143 @@
+{
+  "_note": "제22대 국회의원선거 대구 북구 을 당선인 김승수 (국민의힘). 책자형 선거공보 PDF 7–8쪽 「김승수의 강북·칠곡 명품도시 완성 6대 공약」 1–6 아래 번호 항목 1-1–6-2(12개). 1–6의 분야 제목(「공항 프론트 경제도시」 등)과 따옴표 다짐 문장은 넣지 않았고, 항목 밑의 괄호 줄은 원문대로 붙였다. 글자층이 두 번씩 겹쳐 있어 쪽 이미지를 보고 옮겼다. 3–6쪽의 의정 성과와 9–10쪽의 동별 공약은 넣지 않았다. 제목은 원문 문구를 따랐고 바꾼 것은 위에 적은 구호·수식어 덜어내기뿐이다. 분류(category)는 앱에 정해진 분류 체계가 없어 비워 두었다. 이행 여부는 판정하지 않았다(notJudged).",
+  "districtId": "nec-ca0a25ad",
+  "source": {
+    "sourceUrl": "https://policy.nec.go.kr/policy_pdf/20240410/PDF/PBINFO_PUB/2705/003_100152811_20240402_2.pdf",
+    "fetchedAt": "2026-09-28T02:20:00Z",
+    "publisher": "중앙선거관리위원회"
+  },
+  "pledges": [
+    {
+      "id": "22-daegu-buk-b-01",
+      "title": "매천시장 후적지 활용 신공항 일자리 · 문화 1번지 복합 글로벌 문화 · 경제 비즈니스타운 조성",
+      "category": "",
+      "status": "notJudged",
+      "source": {
+        "sourceUrl": "https://policy.nec.go.kr/policy_pdf/20240410/PDF/PBINFO_PUB/2705/003_100152811_20240402_2.pdf",
+        "fetchedAt": "2026-09-28T02:20:00Z",
+        "publisher": "중앙선거관리위원회"
+      }
+    },
+    {
+      "id": "22-daegu-buk-b-02",
+      "title": "통합신공항의 관문, 사통팔달의 교통망 확충 (중앙고속도로 · 국도 5호선 확장, 조야-동명 광역도로 조속 개통, 도시철도 3호선~공항철도 연결)",
+      "category": "",
+      "status": "notJudged",
+      "source": {
+        "sourceUrl": "https://policy.nec.go.kr/policy_pdf/20240410/PDF/PBINFO_PUB/2705/003_100152811_20240402_2.pdf",
+        "fetchedAt": "2026-09-28T02:20:00Z",
+        "publisher": "중앙선거관리위원회"
+      }
+    },
+    {
+      "id": "22-daegu-buk-b-03",
+      "title": "대구 관광의 메카, 금호꽃섬 국가정원 프로젝트 (금호꽃섬 국가정원화 및 자율주행 금호강변선 · 금호강 보도교 · 리버워크 구축)",
+      "category": "",
+      "status": "notJudged",
+      "source": {
+        "sourceUrl": "https://policy.nec.go.kr/policy_pdf/20240410/PDF/PBINFO_PUB/2705/003_100152811_20240402_2.pdf",
+        "fetchedAt": "2026-09-28T02:20:00Z",
+        "publisher": "중앙선거관리위원회"
+      }
+    },
+    {
+      "id": "22-daegu-buk-b-04",
+      "title": "신천하수처리장 지하화 및 금호강 연계 수변 레저 · 문화관광 복합 테마파크 조성",
+      "category": "",
+      "status": "notJudged",
+      "source": {
+        "sourceUrl": "https://policy.nec.go.kr/policy_pdf/20240410/PDF/PBINFO_PUB/2705/003_100152811_20240402_2.pdf",
+        "fetchedAt": "2026-09-28T02:20:00Z",
+        "publisher": "중앙선거관리위원회"
+      }
+    },
+    {
+      "id": "22-daegu-buk-b-05",
+      "title": "칠곡1~4지구 · 동서변지구 재개발, 운전면허시험장 · 소년원 · 50사단 후적지 개발, 도심주변 그린벨트 해제 추진",
+      "category": "",
+      "status": "notJudged",
+      "source": {
+        "sourceUrl": "https://policy.nec.go.kr/policy_pdf/20240410/PDF/PBINFO_PUB/2705/003_100152811_20240402_2.pdf",
+        "fetchedAt": "2026-09-28T02:20:00Z",
+        "publisher": "중앙선거관리위원회"
+      }
+    },
+    {
+      "id": "22-daegu-buk-b-06",
+      "title": "도시철도 4호선(엑스코선) 강북 연장 (연경-동서변-도남-동호 연장)",
+      "category": "",
+      "status": "notJudged",
+      "source": {
+        "sourceUrl": "https://policy.nec.go.kr/policy_pdf/20240410/PDF/PBINFO_PUB/2705/003_100152811_20240402_2.pdf",
+        "fetchedAt": "2026-09-28T02:20:00Z",
+        "publisher": "중앙선거관리위원회"
+      }
+    },
+    {
+      "id": "22-daegu-buk-b-07",
+      "title": "대구 문화예술의 중심, 문화산업허브 조성 (뮤지컬컴플렉스 · 국립미술관 대구관, 팔거산성 · 구암동고분군 · 칠곡향교 연계 역사문화관광벨트)",
+      "category": "",
+      "status": "notJudged",
+      "source": {
+        "sourceUrl": "https://policy.nec.go.kr/policy_pdf/20240410/PDF/PBINFO_PUB/2705/003_100152811_20240402_2.pdf",
+        "fetchedAt": "2026-09-28T02:20:00Z",
+        "publisher": "중앙선거관리위원회"
+      }
+    },
+    {
+      "id": "22-daegu-buk-b-08",
+      "title": "어디든 10분거리, 풍족한 문화 · 생활체육시설 확충 (대구 강북 · 군위권 거점 융복합 도서관, 파크골프장, 맨발산책로, 다목적 체육관)",
+      "category": "",
+      "status": "notJudged",
+      "source": {
+        "sourceUrl": "https://policy.nec.go.kr/policy_pdf/20240410/PDF/PBINFO_PUB/2705/003_100152811_20240402_2.pdf",
+        "fetchedAt": "2026-09-28T02:20:00Z",
+        "publisher": "중앙선거관리위원회"
+      }
+    },
+    {
+      "id": "22-daegu-buk-b-09",
+      "title": "모든 아이들이 꿈을 펼치는 대구 1등 교육발전특구 조성 (국제바칼로레아(IB) 참여학교 확대, 예술영재육성 특화캠퍼스 유치, 스포츠 돌봄교실 확대)",
+      "category": "",
+      "status": "notJudged",
+      "source": {
+        "sourceUrl": "https://policy.nec.go.kr/policy_pdf/20240410/PDF/PBINFO_PUB/2705/003_100152811_20240402_2.pdf",
+        "fetchedAt": "2026-09-28T02:20:00Z",
+        "publisher": "중앙선거관리위원회"
+      }
+    },
+    {
+      "id": "22-daegu-buk-b-10",
+      "title": "부모 · 아이 모두 행복한 육아 인프라 구축 (지능형 창의 놀이시설 확충, 미취학 아동 대상 늘봄서비스 확대, 육아휴직 급여 상한 인상)",
+      "category": "",
+      "status": "notJudged",
+      "source": {
+        "sourceUrl": "https://policy.nec.go.kr/policy_pdf/20240410/PDF/PBINFO_PUB/2705/003_100152811_20240402_2.pdf",
+        "fetchedAt": "2026-09-28T02:20:00Z",
+        "publisher": "중앙선거관리위원회"
+      }
+    },
+    {
+      "id": "22-daegu-buk-b-11",
+      "title": "경북 농업 기술원 후적지 경북대 의대 · 간호대 이전 및 보건의료 R&D 클러스터 등이 입지한 메디컬컴플렉스 조성",
+      "category": "",
+      "status": "notJudged",
+      "source": {
+        "sourceUrl": "https://policy.nec.go.kr/policy_pdf/20240410/PDF/PBINFO_PUB/2705/003_100152811_20240402_2.pdf",
+        "fetchedAt": "2026-09-28T02:20:00Z",
+        "publisher": "중앙선거관리위원회"
+      }
+    },
+    {
+      "id": "22-daegu-buk-b-12",
+      "title": "남녀노소 건강 걱정 없는 의료인프라 구축 (공공심야어린이병원 · 소아전문응급의료센터 · 심야약국 확충, 어르신 건강놀이터 · 재택의료센터 확대, 1인가구 · 의료 취약층을 위한 ‘병원 안심동행서비스’ 추진)",
+      "category": "",
+      "status": "notJudged",
+      "source": {
+        "sourceUrl": "https://policy.nec.go.kr/policy_pdf/20240410/PDF/PBINFO_PUB/2705/003_100152811_20240402_2.pdf",
+        "fetchedAt": "2026-09-28T02:20:00Z",
+        "publisher": "중앙선거관리위원회"
+      }
+    }
+  ]
+}

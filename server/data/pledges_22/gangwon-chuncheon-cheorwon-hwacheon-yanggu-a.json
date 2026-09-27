@@ -1,0 +1,66 @@
+{
+  "_note": "제22대 국회의원선거 강원 춘천시철원군화천군양구군 갑 당선인 허영 (더불어민주당). 책자형 선거공보 PDF 5–6쪽 「인구 35만 춘천」·「허영은 해냅니다!」의 굵은 제목 공약 5개. 글자층이 얇아 쪽 이미지를 보고 확인했다. 제목 아래 • 세부 항목은 넣지 않았다. PDF 7–8쪽 「대한민국 위기 극복을 위한 허영의 약속」은 전국 공약이라, PDF 9–10쪽은 동·면별 공약이라, PDF 3–4쪽은 의정 성과라 넣지 않았다. 제목은 원문 문구를 따랐고 바꾼 것은 위에 적은 구호·수식어 덜어내기뿐이다. 분류(category)는 앱에 정해진 분류 체계가 없어 비워 두었다. 이행 여부는 판정하지 않았다(notJudged).",
+  "districtId": "nec-583a7e8c",
+  "source": {
+    "sourceUrl": "https://policy.nec.go.kr/policy_pdf/20240410/PDF/PBINFO_PUB/5201/003_100152616_20240402_2.pdf",
+    "fetchedAt": "2026-09-28T02:00:00Z",
+    "publisher": "중앙선거관리위원회"
+  },
+  "pledges": [
+    {
+      "id": "22-gangwon-chuncheon-cheorwon-hwacheon-yanggu-a-01",
+      "title": "정원산업도시 춘천, 호수국가정원 완성",
+      "category": "",
+      "status": "notJudged",
+      "source": {
+        "sourceUrl": "https://policy.nec.go.kr/policy_pdf/20240410/PDF/PBINFO_PUB/5201/003_100152616_20240402_2.pdf",
+        "fetchedAt": "2026-09-28T02:00:00Z",
+        "publisher": "중앙선거관리위원회"
+      }
+    },
+    {
+      "id": "22-gangwon-chuncheon-cheorwon-hwacheon-yanggu-a-02",
+      "title": "일자리 창출 5종 세트 추진",
+      "category": "",
+      "status": "notJudged",
+      "source": {
+        "sourceUrl": "https://policy.nec.go.kr/policy_pdf/20240410/PDF/PBINFO_PUB/5201/003_100152616_20240402_2.pdf",
+        "fetchedAt": "2026-09-28T02:00:00Z",
+        "publisher": "중앙선거관리위원회"
+      }
+    },
+    {
+      "id": "22-gangwon-chuncheon-cheorwon-hwacheon-yanggu-a-03",
+      "title": "미니신도시급 은퇴자 도시 조성",
+      "category": "",
+      "status": "notJudged",
+      "source": {
+        "sourceUrl": "https://policy.nec.go.kr/policy_pdf/20240410/PDF/PBINFO_PUB/5201/003_100152616_20240402_2.pdf",
+        "fetchedAt": "2026-09-28T02:00:00Z",
+        "publisher": "중앙선거관리위원회"
+      }
+    },
+    {
+      "id": "22-gangwon-chuncheon-cheorwon-hwacheon-yanggu-a-04",
+      "title": "역세권 공간혁신 프로젝트 추진",
+      "category": "",
+      "status": "notJudged",
+      "source": {
+        "sourceUrl": "https://policy.nec.go.kr/policy_pdf/20240410/PDF/PBINFO_PUB/5201/003_100152616_20240402_2.pdf",
+        "fetchedAt": "2026-09-28T02:00:00Z",
+        "publisher": "중앙선거관리위원회"
+      }
+    },
+    {
+      "id": "22-gangwon-chuncheon-cheorwon-hwacheon-yanggu-a-05",
+      "title": "춘천 축구전용구장 건립",
+      "category": "",
+      "status": "notJudged",
+      "source": {
+        "sourceUrl": "https://policy.nec.go.kr/policy_pdf/20240410/PDF/PBINFO_PUB/5201/003_100152616_20240402_2.pdf",
+        "fetchedAt": "2026-09-28T02:00:00Z",
+        "publisher": "중앙선거관리위원회"
+      }
+    }
+  ]
+}

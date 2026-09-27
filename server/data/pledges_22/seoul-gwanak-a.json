@@ -1,0 +1,143 @@
+{
+  "_note": "제22대 국회의원선거 서울 관악구 갑 당선인 박민규 (더불어민주당). 책자형 선거공보 PDF 7–8쪽 「관악의 확실한 변화, 박민규가 하겠습니다!」 01 교통 항목 5개, 02 관악S밸리 항목 6개, 03 「봉천천 생태하천 복원」 1개. 01·02의 큰 제목 구호와 03 아래 구간·일정 설명, PDF 6쪽 「박민규와 더불어민주당!」 공약, 9–10쪽의 동별 공약은 넣지 않았다. 앞의 번호·기호와 끝의 !·마침표만 덜어냈다. 제목은 원문 문구를 따랐고 바꾼 것은 위에 적은 구호·수식어 덜어내기뿐이다. 분류(category)는 앱에 정해진 분류 체계가 없어 비워 두었다. 이행 여부는 판정하지 않았다(notJudged).",
+  "districtId": "nec-61b9fe9a",
+  "source": {
+    "sourceUrl": "https://policy.nec.go.kr/policy_pdf/20240410/PDF/PBINFO_PUB/1121/003_100151602_20240402_4.pdf",
+    "fetchedAt": "2026-09-27T17:33:02Z",
+    "publisher": "중앙선거관리위원회"
+  },
+  "pledges": [
+    {
+      "id": "22-seoul-gwanak-a-01",
+      "title": "조속한 서부선 착공 실현",
+      "category": "",
+      "status": "notJudged",
+      "source": {
+        "sourceUrl": "https://policy.nec.go.kr/policy_pdf/20240410/PDF/PBINFO_PUB/1121/003_100151602_20240402_4.pdf",
+        "fetchedAt": "2026-09-27T17:33:02Z",
+        "publisher": "중앙선거관리위원회"
+      }
+    },
+    {
+      "id": "22-seoul-gwanak-a-02",
+      "title": "서부선 서울대 정문 방향 연장(신림선과 연결)",
+      "category": "",
+      "status": "notJudged",
+      "source": {
+        "sourceUrl": "https://policy.nec.go.kr/policy_pdf/20240410/PDF/PBINFO_PUB/1121/003_100151602_20240402_4.pdf",
+        "fetchedAt": "2026-09-27T17:33:02Z",
+        "publisher": "중앙선거관리위원회"
+      }
+    },
+    {
+      "id": "22-seoul-gwanak-a-03",
+      "title": "GTX-D 신림역 반드시 추진! : 트리플 역세권 신림역 시대 개막",
+      "category": "",
+      "status": "notJudged",
+      "source": {
+        "sourceUrl": "https://policy.nec.go.kr/policy_pdf/20240410/PDF/PBINFO_PUB/1121/003_100151602_20240402_4.pdf",
+        "fetchedAt": "2026-09-27T17:33:02Z",
+        "publisher": "중앙선거관리위원회"
+      }
+    },
+    {
+      "id": "22-seoul-gwanak-a-04",
+      "title": "촘촘한 마을버스, 골목까지 편리하게! → 기사인건비, 차고지 확보 지원",
+      "category": "",
+      "status": "notJudged",
+      "source": {
+        "sourceUrl": "https://policy.nec.go.kr/policy_pdf/20240410/PDF/PBINFO_PUB/1121/003_100151602_20240402_4.pdf",
+        "fetchedAt": "2026-09-27T17:33:02Z",
+        "publisher": "중앙선거관리위원회"
+      }
+    },
+    {
+      "id": "22-seoul-gwanak-a-05",
+      "title": "주요 역세권 및 주택가 공영주차장 확충 적극 추진",
+      "category": "",
+      "status": "notJudged",
+      "source": {
+        "sourceUrl": "https://policy.nec.go.kr/policy_pdf/20240410/PDF/PBINFO_PUB/1121/003_100151602_20240402_4.pdf",
+        "fetchedAt": "2026-09-27T17:33:02Z",
+        "publisher": "중앙선거관리위원회"
+      }
+    },
+    {
+      "id": "22-seoul-gwanak-a-06",
+      "title": "토지용도변경 등 통한 73,000㎡ 부지 추가 확보",
+      "category": "",
+      "status": "notJudged",
+      "source": {
+        "sourceUrl": "https://policy.nec.go.kr/policy_pdf/20240410/PDF/PBINFO_PUB/1121/003_100151602_20240402_4.pdf",
+        "fetchedAt": "2026-09-27T17:33:02Z",
+        "publisher": "중앙선거관리위원회"
+      }
+    },
+    {
+      "id": "22-seoul-gwanak-a-07",
+      "title": "관악S밸리 기업지원 펀드 조성 → 투자활성화",
+      "category": "",
+      "status": "notJudged",
+      "source": {
+        "sourceUrl": "https://policy.nec.go.kr/policy_pdf/20240410/PDF/PBINFO_PUB/1121/003_100151602_20240402_4.pdf",
+        "fetchedAt": "2026-09-27T17:33:02Z",
+        "publisher": "중앙선거관리위원회"
+      }
+    },
+    {
+      "id": "22-seoul-gwanak-a-08",
+      "title": "관악S밸리 벤처창업거점공간 조성사업 성공적 추진",
+      "category": "",
+      "status": "notJudged",
+      "source": {
+        "sourceUrl": "https://policy.nec.go.kr/policy_pdf/20240410/PDF/PBINFO_PUB/1121/003_100151602_20240402_4.pdf",
+        "fetchedAt": "2026-09-27T17:33:02Z",
+        "publisher": "중앙선거관리위원회"
+      }
+    },
+    {
+      "id": "22-seoul-gwanak-a-09",
+      "title": "서울대와 함께하는 캠퍼스타운 종합형 사업 추진 → 창업 + 주거 + 상권 + 지역협력, 관악의 활력증진",
+      "category": "",
+      "status": "notJudged",
+      "source": {
+        "sourceUrl": "https://policy.nec.go.kr/policy_pdf/20240410/PDF/PBINFO_PUB/1121/003_100151602_20240402_4.pdf",
+        "fetchedAt": "2026-09-27T17:33:02Z",
+        "publisher": "중앙선거관리위원회"
+      }
+    },
+    {
+      "id": "22-seoul-gwanak-a-10",
+      "title": "IR 통한 유망기업 발굴, 투자연계, 사업화자금 적극지원",
+      "category": "",
+      "status": "notJudged",
+      "source": {
+        "sourceUrl": "https://policy.nec.go.kr/policy_pdf/20240410/PDF/PBINFO_PUB/1121/003_100151602_20240402_4.pdf",
+        "fetchedAt": "2026-09-27T17:33:02Z",
+        "publisher": "중앙선거관리위원회"
+      }
+    },
+    {
+      "id": "22-seoul-gwanak-a-11",
+      "title": "벤처기업집적시설 등 민간 주도 창업인프라 조성 유도",
+      "category": "",
+      "status": "notJudged",
+      "source": {
+        "sourceUrl": "https://policy.nec.go.kr/policy_pdf/20240410/PDF/PBINFO_PUB/1121/003_100151602_20240402_4.pdf",
+        "fetchedAt": "2026-09-27T17:33:02Z",
+        "publisher": "중앙선거관리위원회"
+      }
+    },
+    {
+      "id": "22-seoul-gwanak-a-12",
+      "title": "봉천천 생태하천 복원",
+      "category": "",
+      "status": "notJudged",
+      "source": {
+        "sourceUrl": "https://policy.nec.go.kr/policy_pdf/20240410/PDF/PBINFO_PUB/1121/003_100151602_20240402_4.pdf",
+        "fetchedAt": "2026-09-27T17:33:02Z",
+        "publisher": "중앙선거관리위원회"
+      }
+    }
+  ]
+}

@@ -1,0 +1,121 @@
+{
+  "_note": "제22대 국회의원선거 경기 동두천시양주시연천군 을 당선인 김성원 (국민의힘). 책자형 선거공보 PDF 5쪽(펼침면) 「대한민국 발전, 경기북부 중심 동두천·양주·연천에서 시작합니다!」의 큰 제목 2개와 붉은 제목 공약 8개(세로 칸 순서대로). 제목 아래 소제목·• 세부 줄은 넣지 않았다. PDF 6쪽 「333공약」 분야별 목록은 더 긴 주제별 목록이라, PDF 2–4쪽 지난 임기 실적은 넣지 않았다. 제목은 원문 문구를 따랐고 바꾼 것은 위에 적은 구호·수식어 덜어내기뿐이다. 분류(category)는 앱에 정해진 분류 체계가 없어 비워 두었다. 이행 여부는 판정하지 않았다(notJudged).",
+  "districtId": "nec-d2a85df6",
+  "source": {
+    "sourceUrl": "https://policy.nec.go.kr/policy_pdf/20240410/PDF/PBINFO_PUB/4117/003_100152698_20240401_2.pdf",
+    "fetchedAt": "2026-09-27T17:34:00Z",
+    "publisher": "중앙선거관리위원회"
+  },
+  "pledges": [
+    {
+      "id": "22-gyeonggi-dongducheon-yangju-yeoncheon-b-01",
+      "title": "제3롯데월드(가칭) 유치",
+      "category": "",
+      "status": "notJudged",
+      "source": {
+        "sourceUrl": "https://policy.nec.go.kr/policy_pdf/20240410/PDF/PBINFO_PUB/4117/003_100152698_20240401_2.pdf",
+        "fetchedAt": "2026-09-27T17:34:00Z",
+        "publisher": "중앙선거관리위원회"
+      }
+    },
+    {
+      "id": "22-gyeonggi-dongducheon-yangju-yeoncheon-b-02",
+      "title": "서울~양주~동두천~연천 고속도로 조기 건설",
+      "category": "",
+      "status": "notJudged",
+      "source": {
+        "sourceUrl": "https://policy.nec.go.kr/policy_pdf/20240410/PDF/PBINFO_PUB/4117/003_100152698_20240401_2.pdf",
+        "fetchedAt": "2026-09-27T17:34:00Z",
+        "publisher": "중앙선거관리위원회"
+      }
+    },
+    {
+      "id": "22-gyeonggi-dongducheon-yangju-yeoncheon-b-03",
+      "title": "평화경제특구 및 기회발전특구 조성",
+      "category": "",
+      "status": "notJudged",
+      "source": {
+        "sourceUrl": "https://policy.nec.go.kr/policy_pdf/20240410/PDF/PBINFO_PUB/4117/003_100152698_20240401_2.pdf",
+        "fetchedAt": "2026-09-27T17:34:00Z",
+        "publisher": "중앙선거관리위원회"
+      }
+    },
+    {
+      "id": "22-gyeonggi-dongducheon-yangju-yeoncheon-b-04",
+      "title": "국가 첨단전략산업 특화단지 조성",
+      "category": "",
+      "status": "notJudged",
+      "source": {
+        "sourceUrl": "https://policy.nec.go.kr/policy_pdf/20240410/PDF/PBINFO_PUB/4117/003_100152698_20240401_2.pdf",
+        "fetchedAt": "2026-09-27T17:34:00Z",
+        "publisher": "중앙선거관리위원회"
+      }
+    },
+    {
+      "id": "22-gyeonggi-dongducheon-yangju-yeoncheon-b-05",
+      "title": "국가정원(국제평화공원) 유치",
+      "category": "",
+      "status": "notJudged",
+      "source": {
+        "sourceUrl": "https://policy.nec.go.kr/policy_pdf/20240410/PDF/PBINFO_PUB/4117/003_100152698_20240401_2.pdf",
+        "fetchedAt": "2026-09-27T17:34:00Z",
+        "publisher": "중앙선거관리위원회"
+      }
+    },
+    {
+      "id": "22-gyeonggi-dongducheon-yangju-yeoncheon-b-06",
+      "title": "교통혁명 완성",
+      "category": "",
+      "status": "notJudged",
+      "source": {
+        "sourceUrl": "https://policy.nec.go.kr/policy_pdf/20240410/PDF/PBINFO_PUB/4117/003_100152698_20240401_2.pdf",
+        "fetchedAt": "2026-09-27T17:34:00Z",
+        "publisher": "중앙선거관리위원회"
+      }
+    },
+    {
+      "id": "22-gyeonggi-dongducheon-yangju-yeoncheon-b-07",
+      "title": "대학 입시 「접경지역 특별전형」 신설",
+      "category": "",
+      "status": "notJudged",
+      "source": {
+        "sourceUrl": "https://policy.nec.go.kr/policy_pdf/20240410/PDF/PBINFO_PUB/4117/003_100152698_20240401_2.pdf",
+        "fetchedAt": "2026-09-27T17:34:00Z",
+        "publisher": "중앙선거관리위원회"
+      }
+    },
+    {
+      "id": "22-gyeonggi-dongducheon-yangju-yeoncheon-b-08",
+      "title": "의과대학 신설 및 공공의료원 설립",
+      "category": "",
+      "status": "notJudged",
+      "source": {
+        "sourceUrl": "https://policy.nec.go.kr/policy_pdf/20240410/PDF/PBINFO_PUB/4117/003_100152698_20240401_2.pdf",
+        "fetchedAt": "2026-09-27T17:34:00Z",
+        "publisher": "중앙선거관리위원회"
+      }
+    },
+    {
+      "id": "22-gyeonggi-dongducheon-yangju-yeoncheon-b-09",
+      "title": "국립 연천 현충원 조속 개원 및 국립 보훈종합 복지시설 건립",
+      "category": "",
+      "status": "notJudged",
+      "source": {
+        "sourceUrl": "https://policy.nec.go.kr/policy_pdf/20240410/PDF/PBINFO_PUB/4117/003_100152698_20240401_2.pdf",
+        "fetchedAt": "2026-09-27T17:34:00Z",
+        "publisher": "중앙선거관리위원회"
+      }
+    },
+    {
+      "id": "22-gyeonggi-dongducheon-yangju-yeoncheon-b-10",
+      "title": "어르신 주7일 점심 제공 및 주민 여가복지시설 확충 본격화",
+      "category": "",
+      "status": "notJudged",
+      "source": {
+        "sourceUrl": "https://policy.nec.go.kr/policy_pdf/20240410/PDF/PBINFO_PUB/4117/003_100152698_20240401_2.pdf",
+        "fetchedAt": "2026-09-27T17:34:00Z",
+        "publisher": "중앙선거관리위원회"
+      }
+    }
+  ]
+}
