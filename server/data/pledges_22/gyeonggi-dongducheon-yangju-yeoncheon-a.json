@@ -1,0 +1,396 @@
+{
+  "_note": "제22대 국회의원선거 경기 동두천시양주시연천군 갑 당선인 정성호 (더불어민주당). 책자형 선거공보 PDF 5쪽 「양주시민의 5대 숙원 빠르고 확실하게 해결하겠습니다」 ✓ 항목 5개와 PDF 6쪽(펼침면) 「정성호의 5대 비전 30대 약속」 1–5 아래 • 항목 30개. PDF 글자층의 분야 순서가 번호와 달라 쪽 이미지의 번호(1 동서균형발전 → 2 일자리 → 3 광역교통 → 4 교육·복지 → 5 문화·예술)대로 두었다. 「전철 1호선 배차 확대」 아래 괄호 부연 줄은 원문대로 붙였다. PDF 5쪽 위의 「따뜻한 나라 정성호가 약속합니다」 전국 정책과 PDF 4쪽 지난 임기 실적은 넣지 않았다. 제목은 원문 문구를 따랐고 바꾼 것은 위에 적은 구호·수식어 덜어내기뿐이다. 분류(category)는 앱에 정해진 분류 체계가 없어 비워 두었다. 이행 여부는 판정하지 않았다(notJudged).",
+  "districtId": "nec-f64a675e",
+  "source": {
+    "sourceUrl": "https://policy.nec.go.kr/policy_pdf/20240410/PDF/PBINFO_PUB/4116/003_100152992_20240402_2.pdf",
+    "fetchedAt": "2026-09-27T17:34:00Z",
+    "publisher": "중앙선거관리위원회"
+  },
+  "pledges": [
+    {
+      "id": "22-gyeonggi-dongducheon-yangju-yeoncheon-a-01",
+      "title": "옥정 물류창고 건설 중단",
+      "category": "",
+      "status": "notJudged",
+      "source": {
+        "sourceUrl": "https://policy.nec.go.kr/policy_pdf/20240410/PDF/PBINFO_PUB/4116/003_100152992_20240402_2.pdf",
+        "fetchedAt": "2026-09-27T17:34:00Z",
+        "publisher": "중앙선거관리위원회"
+      }
+    },
+    {
+      "id": "22-gyeonggi-dongducheon-yangju-yeoncheon-a-02",
+      "title": "회천신도시 중앙공원, 중앙도서관, 커뮤니티센터 등 확충",
+      "category": "",
+      "status": "notJudged",
+      "source": {
+        "sourceUrl": "https://policy.nec.go.kr/policy_pdf/20240410/PDF/PBINFO_PUB/4116/003_100152992_20240402_2.pdf",
+        "fetchedAt": "2026-09-27T17:34:00Z",
+        "publisher": "중앙선거관리위원회"
+      }
+    },
+    {
+      "id": "22-gyeonggi-dongducheon-yangju-yeoncheon-a-03",
+      "title": "전철 1호선 배차 확대(덕계, 덕정역-양주역 수준 증차 연내 확정)",
+      "category": "",
+      "status": "notJudged",
+      "source": {
+        "sourceUrl": "https://policy.nec.go.kr/policy_pdf/20240410/PDF/PBINFO_PUB/4116/003_100152992_20240402_2.pdf",
+        "fetchedAt": "2026-09-27T17:34:00Z",
+        "publisher": "중앙선거관리위원회"
+      }
+    },
+    {
+      "id": "22-gyeonggi-dongducheon-yangju-yeoncheon-a-04",
+      "title": "국제스케이트장 양주 유치",
+      "category": "",
+      "status": "notJudged",
+      "source": {
+        "sourceUrl": "https://policy.nec.go.kr/policy_pdf/20240410/PDF/PBINFO_PUB/4116/003_100152992_20240402_2.pdf",
+        "fetchedAt": "2026-09-27T17:34:00Z",
+        "publisher": "중앙선거관리위원회"
+      }
+    },
+    {
+      "id": "22-gyeonggi-dongducheon-yangju-yeoncheon-a-05",
+      "title": "백석 98번 국지도, 연곡~방성 도로 4차로 확장",
+      "category": "",
+      "status": "notJudged",
+      "source": {
+        "sourceUrl": "https://policy.nec.go.kr/policy_pdf/20240410/PDF/PBINFO_PUB/4116/003_100152992_20240402_2.pdf",
+        "fetchedAt": "2026-09-27T17:34:00Z",
+        "publisher": "중앙선거관리위원회"
+      }
+    },
+    {
+      "id": "22-gyeonggi-dongducheon-yangju-yeoncheon-a-06",
+      "title": "백석·광적, 정부(LH) 주도 옥정규모 신도시 조성 추진",
+      "category": "",
+      "status": "notJudged",
+      "source": {
+        "sourceUrl": "https://policy.nec.go.kr/policy_pdf/20240410/PDF/PBINFO_PUB/4116/003_100152992_20240402_2.pdf",
+        "fetchedAt": "2026-09-27T17:34:00Z",
+        "publisher": "중앙선거관리위원회"
+      }
+    },
+    {
+      "id": "22-gyeonggi-dongducheon-yangju-yeoncheon-a-07",
+      "title": "장흥 삼하·삼상·일영 통합 대개발 추진",
+      "category": "",
+      "status": "notJudged",
+      "source": {
+        "sourceUrl": "https://policy.nec.go.kr/policy_pdf/20240410/PDF/PBINFO_PUB/4116/003_100152992_20240402_2.pdf",
+        "fetchedAt": "2026-09-27T17:34:00Z",
+        "publisher": "중앙선거관리위원회"
+      }
+    },
+    {
+      "id": "22-gyeonggi-dongducheon-yangju-yeoncheon-a-08",
+      "title": "전철 3호선 지축~백석 연장 추진",
+      "category": "",
+      "status": "notJudged",
+      "source": {
+        "sourceUrl": "https://policy.nec.go.kr/policy_pdf/20240410/PDF/PBINFO_PUB/4116/003_100152992_20240402_2.pdf",
+        "fetchedAt": "2026-09-27T17:34:00Z",
+        "publisher": "중앙선거관리위원회"
+      }
+    },
+    {
+      "id": "22-gyeonggi-dongducheon-yangju-yeoncheon-a-09",
+      "title": "자율주행 순환버스 도입, 대중교통 전면 재편",
+      "category": "",
+      "status": "notJudged",
+      "source": {
+        "sourceUrl": "https://policy.nec.go.kr/policy_pdf/20240410/PDF/PBINFO_PUB/4116/003_100152992_20240402_2.pdf",
+        "fetchedAt": "2026-09-27T17:34:00Z",
+        "publisher": "중앙선거관리위원회"
+      }
+    },
+    {
+      "id": "22-gyeonggi-dongducheon-yangju-yeoncheon-a-10",
+      "title": "탄소 제로, 명품 수소 도시 조성",
+      "category": "",
+      "status": "notJudged",
+      "source": {
+        "sourceUrl": "https://policy.nec.go.kr/policy_pdf/20240410/PDF/PBINFO_PUB/4116/003_100152992_20240402_2.pdf",
+        "fetchedAt": "2026-09-27T17:34:00Z",
+        "publisher": "중앙선거관리위원회"
+      }
+    },
+    {
+      "id": "22-gyeonggi-dongducheon-yangju-yeoncheon-a-11",
+      "title": "재난 안전 도시, 반려동물 친화도시 구축",
+      "category": "",
+      "status": "notJudged",
+      "source": {
+        "sourceUrl": "https://policy.nec.go.kr/policy_pdf/20240410/PDF/PBINFO_PUB/4116/003_100152992_20240402_2.pdf",
+        "fetchedAt": "2026-09-27T17:34:00Z",
+        "publisher": "중앙선거관리위원회"
+      }
+    },
+    {
+      "id": "22-gyeonggi-dongducheon-yangju-yeoncheon-a-12",
+      "title": "첨단 기업 유치 중점 추진",
+      "category": "",
+      "status": "notJudged",
+      "source": {
+        "sourceUrl": "https://policy.nec.go.kr/policy_pdf/20240410/PDF/PBINFO_PUB/4116/003_100152992_20240402_2.pdf",
+        "fetchedAt": "2026-09-27T17:34:00Z",
+        "publisher": "중앙선거관리위원회"
+      }
+    },
+    {
+      "id": "22-gyeonggi-dongducheon-yangju-yeoncheon-a-13",
+      "title": "K-방산, 신교통, ICT 클러스터 조성",
+      "category": "",
+      "status": "notJudged",
+      "source": {
+        "sourceUrl": "https://policy.nec.go.kr/policy_pdf/20240410/PDF/PBINFO_PUB/4116/003_100152992_20240402_2.pdf",
+        "fetchedAt": "2026-09-27T17:34:00Z",
+        "publisher": "중앙선거관리위원회"
+      }
+    },
+    {
+      "id": "22-gyeonggi-dongducheon-yangju-yeoncheon-a-14",
+      "title": "제조업 융복합 혁신센터 설치, 섬유산업 첨단화",
+      "category": "",
+      "status": "notJudged",
+      "source": {
+        "sourceUrl": "https://policy.nec.go.kr/policy_pdf/20240410/PDF/PBINFO_PUB/4116/003_100152992_20240402_2.pdf",
+        "fetchedAt": "2026-09-27T17:34:00Z",
+        "publisher": "중앙선거관리위원회"
+      }
+    },
+    {
+      "id": "22-gyeonggi-dongducheon-yangju-yeoncheon-a-15",
+      "title": "청년창업센터·창업펀드 설립, ‘양주 창업밸리’ 조성",
+      "category": "",
+      "status": "notJudged",
+      "source": {
+        "sourceUrl": "https://policy.nec.go.kr/policy_pdf/20240410/PDF/PBINFO_PUB/4116/003_100152992_20240402_2.pdf",
+        "fetchedAt": "2026-09-27T17:34:00Z",
+        "publisher": "중앙선거관리위원회"
+      }
+    },
+    {
+      "id": "22-gyeonggi-dongducheon-yangju-yeoncheon-a-16",
+      "title": "신중년 일자리센터 설립, 어르신 일자리 확대",
+      "category": "",
+      "status": "notJudged",
+      "source": {
+        "sourceUrl": "https://policy.nec.go.kr/policy_pdf/20240410/PDF/PBINFO_PUB/4116/003_100152992_20240402_2.pdf",
+        "fetchedAt": "2026-09-27T17:34:00Z",
+        "publisher": "중앙선거관리위원회"
+      }
+    },
+    {
+      "id": "22-gyeonggi-dongducheon-yangju-yeoncheon-a-17",
+      "title": "옥정~고읍~양주역 트램 개설(1단계)",
+      "category": "",
+      "status": "notJudged",
+      "source": {
+        "sourceUrl": "https://policy.nec.go.kr/policy_pdf/20240410/PDF/PBINFO_PUB/4116/003_100152992_20240402_2.pdf",
+        "fetchedAt": "2026-09-27T17:34:00Z",
+        "publisher": "중앙선거관리위원회"
+      }
+    },
+    {
+      "id": "22-gyeonggi-dongducheon-yangju-yeoncheon-a-18",
+      "title": "옥정~회천(덕정) 지하철 신설(`25년 기본계획 착수)",
+      "category": "",
+      "status": "notJudged",
+      "source": {
+        "sourceUrl": "https://policy.nec.go.kr/policy_pdf/20240410/PDF/PBINFO_PUB/4116/003_100152992_20240402_2.pdf",
+        "fetchedAt": "2026-09-27T17:34:00Z",
+        "publisher": "중앙선거관리위원회"
+      }
+    },
+    {
+      "id": "22-gyeonggi-dongducheon-yangju-yeoncheon-a-19",
+      "title": "덕정역 SRT 운행, 도심공항터미널 설치",
+      "category": "",
+      "status": "notJudged",
+      "source": {
+        "sourceUrl": "https://policy.nec.go.kr/policy_pdf/20240410/PDF/PBINFO_PUB/4116/003_100152992_20240402_2.pdf",
+        "fetchedAt": "2026-09-27T17:34:00Z",
+        "publisher": "중앙선거관리위원회"
+      }
+    },
+    {
+      "id": "22-gyeonggi-dongducheon-yangju-yeoncheon-a-20",
+      "title": "경원선 지하화, 양주역 정차 철도망 계획 반영",
+      "category": "",
+      "status": "notJudged",
+      "source": {
+        "sourceUrl": "https://policy.nec.go.kr/policy_pdf/20240410/PDF/PBINFO_PUB/4116/003_100152992_20240402_2.pdf",
+        "fetchedAt": "2026-09-27T17:34:00Z",
+        "publisher": "중앙선거관리위원회"
+      }
+    },
+    {
+      "id": "22-gyeonggi-dongducheon-yangju-yeoncheon-a-21",
+      "title": "평화로 확장·전선 지중화 동시 추진, 고암IC 혼잡 개선",
+      "category": "",
+      "status": "notJudged",
+      "source": {
+        "sourceUrl": "https://policy.nec.go.kr/policy_pdf/20240410/PDF/PBINFO_PUB/4116/003_100152992_20240402_2.pdf",
+        "fetchedAt": "2026-09-27T17:34:00Z",
+        "publisher": "중앙선거관리위원회"
+      }
+    },
+    {
+      "id": "22-gyeonggi-dongducheon-yangju-yeoncheon-a-22",
+      "title": "양주 교육지원청 설립, 특성화고·특목고 유치",
+      "category": "",
+      "status": "notJudged",
+      "source": {
+        "sourceUrl": "https://policy.nec.go.kr/policy_pdf/20240410/PDF/PBINFO_PUB/4116/003_100152992_20240402_2.pdf",
+        "fetchedAt": "2026-09-27T17:34:00Z",
+        "publisher": "중앙선거관리위원회"
+      }
+    },
+    {
+      "id": "22-gyeonggi-dongducheon-yangju-yeoncheon-a-23",
+      "title": "예술창작소 설립, 예술·문화 교육 특성화",
+      "category": "",
+      "status": "notJudged",
+      "source": {
+        "sourceUrl": "https://policy.nec.go.kr/policy_pdf/20240410/PDF/PBINFO_PUB/4116/003_100152992_20240402_2.pdf",
+        "fetchedAt": "2026-09-27T17:34:00Z",
+        "publisher": "중앙선거관리위원회"
+      }
+    },
+    {
+      "id": "22-gyeonggi-dongducheon-yangju-yeoncheon-a-24",
+      "title": "권역별 청소년복합문화센터 설립",
+      "category": "",
+      "status": "notJudged",
+      "source": {
+        "sourceUrl": "https://policy.nec.go.kr/policy_pdf/20240410/PDF/PBINFO_PUB/4116/003_100152992_20240402_2.pdf",
+        "fetchedAt": "2026-09-27T17:34:00Z",
+        "publisher": "중앙선거관리위원회"
+      }
+    },
+    {
+      "id": "22-gyeonggi-dongducheon-yangju-yeoncheon-a-25",
+      "title": "경기북부 거점 ‘혁신형 공공병원’ 유치",
+      "category": "",
+      "status": "notJudged",
+      "source": {
+        "sourceUrl": "https://policy.nec.go.kr/policy_pdf/20240410/PDF/PBINFO_PUB/4116/003_100152992_20240402_2.pdf",
+        "fetchedAt": "2026-09-27T17:34:00Z",
+        "publisher": "중앙선거관리위원회"
+      }
+    },
+    {
+      "id": "22-gyeonggi-dongducheon-yangju-yeoncheon-a-26",
+      "title": "서부권 보건·복지·행정 복합센터 설치",
+      "category": "",
+      "status": "notJudged",
+      "source": {
+        "sourceUrl": "https://policy.nec.go.kr/policy_pdf/20240410/PDF/PBINFO_PUB/4116/003_100152992_20240402_2.pdf",
+        "fetchedAt": "2026-09-27T17:34:00Z",
+        "publisher": "중앙선거관리위원회"
+      }
+    },
+    {
+      "id": "22-gyeonggi-dongducheon-yangju-yeoncheon-a-27",
+      "title": "권역별 커뮤니티센터·복지관·평생학습관 건립",
+      "category": "",
+      "status": "notJudged",
+      "source": {
+        "sourceUrl": "https://policy.nec.go.kr/policy_pdf/20240410/PDF/PBINFO_PUB/4116/003_100152992_20240402_2.pdf",
+        "fetchedAt": "2026-09-27T17:34:00Z",
+        "publisher": "중앙선거관리위원회"
+      }
+    },
+    {
+      "id": "22-gyeonggi-dongducheon-yangju-yeoncheon-a-28",
+      "title": "종합실내체육관 건립, 스포츠가치[체험]센터 유치",
+      "category": "",
+      "status": "notJudged",
+      "source": {
+        "sourceUrl": "https://policy.nec.go.kr/policy_pdf/20240410/PDF/PBINFO_PUB/4116/003_100152992_20240402_2.pdf",
+        "fetchedAt": "2026-09-27T17:34:00Z",
+        "publisher": "중앙선거관리위원회"
+      }
+    },
+    {
+      "id": "22-gyeonggi-dongducheon-yangju-yeoncheon-a-29",
+      "title": "교외선 정차역, 양주 관광 네트워크 구축",
+      "category": "",
+      "status": "notJudged",
+      "source": {
+        "sourceUrl": "https://policy.nec.go.kr/policy_pdf/20240410/PDF/PBINFO_PUB/4116/003_100152992_20240402_2.pdf",
+        "fetchedAt": "2026-09-27T17:34:00Z",
+        "publisher": "중앙선거관리위원회"
+      }
+    },
+    {
+      "id": "22-gyeonggi-dongducheon-yangju-yeoncheon-a-30",
+      "title": "경기북부 최대 양주 아트센터 조기 추진",
+      "category": "",
+      "status": "notJudged",
+      "source": {
+        "sourceUrl": "https://policy.nec.go.kr/policy_pdf/20240410/PDF/PBINFO_PUB/4116/003_100152992_20240402_2.pdf",
+        "fetchedAt": "2026-09-27T17:34:00Z",
+        "publisher": "중앙선거관리위원회"
+      }
+    },
+    {
+      "id": "22-gyeonggi-dongducheon-yangju-yeoncheon-a-31",
+      "title": "양주 관아지, 별산대, 향교 연계 종합전통공연장 조성",
+      "category": "",
+      "status": "notJudged",
+      "source": {
+        "sourceUrl": "https://policy.nec.go.kr/policy_pdf/20240410/PDF/PBINFO_PUB/4116/003_100152992_20240402_2.pdf",
+        "fetchedAt": "2026-09-27T17:34:00Z",
+        "publisher": "중앙선거관리위원회"
+      }
+    },
+    {
+      "id": "22-gyeonggi-dongducheon-yangju-yeoncheon-a-32",
+      "title": "회암사지 세계문화유산 등재",
+      "category": "",
+      "status": "notJudged",
+      "source": {
+        "sourceUrl": "https://policy.nec.go.kr/policy_pdf/20240410/PDF/PBINFO_PUB/4116/003_100152992_20240402_2.pdf",
+        "fetchedAt": "2026-09-27T17:34:00Z",
+        "publisher": "중앙선거관리위원회"
+      }
+    },
+    {
+      "id": "22-gyeonggi-dongducheon-yangju-yeoncheon-a-33",
+      "title": "대모산성 역사공원 조성, 양주역사박물관 건립",
+      "category": "",
+      "status": "notJudged",
+      "source": {
+        "sourceUrl": "https://policy.nec.go.kr/policy_pdf/20240410/PDF/PBINFO_PUB/4116/003_100152992_20240402_2.pdf",
+        "fetchedAt": "2026-09-27T17:34:00Z",
+        "publisher": "중앙선거관리위원회"
+      }
+    },
+    {
+      "id": "22-gyeonggi-dongducheon-yangju-yeoncheon-a-34",
+      "title": "덕계·기산·광백 저수지 등 수변 관광네트워크 구축",
+      "category": "",
+      "status": "notJudged",
+      "source": {
+        "sourceUrl": "https://policy.nec.go.kr/policy_pdf/20240410/PDF/PBINFO_PUB/4116/003_100152992_20240402_2.pdf",
+        "fetchedAt": "2026-09-27T17:34:00Z",
+        "publisher": "중앙선거관리위원회"
+      }
+    },
+    {
+      "id": "22-gyeonggi-dongducheon-yangju-yeoncheon-a-35",
+      "title": "양주시 전역 산책로·자전거길, 생태하천 네트워크 구축",
+      "category": "",
+      "status": "notJudged",
+      "source": {
+        "sourceUrl": "https://policy.nec.go.kr/policy_pdf/20240410/PDF/PBINFO_PUB/4116/003_100152992_20240402_2.pdf",
+        "fetchedAt": "2026-09-27T17:34:00Z",
+        "publisher": "중앙선거관리위원회"
+      }
+    }
+  ]
+}

@@ -1,0 +1,242 @@
+{
+  "_note": "제22대 국회의원선거 경기 고양시 병 당선인 이기헌 (더불어민주당). 책자형 선거공보 PDF 7–8쪽 「뚫린다! 풀린다! 열린다! 일산을 다시 뛰게 하겠습니다!」 세 분야(교통·경제·미래) 소제목 아래 ☑ 항목 21개. 소제목(경의중앙선을 경의중앙강남선으로! 등)은 묶음 이름이라 따로 넣지 않았고, 항목 안의 → 부연은 원문대로 이어 붙였다. PDF 9–10쪽 동별·대상별(어르신·여성청년·장애인·소상공인) 공약은 넣지 않았다. 제목은 원문 문구를 따랐고 바꾼 것은 위에 적은 구호·수식어 덜어내기뿐이다. 분류(category)는 앱에 정해진 분류 체계가 없어 비워 두었다. 이행 여부는 판정하지 않았다(notJudged).",
+  "districtId": "nec-b623494e",
+  "source": {
+    "sourceUrl": "https://policy.nec.go.kr/policy_pdf/20240410/PDF/PBINFO_PUB/4121/003_100151319_20240402_2.pdf",
+    "fetchedAt": "2026-09-27T17:34:00Z",
+    "publisher": "중앙선거관리위원회"
+  },
+  "pledges": [
+    {
+      "id": "22-gyeonggi-goyang-c-01",
+      "title": "일산·강남·양재·판교·광교까지 환승 없이 한 번에! → 경의·중앙선 지하화 등 재구조화로 강남선 신설",
+      "category": "",
+      "status": "notJudged",
+      "source": {
+        "sourceUrl": "https://policy.nec.go.kr/policy_pdf/20240410/PDF/PBINFO_PUB/4121/003_100151319_20240402_2.pdf",
+        "fetchedAt": "2026-09-27T17:34:00Z",
+        "publisher": "중앙선거관리위원회"
+      }
+    },
+    {
+      "id": "22-gyeonggi-goyang-c-02",
+      "title": "인천 2호선 일산 연장 신속 추진",
+      "category": "",
+      "status": "notJudged",
+      "source": {
+        "sourceUrl": "https://policy.nec.go.kr/policy_pdf/20240410/PDF/PBINFO_PUB/4121/003_100151319_20240402_2.pdf",
+        "fetchedAt": "2026-09-27T17:34:00Z",
+        "publisher": "중앙선거관리위원회"
+      }
+    },
+    {
+      "id": "22-gyeonggi-goyang-c-03",
+      "title": "고양·은평선 중산 연장",
+      "category": "",
+      "status": "notJudged",
+      "source": {
+        "sourceUrl": "https://policy.nec.go.kr/policy_pdf/20240410/PDF/PBINFO_PUB/4121/003_100151319_20240402_2.pdf",
+        "fetchedAt": "2026-09-27T17:34:00Z",
+        "publisher": "중앙선거관리위원회"
+      }
+    },
+    {
+      "id": "22-gyeonggi-goyang-c-04",
+      "title": "가좌-장항-식사 트램 추진",
+      "category": "",
+      "status": "notJudged",
+      "source": {
+        "sourceUrl": "https://policy.nec.go.kr/policy_pdf/20240410/PDF/PBINFO_PUB/4121/003_100151319_20240402_2.pdf",
+        "fetchedAt": "2026-09-27T17:34:00Z",
+        "publisher": "중앙선거관리위원회"
+      }
+    },
+    {
+      "id": "22-gyeonggi-goyang-c-05",
+      "title": "3호선 구파발행 폐지, 대화행으로 일원화",
+      "category": "",
+      "status": "notJudged",
+      "source": {
+        "sourceUrl": "https://policy.nec.go.kr/policy_pdf/20240410/PDF/PBINFO_PUB/4121/003_100151319_20240402_2.pdf",
+        "fetchedAt": "2026-09-27T17:34:00Z",
+        "publisher": "중앙선거관리위원회"
+      }
+    },
+    {
+      "id": "22-gyeonggi-goyang-c-06",
+      "title": "고양-양재 대심도 고속도로 조속 착공",
+      "category": "",
+      "status": "notJudged",
+      "source": {
+        "sourceUrl": "https://policy.nec.go.kr/policy_pdf/20240410/PDF/PBINFO_PUB/4121/003_100151319_20240402_2.pdf",
+        "fetchedAt": "2026-09-27T17:34:00Z",
+        "publisher": "중앙선거관리위원회"
+      }
+    },
+    {
+      "id": "22-gyeonggi-goyang-c-07",
+      "title": "수요응답형 똑버스 운영 확대",
+      "category": "",
+      "status": "notJudged",
+      "source": {
+        "sourceUrl": "https://policy.nec.go.kr/policy_pdf/20240410/PDF/PBINFO_PUB/4121/003_100151319_20240402_2.pdf",
+        "fetchedAt": "2026-09-27T17:34:00Z",
+        "publisher": "중앙선거관리위원회"
+      }
+    },
+    {
+      "id": "22-gyeonggi-goyang-c-08",
+      "title": "벤처기업과 스타트업 기업, 벤처대학원대학교 유치",
+      "category": "",
+      "status": "notJudged",
+      "source": {
+        "sourceUrl": "https://policy.nec.go.kr/policy_pdf/20240410/PDF/PBINFO_PUB/4121/003_100151319_20240402_2.pdf",
+        "fetchedAt": "2026-09-27T17:34:00Z",
+        "publisher": "중앙선거관리위원회"
+      }
+    },
+    {
+      "id": "22-gyeonggi-goyang-c-09",
+      "title": "고양산업진흥원 입주를 통한 지원체계 구축",
+      "category": "",
+      "status": "notJudged",
+      "source": {
+        "sourceUrl": "https://policy.nec.go.kr/policy_pdf/20240410/PDF/PBINFO_PUB/4121/003_100151319_20240402_2.pdf",
+        "fetchedAt": "2026-09-27T17:34:00Z",
+        "publisher": "중앙선거관리위원회"
+      }
+    },
+    {
+      "id": "22-gyeonggi-goyang-c-10",
+      "title": "벤처기업인들을 위한 벤처 홈타운 숙박시설 지원",
+      "category": "",
+      "status": "notJudged",
+      "source": {
+        "sourceUrl": "https://policy.nec.go.kr/policy_pdf/20240410/PDF/PBINFO_PUB/4121/003_100151319_20240402_2.pdf",
+        "fetchedAt": "2026-09-27T17:34:00Z",
+        "publisher": "중앙선거관리위원회"
+      }
+    },
+    {
+      "id": "22-gyeonggi-goyang-c-11",
+      "title": "6개 종합병원과 바이오기업을 연결한 메디시티(Medi-city) 구축 → 의료관광으로 지역경제 활성화",
+      "category": "",
+      "status": "notJudged",
+      "source": {
+        "sourceUrl": "https://policy.nec.go.kr/policy_pdf/20240410/PDF/PBINFO_PUB/4121/003_100151319_20240402_2.pdf",
+        "fetchedAt": "2026-09-27T17:34:00Z",
+        "publisher": "중앙선거관리위원회"
+      }
+    },
+    {
+      "id": "22-gyeonggi-goyang-c-12",
+      "title": "세계적 규모의 미디어아트 중심 ‘일산아트뮤지엄’ 설립 추진",
+      "category": "",
+      "status": "notJudged",
+      "source": {
+        "sourceUrl": "https://policy.nec.go.kr/policy_pdf/20240410/PDF/PBINFO_PUB/4121/003_100151319_20240402_2.pdf",
+        "fetchedAt": "2026-09-27T17:34:00Z",
+        "publisher": "중앙선거관리위원회"
+      }
+    },
+    {
+      "id": "22-gyeonggi-goyang-c-13",
+      "title": "방송영상밸리, CJ라이브시티, 테크노밸리와 킨텍스 마이스(Mice)산업 결합 → 킨텍스 제3전시장 조속 추진",
+      "category": "",
+      "status": "notJudged",
+      "source": {
+        "sourceUrl": "https://policy.nec.go.kr/policy_pdf/20240410/PDF/PBINFO_PUB/4121/003_100151319_20240402_2.pdf",
+        "fetchedAt": "2026-09-27T17:34:00Z",
+        "publisher": "중앙선거관리위원회"
+      }
+    },
+    {
+      "id": "22-gyeonggi-goyang-c-14",
+      "title": "권역별 조건에 적합한 재건축 지원체계 구축",
+      "category": "",
+      "status": "notJudged",
+      "source": {
+        "sourceUrl": "https://policy.nec.go.kr/policy_pdf/20240410/PDF/PBINFO_PUB/4121/003_100151319_20240402_2.pdf",
+        "fetchedAt": "2026-09-27T17:34:00Z",
+        "publisher": "중앙선거관리위원회"
+      }
+    },
+    {
+      "id": "22-gyeonggi-goyang-c-15",
+      "title": "용적률·건폐율 상향, 주차장시설 기준완화, 주거환경 조건 등 통합재건축사업 지원",
+      "category": "",
+      "status": "notJudged",
+      "source": {
+        "sourceUrl": "https://policy.nec.go.kr/policy_pdf/20240410/PDF/PBINFO_PUB/4121/003_100151319_20240402_2.pdf",
+        "fetchedAt": "2026-09-27T17:34:00Z",
+        "publisher": "중앙선거관리위원회"
+      }
+    },
+    {
+      "id": "22-gyeonggi-goyang-c-16",
+      "title": "9사단을 이전해 일산주민의 공간으로",
+      "category": "",
+      "status": "notJudged",
+      "source": {
+        "sourceUrl": "https://policy.nec.go.kr/policy_pdf/20240410/PDF/PBINFO_PUB/4121/003_100151319_20240402_2.pdf",
+        "fetchedAt": "2026-09-27T17:34:00Z",
+        "publisher": "중앙선거관리위원회"
+      }
+    },
+    {
+      "id": "22-gyeonggi-goyang-c-17",
+      "title": "군사보호구역 면적을 37%에서 20% 대로 축소 추진",
+      "category": "",
+      "status": "notJudged",
+      "source": {
+        "sourceUrl": "https://policy.nec.go.kr/policy_pdf/20240410/PDF/PBINFO_PUB/4121/003_100151319_20240402_2.pdf",
+        "fetchedAt": "2026-09-27T17:34:00Z",
+        "publisher": "중앙선거관리위원회"
+      }
+    },
+    {
+      "id": "22-gyeonggi-goyang-c-18",
+      "title": "세계경제포럼(다보스포럼)에 견줄 세계평화포럼 개최 추진",
+      "category": "",
+      "status": "notJudged",
+      "source": {
+        "sourceUrl": "https://policy.nec.go.kr/policy_pdf/20240410/PDF/PBINFO_PUB/4121/003_100151319_20240402_2.pdf",
+        "fetchedAt": "2026-09-27T17:34:00Z",
+        "publisher": "중앙선거관리위원회"
+      }
+    },
+    {
+      "id": "22-gyeonggi-goyang-c-19",
+      "title": "신재생에너지 전환 적극 지원 → 시민 중심의 고양시 탄소중립기구 설립",
+      "category": "",
+      "status": "notJudged",
+      "source": {
+        "sourceUrl": "https://policy.nec.go.kr/policy_pdf/20240410/PDF/PBINFO_PUB/4121/003_100151319_20240402_2.pdf",
+        "fetchedAt": "2026-09-27T17:34:00Z",
+        "publisher": "중앙선거관리위원회"
+      }
+    },
+    {
+      "id": "22-gyeonggi-goyang-c-20",
+      "title": "고봉산-경의로 숲길-정발산-호수공원-한강(장항습지)을 생태누리길로 연결 → 웨스턴돔, 라페스타와 연결해 지역경제 활성화",
+      "category": "",
+      "status": "notJudged",
+      "source": {
+        "sourceUrl": "https://policy.nec.go.kr/policy_pdf/20240410/PDF/PBINFO_PUB/4121/003_100151319_20240402_2.pdf",
+        "fetchedAt": "2026-09-27T17:34:00Z",
+        "publisher": "중앙선거관리위원회"
+      }
+    },
+    {
+      "id": "22-gyeonggi-goyang-c-21",
+      "title": "한강 하구 습지의 보전과 학술연구, 생태관광 활성화",
+      "category": "",
+      "status": "notJudged",
+      "source": {
+        "sourceUrl": "https://policy.nec.go.kr/policy_pdf/20240410/PDF/PBINFO_PUB/4121/003_100151319_20240402_2.pdf",
+        "fetchedAt": "2026-09-27T17:34:00Z",
+        "publisher": "중앙선거관리위원회"
+      }
+    }
+  ]
+}

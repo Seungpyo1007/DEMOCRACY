@@ -1,0 +1,44 @@
+{
+  "_note": "제22대 국회의원선거 경기 성남시중원구 당선인 이수진 (더불어민주당). 책자형 선거공보 PDF 6쪽 「이수진 3대 핵심공약」 1–3. PDF 글자층이 깨져 있어 쪽 이미지를 보고 옮겼다. PDF 7–8쪽 「10대 중점공약」(분야별 ▶ 항목)은 더 긴 주제별 목록이라, PDF 9–10쪽 동별 공약과 PDF 4쪽 대표 법안 실적은 넣지 않았다. 제목은 원문 문구를 따랐고 바꾼 것은 위에 적은 구호·수식어 덜어내기뿐이다. 분류(category)는 앱에 정해진 분류 체계가 없어 비워 두었다. 이행 여부는 판정하지 않았다(notJudged).",
+  "districtId": "nec-03d087ba",
+  "source": {
+    "sourceUrl": "https://policy.nec.go.kr/policy_pdf/20240410/PDF/PBINFO_PUB/4106/003_100152344_20240402_2.pdf",
+    "fetchedAt": "2026-09-27T17:34:00Z",
+    "publisher": "중앙선거관리위원회"
+  },
+  "pledges": [
+    {
+      "id": "22-gyeonggi-seongnam-jungwon-01",
+      "title": "위례-삼동선/수광선 도촌역 추진",
+      "category": "",
+      "status": "notJudged",
+      "source": {
+        "sourceUrl": "https://policy.nec.go.kr/policy_pdf/20240410/PDF/PBINFO_PUB/4106/003_100152344_20240402_2.pdf",
+        "fetchedAt": "2026-09-27T17:34:00Z",
+        "publisher": "중앙선거관리위원회"
+      }
+    },
+    {
+      "id": "22-gyeonggi-seongnam-jungwon-02",
+      "title": "재개발·재건축 용적률 300% 상향 추진",
+      "category": "",
+      "status": "notJudged",
+      "source": {
+        "sourceUrl": "https://policy.nec.go.kr/policy_pdf/20240410/PDF/PBINFO_PUB/4106/003_100152344_20240402_2.pdf",
+        "fetchedAt": "2026-09-27T17:34:00Z",
+        "publisher": "중앙선거관리위원회"
+      }
+    },
+    {
+      "id": "22-gyeonggi-seongnam-jungwon-03",
+      "title": "환경 악취해결, 우수·오수 관로 분리",
+      "category": "",
+      "status": "notJudged",
+      "source": {
+        "sourceUrl": "https://policy.nec.go.kr/policy_pdf/20240410/PDF/PBINFO_PUB/4106/003_100152344_20240402_2.pdf",
+        "fetchedAt": "2026-09-27T17:34:00Z",
+        "publisher": "중앙선거관리위원회"
+      }
+    }
+  ]
+}
