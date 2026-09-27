@@ -231,6 +231,48 @@ Deno.test("curated pledges / region importers enforce sources and evidence", () 
     Error,
     "source",
   );
+  // 「판정 전」: accepted plain, with the publisher named rather than the host…
+  const listed = pledgesToSql({
+    districtId: MAPO_B,
+    source: { ...src, publisher: "중앙선거관리위원회" },
+    pledges: [{ id: "n1", title: "t", category: "", status: "notJudged", source: src }],
+  });
+  assertStringIncludes(listed, "'notJudged'");
+  assertStringIncludes(listed, "'중앙선거관리위원회'");
+  // …and refused with any part of a verdict attached.
+  for (
+    const extra of [
+      { evidenceUrl: "https://policy.nec.go.kr/e" },
+      {
+        judgement: {
+          steps: [{ actor: "큐레이터", detail: "", stamp: "" }],
+          source: src,
+        },
+      },
+      { billIds: ["PRC_1"] },
+    ]
+  ) {
+    assertThrows(
+      () =>
+        pledgesToSql({
+          districtId: MAPO_B,
+          source: src,
+          pledges: [{ id: "n", title: "t", status: "notJudged", source: src, ...extra }],
+        }),
+      Error,
+      "notJudged",
+    );
+  }
+  assertThrows(
+    () =>
+      pledgesToSql({
+        districtId: MAPO_B,
+        source: { ...src, publisher: " " },
+        pledges: [{ id: "n", title: "t", status: "notJudged", source: src }],
+      }),
+    Error,
+    "publisher",
+  );
   assertThrows(
     () => pledgesToSql({ districtId: "fixture-x", source: src, pledges: [] }),
     Error,

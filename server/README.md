@@ -15,24 +15,25 @@ Reading needs no account; the account routes need a Supabase Auth sign-in.
 
 ## Layout
 
-| Path                                              | What                                                                                                          |
-| ------------------------------------------------- | ------------------------------------------------------------------------------------------------------------- |
-| `supabase/migrations/20260924000000_init.sql`     | Schema, RLS, BFF SQL helpers, purge functions, cron schedules                                                 |
-| `supabase/migrations/20260926000000_accounts.sql` | Profiles, consents, 활동명 offers, residency; account SQL functions; orphan-login purge                       |
-| `supabase/seed.sql`                               | **Sample** 마포구 갑/을 + 종로구 district mapping, generated from `testdata/`. Not verified against [별표 1]. |
-| `supabase/functions/_shared/`                     | API clients, normalizers (one per source), envelope, provenance, PostgREST client                             |
-| `supabase/functions/ingest-assembly/`             | Members (daily), bills and plenary votes (every 6 h)                                                          |
-| `supabase/functions/ingest-nec/`                  | Election and district codes and candidates (weekly), historical winners (`?mode=backfill`)                    |
-| `supabase/functions/bff/`                         | The API. `contract.ts` mirrors the app's Dart parsers. `account.ts`, `residency.ts`: signed-in.               |
-| `scripts/`                                        | One-off importers that write SQL to stdout; `build_district_areas.ts` builds the mapping CSV                  |
-| `data/`                                           | Generated inputs kept in git: the 22대 district mapping                                                       |
-| `testdata/`                                       | Hand-written API samples and district-mapping samples. See `testdata/README.md`.                              |
+| Path                                                       | What                                                                                                          |
+| ---------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------- |
+| `supabase/migrations/20260924000000_init.sql`              | Schema, RLS, BFF SQL helpers, purge functions, cron schedules                                                 |
+| `supabase/migrations/20260926000000_accounts.sql`          | Profiles, consents, 활동명 offers, residency; account SQL functions; orphan-login purge                       |
+| `supabase/migrations/20260927000000_pledge_not_judged.sql` | Pledge status `notJudged` (「판정 전」), which may carry no evidence, judgement or bills                      |
+| `supabase/seed.sql`                                        | **Sample** 마포구 갑/을 + 종로구 district mapping, generated from `testdata/`. Not verified against [별표 1]. |
+| `supabase/functions/_shared/`                              | API clients, normalizers (one per source), envelope, provenance, PostgREST client                             |
+| `supabase/functions/ingest-assembly/`                      | Members (daily), bills and plenary votes (every 6 h)                                                          |
+| `supabase/functions/ingest-nec/`                           | Election and district codes and candidates (weekly), historical winners (`?mode=backfill`)                    |
+| `supabase/functions/bff/`                                  | The API. `contract.ts` mirrors the app's Dart parsers. `account.ts`, `residency.ts`: signed-in.               |
+| `scripts/`                                                 | One-off importers that write SQL to stdout; `build_district_areas.ts` builds the mapping CSV                  |
+| `data/`                                                    | Generated inputs kept in git: the 22대 district mapping                                                       |
+| `testdata/`                                                | Hand-written API samples and district-mapping samples. See `testdata/README.md`.                              |
 
 ## Develop
 
 ```sh
 brew install deno
-deno task ci      # fmt --check, lint, check, test (offline; 72 tests)
+deno task ci      # fmt --check, lint, check, test (offline; 79 tests)
 ```
 
 ## BFF contract (fixed; the app is built against it)
@@ -72,7 +73,8 @@ A success is `200 {"servedAt": ISO-UTC, "data": {...}}`. An error is non-2xx
   - 출석률 = meetings with status 출석 ÷ meetings on record since 2024-05-30.
   - votes = monthly share of the member's recorded plenary votes that are not 불참.
   - 발의 법안 = bills where the member is 대표발의자 (`RST_MONA_CD`).
-  - 공약 이행 = fulfilled ÷ curated pledges. It appears only when curated pledges exist.
+  - 공약 이행 = fulfilled ÷ judged pledges. A `notJudged` (「판정 전」) pledge counts on neither
+    side, and a board with no judged pledge shows no 공약 이행 at all.
   - There are no rankings, scores or labels.
 
 ### Account routes

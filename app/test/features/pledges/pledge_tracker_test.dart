@@ -11,8 +11,10 @@ import 'package:democracy/src/features/district/data/fake_district_repository.da
 import 'package:democracy/src/features/pledges/application/pledge_providers.dart';
 import 'package:democracy/src/features/pledges/data/fake_pledge_repository.dart';
 import 'package:democracy/src/features/pledges/domain/pledge.dart';
+import 'package:democracy/src/features/pledges/domain/pledge_repository.dart';
 import 'package:democracy/src/features/pledges/presentation/pledge_detail_screen.dart';
 import 'package:democracy/src/features/pledges/presentation/pledge_tracker_screen.dart';
+import 'package:democracy/src/features/shared/presentation/provenance_widgets.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_test/flutter_test.dart';
@@ -24,6 +26,38 @@ const _district = DistrictRef(
   id: 'fixture-seoul-mapo-b',
   displayName: '서울 마포구 을',
 );
+
+/// Serves one board built in the test, for the shapes the fixture lacks.
+class _BoardRepository implements PledgeRepository {
+  const _BoardRepository(this.json);
+
+  final Map<String, Object?> json;
+
+  @override
+  Future<PledgeBoard> loadBoard(String districtId) async =>
+      PledgeBoard.fromJson(json);
+}
+
+const _gongboUrl =
+    'https://policy.nec.go.kr/policy_pdf/20240410/PDF/PBINFO_PUB/fixture.pdf';
+
+Map<String, Object?> _listedPledge(String id, String title, String status) => {
+  'id': id,
+  'title': title,
+  'category': '',
+  'status': status,
+  'source': {'sourceUrl': _gongboUrl, 'fetchedAt': '2026-09-27T00:00:00Z'},
+};
+
+/// Only 「판정 전」: what a pilot district's board looks like today.
+final _listOnly = <String, Object?>{
+  'source': {'sourceUrl': _gongboUrl, 'fetchedAt': '2026-09-27T00:00:00Z'},
+  'pledges': [
+    _listedPledge('l1', '경전철 조기 착공 추진', 'notJudged'),
+    _listedPledge('l2', '복합문화도서관 건립 추진', 'notJudged'),
+    _listedPledge('l3', '전통시장 활성화 지원', 'notJudged'),
+  ],
+};
 
 void main() {
   /// Once a filter is applied the status chips render the same text as the
@@ -56,6 +90,7 @@ void main() {
     WidgetTester tester, {
     bool verified = false,
     TargetPlatform platform = TargetPlatform.android,
+    PledgeRepository? repository,
   }) async {
     // The default 800x600 test surface is wider and shorter than any phone,
     // which put list rows under the bottom bar. Matching the mockup viewport
@@ -68,7 +103,7 @@ void main() {
       overrides: [
         addressStoreProvider.overrideWithValue(InMemoryAddressStore()),
         pledgeRepositoryProvider.overrideWithValue(
-          FakePledgeRepository(loader: fixtureLoaderFromDisk()),
+          repository ?? FakePledgeRepository(loader: fixtureLoaderFromDisk()),
         ),
         districtRepositoryProvider.overrideWithValue(
           FakeDistrictRepository(loader: fixtureLoaderFromDisk()),
@@ -181,7 +216,9 @@ void main() {
     testWidgets('names every colour it uses', (tester) async {
       await pumpTracker(tester);
 
-      for (final status in PledgeStatus.values) {
+      // The fixture is fully judged, so 판정 전 has no row and no colour.
+      expect(find.textContaining(PledgeStatus.notJudged.label), findsNothing);
+      for (final status in PledgeStatus.verdicts) {
         expect(find.textContaining(status.label), findsWidgets);
         expect(find.textContaining(status.glyph), findsWidgets);
       }
@@ -235,6 +272,105 @@ void main() {
       // Android's large app bar carries the title twice, expanded and
       // collapsed, and cross-fades between them as the page scrolls.
       expect(find.text('공약이행률 트래커'), findsWidgets);
+    });
+  });
+
+  group('a board with nothing judged', () {
+    testWidgets('is a list, with no rate, bar or category bars', (
+      tester,
+    ) async {
+      await pumpTracker(tester, repository: _BoardRepository(_listOnly));
+
+      expect(find.byKey(PledgeTrackerKeys.heroRate), findsNothing);
+      expect(find.byKey(PledgeTrackerKeys.statusBar), findsNothing);
+      expect(find.byKey(PledgeTrackerKeys.legend), findsNothing);
+      expect(find.text('01 종합 이행률'), findsNothing);
+      expect(find.byType(LabeledBar), findsNothing);
+      expect(find.textContaining('%'), findsNothing);
+
+      expect(find.text('01 전체 공약'), findsOneWidget);
+      expect(listCount(tester), '3건');
+      expect(find.text('경전철 조기 착공 추진'), findsOneWidget);
+    });
+
+    // Icon and word on every row, never a colour alone.
+    testWidgets('labels every pledge 판정 전, with its glyph', (tester) async {
+      await pumpTracker(tester, repository: _BoardRepository(_listOnly));
+
+      expect(find.text('○ 판정 전'), findsNWidgets(3));
+      for (final verdict in PledgeStatus.verdicts) {
+        expect(find.textContaining(verdict.label), findsNothing);
+      }
+      expect(find.bySemanticsLabel('경전철 조기 착공 추진, 판정 전'), findsOneWidget);
+    });
+
+    testWidgets(
+      'says once that nothing is judged, and where the list is from',
+      (tester) async {
+        await pumpTracker(tester, repository: _BoardRepository(_listOnly));
+
+        final note = find.byKey(PledgeTrackerKeys.notJudgedNote);
+        expect(note, findsOneWidget);
+        expect(
+          find.descendant(
+            of: note,
+            matching: find.textContaining('아직 이행 여부를 판정하지 않았습니다'),
+          ),
+          findsOneWidget,
+        );
+        expect(
+          find.descendant(of: note, matching: find.textContaining('선거공보')),
+          findsOneWidget,
+        );
+        final badge = tester.widget<SourceBadge>(
+          find.descendant(of: note, matching: find.byType(SourceBadge)),
+        );
+        expect(badge.source.sourceUrl, Uri.parse(_gongboUrl));
+        expect(find.textContaining('판정하지 않았습니다'), findsOneWidget);
+      },
+    );
+
+    testWidgets('opens a pledge without a verdict or its reasoning', (
+      tester,
+    ) async {
+      await pumpTracker(tester, repository: _BoardRepository(_listOnly));
+
+      await openPledge(tester, '복합문화도서관 건립 추진');
+
+      expect(find.text('○ 판정 전'), findsOneWidget);
+      expect(find.textContaining('아직 이행 여부를 판정하지 않은 공약입니다'), findsOneWidget);
+      expect(find.text('판정 근거는 모두 원문으로 연결됩니다'), findsNothing);
+      expect(find.text('공약 원문'), findsOneWidget);
+    });
+  });
+
+  group('a board with some pledges judged', () {
+    final mixed = <String, Object?>{
+      'source': _listOnly['source'],
+      'pledges': [
+        _listedPledge('m1', '하나', 'fulfilled'),
+        _listedPledge('m2', '둘', 'unfulfilled'),
+        _listedPledge('m3', '셋', 'notJudged'),
+        _listedPledge('m4', '넷', 'notJudged'),
+      ],
+    };
+
+    testWidgets('rates only what was judged, and names 판정 전 in the table', (
+      tester,
+    ) async {
+      await pumpTracker(tester, repository: _BoardRepository(mixed));
+
+      final hero = tester.widget<Figure>(
+        find.descendant(
+          of: find.byKey(PledgeTrackerKeys.heroRate),
+          matching: find.byType(Figure),
+        ),
+      );
+      // 1 of 2 judged, not 1 of 4.
+      expect('${hero.value}${hero.unit}', '50%');
+      expect(legendEntry('○ 판정 전'), findsOneWidget);
+      expect(find.byKey(PledgeTrackerKeys.notJudgedNote), findsOneWidget);
+      expect(find.text('02 전체 공약'), findsOneWidget);
     });
   });
 

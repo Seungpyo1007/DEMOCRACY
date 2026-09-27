@@ -120,7 +120,11 @@ List<Widget> _detail(Pledge pledge) {
         children: [
           const SectionHeader(number: '01', label: '판정 과정'),
           const SizedBox(height: AppSpacing.x4 + 2),
-          if (judgement == null)
+          if (!pledge.status.isJudged)
+            const DisclaimerBox(
+              text: '아직 이행 여부를 판정하지 않은 공약입니다. 공약 내용은 아래 원문에서 확인할 수 있습니다.',
+            )
+          else if (judgement == null)
             const DisclaimerBox(
               text: '이 공약은 아직 판정 기록이 없습니다. 상태는 원문 출처에서 가져온 값입니다.',
             )
@@ -154,11 +158,14 @@ List<Widget> _detail(Pledge pledge) {
     ),
     const SizedBox(height: AppSpacing.x6),
     RevealIn(index: 2, child: _Originals(pledge: pledge)),
-    const SizedBox(height: AppSpacing.x4),
-    const Align(
-      alignment: AlignmentDirectional.centerStart,
-      child: MarginNote('판정 근거는 모두 원문으로 연결됩니다', delay: AppMotion.slow),
-    ),
+    // There is no verdict to ground on a pledge nobody has judged.
+    if (pledge.status.isJudged) ...[
+      const SizedBox(height: AppSpacing.x4),
+      const Align(
+        alignment: AlignmentDirectional.centerStart,
+        child: MarginNote('판정 근거는 모두 원문으로 연결됩니다', delay: AppMotion.slow),
+      ),
+    ],
   ];
 }
 

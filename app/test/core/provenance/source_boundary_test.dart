@@ -162,6 +162,70 @@ void main() {
       expect(pledge.evidenceUrl, isNotNull);
     });
 
+    test('「판정 전」 parses, and an unknown status is never read as a verdict', () {
+      expect(
+        Pledge.fromJson(pledgeJson(status: 'notJudged')).status,
+        PledgeStatus.notJudged,
+      );
+      expect(PledgeStatus.notJudged.display, '○ 판정 전');
+      // Before 「판정 전」 existed, anything unrecognised became 미이행.
+      for (final raw in ['kept', '', null, 3]) {
+        expect(PledgeStatus.parse(raw), PledgeStatus.notJudged, reason: '$raw');
+      }
+      expect(PledgeStatus.parse('unfulfilled'), PledgeStatus.unfulfilled);
+    });
+
+    test('a 판정 전 pledge drops any judgement or evidence it was sent', () {
+      final pledge = Pledge.fromJson({
+        ...pledgeJson(
+          status: 'notJudged',
+          evidenceUrl: 'https://open.assembly.go.kr/fixture/diff',
+        ),
+        'judgement': {
+          'steps': [
+            {'actor': '누군가', 'detail': '', 'stamp': ''},
+          ],
+          'source': sourceJson(),
+        },
+      });
+
+      expect(pledge.status.isJudged, isFalse);
+      expect(pledge.evidenceUrl, isNull);
+      expect(pledge.judgement, isNull);
+    });
+
+    test('a board with nothing judged has no fulfilment rate', () {
+      final board = PledgeBoard.fromJson({
+        'pledges': [
+          {...pledgeJson(status: 'notJudged'), 'id': 'a', 'category': '교통'},
+          {...pledgeJson(status: 'notJudged'), 'id': 'b', 'category': '교통'},
+        ],
+        'source': sourceJson(),
+      });
+
+      expect(board.hasJudgements, isFalse);
+      expect(board.fulfilmentRate, isNull);
+      expect(board.fulfilmentDisplay, isNull);
+      expect(board.categories, isEmpty);
+    });
+
+    test('the rate is kept over judged; 판정 전 is on neither side', () {
+      final board = PledgeBoard.fromJson({
+        'pledges': [
+          {...pledgeJson(status: 'fulfilled'), 'id': 'a', 'category': '교통'},
+          {...pledgeJson(status: 'unfulfilled'), 'id': 'b', 'category': '교통'},
+          {...pledgeJson(status: 'notJudged'), 'id': 'c', 'category': '교통'},
+          {...pledgeJson(status: 'notJudged'), 'id': 'd', 'category': '환경'},
+        ],
+        'source': sourceJson(),
+      });
+
+      expect(board.judgedCount, 2);
+      expect(board.fulfilmentDisplay, '50%');
+      expect(board.categories.map((c) => c.category), ['교통']);
+      expect(board.categories.single.total, 2);
+    });
+
     test('an unsourced pledge is refused', () {
       expect(
         () => Pledge.fromJson({'id': 'fixture-pledge', 'title': '가상 공약'}),

@@ -84,7 +84,16 @@ function billItem(b: BillRec) {
 
 // ------------------------------------------------------------------ pledges
 
-const PLEDGE_STATUSES = new Set(["fulfilled", "inProgress", "unfulfilled", "reversed"]);
+const PLEDGE_STATUSES = new Set([
+  "notJudged",
+  "fulfilled",
+  "inProgress",
+  "unfulfilled",
+  "reversed",
+]);
+
+/** 「판정 전」: listed from the 선거공보, no fulfilment call made. */
+const NOT_JUDGED = "notJudged";
 
 function pledgeJudgement(raw: unknown) {
   if (!raw || typeof raw !== "object") return undefined;
@@ -112,6 +121,11 @@ export function pledgeJson(p: PledgeRec) {
   if (!source || !p.id || !p.title || !PLEDGE_STATUSES.has(p.status)) return null;
   const evidence = isPresentableSourceUrl(p.evidence_url) ? p.evidence_url : undefined;
   if (p.status === "reversed" && !evidence) return null;
+  // A pledge nobody has judged carries no part of a verdict, even if a row
+  // somehow holds one (the migration forbids it; this is the second lock).
+  if (p.status === NOT_JUDGED) {
+    return { id: p.id, title: p.title, category: p.category ?? "", status: p.status, source };
+  }
   const judgement = pledgeJudgement(p.judgement);
   return {
     id: p.id,
@@ -200,12 +214,16 @@ export async function buildProfile(store: ReadStore, id: string, now: Date) {
       value: { value: billCount.count, ...billsSource },
     });
   }
-  if (pledges) {
-    const fulfilled = pledges.pledges.filter((p) => p.status === "fulfilled").length;
+  // 공약 이행 = fulfilled ÷ judged. A 「판정 전」 pledge is neither kept nor
+  // broken, so it is left out of both sides; a board with nothing judged has
+  // no rate at all rather than a 0 % that would read as a verdict.
+  const judged = pledges?.pledges.filter((p) => p.status !== NOT_JUDGED) ?? [];
+  if (pledges && judged.length > 0) {
+    const fulfilled = judged.filter((p) => p.status === "fulfilled").length;
     stats.push({
       label: "공약 이행",
       unit: "%",
-      value: { value: Math.round((fulfilled / pledges.pledges.length) * 100), ...pledges.source },
+      value: { value: Math.round((fulfilled / judged.length) * 100), ...pledges.source },
     });
   }
 
