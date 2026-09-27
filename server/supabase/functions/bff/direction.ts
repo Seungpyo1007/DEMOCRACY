@@ -10,7 +10,7 @@
 
 import { latest, type SourceMeta, sourceMeta, SOURCES } from "../_shared/provenance.ts";
 import { BILL_FIELDS, type BillField, fieldForCommittee } from "./bill_fields.ts";
-import { CURRENT_AGE, loadDistrictAndIncumbent } from "./builders.ts";
+import { CURRENT_AGE, loadDistrictAndSeat } from "./builders.ts";
 import type { BillCommitteeRec, ReadStore } from "./store.ts";
 
 /** The earlier term the current one is compared with. */
@@ -138,7 +138,13 @@ export function fieldTrend(
 }
 
 export async function buildDirection(store: ReadStore, id: string) {
-  const { district, member } = await loadDistrictAndIncumbent(store, id);
+  const { district, seat } = await loadDistrictAndSeat(store, id);
+  const districtRef = { id: district.id, displayName: district.display_name };
+  // No member, no trend: every block is null, which the app shows as 준비 중.
+  if (seat.kind !== "held") {
+    return { district: districtRef, trend: null, stances: null, issues: null };
+  }
+  const member = seat.member;
   const mona = member.mona_cd;
 
   const [fromCount, toCount, fromRows, toRows] = await Promise.all([
@@ -162,7 +168,7 @@ export async function buildDirection(store: ReadStore, id: string) {
     : null;
 
   return {
-    district: { id: district.id, displayName: district.display_name },
+    district: districtRef,
     trend,
     // Model output; not produced. The app shows each as 준비 중.
     stances: null,

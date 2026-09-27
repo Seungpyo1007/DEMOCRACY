@@ -74,7 +74,16 @@ text) and `rate_limited` (429).
   - Any figure without a presentable `sourceUrl` and `fetchedAt` is dropped.
   - `record.attendance` and `record.votes` are omitted when there is no data. `record.bills` is
     always present with `record`.
-  - A district with no sourced incumbent gets `404 not_found`, never a partial payload.
+  - A seat with no current member is **vacant** only when the stored Assembly member list was read
+    and every 지역구 member in it was placed in a district; the source is that list.
+    - profile: `{district, source, incumbent: null, vacant: true, candidates}`.
+    - history: `legislator: {vacant: true, source}`; region and elections as usual.
+    - direction: every block `null`.
+  - With no sourced incumbent and no such certainty (a member the list names matched no district),
+    profile is `404 not_found` and history has `legislator: null`: nothing is said about the seat,
+    and the place and its elections still show.
+  - A region event read from another document than its timeline (the 공직선거법 version that made a
+    선거구 change) carries its own `source`.
   - Every response is checked for keyed URLs (`KEY=`, `ServiceKey=`, `confmKey=`) before it is sent.
 - **Figures.** Every figure is descriptive:
   - 출석률 = meetings with status 출석 ÷ meetings on record since 2024-05-30.

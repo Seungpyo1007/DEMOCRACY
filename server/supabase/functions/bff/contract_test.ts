@@ -172,6 +172,95 @@ Deno.test("history: ongoing row only while counting; empty region still sourced"
   assert(body.data.region.source.sourceUrl.startsWith("https://www.data.go.kr/"));
 });
 
+/** A handler over the pipeline's rows, changed by `edit`. */
+async function handlerOver(edit: (t: ReturnType<typeof toTables>) => void) {
+  const { db } = await runPipeline();
+  const tables = toTables(db);
+  edit(tables);
+  const handler = createHandler({
+    store: new MemoryStore(tables),
+    fetch: fakeUpstream().fetch,
+    jusoKey: "",
+    vworldKey: "",
+    now: () => NOW,
+    ...signedOut(),
+  });
+  return async (path: string) => {
+    const res = await handler(new Request(`https://r/functions/v1/bff${path}`));
+    return { status: res.status, body: await res.json() };
+  };
+}
+
+Deno.test("history: an event from another document than the timeline names it", async () => {
+  const get = await handlerOver(() => {});
+  const { body } = await get(`/districts/${MAPO_B}/history`);
+  assertEquals(validateHistoryRecord(body.data), []);
+  assertEquals(body.data.region.events[0].source.sourceUrl, "https://www.mapo.go.kr/");
+  const bad = structuredClone(body.data);
+  bad.region.events[0].source = { sourceUrl: "", fetchedAt: "x" };
+  assert(validateHistoryRecord(bad).length > 0);
+});
+
+Deno.test("vacant seat: history keeps the place and its elections; profile says vacant", async () => {
+  // Nobody in the Assembly's current list sits for 마포구 을, and every 지역구 member was placed.
+  const get = await handlerOver((t) => {
+    t.members = t.members.filter((m) => m.district_id !== MAPO_B);
+  });
+  const history = await get(`/districts/${MAPO_B}/history`);
+  assertEquals(history.status, 200);
+  assertEquals(validateHistoryRecord(history.body.data), []);
+  const h = history.body.data;
+  assertEquals(h.legislator, {
+    vacant: true,
+    source: {
+      sourceUrl:
+        "https://open.assembly.go.kr/portal/data/service/selectAPIServicePage.do/OWSSC6001134T516707",
+      fetchedAt: "2026-09-24T03:00:00.000Z",
+    },
+  });
+  assertEquals(h.elections.rows.length, 3);
+  assert(h.elections.rows.every((r: { winner: { id: string } }) => r.winner.id.startsWith("nec-")));
+  assertEquals(h.region.events.length, 2);
+
+  const profile = await get(`/districts/${MAPO_B}/profile`);
+  assertEquals(profile.status, 200);
+  assertEquals(validateDistrictProfile(profile.body.data), []);
+  assertEquals(profile.body.data.incumbent, null);
+  assertEquals(profile.body.data.vacant, true);
+  assertEquals(profile.body.data.source, h.legislator.source);
+  assert(Array.isArray(profile.body.data.candidates));
+
+  const direction = await get(`/districts/${MAPO_B}/direction`);
+  assertEquals(direction.status, 200);
+  assertEquals(validateDirectionReport(direction.body.data), []);
+  assertEquals(direction.body.data.trend, null);
+
+  // The validator holds a vacant profile to its word.
+  const both = { ...profile.body.data, incumbent: { id: "x", name: "y" } };
+  assertEquals(validateDistrictProfile(both), ["incumbent: a vacant seat has none"]);
+  assert(validateDistrictProfile({ ...profile.body.data, vacant: false }).length > 0);
+});
+
+Deno.test("seat not placed: nothing is said about it, the rest of history stays", async () => {
+  // A current 지역구 member whose ORIG_NM matched no district: the empty seat may be theirs.
+  const get = await handlerOver((t) => {
+    t.members = t.members.filter((m) => m.district_id !== MAPO_B);
+    t.members.push({
+      ...t.members[0],
+      mona_cd: "LOST0001",
+      district_key: "서울없는구",
+      district_id: null,
+    });
+  });
+  const history = await get(`/districts/${MAPO_B}/history`);
+  assertEquals(history.status, 200);
+  assertEquals(validateHistoryRecord(history.body.data), []);
+  assertEquals(history.body.data.legislator, null);
+  assertEquals(history.body.data.elections.rows.length, 3);
+  const profile = await get(`/districts/${MAPO_B}/profile`);
+  assertEquals([profile.status, profile.body.error.code], [404, "not_found"]);
+});
+
 Deno.test("results: matches the RawElectionResults contract", async () => {
   const { get } = await setup();
   const { res, body } = await get(`/districts/${MAPO_B}/results`);
