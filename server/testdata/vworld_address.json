@@ -27,8 +27,8 @@
           "level3": "",
           "level4L": "망원동",
           "level4LC": "1144012300",
-          "level4A": "",
-          "level4AC": "",
+          "level4A": "망원제1동",
+          "level4AC": "1144069000",
           "level5": "000-0",
           "detail": ""
         }
@@ -36,14 +36,14 @@
       {
         "zipcode": "",
         "type": "road",
-        "text": "서울특별시 마포구 가상로 00",
+        "text": "서울특별시 마포구 가상로 00 (망원동)",
         "structure": {
           "level0": "대한민국",
           "level1": "서울특별시",
           "level2": "마포구",
           "level3": "",
           "level4L": "가상로",
-          "level4LC": "1144012300",
+          "level4LC": "3000001",
           "level4A": "망원1동",
           "level4AC": "1144069000",
           "level5": "00",

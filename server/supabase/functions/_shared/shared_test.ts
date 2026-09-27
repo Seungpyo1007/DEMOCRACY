@@ -354,7 +354,7 @@ Deno.test("juso parsing", () => {
 Deno.test("V-World parsing takes the road entry's 행정동 and the parcel's 법정동", () => {
   assertEquals(parseVworldPlace(JSON.parse(sample("vworld_address.json"))), {
     hdongCode: "1144069000",
-    hdongName: "망원1동",
+    hdongName: "망원제1동",
     bjdCode: "1144012300",
   });
   // Off any road: 법정동 only, left to the bridge.

@@ -101,9 +101,10 @@ export function vworldAddressUrl(key: string, lat: number, lng: number, domain?:
 }
 
 /**
- * response.status "OK" | "NOT_FOUND" | "ERROR". result[] holds a "road" and/or a "parcel"
- * entry; structure.level4AC (행정동 code) is only on road entries, structure.level4LC
- * (법정동 code) on both.
+ * response.status "OK" | "NOT_FOUND" | "ERROR". result[] holds a "parcel" and/or a "road"
+ * entry. Checked live 2026-09-27: both carry the 행정동 (level4A, level4AC) although the
+ * reference says parcel entries do not; level4LC is the 법정동 code on a parcel entry and a
+ * 7-digit road code on a road entry, so only 10 digits count.
  */
 export function parseVworldPlace(json: unknown): PlaceCodes | null {
   const res = (json as { response?: Record<string, unknown> } | null)?.response;
