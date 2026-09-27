@@ -88,7 +88,7 @@ class DistrictHomeScreen extends ConsumerWidget {
           actions: [
             const AccountEntryButton(),
             AppToolbarButton(
-              icon: AppIcons.swapDistrict,
+              icon: AppIcons.search,
               label: '지역구 변경',
               onPressed: () => _changeDistrict(context, ref),
             ),
@@ -310,6 +310,7 @@ class _IncumbentSectionState extends State<_IncumbentSection> {
         MotionSize(
           child: AnimatedSwitcher(
             duration: reduced ? Duration.zero : AppMotion.base,
+            reverseDuration: AppMotion.leave,
             switchInCurve: AppMotion.settle,
             switchOutCurve: AppMotion.settle,
             layoutBuilder: (current, previous) => Stack(

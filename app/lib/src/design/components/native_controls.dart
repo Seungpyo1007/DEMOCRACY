@@ -39,10 +39,6 @@ class AppIcon {
 
 abstract final class AppIcons {
   static const back = AppIcon(Icons.arrow_back, 'chevron.backward');
-  static const swapDistrict = AppIcon(
-    Icons.swap_horiz,
-    'arrow.left.arrow.right',
-  );
   static const share = AppIcon(Icons.share_outlined, 'square.and.arrow.up');
   static const more = AppIcon(Icons.more_vert, 'ellipsis');
   static const info = AppIcon(Icons.info_outline, 'info.circle');
@@ -92,11 +88,13 @@ class AppToolbarButton extends StatelessWidget {
         child: SizedBox(
           width: 44,
           height: 44,
-          child: CNButton.icon(
-            icon: CNSymbol(icon.sfSymbol, size: 15),
-            onPressed: onPressed,
-            enabled: onPressed != null,
-            tint: AppColors.ink,
+          child: PaintedWhenSettled(
+            child: CNButton.icon(
+              icon: CNSymbol(icon.sfSymbol, size: 15),
+              onPressed: onPressed,
+              enabled: onPressed != null,
+              tint: AppColors.ink,
+            ),
           ),
         ),
       );
@@ -407,17 +405,19 @@ class _AppSearchFieldState extends State<AppSearchField> {
       if (usesNativeIosControls(context)) {
         final field = SizedBox(
           height: 44,
-          child: CNSearchBar(
-            controller: _native,
-            placeholder: widget.placeholder,
-            expandable: false,
-            initiallyExpanded: true,
-            expandedHeight: 44,
-            showCancelButton: false,
-            autofocus: widget.autofocus,
-            tint: AppColors.ink,
-            onChanged: widget.onChanged,
-            onSubmitted: widget.onSubmitted,
+          child: PaintedWhenSettled(
+            child: CNSearchBar(
+              controller: _native,
+              placeholder: widget.placeholder,
+              expandable: false,
+              initiallyExpanded: true,
+              expandedHeight: 44,
+              showCancelButton: false,
+              autofocus: widget.autofocus,
+              tint: AppColors.ink,
+              onChanged: widget.onChanged,
+              onSubmitted: widget.onSubmitted,
+            ),
           ),
         );
         if (widget.onTap == null) {
@@ -620,5 +620,70 @@ class AppSecondaryButton extends StatelessWidget {
             label: Text(label),
           );
     return expand ? SizedBox(width: double.infinity, child: button) : button;
+  }
+}
+
+/// Keeps a native control's place but does not paint it while its page is
+/// sliding in, sliding out, or being covered.
+///
+/// A UIKit view composited into a page that Flutter is animating blanks the
+/// Flutter content around it until the transition settles. Not painting the
+/// native view for those few hundred milliseconds keeps the page itself on
+/// time; the control appears as the page lands, the same trade the tab bar
+/// makes. It stays mounted, so the UIKit view keeps its text and focus.
+class PaintedWhenSettled extends StatefulWidget {
+  const PaintedWhenSettled({required this.child, super.key});
+
+  final Widget child;
+
+  @override
+  State<PaintedWhenSettled> createState() => _PaintedWhenSettledState();
+}
+
+class _PaintedWhenSettledState extends State<PaintedWhenSettled> {
+  Animation<double>? _enter;
+  Animation<double>? _cover;
+  bool _moving = false;
+
+  @override
+  void didChangeDependencies() {
+    super.didChangeDependencies();
+    final route = ModalRoute.of(context);
+    _listen(route?.animation, route?.secondaryAnimation);
+  }
+
+  void _listen(Animation<double>? enter, Animation<double>? cover) {
+    if (!identical(enter, _enter)) {
+      _enter?.removeStatusListener(_onStatus);
+      _enter = enter?..addStatusListener(_onStatus);
+    }
+    if (!identical(cover, _cover)) {
+      _cover?.removeStatusListener(_onStatus);
+      _cover = cover?..addStatusListener(_onStatus);
+    }
+    _onStatus(AnimationStatus.completed);
+  }
+
+  void _onStatus(AnimationStatus _) {
+    final moving =
+        (_enter?.status.isAnimating ?? false) ||
+        (_cover?.status.isAnimating ?? false);
+    if (moving != _moving && mounted) {
+      setState(() => _moving = moving);
+    }
+  }
+
+  @override
+  void dispose() {
+    _enter?.removeStatusListener(_onStatus);
+    _cover?.removeStatusListener(_onStatus);
+    super.dispose();
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    // At opacity 0 the child is not painted at all, so no platform-view layer
+    // enters the scene; layout and state are untouched.
+    return Opacity(opacity: _moving ? 0 : 1, child: widget.child);
   }
 }

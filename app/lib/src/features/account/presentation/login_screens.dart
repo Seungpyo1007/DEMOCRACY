@@ -233,22 +233,24 @@ class ProviderButton extends StatelessWidget {
   final bool busy;
   final bool retry;
 
+  // Kakao's login design guide: container #FEE500, symbol #000000 (drawn
+  // as #191919 in the official resource), label black at 85%.
   static const _kakaoYellow = Color(0xFFFEE500);
-  static const _kakaoInk = Color(0xFF191919);
+  static const _kakaoSymbol = Color(0xFF191919);
+  static const _kakaoLabel = Color(0xD9000000);
 
   @override
   Widget build(BuildContext context) {
     final (background, foreground, border) = switch (provider) {
       SignInProvider.apple => (Colors.black, Colors.white, null),
-      SignInProvider.kakao => (_kakaoYellow, _kakaoInk, null),
+      SignInProvider.kakao => (_kakaoYellow, _kakaoLabel, null),
       _ => (AppColors.white, AppColors.ink, AppColors.neutral400),
     };
     final mark = switch (provider) {
       SignInProvider.apple => Icon(Icons.apple, size: 20, color: foreground),
-      SignInProvider.kakao => Icon(
-        Icons.chat_bubble,
-        size: 18,
-        color: foreground,
+      SignInProvider.kakao => const CustomPaint(
+        size: Size.square(18),
+        painter: _KakaoSymbol(_kakaoSymbol),
       ),
       _ => Text(
         'G',
@@ -259,9 +261,14 @@ class ProviderButton extends StatelessWidget {
         ),
       ),
     };
-    final label = retry
-        ? '${provider.label}로 다시 시도'
-        : '${provider.label}로 계속하기';
+    // Kakao's guide fixes the label to 카카오 로그인; the others read as a
+    // continuation, since the same button signs up and signs in.
+    final label = switch ((provider, retry)) {
+      (SignInProvider.kakao, false) => '카카오 로그인',
+      (SignInProvider.kakao, true) => '카카오 로그인 다시 시도',
+      (_, true) => '${provider.label}로 다시 시도',
+      _ => '${provider.label}로 계속하기',
+    };
 
     return PressScale(
       child: SizedBox(
@@ -300,6 +307,45 @@ class ProviderButton extends StatelessWidget {
       ),
     );
   }
+}
+
+/// Kakao's symbol, traced from the official login button resource
+/// (developers.kakao.com → 리소스 다운로드 → 카카오 로그인), so it is the
+/// guide's shape rather than a look-alike. The source path sits in a
+/// 12.9555-unit square; it is scaled to the paint size.
+class _KakaoSymbol extends CustomPainter {
+  const _KakaoSymbol(this.color);
+
+  final Color color;
+
+  static const _unit = 12.9555;
+
+  static Path _path() => Path()
+    ..moveTo(6.4785, 0)
+    ..cubicTo(2.8997, 0, 0, 2.4812, 0, 5.5416)
+    ..cubicTo(0, 7.5087, 1.1994, 9.2371, 3.0067, 10.2198)
+    ..lineTo(2.3956, 12.6888)
+    ..cubicTo(2.3729, 12.7625, 2.3907, 12.8415, 2.4394, 12.8959)
+    ..cubicTo(2.475, 12.9345, 2.5236, 12.9555, 2.5706, 12.9555)
+    ..cubicTo(2.6112, 12.9555, 2.6517, 12.9415, 2.6857, 12.9116)
+    ..lineTo(5.3115, 10.9919)
+    ..cubicTo(5.6892, 11.0498, 6.0782, 11.0814, 6.4769, 11.0814)
+    ..cubicTo(10.0542, 11.0814, 12.9555, 8.6001, 12.9555, 5.5398)
+    ..cubicTo(12.9555, 2.4795, 10.0558, 0, 6.4785, 0)
+    ..close();
+
+  @override
+  void paint(Canvas canvas, Size size) {
+    final scale = size.shortestSide / _unit;
+    canvas
+      ..save()
+      ..scale(scale)
+      ..drawPath(_path(), Paint()..color = color)
+      ..restore();
+  }
+
+  @override
+  bool shouldRepaint(_KakaoSymbol old) => old.color != color;
 }
 
 class _EmailLink extends StatelessWidget {

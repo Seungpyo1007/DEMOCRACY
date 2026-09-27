@@ -38,6 +38,11 @@ abstract final class AppMotion {
   /// Gap between bars, which are wider apart on the page than rows.
   static const barStagger = Duration(milliseconds: 96);
 
+  /// How long a pane being replaced takes to go: not at all. Only arrivals
+  /// move. An outgoing tab that fades as slowly as the new one comes in sits
+  /// on top of it, and reads as the old content refusing to leave.
+  static const leave = Duration.zero;
+
   /// Everything on a screen has arrived by this point.
   static const enterBudget = Duration(milliseconds: 2200);
 

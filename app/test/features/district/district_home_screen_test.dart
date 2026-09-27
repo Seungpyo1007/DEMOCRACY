@@ -202,10 +202,7 @@ void main() {
   testWidgets('the district switch is a toolbar action', (tester) async {
     await pumpHome(tester);
 
-    final action = find.widgetWithIcon(
-      IconButton,
-      AppIcons.swapDistrict.material,
-    );
+    final action = find.widgetWithIcon(IconButton, AppIcons.search.material);
     expect(action, findsOneWidget);
     expect(tester.widget<IconButton>(action).tooltip, '지역구 변경');
 
@@ -221,9 +218,7 @@ void main() {
       'read-only', (tester) async {
     final container = await pumpHome(tester);
 
-    await tester.tap(
-      find.widgetWithIcon(IconButton, AppIcons.swapDistrict.material),
-    );
+    await tester.tap(find.widgetWithIcon(IconButton, AppIcons.search.material));
     await tester.pumpAndSettle();
     await tester.enterText(
       find.descendant(
@@ -247,9 +242,7 @@ void main() {
   ) async {
     final container = await pumpHome(tester);
 
-    await tester.tap(
-      find.widgetWithIcon(IconButton, AppIcons.swapDistrict.material),
-    );
+    await tester.tap(find.widgetWithIcon(IconButton, AppIcons.search.material));
     await tester.pumpAndSettle();
     await tester.tap(find.byTooltip('뒤로'));
     await tester.pumpAndSettle();

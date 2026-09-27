@@ -201,8 +201,14 @@ class WriteIn extends StatelessWidget {
       delay: delay,
       curve: AppMotion.writeCurve,
       child: child,
-      builder: (context, t, child) =>
-          t >= 1 ? child! : ClipRect(clipper: _WrittenSoFar(t), child: child),
+      // The same ClipRect at every frame, clipping nothing once written.
+      // Swapping it for the bare child at the end would rebuild everything
+      // inside -- a margin note's underline would start drawing again.
+      builder: (context, t, child) => ClipRect(
+        clipper: _WrittenSoFar(t),
+        clipBehavior: t >= 1 ? Clip.none : Clip.hardEdge,
+        child: child,
+      ),
     );
   }
 }

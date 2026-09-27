@@ -249,7 +249,7 @@ void main() {
       );
       await tester.pumpAndSettle();
 
-      await tester.tap(find.text('카카오로 계속하기'));
+      await tester.tap(find.text('카카오 로그인'));
       await tester.pumpAndSettle();
       expect(locationOf(router), AppRoutes.consent);
 
@@ -271,7 +271,7 @@ void main() {
       final (container, router) = await pumpRouter(tester, district: _district);
       unawaited(router.push(AppRoutes.login));
       await tester.pumpAndSettle();
-      await tester.tap(find.text('카카오로 계속하기'));
+      await tester.tap(find.text('카카오 로그인'));
       await tester.pumpAndSettle();
 
       await tester.tap(find.text('만 14세 미만이에요'));
@@ -294,7 +294,7 @@ void main() {
       await tester.tap(find.text('로그인하고 계속'));
       await tester.pumpAndSettle();
 
-      await tester.tap(find.text('카카오로 계속하기'));
+      await tester.tap(find.text('카카오 로그인'));
       await tester.pumpAndSettle();
       for (final label in ['만 14세 이상입니다', '이용약관', '개인정보 수집·이용']) {
         await tester.tap(find.textContaining(label).first);
