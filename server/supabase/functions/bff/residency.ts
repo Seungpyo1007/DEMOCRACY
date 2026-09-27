@@ -4,7 +4,7 @@
 //                              → {token, districtId, displayName, method, verifiedAt, expiresAt}
 //   DELETE /residency          → {deleted: true}
 //
-// The server derives the district itself from juso (address) or Kakao (coordinates) and
+// The server derives the district itself from juso (address) or V-World (coordinates) and
 // the [별표 1] mapping; a district id from the client is never accepted. An address that is
 // ambiguous or unmapped is no_match rather than a guess.
 //
@@ -16,7 +16,7 @@
 // stronger check can replace it later; the app must not call it 실거주 증명.
 
 import { ApiError } from "../_shared/envelope.ts";
-import { lookupHdong, searchJuso } from "../_shared/geo.ts";
+import { lookupPlace, searchJuso } from "../_shared/geo.ts";
 import type { FetchLike } from "../_shared/http.ts";
 import {
   type AccountContext,
@@ -25,7 +25,7 @@ import {
   requireProfile,
   requireUser,
 } from "./account.ts";
-import { districtForHdong, districtForRoadAddress, type DistrictRef } from "./mapping.ts";
+import { districtForPlace, districtForRoadAddress, type DistrictRef } from "./mapping.ts";
 
 export const RESIDENCY_METHOD = "address_self_declared";
 /** How long a verification lasts before the user confirms their address again. */
@@ -35,7 +35,9 @@ const TOKEN_BYTES = 32;
 export interface ResidencyContext extends AccountContext {
   fetch: FetchLike;
   jusoKey: string;
-  kakaoKey: string;
+  vworldKey: string;
+  /** The service URL the V-World key was issued for, when the key asks for it. */
+  vworldDomain?: string;
 }
 
 type Place = { roadAddress: string } | { lat: number; lng: number };
@@ -78,8 +80,8 @@ async function districtFor(ctx: ResidencyContext, place: Place): Promise<Distric
     const found = await searchJuso(ctx.fetch, ctx.jusoKey, place.roadAddress);
     return districtForRoadAddress(ctx.store, found, place.roadAddress);
   }
-  const hdong = await lookupHdong(ctx.fetch, ctx.kakaoKey, place.lat, place.lng);
-  return hdong ? districtForHdong(ctx.store, hdong) : null;
+  const found = await lookupPlace(ctx.fetch, ctx.vworldKey, place.lat, place.lng, ctx.vworldDomain);
+  return found ? districtForPlace(ctx.store, found) : null;
 }
 
 /** Handles residency paths; null when `path` is not one of them. */

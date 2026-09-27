@@ -2,7 +2,7 @@
 
 Offline inputs for `deno task test`. No test touches the network.
 
-## API response samples (`assembly_*.json`, `nec_*.json`, `juso_search.json`, `kakao_region.json`)
+## API response samples (`assembly_*.json`, `nec_*.json`, `juso_search.json`, `vworld_address.json`)
 
 **Hand-written.** No API keys existed when these were made. All people, parties, bills and addresses
 are fictional ("가상 의원", "가나당", `FAKE0001`).
@@ -14,7 +14,7 @@ How far each shape is verified:
 | 열린국회정보 (`nwvrqwxyaytdsfvhu`, `ALLNAMEMBER`, `nzmimeepazxkubdpn`, `nojepdqqaweusdfbi`) | Checked against live keyless calls on 2026-09-24. Keyless calls return real data capped at 5 rows.                                                                                                                              | Checked, including `INFO-200` and `ERROR-300`.                                                                                                                     |
 | 선관위 on data.go.kr (코드, 당선인, 후보자)                                                 | Taken from the NEC open-data portal docs (data.nec.go.kr) and the data.go.kr dataset pages. **Not yet checked against a keyed call.**                                                                                           | `resultCode` values `INFO-00` and `INFO-03`, and the single-object `item`, are from memory of these APIs. The XML gateway error is the standard data.go.kr format. |
 | juso 검색 API                                                                               | `roadAddr`, `admCd`, `siNm`, `sggNm`, `emdNm` are documented. `hemdNm` (with `addInfoYn=Y`) checked live 2026-09-27: the whole name ("서울특별시 마포구 서교동"), several 행정동 joined by "," for a building in more than one. | `results.common.errorCode`                                                                                                                                         |
-| Kakao `coord2regioncode`                                                                    | Documented (`region_type` "H", `code`)                                                                                                                                                                                          | —                                                                                                                                                                  |
+| V-World 지오코더 2.0 `getAddress`                                                           | From the vworld.kr reverse-geocoding reference: `response.status`, `result[].structure.level4AC` (행정동 code, road entries only), `level4LC` (법정동 code). **Not yet checked against a keyed call.**                          | `status` "OK" / "NOT_FOUND" / "ERROR" with `error.code`                                                                                                            |
 
 Field mapping lives in one normalizer per source
 (`supabase/functions/_shared/normalize_assembly.ts`, `normalize_nec.ts`, `geo.ts`). If a live call

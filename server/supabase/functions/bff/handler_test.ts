@@ -13,7 +13,7 @@ async function handlerWith(overrides: Record<string, () => Response> = {}, logs:
     store: new MemoryStore(toTables(db)),
     fetch: fakeUpstream(overrides).fetch,
     jusoKey: "J",
-    kakaoKey: "K",
+    vworldKey: "V",
     now: () => NOW,
     ...signedOut(),
     logError: (m) => logs.push(m),
@@ -59,7 +59,7 @@ Deno.test("district without a sourced incumbent is not_found (never a half paylo
     store: new MemoryStore(t),
     fetch: fakeUpstream().fetch,
     jusoKey: "",
-    kakaoKey: "",
+    vworldKey: "",
     now: () => NOW,
     ...signedOut(),
   });
@@ -69,9 +69,12 @@ Deno.test("district without a sourced incumbent is not_found (never a half paylo
 
 Deno.test("location outside any mapped district → 404 no_match", async () => {
   const h = await handlerWith({
-    "dapi.kakao.com": () =>
+    "api.vworld.kr": () =>
       Response.json({
-        documents: [{ region_type: "H", code: "2611051000", region_3depth_name: "가상동" }],
+        response: {
+          status: "OK",
+          result: [{ type: "road", structure: { level4A: "가상동", level4AC: "2611051000" } }],
+        },
       }),
   });
   const r = await call(h, "/location/district?lat=35.1&lng=129.03");
@@ -150,7 +153,7 @@ Deno.test("empty database: every district route is a clean 404", async () => {
     store: new MemoryStore(emptyTables()),
     fetch: fakeUpstream().fetch,
     jusoKey: "",
-    kakaoKey: "",
+    vworldKey: "",
     now: () => NOW,
     ...signedOut(),
   });

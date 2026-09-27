@@ -2,7 +2,7 @@
 // import_district_areas.ts reads, and the 법정동→행정동 bridge CSV that
 // import_bjdong_hdong.ts reads.
 //
-// The 구역표 names the 행정동 of its election day. juso and Kakao answer with today's codes, so
+// The 구역표 names the 행정동 of its election day. juso and V-World answer with today's codes, so
 // the table is read against the 행정동 alive on that day and then carried to today's codes:
 //   1. same code, same name;
 //   2. same 동 name in the 시군구 it came from (renamed 시도/시군구, new 일반구);

@@ -35,7 +35,7 @@ async function setup(overrides: Record<string, () => Response> = {}) {
     store: new MemoryStore(toTables(db)),
     fetch: up.fetch,
     jusoKey: "J",
-    kakaoKey: "K",
+    vworldKey: "V",
     accounts,
     auth: gotrue.auth,
     randomBytes: seededBytes(42),
@@ -493,9 +493,12 @@ Deno.test("residency: unmapped, ambiguous or unknown places are no_match", async
   assertEquals(accounts.t.residency, []);
 
   const other = await setup({
-    "dapi.kakao.com": () =>
+    "api.vworld.kr": () =>
       Response.json({
-        documents: [{ region_type: "H", code: "2611051000", region_3depth_name: "가상동" }],
+        response: {
+          status: "OK",
+          result: [{ type: "road", structure: { level4A: "가상동", level4AC: "2611051000" } }],
+        },
       }),
   });
   await signUp(other.call);

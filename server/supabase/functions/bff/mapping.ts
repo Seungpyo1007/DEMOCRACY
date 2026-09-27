@@ -8,7 +8,7 @@
 // only trusted when every 행정동 it yields lands in the same 선거구.
 
 import { CURRENT_DISTRICT_SG_ID, normalizeHdongName } from "../_shared/district_names.ts";
-import type { JusoAddress } from "../_shared/geo.ts";
+import type { JusoAddress, PlaceCodes } from "../_shared/geo.ts";
 import type { AreaRec, BridgeRec, DistrictRec, ReadStore } from "./store.ts";
 
 export interface DistrictRef {
@@ -92,13 +92,19 @@ export async function suggestionsFor(
   return out;
 }
 
-export async function districtForHdong(
+export async function districtForPlace(
   store: ReadStore,
-  hdong: { code: string; name: string | null },
+  place: PlaceCodes,
 ): Promise<DistrictRef | null> {
-  const sigungu = hdong.code.slice(0, 5);
+  const sigungu = (place.hdongCode ?? place.bjdCode)?.slice(0, 5);
+  if (!sigungu) return null;
   const local = await store.areasForSigungu(CURRENT_DISTRICT_SG_ID, [sigungu]);
-  const code = resolveSggCode(local, sigungu, { hdongCode: hdong.code, hdongName: hdong.name });
+  const bridge = place.bjdCode ? await store.bridgeFor([place.bjdCode]) : [];
+  const code = resolveSggCode(local, sigungu, {
+    hdongCode: place.hdongCode,
+    hdongName: place.hdongName,
+    bjdCode: place.bjdCode,
+  }, bridge);
   if (!code) return null;
   const [d] = await store.districtsBySggCodes(CURRENT_DISTRICT_SG_ID, [code]);
   return d ? { id: d.id, displayName: d.display_name } : null;
