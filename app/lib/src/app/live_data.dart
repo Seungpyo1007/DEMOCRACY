@@ -23,16 +23,14 @@ import 'package:democracy/src/features/pledges/data/remote_pledge_repository.dar
 import 'package:democracy/src/features/results/application/results_providers.dart';
 import 'package:democracy/src/features/results/data/remote_results_repository.dart';
 import 'package:democracy/src/features/reviews/application/review_providers.dart';
-import 'package:democracy/src/features/reviews/domain/resident_review.dart';
-import 'package:democracy/src/features/reviews/domain/review_draft.dart';
-import 'package:democracy/src/features/reviews/domain/review_repository.dart';
+import 'package:democracy/src/features/reviews/data/remote_review_repository.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter_riverpod/misc.dart';
 
 /// Every override a build with a BFF needs, or none without one.
 ///
-/// Features with a live source read it. The rest -- AI, reviews, community --
-/// are still fixture-only, and a fixture keyed to a sample district has
+/// Features with a live source read it. The rest -- AI -- are still
+/// fixture-only, and a fixture keyed to a sample district has
 /// nothing to say about a real one: they answer NotAvailableException, which
 /// the screens show as 준비 중, rather than show sample candidates under a
 /// real district's name.
@@ -81,9 +79,9 @@ List<Override> liveDataOverrides(BffConfig? config) {
     resultsRepositoryProvider.overrideWithValue(
       RemoteResultsRepository(client),
     ),
-    reviewRepositoryProvider.overrideWithValue(const _UnavailableReviews()),
+    reviewRepositoryProvider.overrideWithValue(RemoteReviewRepository(client)),
     communityRepositoryProvider.overrideWithValue(
-      const _UnavailableCommunity(),
+      RemoteCommunityRepository(client),
     ),
     addressStoreProvider.overrideWith(
       (ref) => LiveAddressStore(const SecureAddressStore()),
@@ -147,32 +145,4 @@ class _UnavailableDirection implements DirectionRepository {
   @override
   Future<DirectionReport> loadReport(String districtId) =>
       Future.error(const NotAvailableException('ai direction'));
-}
-
-class _UnavailableReviews implements ReviewRepository {
-  const _UnavailableReviews();
-
-  @override
-  Future<ReviewBoard> loadBoard(String districtId) =>
-      Future.error(const NotAvailableException('reviews'));
-
-  @override
-  Future<ReviewBoard> submit(String districtId, ReviewDraft draft) =>
-      Future.error(const NotAvailableException('reviews'));
-}
-
-class _UnavailableCommunity implements CommunityRepository {
-  const _UnavailableCommunity();
-
-  @override
-  Stream<List<ChatMessage>> watchChannel(String districtId) =>
-      Stream.error(const NotAvailableException('community channel'));
-
-  @override
-  Future<void> send(String districtId, String body) =>
-      Future.error(const NotAvailableException('community channel'));
-
-  @override
-  Future<List<DiscussionThread>> loadThreads(String districtId) =>
-      Future.error(const NotAvailableException('community threads'));
 }

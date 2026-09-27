@@ -47,10 +47,11 @@ compileSdk만 37인 건 `flutter_secure_storage` 11 때문. bootstrap 스크립�
 그냥 `flutter run` 하면 전부 샘플 데이터로 뜸. 실제 서버에 붙이려면:
 
 ```bash
-flutter run \
-  --dart-define=BFF_URL=https://<ref>.supabase.co/functions/v1/bff \
-  --dart-define=BFF_ANON_KEY=<anon key>
+cp app/dart_defines.example.json app/dart_defines.json   # 주소랑 anon 키 채움. gitignore라 커밋 안 됨
+cd app && flutter run --dart-define-from-file=dart_defines.json
 ```
+
+폰에 릴리스로 넣을 때도 `flutter build ios --release --dart-define-from-file=dart_defines.json`. 이거 빼고 빌드하면 전부 샘플 데이터로 뜸
 
 로그인 제공자 키(카카오, Google, Android에서 Apple)는 따로 넣어야 함. 키 없는 제공자는 버튼이 안 나오고 이메일 로그인만 됨. 넣는 곳은 `app/ios/Flutter/Keys.xcconfig.example`, `server/README.md` 참고.
 

@@ -191,6 +191,15 @@ class AuthController extends Notifier<AuthState> {
     ref.read(addressControllerProvider.notifier).dropResidency();
   }
 
+  /// A call made outside this controller -- posting a review or a message --
+  /// found the session refused. Signs out with the expiry flag, as [_guard]
+  /// does, so the app answers it with the "sign in again" sheet.
+  Future<void> sessionExpired() async {
+    await _auth.signOut();
+    state = const AuthSignedOut(sessionExpired: true);
+    ref.read(addressControllerProvider.notifier).dropResidency();
+  }
+
   /// Back to the login screen's resting state after a failure was shown.
   void dismissFailure() {
     if (state is AuthFailed || state is AuthUnder14) {
@@ -253,9 +262,7 @@ class AuthController extends Notifier<AuthState> {
     try {
       return await call();
     } on SessionExpiredException {
-      await _auth.signOut();
-      state = const AuthSignedOut(sessionExpired: true);
-      ref.read(addressControllerProvider.notifier).dropResidency();
+      await sessionExpired();
       rethrow;
     }
   }

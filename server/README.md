@@ -10,6 +10,7 @@ Reading needs no account; the account routes need a Supabase Auth sign-in.
                                                      ──▶ bff (GET) ──▶ app
 [juso.go.kr / V-World] ◀── proxied live by bff (query never logged or stored)
 [Supabase Auth: Apple / Kakao / Google / email] ──user JWT──▶ bff /me ──▶ profiles, consents
+                                                 ──user JWT──▶ bff posts ──▶ reviews, community_*
 [공직선거법 [별표 1], 출결 file, curated pledges/region] ──scripts/*.ts──▶ SQL ──▶ tables
 ```
 
@@ -19,12 +20,13 @@ Reading needs no account; the account routes need a Supabase Auth sign-in.
 | -------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------- |
 | `supabase/migrations/20260924000000_init.sql`            | Schema, RLS, BFF SQL helpers, purge functions, cron schedules                                                             |
 | `supabase/migrations/20260926000000_accounts.sql`        | Profiles, consents, 활동명 offers, residency; account SQL functions; orphan-login purge                                   |
+| `supabase/migrations/20260927000000_community.sql`       | Reviews, channel messages, bill threads and replies; write functions (residency, rate limit); thread sync                 |
 | `supabase/migrations/20260927120000_district_counts.sql` | Final 개표 per 선거구 per election (`district_counts`)                                                                    |
 | `supabase/seed.sql`                                      | **Sample** 마포구 갑/을 + 종로구 district mapping, generated from `testdata/`. Not verified against [별표 1].             |
 | `supabase/functions/_shared/`                            | API clients, normalizers (one per source), envelope, provenance, PostgREST client                                         |
 | `supabase/functions/ingest-assembly/`                    | Members (daily), bills and plenary votes (every 6 h)                                                                      |
 | `supabase/functions/ingest-nec/`                         | Election and district codes and candidates (weekly), historical winners (`?mode=backfill`), final counts (`?mode=counts`) |
-| `supabase/functions/bff/`                                | The API. `contract.ts` mirrors the app's Dart parsers. `account.ts`, `residency.ts`: signed-in.                           |
+| `supabase/functions/bff/`                                | The API. `contract.ts` mirrors the app's Dart parsers. `account.ts`, `residency.ts`: signed-in. `community.ts`: posts.    |
 | `scripts/`                                               | One-off importers that write SQL to stdout; `build_district_areas.ts` builds the mapping CSV                              |
 | `data/`                                                  | Generated inputs kept in git: the 22대 district mapping                                                                   |
 | `testdata/`                                              | Hand-written API samples and district-mapping samples. See `testdata/README.md`.                                          |
@@ -33,7 +35,7 @@ Reading needs no account; the account routes need a Supabase Auth sign-in.
 
 ```sh
 brew install deno
-deno task ci      # fmt --check, lint, check, test (offline; 82 tests)
+deno task ci      # fmt --check, lint, check, test (offline)
 ```
 
 ## BFF contract (fixed; the app is built against it)
@@ -44,7 +46,9 @@ Base URL: `https://<ref>.supabase.co/functions/v1/bff`. Send `apikey: <anon>` an
 A success is `200 {"servedAt": ISO-UTC, "data": {...}}`. An error is non-2xx
 `{"servedAt", "error": {"code", "message"}}`. The error codes are `not_found`, `no_match`,
 `not_curated`, `bad_request`, `upstream`, `internal`, `unauthorized` (401), `forbidden` (403),
-`consent_required` (403), `conflict` (409) and `too_soon` (429, with `error.availableAt`).
+`consent_required` (403), `conflict` (409), `too_soon` (429, with `error.availableAt`),
+`residency_required` (403), `content_rejected` (422, with `error.reason`: `hate`, never the matched
+text) and `rate_limited` (429).
 
 | Route                              | data                                                                                     |
 | ---------------------------------- | ---------------------------------------------------------------------------------------- |
@@ -108,8 +112,8 @@ cached (`no-store`). "Me" below is `{profile|null, consents, residency|null}`:
 | `POST /me/under14`              | → `{deleted:true}`. Deletes the login; nothing is kept. `409` once a profile exists.                |
 | `POST /me/handle`               | `{handle}` → Me. Not offered `403`, taken `409`, second change within 30 days `429`.                |
 | `PATCH /me`                     | `{notify}` → Me. Recorded as a `notify` consent row.                                                |
-| `GET /me/export`                | `{exportedAt, account, profile, consents, residency}`. No token hash; no address exists.            |
-| `DELETE /me?posts=keep\|delete` | → `{deleted:true, posts}`. Removes the profile rows, then the auth user.                            |
+| `GET /me/export`                | `{exportedAt, account, profile, consents, residency, posts:{reviews, messages, threadReplies}}`.    |
+| `DELETE /me?posts=keep\|delete` | → `{deleted:true, posts}`. `delete` removes the posts first; `keep` leaves them as 「탈퇴한 주민」. |
 | `POST /residency/verify`        | `{roadAddress}` or `{lat, lng}` → `{token, districtId, displayName, method, verifiedAt, expiresAt}` |
 | `DELETE /residency`             | → `{deleted:true}`                                                                                  |
 
@@ -122,6 +126,42 @@ cached (`no-store`). "Me" below is `{profile|null, consents, residency|null}`:
     method (`address_self_declared`) and an expiry 180 days out (`RESIDENCY_TTL_DAYS`). Verifying
     again replaces the old row and token.
   - This is a self-declared address, not proof of residence; the app must not call it 실거주 증명.
+
+### Resident posts
+
+Reading needs no account: signed-out reads are cached 15 s; a signed-in read is no-store because it
+marks the reader's own posts (`mine`). Writing needs a user token **and** an unexpired residency for
+that same district (`403 residency_required`), checked before the body and again inside the SQL
+write function.
+
+| Route                           | Body → data                                                                                                                       |
+| ------------------------------- | --------------------------------------------------------------------------------------------------------------------------------- |
+| `GET /districts/{id}/reviews`   | `{summary:{average, respondents, axes:[{label, score}]}, reviews:[{id, author, score, verifiedResident, body, mine, createdAt}]}` |
+| `POST /districts/{id}/reviews`  | `{scores:{소통, 공약이행, 지역발전, 도덕성: 1-5}, body: 10-500 chars, anonymous?}` → the board as above                           |
+| `DELETE /reviews/{id}`          | → `{deleted:true}`. Own only (`403 forbidden`).                                                                                   |
+| `GET /districts/{id}/community` | `{messages:[{id, author, body, verifiedResident, mine, createdAt}], threads:[{id, title, origin, replies, sourceUrl, openedAt}]}` |
+| `POST /districts/{id}/messages` | `{body: 1-300 chars, anonymous?}` → `{message}`                                                                                   |
+| `DELETE /messages/{id}`         | → `{deleted:true}`. Own only.                                                                                                     |
+
+- **No reviews yet** is `summary: {average: 0, respondents: 0, axes: []}`; the app shows it as an
+  empty board, not a zero rating.
+- **Author** is the 활동명, 「익명 주민」 when the post is anonymous, 「탈퇴한 주민」 once the
+  account is deleted. `anonymous` defaults to `true` when omitted. `verifiedResident` is stored at
+  post time.
+- **One review per resident per district.** A second POST replaces the first. The average and axes
+  are computed on the server (`bff_review_summary`).
+- **Content rules** (`_shared/content_guard.ts`): the server refuses the app's `ContentGuard`
+  **hate** list, so editing the app does not bypass it, and the app treats it as a hard stop. The
+  app's **claim** list (possible misinformation) stays a client-side warning the author may send
+  past: a keyword cannot tell a false claim from a true one or a quote, and refusing it would be the
+  app deciding what residents may say about a politician. Both lists are stand-ins for a real
+  classifier.
+- **Rate limit:** 5 posts a minute per user across reviews, messages and replies (`429`).
+- **Threads** are never started by residents. `sync_bill_threads()` (cron `sync-bill-threads`, 15
+  minutes after each bills ingest) opens one per current-term bill sponsored (대표발의) by a
+  district's current member, linked to the bill's likms page. Replies have a table and a count but
+  no route yet; the app does not open threads.
+- Post bodies are never logged.
 
 - **활동명** (handle) is a neutral nature word, a space and two digits (`솔숲 42`), drawn by the
   server from `_shared/handles.ts`. The list excludes surname-like words, party names, party colours
@@ -177,6 +217,7 @@ cached (`no-store`). "Me" below is `{profile|null, consents, residency|null}`:
    select public.call_ingest('ingest-nec', 'mode=counts&sgIds=20160413');
    select public.call_ingest('ingest-assembly', 'mode=members'); -- check: ~300 rows, summary.unmatchedDistricts
    select public.call_ingest('ingest-assembly', 'mode=bills_votes');
+   select public.sync_bill_threads();                            -- after bills land; cron repeats it
    ```
    - Check the result of each call with
      `select * from net._http_response order by id desc limit 5;`.
@@ -247,6 +288,8 @@ cached (`no-store`). "Me" below is `{profile|null, consents, residency|null}`:
 - `/address/search`, `/location/district` and `/residency/verify` never log or store the query,
   address or coordinates. Logs carry only the route and the upstream status. The residency table has
   no address or coordinate column.
+- Post bodies are never logged. A post stores its author id, never a real name; a deleted account
+  leaves `author_id` null (「탈퇴한 주민」) or, with `posts=delete`, no post at all.
 - `source_url` columns have a CHECK that rejects keyed URLs.
 - Accounts hold no real name, phone number or birth date. `email` is only what the provider gave,
   kept for export and recovery and never shown. The BFF checks each user token with Supabase Auth

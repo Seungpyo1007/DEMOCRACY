@@ -1,4 +1,5 @@
 import 'package:democracy/src/app/app_routes.dart';
+import 'package:democracy/src/core/account/auth_controller.dart';
 import 'package:democracy/src/core/adaptive/platform_adaptive.dart';
 import 'package:democracy/src/core/auth/address_controller.dart';
 import 'package:democracy/src/core/auth/verified_gate.dart';
@@ -49,8 +50,11 @@ class _CommunityScreenState extends ConsumerState<CommunityScreen> {
 
   int _tab = 0;
 
-  ContentWarning? _warning;
+  /// What held the last message back: a content warning, or why the server
+  /// refused it. Shown at the foot of the channel, where it would have landed.
+  String? _notice;
   bool _acknowledged = false;
+  bool _sending = false;
 
   @override
   void dispose() {
@@ -95,10 +99,12 @@ class _CommunityScreenState extends ConsumerState<CommunityScreen> {
 
     // Intercepted before it is sent, not moderated after. A message the author
     // can still take back is a different thing from one already delivered.
+    // A claim can be sent past on a second press; a hate term cannot, as the
+    // server refuses it too.
     final warning = ContentGuard.inspect(body);
-    if (warning != null && !_acknowledged) {
+    if (warning != null && (warning.blocks || !_acknowledged)) {
       setState(() {
-        _warning = warning;
+        _notice = warning.prompt('보내려면');
         _acknowledged = true;
       });
       _revealLatest();
@@ -106,17 +112,38 @@ class _CommunityScreenState extends ConsumerState<CommunityScreen> {
     }
 
     final district = ref.read(addressControllerProvider).district;
-    if (district == null) {
+    if (district == null || _sending) {
       return;
     }
 
-    await ref.read(communityRepositoryProvider).send(district.id, body);
+    setState(() => _sending = true);
+    try {
+      await ref.read(communityRepositoryProvider).send(district.id, body);
+    } on Object catch (error) {
+      await settleWriteFailure(
+        error,
+        onSessionExpired: () =>
+            ref.read(authControllerProvider.notifier).sessionExpired(),
+        onResidencyLost: () =>
+            ref.read(addressControllerProvider.notifier).dropResidency(),
+      );
+      if (mounted) {
+        // The message stays in the field, to send again or change.
+        setState(() {
+          _sending = false;
+          _notice = writeFailureMessage(error);
+        });
+        _revealLatest();
+      }
+      return;
+    }
     _message.clear();
     if (!mounted) {
       return;
     }
     setState(() {
-      _warning = null;
+      _sending = false;
+      _notice = null;
       _acknowledged = false;
     });
     _revealLatest();
@@ -197,7 +224,7 @@ class _CommunityScreenState extends ConsumerState<CommunityScreen> {
                         key: ValueKey(_tab),
                         child: switch (_tab) {
                           0 => const _ReviewTab(),
-                          1 => _ChannelTab(warning: _warning),
+                          1 => _ChannelTab(notice: _notice),
                           _ => const _ThreadTab(),
                         },
                       ),
@@ -236,7 +263,18 @@ class _ReviewTab extends ConsumerWidget {
         builder: (context, data) => Column(
           crossAxisAlignment: CrossAxisAlignment.stretch,
           children: [
-            RevealIn(child: _Summary(summary: data.summary)),
+            // A seat no one has rated yet has no average: saying 0.0 would
+            // read as a verdict nobody gave.
+            RevealIn(
+              child: data.summary.isEmpty
+                  ? const _EmptyNote(
+                      title: '아직 올라온 평가가 없습니다.',
+                      detail:
+                          '이 지역구 주소 인증을 마친 주민이 평가를 올리면 '
+                          '평균과 항목별 점수가 여기에 모입니다.',
+                    )
+                  : _Summary(summary: data.summary),
+            ),
             const SizedBox(height: 18),
             const RevealIn(
               index: 1,
@@ -255,6 +293,42 @@ class _ReviewTab extends ConsumerWidget {
               ),
           ],
         ),
+      ),
+    );
+  }
+}
+
+/// What a tab says when there is nothing in it yet: a real district starts
+/// empty, and that should read as a beginning rather than a failure.
+class _EmptyNote extends StatelessWidget {
+  const _EmptyNote({required this.title, required this.detail});
+
+  final String title;
+  final String detail;
+
+  @override
+  Widget build(BuildContext context) {
+    return Padding(
+      padding: const EdgeInsets.symmetric(vertical: AppSpacing.x6),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Text(
+            title,
+            style: AppTextStyles.reading.copyWith(
+              color: AppColors.ink,
+              fontWeight: FontWeight.w700,
+            ),
+          ),
+          const SizedBox(height: AppSpacing.x1),
+          Text(
+            detail,
+            style: AppTextStyles.cardBody.copyWith(
+              color: AppColors.neutral600,
+              height: 1.5,
+            ),
+          ),
+        ],
       ),
     );
   }
@@ -454,9 +528,9 @@ class _ComposeAction extends StatelessWidget {
 /// this is what it is read in, with the warning at the foot where the next
 /// message would land.
 class _ChannelTab extends ConsumerWidget {
-  const _ChannelTab({required this.warning});
+  const _ChannelTab({required this.notice});
 
-  final ContentWarning? warning;
+  final String? notice;
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
@@ -496,6 +570,11 @@ class _ChannelTab extends ConsumerWidget {
             data: (data) => Column(
               crossAxisAlignment: CrossAxisAlignment.stretch,
               children: [
+                if (data.isEmpty)
+                  const _EmptyNote(
+                    title: '아직 메시지가 없습니다.',
+                    detail: '이 지역구 주소 인증 주민이 보낸 메시지가 여기에 쌓입니다.',
+                  ),
                 for (var i = 0; i < data.length; i++)
                   RevealIn(
                     key: ValueKey(data[i].id),
@@ -513,15 +592,13 @@ class _ChannelTab extends ConsumerWidget {
             duration: duration,
             curve: AppMotion.settle,
             alignment: Alignment.topCenter,
-            child: warning == null
+            child: notice == null
                 ? const SizedBox(width: double.infinity)
                 : Padding(
                     padding: const EdgeInsets.only(top: AppSpacing.x4),
                     child: Semantics(
                       liveRegion: true,
-                      child: DisclaimerBox(
-                        text: '${warning!.message} 그대로 보내려면 한 번 더 누르세요.',
-                      ),
+                      child: DisclaimerBox(text: notice!),
                     ),
                   ),
           ),
@@ -753,6 +830,14 @@ class _ThreadTab extends ConsumerWidget {
               ),
             ),
             const SizedBox(height: AppSpacing.x1),
+            if (data.isEmpty)
+              const RevealIn(
+                index: 2,
+                child: _EmptyNote(
+                  title: '아직 열린 토론이 없습니다.',
+                  detail: '현직 의원이 대표발의한 법안이 수집되면 토론이 자동으로 열립니다.',
+                ),
+              ),
             for (var i = 0; i < data.length; i++)
               RevealIn(
                 key: ValueKey(data[i].id),

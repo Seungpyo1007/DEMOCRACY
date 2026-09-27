@@ -4,6 +4,7 @@
 import { createAuth } from "../_shared/auth.ts";
 import { createPostgrest } from "../_shared/postgrest.ts";
 import { PostgrestAccountStore } from "./account_store.ts";
+import { PostgrestCommunityStore } from "./community_store.ts";
 import { createHandler } from "./handler.ts";
 import { PostgrestStore } from "./store.ts";
 
@@ -13,6 +14,7 @@ const db = createPostgrest(fetch, env("SUPABASE_URL"), env("SUPABASE_SERVICE_ROL
 const handler = createHandler({
   store: new PostgrestStore(db),
   accounts: new PostgrestAccountStore(db),
+  community: new PostgrestCommunityStore(db),
   auth: createAuth(
     fetch,
     env("SUPABASE_URL"),
