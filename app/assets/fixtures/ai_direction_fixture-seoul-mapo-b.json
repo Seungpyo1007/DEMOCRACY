@@ -1,5 +1,5 @@
 {
-  "_note": "Sample direction analysis. Not a real model run, not real bill counts or issue mentions, and not an evaluation of any candidate or legislator.",
+  "_note": "Sample direction analysis. The stances and issues stand in for a model run that does not exist; the trend has the shape the BFF computes from bill committees (no model), with made-up counts. Not real bill counts or issue mentions, and not an evaluation of any candidate or legislator.",
   "generatedAt": "2026-07-30T09:00:00Z",
   "stances": {
     "axes": {
@@ -43,13 +43,16 @@
     "fromTerm": "21대",
     "toTerm": "22대",
     "billCount": 31,
+    "fromCount": 13,
+    "toCount": 18,
+    "excludedCount": 2,
     "fields": [
-      { "label": "교통", "from": 38, "to": 22 },
-      { "label": "주거", "from": 20, "to": 34 },
-      { "label": "복지", "from": 18, "to": 20 },
-      { "label": "기타", "from": 24, "to": 24 }
+      { "label": "복지·보건", "from": 15.4, "to": 33.3 },
+      { "label": "교육·문화", "from": 23.1, "to": 22.2 },
+      { "label": "국토·교통", "from": 38.5, "to": 22.2 },
+      { "label": "기타", "from": 23.1, "to": 22.2 }
     ],
-    "summary": "21대에는 교통 법안 비중이 가장 컸고, 22대에는 주거 법안 비중이 가장 큽니다. 복지 분야 비중은 비슷하게 유지됐습니다.",
+    "summary": "21대에는 국토·교통 분야 법안 비중이 가장 컸고(38%), 22대에는 복지·보건 분야 비중이 가장 큽니다(33%).",
     "source": {
       "sourceUrl": "https://open.assembly.go.kr/fixture/legislator-1/bills",
       "fetchedAt": "2026-07-30T09:00:00Z"

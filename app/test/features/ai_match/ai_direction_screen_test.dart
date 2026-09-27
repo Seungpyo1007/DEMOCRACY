@@ -2,12 +2,14 @@ import 'package:democracy/src/app/app_routes.dart';
 import 'package:democracy/src/core/auth/address_controller.dart';
 import 'package:democracy/src/core/auth/address_state.dart';
 import 'package:democracy/src/core/auth/address_store.dart';
+import 'package:democracy/src/core/network/not_available.dart';
 import 'package:democracy/src/design/app_theme.dart';
 import 'package:democracy/src/design/components/editorial.dart';
 import 'package:democracy/src/features/ai_match/application/direction_providers.dart';
 import 'package:democracy/src/features/ai_match/application/match_providers.dart';
 import 'package:democracy/src/features/ai_match/data/fake_direction_repository.dart';
 import 'package:democracy/src/features/ai_match/data/fake_match_repository.dart';
+import 'package:democracy/src/features/ai_match/domain/direction_report.dart';
 import 'package:democracy/src/features/ai_match/presentation/ai_direction_screen.dart';
 import 'package:democracy/src/features/ai_match/presentation/ai_disclosure.dart';
 import 'package:democracy/src/features/ai_match/presentation/ai_match_screen.dart';
@@ -29,6 +31,7 @@ void main() {
   Future<void> pumpDirection(
     WidgetTester tester, {
     TargetPlatform platform = TargetPlatform.android,
+    DirectionRepository? repository,
   }) async {
     tester.view.physicalSize = const Size(390, 844);
     tester.view.devicePixelRatio = 1.0;
@@ -44,7 +47,8 @@ void main() {
           ),
         ),
         directionRepositoryProvider.overrideWithValue(
-          FakeDirectionRepository(loader: fixtureLoaderFromDisk()),
+          repository ??
+              FakeDirectionRepository(loader: fixtureLoaderFromDisk()),
         ),
       ],
     );
@@ -106,8 +110,9 @@ void main() {
         expect(find.text('01 후보 정책 성향', findRichText: true), findsOneWidget);
 
         await scrollTo(tester, find.text('02 의원 행보 추세', findRichText: true));
-        expect(find.textContaining('주거 법안 비중이 가장 큽니다'), findsOneWidget);
-        expect(find.text('발의 법안 31건 · AI 요약'), findsOneWidget);
+        await scrollTo(tester, find.text(trendBasis));
+        expect(find.textContaining('복지·보건 분야 비중이 가장 큽니다'), findsOneWidget);
+        expect(find.text('21대 13건 · 22대 18건 · 위원회 미정 2건 제외'), findsOneWidget);
 
         await scrollTo(tester, find.text('03 지역 쟁점 흐름', findRichText: true));
         await scrollTo(tester, find.text('언급 많은 순, 좋고 나쁨 아님'));
@@ -183,14 +188,15 @@ void main() {
   });
 
   group('the disclosure', () {
-    // All three sections are model output, so each is marked where it opens.
+    // The stances and issues are model output, so each is marked where it
+    // opens. The bill trend is a count and is not.
     for (final platform in [TargetPlatform.iOS, TargetPlatform.android]) {
       testWidgets('${platform.name}: labels every AI-derived section', (
         tester,
       ) async {
         await pumpDirection(tester, platform: platform);
 
-        for (final header in ['01 후보 정책 성향', '02 의원 행보 추세', '03 지역 쟁점 흐름']) {
+        for (final header in ['01 후보 정책 성향', '03 지역 쟁점 흐름']) {
           final finder = find.text(header, findRichText: true);
           await scrollTo(tester, finder);
           final row = find.ancestor(
@@ -206,6 +212,28 @@ void main() {
         expect(tester.takeException(), isNull);
       });
     }
+
+    testWidgets('does not call the bill trend AI', (tester) async {
+      await pumpDirection(tester);
+
+      await scrollTo(tester, find.text('02 의원 행보 추세', findRichText: true));
+      await scrollTo(tester, find.text(trendBasis));
+      final trend = find.ancestor(
+        of: find.text(trendBasis),
+        matching: _trendSection,
+      );
+      expect(trend, findsOneWidget);
+
+      expect(
+        find.descendant(of: trend, matching: find.byType(AiReferenceLabel)),
+        findsNothing,
+      );
+      expect(
+        find.descendant(of: trend, matching: find.textContaining('AI')),
+        findsNothing,
+      );
+      expect(find.text(trendBasis), findsOneWidget);
+    });
 
     // iOS, where no app bar brings a persistent header of its own.
     testWidgets('no longer pins a band over the analysis', (tester) async {
@@ -242,6 +270,66 @@ void main() {
     }
   });
 
+  // What a live build gets today: the bill count, and nothing model-derived.
+  group('trend only', () {
+    for (final platform in [TargetPlatform.iOS, TargetPlatform.android]) {
+      testWidgets('${platform.name}: draws the trend, 준비 중 for the rest', (
+        tester,
+      ) async {
+        await pumpDirection(
+          tester,
+          platform: platform,
+          repository: _StaticDirection(_trendOnly()),
+        );
+
+        expect(find.text('01 후보 정책 성향', findRichText: true), findsOneWidget);
+        expect(find.text('후보 공약 문구의 정책 성향 분석은 아직 준비 중입니다.'), findsOneWidget);
+        expect(find.text('02 의원 행보 추세', findRichText: true), findsOneWidget);
+        await scrollTo(tester, find.text(trendBasis));
+        expect(find.text('가상 의원 · 대표발의 비중'), findsOneWidget);
+        expect(find.text('21대 0건 · 22대 3건'), findsOneWidget);
+        expect(find.bySemanticsLabel(RegExp('국토·교통 집계 없음에서 100%')), findsOne);
+        await scrollTo(tester, find.text('지역 쟁점 흐름 분석은 아직 준비 중입니다.'));
+
+        // Nothing on the page is AI output, so nothing is labelled as such,
+        // and nothing asked for the disclosure scope and failed.
+        expect(find.byType(AiReferenceLabel), findsNothing);
+        expect(tester.takeException(), isNull);
+      });
+    }
+  });
+
+  group('nothing', () {
+    testWidgets('an empty report says 준비 중 under every header', (tester) async {
+      await pumpDirection(
+        tester,
+        repository: _StaticDirection(
+          const DirectionReport(
+            stances: null,
+            trend: null,
+            issues: null,
+            generatedAt: null,
+          ),
+        ),
+      );
+
+      expect(find.text('후보 공약 문구의 정책 성향 분석은 아직 준비 중입니다.'), findsOneWidget);
+      expect(find.text('현직 의원의 대표발의 법안 집계는 아직 준비 중입니다.'), findsOneWidget);
+      expect(find.text('지역 쟁점 흐름 분석은 아직 준비 중입니다.'), findsOneWidget);
+      expect(find.byType(AiReferenceLabel), findsNothing);
+      expect(find.byType(SourceBadge), findsNothing);
+    });
+
+    testWidgets('a district with no data at all is 준비 중, not an error', (
+      tester,
+    ) async {
+      await pumpDirection(tester, repository: const _UnavailableDirection());
+
+      expect(find.text('이 지역구의 방향 분석은 아직 준비 중입니다.'), findsOneWidget);
+      expect(find.text('분석 결과를 불러오지 못했습니다.'), findsNothing);
+    });
+  });
+
   testWidgets('switches to the candidate match', (tester) async {
     await pumpDirection(tester);
 
@@ -251,6 +339,53 @@ void main() {
     expect(find.text('나에게 유리한 후보는?'), findsWidgets);
     expect(find.text('어디로 향하고 있나'), findsNothing);
   });
+}
+
+final _trendSection = find.byWidgetPredicate(
+  (widget) => widget.runtimeType.toString() == '_TrendSection',
+);
+
+/// A member first elected in the 22대: no 21대 point at all.
+DirectionReport _trendOnly() => DirectionReport.fromJson({
+  'trend': {
+    'legislatorName': '가상 의원',
+    'fromTerm': '21대',
+    'toTerm': '22대',
+    'billCount': 3,
+    'fromCount': 0,
+    'toCount': 3,
+    'excludedCount': 0,
+    'fields': [
+      {'label': '국토·교통', 'from': null, 'to': 100},
+    ],
+    'summary':
+        '22대에는 국토·교통 분야 법안 비중이 가장 큽니다(100%). '
+        '21대에는 집계된 대표발의 법안이 없습니다.',
+    'source': {
+      'sourceUrl':
+          'https://open.assembly.go.kr/portal/data/service/selectAPIServicePage.do/OK7XM1000938DS17215',
+      'fetchedAt': '2026-09-24T03:00:00.000Z',
+    },
+  },
+  'stances': null,
+  'issues': null,
+});
+
+class _StaticDirection implements DirectionRepository {
+  const _StaticDirection(this.report);
+
+  final DirectionReport report;
+
+  @override
+  Future<DirectionReport> loadReport(String districtId) async => report;
+}
+
+class _UnavailableDirection implements DirectionRepository {
+  const _UnavailableDirection();
+
+  @override
+  Future<DirectionReport> loadReport(String districtId) =>
+      Future.error(const NotAvailableException('direction'));
 }
 
 /// A toolbar action by its label: the Material tooltip on Android, the glass

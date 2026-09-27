@@ -149,6 +149,10 @@ class PolicyStances {
 }
 
 /// One policy field's share of the incumbent's bills in two terms.
+///
+/// A share is null when that term has no counted bills at all -- a member
+/// first elected in the later term has no earlier point, which is not the
+/// same as having 0% of their bills in this field.
 class FieldShare {
   const FieldShare({required this.label, required this.from, required this.to});
 
@@ -160,27 +164,37 @@ class FieldShare {
     final label = json['label'];
     final from = json['from'];
     final to = json['to'];
-    if (label is! String || label.isEmpty || from is! num || to is! num) {
-      throw const FormatException('A field share needs a label and two terms.');
+    if (label is! String ||
+        label.isEmpty ||
+        (from != null && from is! num) ||
+        (to != null && to is! num) ||
+        (from == null && to == null)) {
+      throw const FormatException(
+        'A field share needs a label and a share in at least one term.',
+      );
     }
 
     return FieldShare(
       label: label,
-      from: from.toDouble().clamp(0, 100),
-      to: to.toDouble().clamp(0, 100),
+      from: (from as num?)?.toDouble().clamp(0, 100),
+      to: (to as num?)?.toDouble().clamp(0, 100),
     );
   }
 
   final String label;
 
-  /// Percent of bills in the earlier term.
-  final double from;
+  /// Percent of bills in the earlier term, or null with none counted.
+  final double? from;
 
-  /// Percent of bills in the later term.
-  final double to;
+  /// Percent of bills in the later term, or null with none counted.
+  final double? to;
 }
 
-/// 02 -- how the incumbent's bills have shifted between terms.
+/// 02 -- how the incumbent's bills split across fields in two terms.
+///
+/// A count, not model output: each bill's field is the committee it was
+/// referred to, read through a fixed table on the server, and [summary] is a
+/// template over the numbers. The screen draws it without the AI label.
 class LegislatorTrend {
   const LegislatorTrend({
     required this.legislatorName,
@@ -190,6 +204,9 @@ class LegislatorTrend {
     required this.fields,
     required this.summary,
     required this.source,
+    this.fromCount,
+    this.toCount,
+    this.excludedCount,
   });
 
   factory LegislatorTrend.fromJson(Object? json) {
@@ -212,6 +229,17 @@ class LegislatorTrend {
       );
     }
 
+    int? count(String key) {
+      final value = json[key];
+      if (value == null) {
+        return null;
+      }
+      if (value is! int || value < 0) {
+        throw FormatException('"$key" must be a count.');
+      }
+      return value;
+    }
+
     final raw = json['fields'];
 
     return LegislatorTrend(
@@ -219,6 +247,9 @@ class LegislatorTrend {
       fromTerm: fromTerm,
       toTerm: toTerm,
       billCount: billCount,
+      fromCount: count('fromCount'),
+      toCount: count('toCount'),
+      excludedCount: count('excludedCount'),
       fields: List.unmodifiable([
         if (raw is List)
           for (final field in raw) FieldShare.fromJson(field),
@@ -232,21 +263,37 @@ class LegislatorTrend {
   final String fromTerm;
   final String toTerm;
 
-  /// How many bills the shares were counted from.
+  /// How many bills the shares were counted from, both terms together.
   final int billCount;
+
+  /// Bills counted in each term, where the payload says.
+  final int? fromCount;
+  final int? toCount;
+
+  /// Bills left out because no committee had been assigned to them yet.
+  final int? excludedCount;
 
   final List<FieldShare> fields;
 
-  /// The model's description of the shift. Descriptive only (N-5): it says
-  /// which share grew, never whether that was the right thing to do.
+  /// Which field had the largest share in each term, as a sentence built
+  /// from the numbers. Descriptive only (N-5): it says which share was
+  /// largest, never whether that was the right thing to do.
   final String summary;
 
   final SourceMetadata source;
 
-  /// The field with the largest share in the later term -- the one line the
-  /// chart sets in ink, because it is the one the summary names.
-  FieldShare? get leading =>
-      fields.isEmpty ? null : fields.reduce((a, b) => b.to > a.to ? b : a);
+  /// The field with the largest share in the later term (or, with no later
+  /// bills, the earlier one) -- the one line the chart sets in ink, because
+  /// it is the one the summary names.
+  FieldShare? get leading {
+    if (fields.isEmpty) {
+      return null;
+    }
+    final byLater = fields.any((field) => field.to != null);
+    double share(FieldShare field) =>
+        (byLater ? field.to : field.from) ?? double.negativeInfinity;
+    return fields.reduce((a, b) => share(b) > share(a) ? b : a);
+  }
 }
 
 /// Which way a local issue's mentions have gone over the period.
@@ -377,6 +424,12 @@ class IssueFlow {
 }
 
 /// The whole direction analysis for one district.
+///
+/// Each block stands alone: null (or absent) means that block is not
+/// available for this district, and the screen shows it as 준비 중 while the
+/// others render. A block that is present still has to parse in full,
+/// provenance included. A live build gets [trend] only; the other two are
+/// model output and nothing produces them yet.
 class DirectionReport {
   const DirectionReport({
     required this.stances,
@@ -388,20 +441,28 @@ class DirectionReport {
   factory DirectionReport.fromJson(Map<String, Object?> json) {
     final generated = json['generatedAt'];
 
+    T? optional<T>(String key, T Function(Object? json) parse) {
+      final value = json[key];
+      return value == null ? null : parse(value);
+    }
+
     return DirectionReport(
-      stances: PolicyStances.fromJson(json['stances']),
-      trend: LegislatorTrend.fromJson(json['trend']),
-      issues: IssueFlow.fromJson(json['issues']),
+      stances: optional('stances', PolicyStances.fromJson),
+      trend: optional('trend', LegislatorTrend.fromJson),
+      issues: optional('issues', IssueFlow.fromJson),
       generatedAt: generated is String
           ? DateTime.tryParse(generated)?.toUtc()
           : null,
     );
   }
 
-  final PolicyStances stances;
-  final LegislatorTrend trend;
-  final IssueFlow issues;
+  final PolicyStances? stances;
+  final LegislatorTrend? trend;
+  final IssueFlow? issues;
   final DateTime? generatedAt;
+
+  /// True when no block has anything to show.
+  bool get isEmpty => stances == null && trend == null && issues == null;
 }
 
 abstract interface class DirectionRepository {
