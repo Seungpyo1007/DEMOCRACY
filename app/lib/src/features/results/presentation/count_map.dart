@@ -35,6 +35,16 @@ class CountMap extends StatelessWidget {
   final ValueChanged<DistrictCount> onSelected;
   final double tileHeight;
 
+  /// Above this many tiles the grid goes to three shorter columns, so a 시도
+  /// of sixty districts is a couple of screens rather than ten.
+  static const denseAbove = 12;
+
+  /// The 시도 a district is filed under: the first word of its name, '서울'
+  /// in '서울 마포구 을'. The screen shows one 시도 at a time when a payload
+  /// spans several.
+  static String regionOf(DistrictCount district) =>
+      district.districtName.split(' ').first;
+
   /// Light where little is counted, dark where most is. A single-hue ramp,
   /// because two hues would read as two sides.
   static Color shadeFor(double countedFraction) {
@@ -66,6 +76,9 @@ class CountMap extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final dense = districts.length > denseAbove;
+    final columns = dense ? 3 : 2;
+
     return Column(
       crossAxisAlignment: CrossAxisAlignment.stretch,
       mainAxisSize: MainAxisSize.min,
@@ -76,7 +89,8 @@ class CountMap extends StatelessWidget {
             padding: const EdgeInsets.all(2),
             child: LayoutBuilder(
               builder: (context, constraints) {
-                final width = (constraints.maxWidth - 2) / 2;
+                final width =
+                    (constraints.maxWidth - 2 * (columns - 1)) / columns;
                 return Wrap(
                   spacing: 2,
                   runSpacing: 2,
@@ -84,10 +98,11 @@ class CountMap extends StatelessWidget {
                     for (var i = 0; i < districts.length; i++)
                       SizedBox(
                         width: width,
-                        height: tileHeight,
+                        height: dense ? tileHeight * 0.75 : tileHeight,
                         child: _DistrictTile(
                           district: districts[i],
                           index: i,
+                          dense: dense,
                           selected: districts[i].districtId == selectedId,
                           home: districts[i].districtId == homeId,
                           onTap: () => onSelected(districts[i]),
@@ -110,6 +125,7 @@ class _DistrictTile extends StatelessWidget {
   const _DistrictTile({
     required this.district,
     required this.index,
+    required this.dense,
     required this.selected,
     required this.home,
     required this.onTap,
@@ -117,6 +133,7 @@ class _DistrictTile extends StatelessWidget {
 
   final DistrictCount district;
   final int index;
+  final bool dense;
   final bool selected;
   final bool home;
   final VoidCallback onTap;
@@ -168,7 +185,9 @@ class _DistrictTile extends StatelessWidget {
                         : null,
                   ),
                   child: Padding(
-                    padding: const EdgeInsets.all(AppSpacing.x3),
+                    padding: EdgeInsets.all(
+                      dense ? AppSpacing.x2 : AppSpacing.x3,
+                    ),
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -182,7 +201,7 @@ class _DistrictTile extends StatelessWidget {
                                 overflow: TextOverflow.ellipsis,
                                 style: AppTextStyles.ctaSmall.copyWith(
                                   color: label,
-                                  fontSize: 13,
+                                  fontSize: dense ? 12 : 13,
                                 ),
                               ),
                             ),
@@ -196,7 +215,7 @@ class _DistrictTile extends StatelessWidget {
                           '${(shown * 100).round()}%',
                           style: AppTextStyles.figureSmall.copyWith(
                             color: label,
-                            fontSize: 22,
+                            fontSize: dense ? 18 : 22,
                           ),
                         ),
                       ],

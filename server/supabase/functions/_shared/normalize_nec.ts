@@ -1,6 +1,7 @@
 // Field mapping for 선관위 items. The only file that knows NEC field names.
 // Field names taken from the NEC open-data portal docs (data.nec.go.kr) and
-// data.go.kr dataset pages, 2026-09-24. Not yet checked against a keyed call.
+// data.go.kr dataset pages, 2026-09-24. Not yet checked against a keyed call,
+// except the 개표 fields read by normalizeCount (see testdata/README.md).
 
 import {
   districtIdFor,
@@ -213,6 +214,90 @@ export function normalizeCandidate(
     career2: short(str(item.career2)),
     source_url: SOURCES.necCandidates.url,
     publisher: SOURCES.necCandidates.publisher,
+    fetched_at: fetchedAt,
+  };
+}
+
+export interface CountCandidate {
+  name: string;
+  party: string | null;
+  votes: number;
+}
+
+export interface DistrictCountRow {
+  sg_id: string;
+  sg_typecode: number;
+  sd_name: string;
+  sgg_name: string;
+  name_key: string;
+  /** Set by the ingest for the 22대 only, whose 선거구 are the districts table. */
+  district_id: string | null;
+  electorate: number | null;
+  turnout: number | null;
+  valid_votes: number;
+  invalid_votes: number | null;
+  abstentions: number | null;
+  candidates: CountCandidate[];
+  counted_share: number;
+  source_url: string;
+  publisher: string;
+  fetched_at: string;
+}
+
+/** 후보자 slots on a 개표 row: hbj01..hbj50, jd01..jd50, dugsu01..dugsu50. */
+const COUNT_SLOTS = 50;
+/** wiwName of the row that totals a 선거구 across its 구시군. */
+export const COUNT_TOTAL_ROW = "합계";
+
+/**
+ * getXmntckSttusInfoInqire (투·개표 정보, 개표현황): one row per 선거구 and
+ * 구시군, plus the 선거구's own total, whose wiwName is "합계". Only that total
+ * is kept: sunsu (선거인수), tusu (투표수), yutusu (유효투표수), mutusu
+ * (무효투표수), gigwonsu (기권수), and per slot NN the 후보자 hbjNN, the party
+ * jdNN and the votes dugsuNN. Unused slots are empty strings.
+ *
+ * `counted_share` is 100: the ingest refuses an election whose day has not
+ * passed, so every row it stores is a finished count.
+ */
+export function normalizeCount(
+  item: NecItem,
+  request: { sgId: string; sgTypecode: number },
+  fetchedAt: string,
+): DistrictCountRow | null {
+  if (str(item.wiwName) !== COUNT_TOTAL_ROW) return null;
+  const sgId = str(item.sgId) ?? request.sgId;
+  const type = num(item.sgTypecode) ?? request.sgTypecode;
+  const sdName = str(item.sdName);
+  const sggName = str(item.sggName);
+  const valid = num(item.yutusu);
+  if (!sdName || !sggName || sggName === COUNT_TOTAL_ROW || valid === null || valid <= 0) {
+    return null;
+  }
+  const candidates: CountCandidate[] = [];
+  for (let i = 1; i <= COUNT_SLOTS; i++) {
+    const nn = String(i).padStart(2, "0");
+    const name = str(item[`hbj${nn}`]);
+    const votes = num(item[`dugsu${nn}`]);
+    if (!name || votes === null) continue;
+    candidates.push({ name, party: str(item[`jd${nn}`]), votes });
+  }
+  if (candidates.length === 0) return null;
+  return {
+    sg_id: sgId,
+    sg_typecode: type,
+    sd_name: sdName,
+    sgg_name: sggName.replace(/\s+/g, ""),
+    name_key: districtNameKey(sdName, sggName),
+    district_id: null,
+    electorate: num(item.sunsu),
+    turnout: num(item.tusu),
+    valid_votes: valid,
+    invalid_votes: num(item.mutusu),
+    abstentions: num(item.gigwonsu),
+    candidates,
+    counted_share: 100,
+    source_url: SOURCES.necCounts.url,
+    publisher: SOURCES.necCounts.publisher,
     fetched_at: fetchedAt,
   };
 }

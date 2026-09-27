@@ -106,9 +106,10 @@
 - **fixture가 곧 계약이다.** BFF의 `data`는 `assets/fixtures/*.json`과 같은 모양이다(`_note`만 뺀다). `test/core/network/remote_repositories_test.dart`가 각 fixture를 envelope에 싸서 remote 리포지토리로 파싱한다. fixture 모양을 바꾸면 서버도 바꿔야 한다.
 - envelope: `{servedAt, data}` / `{servedAt, error:{code,message}}`. `not_found`·`not_curated`는 `NotAvailableException`이 되고 화면은 "준비 중"을 보인다(재시도 없음). 샘플 데이터로 대신 채우지 않는다.
 - 켜는 법: `flutter run --dart-define=BFF_URL=https://<ref>.supabase.co/functions/v1/bff --dart-define=BFF_ANON_KEY=<anon>`. 없으면 지금처럼 전부 fixture이고, 테스트·골든도 fixture로 돈다(`lib/src/app/live_data.dart`).
-- 실데이터: 지역구 프로필, 역사, 주소 검색, 위치 → 지역구, 공약(큐레이션된 지역구만), 주민 평가·지역 채팅·정책 토론. AI·개표는 BFF 모드에서 "준비 중"이다.
+- 실데이터: 지역구 프로필, 역사, 주소 검색, 위치 → 지역구, 공약(큐레이션된 지역구만), 개표(22대 최종 결과, `/districts/{id}/results`), 주민 평가·지역 채팅·정책 토론. AI는 BFF 모드에서 "준비 중"이다.
+- 개표는 선거 없는 기간이라 `electionSchedule: null`, `live: false`, `polls: []`로 옴. 한 번 받고 끝(`RemoteResultsRepository`). 254개 지역구가 오므로 지도는 시도 칩으로 한 시도씩 보여 주고, 13개 넘으면 3열로 줄인다. 선거 기간 SSE/폴링과 서버 쪽 공표 차단은 아직 없음.
 - 평가·채팅·토론은 처음엔 비어 있다. 빈 상태는 "아직 올라온 평가가 없습니다" 같은 안내로 보이고 0.0 평균은 그리지 않는다. 토론 스레드는 현직 의원 대표발의 법안에서 서버가 연다(`sync_bill_threads`). 채팅은 소켓이 없어 열 때와 보낸 뒤에만 다시 읽는다.
-- 캐시: 프로필·역사·공약만 마지막 응답을 보관해 오프라인에 보여 준다. 각 수치의 `fetchedAt`이 배지에 찍히므로 별도 stale 표시는 두지 않았다. 주소 질의와 좌표는 캐시하지 않는다.
+- 캐시: 프로필·역사·공약·개표(최종 결과라서)만 마지막 응답을 보관해 오프라인에 보여 준다. 각 수치의 `fetchedAt`이 배지에 찍히므로 별도 stale 표시는 두지 않았다. 주소 질의와 좌표는 캐시하지 않는다.
 - `LegislatorRecord.attendance`·`votes`는 선택 필드가 됐다. 본회의 출결은 API가 아니라 회기별 파일이라 없을 수 있다.
 - `servedAt`은 `BffResponse`까지 온다. `ServerAnchoredClock`은 아직 만들지 않았다.
 - 국회의원 공약은 API가 없다(선관위 공약 API는 대통령·단체장·교육감만). 선거공보 PDF에서 손으로 입력한다.

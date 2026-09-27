@@ -21,7 +21,7 @@ import 'package:democracy/src/features/onboarding/data/remote_address_repositori
 import 'package:democracy/src/features/pledges/application/pledge_providers.dart';
 import 'package:democracy/src/features/pledges/data/remote_pledge_repository.dart';
 import 'package:democracy/src/features/results/application/results_providers.dart';
-import 'package:democracy/src/features/results/domain/election_results.dart';
+import 'package:democracy/src/features/results/data/remote_results_repository.dart';
 import 'package:democracy/src/features/reviews/application/review_providers.dart';
 import 'package:democracy/src/features/reviews/data/remote_review_repository.dart';
 import 'package:flutter/foundation.dart';
@@ -29,8 +29,8 @@ import 'package:flutter_riverpod/misc.dart';
 
 /// Every override a build with a BFF needs, or none without one.
 ///
-/// Features with a live source read it. The rest -- AI and results -- are
-/// still fixture-only, and a fixture keyed to a sample district has
+/// Features with a live source read it. The rest -- AI -- are still
+/// fixture-only, and a fixture keyed to a sample district has
 /// nothing to say about a real one: they answer NotAvailableException, which
 /// the screens show as 준비 중, rather than show sample candidates under a
 /// real district's name.
@@ -76,7 +76,9 @@ List<Override> liveDataOverrides(BffConfig? config) {
     directionRepositoryProvider.overrideWithValue(
       const _UnavailableDirection(),
     ),
-    resultsRepositoryProvider.overrideWithValue(const _UnavailableResults()),
+    resultsRepositoryProvider.overrideWithValue(
+      RemoteResultsRepository(client),
+    ),
     reviewRepositoryProvider.overrideWithValue(RemoteReviewRepository(client)),
     communityRepositoryProvider.overrideWithValue(
       RemoteCommunityRepository(client),
@@ -143,12 +145,4 @@ class _UnavailableDirection implements DirectionRepository {
   @override
   Future<DirectionReport> loadReport(String districtId) =>
       Future.error(const NotAvailableException('ai direction'));
-}
-
-class _UnavailableResults implements ResultsRepository {
-  const _UnavailableResults();
-
-  @override
-  Stream<RawElectionResults> watch(String districtId) =>
-      Stream.error(const NotAvailableException('results'));
 }

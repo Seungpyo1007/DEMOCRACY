@@ -1,5 +1,5 @@
 // BFF router. Paths (after /functions/v1/bff):
-//   GET /districts/{id}/profile | /history | /pledges
+//   GET /districts/{id}/profile | /history | /pledges | /results
 //   GET /address/search?q=
 //   GET /location/district?lat=&lng=
 //   /me/... (account routes, signed-in only; see account.ts)
@@ -23,6 +23,7 @@ import { type CommunityContext, handleCommunity } from "./community.ts";
 import type { CommunityStore } from "./community_store.ts";
 import { buildHistory, buildPledges, buildProfile } from "./builders.ts";
 import { districtForPlace, suggestionsFor } from "./mapping.ts";
+import { buildResults } from "./results.ts";
 import { handleResidency, type ResidencyContext } from "./residency.ts";
 import type { ReadStore } from "./store.ts";
 
@@ -98,7 +99,7 @@ export function createHandler(deps: BffDeps): (req: Request) => Promise<Response
       if (posted !== null) return respond(posted.data, posted.cache);
       if (req.method !== "GET") throw new ApiError("bad_request", "Only GET is supported.");
 
-      const district = /^\/districts\/([^/]+)\/(profile|history|pledges)$/.exec(path);
+      const district = /^\/districts\/([^/]+)\/(profile|history|pledges|results)$/.exec(path);
       if (district) {
         const [, id, what] = district;
         if (!isDistrictId(id)) throw new ApiError("bad_request", "Malformed district id.");
@@ -106,6 +107,9 @@ export function createHandler(deps: BffDeps): (req: Request) => Promise<Response
           return respond(await buildProfile(deps.store, id, now()), PROFILE_CACHE);
         }
         if (what === "history") return respond(await buildHistory(deps.store, id), PROFILE_CACHE);
+        // A final count, so the public cache is safe. A live count will need a
+        // short max-age and must never be cached across pollsClose.
+        if (what === "results") return respond(await buildResults(deps.store, id), PROFILE_CACHE);
         return respond(await buildPledges(deps.store, id), PROFILE_CACHE);
       }
 
