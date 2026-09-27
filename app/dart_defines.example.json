@@ -1,0 +1,4 @@
+{
+  "BFF_URL": "https://<project-ref>.supabase.co/functions/v1/bff",
+  "BFF_ANON_KEY": "<anon key>"
+}
