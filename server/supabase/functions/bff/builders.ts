@@ -198,6 +198,8 @@ export async function buildProfile(store: ReadStore, id: string, now: Date) {
     ]);
 
   const stats: { label: string; unit: string; value: SourcedNumber }[] = [];
+  // 출석률 = 출석 ÷ 회의일수, the source's own two columns (「국회의원 본회의 출결현황」).
+  // 결석 / 청가 / 출장 / 결석신고서 are all counted as not 출석, as the source counts them.
   if (attendanceTotal && attendanceTotal.denominator > 0) {
     const v = sourcedNumber(
       round1((attendanceTotal.numerator / attendanceTotal.denominator) * 100),

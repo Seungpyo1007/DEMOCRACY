@@ -16,21 +16,21 @@ Reading needs no account; the account routes need a Supabase Auth sign-in.
 
 ## Layout
 
-| Path                                                       | What                                                                                                                      |
-| ---------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------- |
-| `supabase/migrations/20260924000000_init.sql`              | Schema, RLS, BFF SQL helpers, purge functions, cron schedules                                                             |
-| `supabase/migrations/20260926000000_accounts.sql`          | Profiles, consents, 활동명 offers, residency; account SQL functions; orphan-login purge                                   |
-| `supabase/migrations/20260927000000_community.sql`         | Reviews, channel messages, bill threads and replies; write functions (residency, rate limit); thread sync                 |
-| `supabase/migrations/20260927120000_district_counts.sql`   | Final 개표 per 선거구 per election (`district_counts`)                                                                    |
-| `supabase/migrations/20260927130000_pledge_not_judged.sql` | Pledge status `notJudged` (「판정 전」), which may carry no evidence, judgement or bills                                  |
-| `supabase/seed.sql`                                        | **Sample** 마포구 갑/을 + 종로구 district mapping, generated from `testdata/`. Not verified against [별표 1].             |
-| `supabase/functions/_shared/`                              | API clients, normalizers (one per source), envelope, provenance, PostgREST client                                         |
-| `supabase/functions/ingest-assembly/`                      | Members (daily), bills and plenary votes (every 6 h), 21대 bills (`?mode=bills_backfill&age=21`)                          |
-| `supabase/functions/ingest-nec/`                           | Election and district codes and candidates (weekly), historical winners (`?mode=backfill`), final counts (`?mode=counts`) |
-| `supabase/functions/bff/`                                  | The API. `contract.ts` mirrors the app's Dart parsers. `account.ts`, `residency.ts`: signed-in. `community.ts`: posts.    |
-| `scripts/`                                                 | One-off importers that write SQL to stdout; `build_district_areas.ts` builds the mapping CSV                              |
-| `data/`                                                    | Inputs kept in git: the 22대 district mapping; `pledges_22/`, pilot pledge lists from 선거공보                            |
-| `testdata/`                                                | Hand-written API samples and district-mapping samples. See `testdata/README.md`.                                          |
+| Path                                                       | What                                                                                                                          |
+| ---------------------------------------------------------- | ----------------------------------------------------------------------------------------------------------------------------- |
+| `supabase/migrations/20260924000000_init.sql`              | Schema, RLS, BFF SQL helpers, purge functions, cron schedules                                                                 |
+| `supabase/migrations/20260926000000_accounts.sql`          | Profiles, consents, 활동명 offers, residency; account SQL functions; orphan-login purge                                       |
+| `supabase/migrations/20260927000000_community.sql`         | Reviews, channel messages, bill threads and replies; write functions (residency, rate limit); thread sync                     |
+| `supabase/migrations/20260927120000_district_counts.sql`   | Final 개표 per 선거구 per election (`district_counts`)                                                                        |
+| `supabase/migrations/20260927130000_pledge_not_judged.sql` | Pledge status `notJudged` (「판정 전」), which may carry no evidence, judgement or bills                                      |
+| `supabase/seed.sql`                                        | **Sample** 마포구 갑/을 + 종로구 district mapping, generated from `testdata/`. Not verified against [별표 1].                 |
+| `supabase/functions/_shared/`                              | API clients, normalizers (one per source), envelope, provenance, PostgREST client                                             |
+| `supabase/functions/ingest-assembly/`                      | Members (daily), bills and plenary votes (every 6 h), 21대 bills (`?mode=bills_backfill&age=21`)                              |
+| `supabase/functions/ingest-nec/`                           | Election and district codes and candidates (weekly), historical winners (`?mode=backfill`), final counts (`?mode=counts`)     |
+| `supabase/functions/bff/`                                  | The API. `contract.ts` mirrors the app's Dart parsers. `account.ts`, `residency.ts`: signed-in. `community.ts`: posts.        |
+| `scripts/`                                                 | One-off importers that write SQL to stdout; `build_district_areas.ts` builds the mapping CSV                                  |
+| `data/`                                                    | Inputs kept in git: the 22대 district mapping; `pledges_22/`, pilot pledge lists from 선거공보; `attendance_22/`, 본회의 출결 |
+| `testdata/`                                                | Hand-written API samples and district-mapping samples. See `testdata/README.md`.                                              |
 
 ## Develop
 
@@ -77,7 +77,13 @@ text) and `rate_limited` (429).
   - A district with no sourced incumbent gets `404 not_found`, never a partial payload.
   - Every response is checked for keyed URLs (`KEY=`, `ServiceKey=`, `confmKey=`) before it is sent.
 - **Figures.** Every figure is descriptive:
-  - 출석률 = meetings with status 출석 ÷ meetings on record since 2024-05-30.
+  - 출석률 = 본회의 marked 출석 ÷ 본회의 held while the person was a member, since 2024-05-30 (the
+    monthly series is the same per calendar month). These are the source's own two columns, 회의일수
+    and 출석, in 국회사무처's 「국회의원 본회의 출결현황」. 결석, 청가 (청가서 filed, 국회법
+    제32조), 출장 and 결석신고서 (결석신고서 filed, same article) are all "not 출석": the source
+    counts each apart from 출석 and publishes no rate, so none of them is re-labelled as attended. A
+    sitting held before a member took office (승계, 보궐) or after they left is not in their
+    회의일수 and has no row.
   - votes = monthly share of the member's recorded plenary votes that are not 불참.
   - 발의 법안 = bills where the member is 대표발의자 (`RST_MONA_CD`).
   - 공약 이행 = fulfilled ÷ judged pledges. A `notJudged` (「판정 전」) pledge counts on neither
@@ -300,8 +306,31 @@ write function.
    - Spot-check addresses in split 구 (마포, 강서, 광주 서구, 화성 동탄구, 인천 영종구).
    - Do **not** push `seed.sql` to production. It is an unverified sample.
 7. **Run the other imports as needed.** Each prints SQL. Apply it with psql.
-   - `import_attendance.ts`: 본회의 출결. This is a file dataset: convert it to the documented CSV
-     and pass `--source-url` with the dataset page.
+   - `import_attendance.ts`: 본회의 출결, from `data/attendance_22/<회기>.csv` (committed).
+     - Source: 열린국회정보 「국회의원 본회의 출결현황」
+       (https://open.assembly.go.kr/portal/data/service/selectServicePage.do/O4Q5B50011905O18367),
+       국회사무처, one .xlsx per 회기, usually posted a few days after the 회기 ends. There is no
+       Open API for it (the OPENSRVAPI catalogue has no 출결/출석 service). 22대 files start at
+       제415회; 제425회 had no 본회의 and has no file.
+     - Each CSV has the dataset URL, the file's `fileSeq`, its post date and the fetch date in its
+       `#` header. The importer reads those, so no flags are needed.
+     - To refresh (after a new 회기 file, or a 「(수정)」 re-post), from `server/`:
+       ```sh
+       deno run --allow-net=open.assembly.go.kr --allow-read --allow-write=data/attendance_22 \
+         --allow-env=ASSEMBLY_API_KEY scripts/fetch_attendance.ts
+       git diff --stat data/attendance_22   # review, commit
+       deno run --allow-read scripts/import_attendance.ts data/attendance_22 > att.sql
+       psql "$SUPABASE_DB_URL" -v ON_ERROR_STOP=1 -1 -f att.sql
+       ```
+     - `fetch_attendance.ts` rewrites every 22대 file. It stops if a file's cells do not add up to
+       its own 회의일수/출석/결석/청가/출장/결석신고서 columns, if the layout changes, or if a name
+       cannot be matched to exactly one 22대 MONA_CD (ALLNAMEMBER `NAAS_CD`). The source tells a
+       same-name pair apart by writing one in 한자 (朴芝源 = H7X3372O, 박지원 = 8BF5855P).
+     - `ASSEMBLY_API_KEY` in the shell is optional; the keyless sample key is enough unless a name
+       prefix has more than five members in history, and the script says so when it is not.
+     - Rows are upserts keyed by (mona_cd, meeting_date, meeting_label). If a 「(수정)」 file ever
+       drops a row, delete that 회기 first:
+       `delete from plenary_attendance where meeting_label like '제438회 %';`
    - `import_historical_results.ts`: older results from CSV.
    - `import_geojson.ts`: 22대 boundaries. Confirm the OhmyNews `2024_22_elec_map` license first;
      `--license` is required.
