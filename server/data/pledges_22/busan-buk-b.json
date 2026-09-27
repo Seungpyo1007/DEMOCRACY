@@ -1,0 +1,352 @@
+{
+  "_note": "제22대 국회의원선거 부산 북구 을 당선인 박성훈 (국민의힘). 책자형 선거공보 PDF 5–8쪽(인쇄 6–9쪽) 「약속 하나!–여섯!」 아래 ⊙·항목 31개. 약속 제목 문장(「북구의 길, 시원하게 열겠습니다」 등)은 묶음 머리말이라 따로 넣지 않았고, 항목 밑 '- …' 세부 줄과 약속 둘 첫 항목 밑의 단계 줄(「부산시 기본계획 반영」, 「선도사업 재건축 허가 및 착공」)도 넣지 않았다. 10쪽의 정치 소통 다짐은 넣지 않았다. 제목은 원문 문구를 따랐고 바꾼 것은 위에 적은 구호·수식어 덜어내기뿐이다. 분류(category)는 앱에 정해진 분류 체계가 없어 비워 두었다. 이행 여부는 판정하지 않았다(notJudged).",
+  "districtId": "nec-fdb8fb4c",
+  "source": {
+    "sourceUrl": "https://policy.nec.go.kr/policy_pdf/20240410/PDF/PBINFO_PUB/2608/003_100152979_20240402_2.pdf",
+    "fetchedAt": "2026-09-28T02:20:00Z",
+    "publisher": "중앙선거관리위원회"
+  },
+  "pledges": [
+    {
+      "id": "22-busan-buk-b-01",
+      "title": "화명(만덕)~서면 간 직결 도시철도 건설",
+      "category": "",
+      "status": "notJudged",
+      "source": {
+        "sourceUrl": "https://policy.nec.go.kr/policy_pdf/20240410/PDF/PBINFO_PUB/2608/003_100152979_20240402_2.pdf",
+        "fetchedAt": "2026-09-28T02:20:00Z",
+        "publisher": "중앙선거관리위원회"
+      }
+    },
+    {
+      "id": "22-busan-buk-b-02",
+      "title": "화명~김해초정 간 광역도로 미개통 구간 신속 추진",
+      "category": "",
+      "status": "notJudged",
+      "source": {
+        "sourceUrl": "https://policy.nec.go.kr/policy_pdf/20240410/PDF/PBINFO_PUB/2608/003_100152979_20240402_2.pdf",
+        "fetchedAt": "2026-09-28T02:20:00Z",
+        "publisher": "중앙선거관리위원회"
+      }
+    },
+    {
+      "id": "22-busan-buk-b-03",
+      "title": "금곡로~강변도로 진·출입 과선교 개선사업 조기 개통",
+      "category": "",
+      "status": "notJudged",
+      "source": {
+        "sourceUrl": "https://policy.nec.go.kr/policy_pdf/20240410/PDF/PBINFO_PUB/2608/003_100152979_20240402_2.pdf",
+        "fetchedAt": "2026-09-28T02:20:00Z",
+        "publisher": "중앙선거관리위원회"
+      }
+    },
+    {
+      "id": "22-busan-buk-b-04",
+      "title": "화명동 의성로~남해고속도로 (만덕)연결도로 램프 신설",
+      "category": "",
+      "status": "notJudged",
+      "source": {
+        "sourceUrl": "https://policy.nec.go.kr/policy_pdf/20240410/PDF/PBINFO_PUB/2608/003_100152979_20240402_2.pdf",
+        "fetchedAt": "2026-09-28T02:20:00Z",
+        "publisher": "중앙선거관리위원회"
+      }
+    },
+    {
+      "id": "22-busan-buk-b-05",
+      "title": "노후 아파트 재건축 조속 추진",
+      "category": "",
+      "status": "notJudged",
+      "source": {
+        "sourceUrl": "https://policy.nec.go.kr/policy_pdf/20240410/PDF/PBINFO_PUB/2608/003_100152979_20240402_2.pdf",
+        "fetchedAt": "2026-09-28T02:20:00Z",
+        "publisher": "중앙선거관리위원회"
+      }
+    },
+    {
+      "id": "22-busan-buk-b-06",
+      "title": "개별 재개발 · 재건축 사업 신속 추진",
+      "category": "",
+      "status": "notJudged",
+      "source": {
+        "sourceUrl": "https://policy.nec.go.kr/policy_pdf/20240410/PDF/PBINFO_PUB/2608/003_100152979_20240402_2.pdf",
+        "fetchedAt": "2026-09-28T02:20:00Z",
+        "publisher": "중앙선거관리위원회"
+      }
+    },
+    {
+      "id": "22-busan-buk-b-07",
+      "title": "교육, 교통 등 생활인프라 명품화로 아파트 가치 제고",
+      "category": "",
+      "status": "notJudged",
+      "source": {
+        "sourceUrl": "https://policy.nec.go.kr/policy_pdf/20240410/PDF/PBINFO_PUB/2608/003_100152979_20240402_2.pdf",
+        "fetchedAt": "2026-09-28T02:20:00Z",
+        "publisher": "중앙선거관리위원회"
+      }
+    },
+    {
+      "id": "22-busan-buk-b-08",
+      "title": "교육 국제화 특구 지정 추진",
+      "category": "",
+      "status": "notJudged",
+      "source": {
+        "sourceUrl": "https://policy.nec.go.kr/policy_pdf/20240410/PDF/PBINFO_PUB/2608/003_100152979_20240402_2.pdf",
+        "fetchedAt": "2026-09-28T02:20:00Z",
+        "publisher": "중앙선거관리위원회"
+      }
+    },
+    {
+      "id": "22-busan-buk-b-09",
+      "title": "기업 연계 ‘명문 자율형 공립고등학교’ 유치",
+      "category": "",
+      "status": "notJudged",
+      "source": {
+        "sourceUrl": "https://policy.nec.go.kr/policy_pdf/20240410/PDF/PBINFO_PUB/2608/003_100152979_20240402_2.pdf",
+        "fetchedAt": "2026-09-28T02:20:00Z",
+        "publisher": "중앙선거관리위원회"
+      }
+    },
+    {
+      "id": "22-busan-buk-b-10",
+      "title": "아빠 육아휴가 1개월 의무화 법제화 추진",
+      "category": "",
+      "status": "notJudged",
+      "source": {
+        "sourceUrl": "https://policy.nec.go.kr/policy_pdf/20240410/PDF/PBINFO_PUB/2608/003_100152979_20240402_2.pdf",
+        "fetchedAt": "2026-09-28T02:20:00Z",
+        "publisher": "중앙선거관리위원회"
+      }
+    },
+    {
+      "id": "22-busan-buk-b-11",
+      "title": "긴급돌봄 「24시간 보살핌 늘봄센터」 운영",
+      "category": "",
+      "status": "notJudged",
+      "source": {
+        "sourceUrl": "https://policy.nec.go.kr/policy_pdf/20240410/PDF/PBINFO_PUB/2608/003_100152979_20240402_2.pdf",
+        "fetchedAt": "2026-09-28T02:20:00Z",
+        "publisher": "중앙선거관리위원회"
+      }
+    },
+    {
+      "id": "22-busan-buk-b-12",
+      "title": "아동 입원시 보호자를 대신하여 입원아동 돌봄 지원",
+      "category": "",
+      "status": "notJudged",
+      "source": {
+        "sourceUrl": "https://policy.nec.go.kr/policy_pdf/20240410/PDF/PBINFO_PUB/2608/003_100152979_20240402_2.pdf",
+        "fetchedAt": "2026-09-28T02:20:00Z",
+        "publisher": "중앙선거관리위원회"
+      }
+    },
+    {
+      "id": "22-busan-buk-b-13",
+      "title": "시립아동병원 유치 및 아동 응급병원 체계 구축",
+      "category": "",
+      "status": "notJudged",
+      "source": {
+        "sourceUrl": "https://policy.nec.go.kr/policy_pdf/20240410/PDF/PBINFO_PUB/2608/003_100152979_20240402_2.pdf",
+        "fetchedAt": "2026-09-28T02:20:00Z",
+        "publisher": "중앙선거관리위원회"
+      }
+    },
+    {
+      "id": "22-busan-buk-b-14",
+      "title": "낙동강 선셋 화명 에코파크 조성 및 마리나 시설 확대",
+      "category": "",
+      "status": "notJudged",
+      "source": {
+        "sourceUrl": "https://policy.nec.go.kr/policy_pdf/20240410/PDF/PBINFO_PUB/2608/003_100152979_20240402_2.pdf",
+        "fetchedAt": "2026-09-28T02:20:00Z",
+        "publisher": "중앙선거관리위원회"
+      }
+    },
+    {
+      "id": "22-busan-buk-b-15",
+      "title": "화명 상업지역~생태공원 간 장미브릿지 건설",
+      "category": "",
+      "status": "notJudged",
+      "source": {
+        "sourceUrl": "https://policy.nec.go.kr/policy_pdf/20240410/PDF/PBINFO_PUB/2608/003_100152979_20240402_2.pdf",
+        "fetchedAt": "2026-09-28T02:20:00Z",
+        "publisher": "중앙선거관리위원회"
+      }
+    },
+    {
+      "id": "22-busan-buk-b-16",
+      "title": "대천천 물놀이시설 조성, 화명 수목원 확장, 유아숲 체험원 확장",
+      "category": "",
+      "status": "notJudged",
+      "source": {
+        "sourceUrl": "https://policy.nec.go.kr/policy_pdf/20240410/PDF/PBINFO_PUB/2608/003_100152979_20240402_2.pdf",
+        "fetchedAt": "2026-09-28T02:20:00Z",
+        "publisher": "중앙선거관리위원회"
+      }
+    },
+    {
+      "id": "22-busan-buk-b-17",
+      "title": "파크골프장 추가 조성(18홀), 맨발걷기 산책로 조성",
+      "category": "",
+      "status": "notJudged",
+      "source": {
+        "sourceUrl": "https://policy.nec.go.kr/policy_pdf/20240410/PDF/PBINFO_PUB/2608/003_100152979_20240402_2.pdf",
+        "fetchedAt": "2026-09-28T02:20:00Z",
+        "publisher": "중앙선거관리위원회"
+      }
+    },
+    {
+      "id": "22-busan-buk-b-18",
+      "title": "화명근린공원 및 화명 출렁다리 신규조성",
+      "category": "",
+      "status": "notJudged",
+      "source": {
+        "sourceUrl": "https://policy.nec.go.kr/policy_pdf/20240410/PDF/PBINFO_PUB/2608/003_100152979_20240402_2.pdf",
+        "fetchedAt": "2026-09-28T02:20:00Z",
+        "publisher": "중앙선거관리위원회"
+      }
+    },
+    {
+      "id": "22-busan-buk-b-19",
+      "title": "화명 수영장을 사계절 이용 생태형 놀이시설로 조성",
+      "category": "",
+      "status": "notJudged",
+      "source": {
+        "sourceUrl": "https://policy.nec.go.kr/policy_pdf/20240410/PDF/PBINFO_PUB/2608/003_100152979_20240402_2.pdf",
+        "fetchedAt": "2026-09-28T02:20:00Z",
+        "publisher": "중앙선거관리위원회"
+      }
+    },
+    {
+      "id": "22-busan-buk-b-20",
+      "title": "반려동물 산책로 및 놀이공원 조성",
+      "category": "",
+      "status": "notJudged",
+      "source": {
+        "sourceUrl": "https://policy.nec.go.kr/policy_pdf/20240410/PDF/PBINFO_PUB/2608/003_100152979_20240402_2.pdf",
+        "fetchedAt": "2026-09-28T02:20:00Z",
+        "publisher": "중앙선거관리위원회"
+      }
+    },
+    {
+      "id": "22-busan-buk-b-21",
+      "title": "금곡동 꽃 박물관·기찻길 완충 녹지지대 리모델링",
+      "category": "",
+      "status": "notJudged",
+      "source": {
+        "sourceUrl": "https://policy.nec.go.kr/policy_pdf/20240410/PDF/PBINFO_PUB/2608/003_100152979_20240402_2.pdf",
+        "fetchedAt": "2026-09-28T02:20:00Z",
+        "publisher": "중앙선거관리위원회"
+      }
+    },
+    {
+      "id": "22-busan-buk-b-22",
+      "title": "만덕1동 복합문화체육센터 건립 및 어린이 복합문화공간 조성",
+      "category": "",
+      "status": "notJudged",
+      "source": {
+        "sourceUrl": "https://policy.nec.go.kr/policy_pdf/20240410/PDF/PBINFO_PUB/2608/003_100152979_20240402_2.pdf",
+        "fetchedAt": "2026-09-28T02:20:00Z",
+        "publisher": "중앙선거관리위원회"
+      }
+    },
+    {
+      "id": "22-busan-buk-b-23",
+      "title": "만덕로 상부 생활체육시설 및 테마공원 조성",
+      "category": "",
+      "status": "notJudged",
+      "source": {
+        "sourceUrl": "https://policy.nec.go.kr/policy_pdf/20240410/PDF/PBINFO_PUB/2608/003_100152979_20240402_2.pdf",
+        "fetchedAt": "2026-09-28T02:20:00Z",
+        "publisher": "중앙선거관리위원회"
+      }
+    },
+    {
+      "id": "22-busan-buk-b-24",
+      "title": "경부선 철도 지하화로 확보된 공간을 미래형 도시거점으로 구축",
+      "category": "",
+      "status": "notJudged",
+      "source": {
+        "sourceUrl": "https://policy.nec.go.kr/policy_pdf/20240410/PDF/PBINFO_PUB/2608/003_100152979_20240402_2.pdf",
+        "fetchedAt": "2026-09-28T02:20:00Z",
+        "publisher": "중앙선거관리위원회"
+      }
+    },
+    {
+      "id": "22-busan-buk-b-25",
+      "title": "금곡 도시첨단산단에 첨단기업 유치 및 청년선호 일자리 창출",
+      "category": "",
+      "status": "notJudged",
+      "source": {
+        "sourceUrl": "https://policy.nec.go.kr/policy_pdf/20240410/PDF/PBINFO_PUB/2608/003_100152979_20240402_2.pdf",
+        "fetchedAt": "2026-09-28T02:20:00Z",
+        "publisher": "중앙선거관리위원회"
+      }
+    },
+    {
+      "id": "22-busan-buk-b-26",
+      "title": "부산지식산업센터에 청년 일자리 지원체계 구축",
+      "category": "",
+      "status": "notJudged",
+      "source": {
+        "sourceUrl": "https://policy.nec.go.kr/policy_pdf/20240410/PDF/PBINFO_PUB/2608/003_100152979_20240402_2.pdf",
+        "fetchedAt": "2026-09-28T02:20:00Z",
+        "publisher": "중앙선거관리위원회"
+      }
+    },
+    {
+      "id": "22-busan-buk-b-27",
+      "title": "청년 복합문화 창작공간 조성",
+      "category": "",
+      "status": "notJudged",
+      "source": {
+        "sourceUrl": "https://policy.nec.go.kr/policy_pdf/20240410/PDF/PBINFO_PUB/2608/003_100152979_20240402_2.pdf",
+        "fetchedAt": "2026-09-28T02:20:00Z",
+        "publisher": "중앙선거관리위원회"
+      }
+    },
+    {
+      "id": "22-busan-buk-b-28",
+      "title": "치매안심센터 치매 정밀검사비 전액 지원",
+      "category": "",
+      "status": "notJudged",
+      "source": {
+        "sourceUrl": "https://policy.nec.go.kr/policy_pdf/20240410/PDF/PBINFO_PUB/2608/003_100152979_20240402_2.pdf",
+        "fetchedAt": "2026-09-28T02:20:00Z",
+        "publisher": "중앙선거관리위원회"
+      }
+    },
+    {
+      "id": "22-busan-buk-b-29",
+      "title": "어르신(65세이상) 돌봄 서비스 확대",
+      "category": "",
+      "status": "notJudged",
+      "source": {
+        "sourceUrl": "https://policy.nec.go.kr/policy_pdf/20240410/PDF/PBINFO_PUB/2608/003_100152979_20240402_2.pdf",
+        "fetchedAt": "2026-09-28T02:20:00Z",
+        "publisher": "중앙선거관리위원회"
+      }
+    },
+    {
+      "id": "22-busan-buk-b-30",
+      "title": "중장년 일상돌봄 서비스 확대",
+      "category": "",
+      "status": "notJudged",
+      "source": {
+        "sourceUrl": "https://policy.nec.go.kr/policy_pdf/20240410/PDF/PBINFO_PUB/2608/003_100152979_20240402_2.pdf",
+        "fetchedAt": "2026-09-28T02:20:00Z",
+        "publisher": "중앙선거관리위원회"
+      }
+    },
+    {
+      "id": "22-busan-buk-b-31",
+      "title": "교통약자 편의시설(옥외 승강기 등) 확충",
+      "category": "",
+      "status": "notJudged",
+      "source": {
+        "sourceUrl": "https://policy.nec.go.kr/policy_pdf/20240410/PDF/PBINFO_PUB/2608/003_100152979_20240402_2.pdf",
+        "fetchedAt": "2026-09-28T02:20:00Z",
+        "publisher": "중앙선거관리위원회"
+      }
+    }
+  ]
+}

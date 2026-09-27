@@ -1,0 +1,264 @@
+{
+  "_note": "제22대 국회의원선거 대구 달서구 갑 당선인 유영하 (국민의힘). 책자형 선거공보 PDF 5–6쪽 「달서갑이 달서의 中心이 됩니다!」 다섯 묶음의 ▶ 항목 14개, PDF 7쪽 「AI특구 조성으로」 AI교육특구·AI산업특구 항목 6개, PDF 8쪽 「성서공단의 새로운 변화로」 사진 제목 3개, 모두 23개. 묶음 제목과 「젊음이 되살아나는 성서!」 같은 구호는 넣지 않았다. PDF 9쪽 「모든 세대가 행복한 달서를」(늘봄학교·육아휴직·장학금 등 국민의힘 전국 공약과 같은 내용)은 넣지 않았다. 제목은 원문 문구를 따랐고 바꾼 것은 위에 적은 구호·수식어 덜어내기뿐이다. 분류(category)는 앱에 정해진 분류 체계가 없어 비워 두었다. 이행 여부는 판정하지 않았다(notJudged).",
+  "districtId": "nec-bd3eee21",
+  "source": {
+    "sourceUrl": "https://policy.nec.go.kr/policy_pdf/20240410/PDF/PBINFO_PUB/2707/003_100152311_20240402_2.pdf",
+    "fetchedAt": "2026-09-28T02:20:00Z",
+    "publisher": "중앙선거관리위원회"
+  },
+  "pledges": [
+    {
+      "id": "22-daegu-dalseo-a-01",
+      "title": "은행나무 숲이 우거진 갈산공원 조성 추진",
+      "category": "",
+      "status": "notJudged",
+      "source": {
+        "sourceUrl": "https://policy.nec.go.kr/policy_pdf/20240410/PDF/PBINFO_PUB/2707/003_100152311_20240402_2.pdf",
+        "fetchedAt": "2026-09-28T02:20:00Z",
+        "publisher": "중앙선거관리위원회"
+      }
+    },
+    {
+      "id": "22-daegu-dalseo-a-02",
+      "title": "도심속 휴식공간 장기공원 개발 추진",
+      "category": "",
+      "status": "notJudged",
+      "source": {
+        "sourceUrl": "https://policy.nec.go.kr/policy_pdf/20240410/PDF/PBINFO_PUB/2707/003_100152311_20240402_2.pdf",
+        "fetchedAt": "2026-09-28T02:20:00Z",
+        "publisher": "중앙선거관리위원회"
+      }
+    },
+    {
+      "id": "22-daegu-dalseo-a-03",
+      "title": "와룡산-궁산 연결 생태육교 설치 추진",
+      "category": "",
+      "status": "notJudged",
+      "source": {
+        "sourceUrl": "https://policy.nec.go.kr/policy_pdf/20240410/PDF/PBINFO_PUB/2707/003_100152311_20240402_2.pdf",
+        "fetchedAt": "2026-09-28T02:20:00Z",
+        "publisher": "중앙선거관리위원회"
+      }
+    },
+    {
+      "id": "22-daegu-dalseo-a-04",
+      "title": "주민복합문화센터 건립 추진",
+      "category": "",
+      "status": "notJudged",
+      "source": {
+        "sourceUrl": "https://policy.nec.go.kr/policy_pdf/20240410/PDF/PBINFO_PUB/2707/003_100152311_20240402_2.pdf",
+        "fetchedAt": "2026-09-28T02:20:00Z",
+        "publisher": "중앙선거관리위원회"
+      }
+    },
+    {
+      "id": "22-daegu-dalseo-a-05",
+      "title": "디지털복합 문화공간 건립 추진",
+      "category": "",
+      "status": "notJudged",
+      "source": {
+        "sourceUrl": "https://policy.nec.go.kr/policy_pdf/20240410/PDF/PBINFO_PUB/2707/003_100152311_20240402_2.pdf",
+        "fetchedAt": "2026-09-28T02:20:00Z",
+        "publisher": "중앙선거관리위원회"
+      }
+    },
+    {
+      "id": "22-daegu-dalseo-a-06",
+      "title": "어르신 문화·여가활동 바우처 지원 확대",
+      "category": "",
+      "status": "notJudged",
+      "source": {
+        "sourceUrl": "https://policy.nec.go.kr/policy_pdf/20240410/PDF/PBINFO_PUB/2707/003_100152311_20240402_2.pdf",
+        "fetchedAt": "2026-09-28T02:20:00Z",
+        "publisher": "중앙선거관리위원회"
+      }
+    },
+    {
+      "id": "22-daegu-dalseo-a-07",
+      "title": "호산중학교(가칭) 신설 추진",
+      "category": "",
+      "status": "notJudged",
+      "source": {
+        "sourceUrl": "https://policy.nec.go.kr/policy_pdf/20240410/PDF/PBINFO_PUB/2707/003_100152311_20240402_2.pdf",
+        "fetchedAt": "2026-09-28T02:20:00Z",
+        "publisher": "중앙선거관리위원회"
+      }
+    },
+    {
+      "id": "22-daegu-dalseo-a-08",
+      "title": "다문화청년 글로벌 인재양성 시스템 구축",
+      "category": "",
+      "status": "notJudged",
+      "source": {
+        "sourceUrl": "https://policy.nec.go.kr/policy_pdf/20240410/PDF/PBINFO_PUB/2707/003_100152311_20240402_2.pdf",
+        "fetchedAt": "2026-09-28T02:20:00Z",
+        "publisher": "중앙선거관리위원회"
+      }
+    },
+    {
+      "id": "22-daegu-dalseo-a-09",
+      "title": "소각장 내 생활쓰레기 전처리 시설로 탄소중립 실현",
+      "category": "",
+      "status": "notJudged",
+      "source": {
+        "sourceUrl": "https://policy.nec.go.kr/policy_pdf/20240410/PDF/PBINFO_PUB/2707/003_100152311_20240402_2.pdf",
+        "fetchedAt": "2026-09-28T02:20:00Z",
+        "publisher": "중앙선거관리위원회"
+      }
+    },
+    {
+      "id": "22-daegu-dalseo-a-10",
+      "title": "학교 및 노인요양시설 정화기 설치 확대",
+      "category": "",
+      "status": "notJudged",
+      "source": {
+        "sourceUrl": "https://policy.nec.go.kr/policy_pdf/20240410/PDF/PBINFO_PUB/2707/003_100152311_20240402_2.pdf",
+        "fetchedAt": "2026-09-28T02:20:00Z",
+        "publisher": "중앙선거관리위원회"
+      }
+    },
+    {
+      "id": "22-daegu-dalseo-a-11",
+      "title": "초미세먼지 감축을 위한 지원책 및 제도마련",
+      "category": "",
+      "status": "notJudged",
+      "source": {
+        "sourceUrl": "https://policy.nec.go.kr/policy_pdf/20240410/PDF/PBINFO_PUB/2707/003_100152311_20240402_2.pdf",
+        "fetchedAt": "2026-09-28T02:20:00Z",
+        "publisher": "중앙선거관리위원회"
+      }
+    },
+    {
+      "id": "22-daegu-dalseo-a-12",
+      "title": "노인 안심돌봄 서비스 구축",
+      "category": "",
+      "status": "notJudged",
+      "source": {
+        "sourceUrl": "https://policy.nec.go.kr/policy_pdf/20240410/PDF/PBINFO_PUB/2707/003_100152311_20240402_2.pdf",
+        "fetchedAt": "2026-09-28T02:20:00Z",
+        "publisher": "중앙선거관리위원회"
+      }
+    },
+    {
+      "id": "22-daegu-dalseo-a-13",
+      "title": "장애인 자립 자활센터 건립",
+      "category": "",
+      "status": "notJudged",
+      "source": {
+        "sourceUrl": "https://policy.nec.go.kr/policy_pdf/20240410/PDF/PBINFO_PUB/2707/003_100152311_20240402_2.pdf",
+        "fetchedAt": "2026-09-28T02:20:00Z",
+        "publisher": "중앙선거관리위원회"
+      }
+    },
+    {
+      "id": "22-daegu-dalseo-a-14",
+      "title": "지하철 등 공공화장실 몰카탐지 시스템 구축",
+      "category": "",
+      "status": "notJudged",
+      "source": {
+        "sourceUrl": "https://policy.nec.go.kr/policy_pdf/20240410/PDF/PBINFO_PUB/2707/003_100152311_20240402_2.pdf",
+        "fetchedAt": "2026-09-28T02:20:00Z",
+        "publisher": "중앙선거관리위원회"
+      }
+    },
+    {
+      "id": "22-daegu-dalseo-a-15",
+      "title": "AI 교육 확대 : 학교와 교육 기관의 AI 교육 강화 및 학생들의 관심 지원",
+      "category": "",
+      "status": "notJudged",
+      "source": {
+        "sourceUrl": "https://policy.nec.go.kr/policy_pdf/20240410/PDF/PBINFO_PUB/2707/003_100152311_20240402_2.pdf",
+        "fetchedAt": "2026-09-28T02:20:00Z",
+        "publisher": "중앙선거관리위원회"
+      }
+    },
+    {
+      "id": "22-daegu-dalseo-a-16",
+      "title": "AI 교사 양성 : AI 교사 양성으로 학생들에게 최신 기술과 지식 전달",
+      "category": "",
+      "status": "notJudged",
+      "source": {
+        "sourceUrl": "https://policy.nec.go.kr/policy_pdf/20240410/PDF/PBINFO_PUB/2707/003_100152311_20240402_2.pdf",
+        "fetchedAt": "2026-09-28T02:20:00Z",
+        "publisher": "중앙선거관리위원회"
+      }
+    },
+    {
+      "id": "22-daegu-dalseo-a-17",
+      "title": "AI 교육 자료 개발 : AI 교육을 위한 교재, 강의 자료, 온라인 콘텐츠 개발",
+      "category": "",
+      "status": "notJudged",
+      "source": {
+        "sourceUrl": "https://policy.nec.go.kr/policy_pdf/20240410/PDF/PBINFO_PUB/2707/003_100152311_20240402_2.pdf",
+        "fetchedAt": "2026-09-28T02:20:00Z",
+        "publisher": "중앙선거관리위원회"
+      }
+    },
+    {
+      "id": "22-daegu-dalseo-a-18",
+      "title": "AI 기업 유치 및 지원 : AI 기업에 대한 인센티브 제공 및 생태계 구축",
+      "category": "",
+      "status": "notJudged",
+      "source": {
+        "sourceUrl": "https://policy.nec.go.kr/policy_pdf/20240410/PDF/PBINFO_PUB/2707/003_100152311_20240402_2.pdf",
+        "fetchedAt": "2026-09-28T02:20:00Z",
+        "publisher": "중앙선거관리위원회"
+      }
+    },
+    {
+      "id": "22-daegu-dalseo-a-19",
+      "title": "AI 혁신 네트워크 구축 : 기업, 연구소, 대학 간 협업 플랫폼 구축",
+      "category": "",
+      "status": "notJudged",
+      "source": {
+        "sourceUrl": "https://policy.nec.go.kr/policy_pdf/20240410/PDF/PBINFO_PUB/2707/003_100152311_20240402_2.pdf",
+        "fetchedAt": "2026-09-28T02:20:00Z",
+        "publisher": "중앙선거관리위원회"
+      }
+    },
+    {
+      "id": "22-daegu-dalseo-a-20",
+      "title": "AI 고용 및 직업 훈련 : 새로운 일자리 창출을 위한 직업 훈련 프로그램 제공",
+      "category": "",
+      "status": "notJudged",
+      "source": {
+        "sourceUrl": "https://policy.nec.go.kr/policy_pdf/20240410/PDF/PBINFO_PUB/2707/003_100152311_20240402_2.pdf",
+        "fetchedAt": "2026-09-28T02:20:00Z",
+        "publisher": "중앙선거관리위원회"
+      }
+    },
+    {
+      "id": "22-daegu-dalseo-a-21",
+      "title": "대기업 유치 추진",
+      "category": "",
+      "status": "notJudged",
+      "source": {
+        "sourceUrl": "https://policy.nec.go.kr/policy_pdf/20240410/PDF/PBINFO_PUB/2707/003_100152311_20240402_2.pdf",
+        "fetchedAt": "2026-09-28T02:20:00Z",
+        "publisher": "중앙선거관리위원회"
+      }
+    },
+    {
+      "id": "22-daegu-dalseo-a-22",
+      "title": "성서공단 내 공동세탁소 설치",
+      "category": "",
+      "status": "notJudged",
+      "source": {
+        "sourceUrl": "https://policy.nec.go.kr/policy_pdf/20240410/PDF/PBINFO_PUB/2707/003_100152311_20240402_2.pdf",
+        "fetchedAt": "2026-09-28T02:20:00Z",
+        "publisher": "중앙선거관리위원회"
+      }
+    },
+    {
+      "id": "22-daegu-dalseo-a-23",
+      "title": "계명대와 기업의 산학협력",
+      "category": "",
+      "status": "notJudged",
+      "source": {
+        "sourceUrl": "https://policy.nec.go.kr/policy_pdf/20240410/PDF/PBINFO_PUB/2707/003_100152311_20240402_2.pdf",
+        "fetchedAt": "2026-09-28T02:20:00Z",
+        "publisher": "중앙선거관리위원회"
+      }
+    }
+  ]
+}

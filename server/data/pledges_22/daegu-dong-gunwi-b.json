@@ -1,0 +1,220 @@
+{
+  "_note": "제22대 국회의원선거 대구 동구군위군 을 당선인 강대식 (국민의힘). 책자형 선거공보 PDF 5쪽 「24시간 잠들지 않는 글로벌 동구 건설」(동구 전체) 5개와 PDF 7–8쪽 군위 공약(「자족 에어시티 군위 건설」, 「아기 울음소리가 넘치는 군위 완성」) 14개의 핀 표시 공약 제목, 모두 19개. 동구와 군위 묶음에 같은 제목(「대구경북통합신공항 접근 교통망 대폭 확충」, 「교육발전특구 지정」)이 따로 있어 둘 다 두었다. 제목 밑 '· …' 세부 줄은 넣지 않았다. PDF 6쪽의 동별 권역(공산·불로봉무·도평·해안동, 안심1–4·혁신동) 공약, 3–4쪽 성과, 9–10쪽 국민의힘 공약은 넣지 않았다. 제목은 원문 문구를 따랐고 바꾼 것은 위에 적은 구호·수식어 덜어내기뿐이다. 분류(category)는 앱에 정해진 분류 체계가 없어 비워 두었다. 이행 여부는 판정하지 않았다(notJudged).",
+  "districtId": "nec-0633b69e",
+  "source": {
+    "sourceUrl": "https://policy.nec.go.kr/policy_pdf/20240410/PDF/PBINFO_PUB/2702/003_100152715_20240402_2.pdf",
+    "fetchedAt": "2026-09-28T02:20:00Z",
+    "publisher": "중앙선거관리위원회"
+  },
+  "pledges": [
+    {
+      "id": "22-daegu-dong-gunwi-b-01",
+      "title": "대구경북통합신공항 건설 및 후적지 개발",
+      "category": "",
+      "status": "notJudged",
+      "source": {
+        "sourceUrl": "https://policy.nec.go.kr/policy_pdf/20240410/PDF/PBINFO_PUB/2702/003_100152715_20240402_2.pdf",
+        "fetchedAt": "2026-09-28T02:20:00Z",
+        "publisher": "중앙선거관리위원회"
+      }
+    },
+    {
+      "id": "22-daegu-dong-gunwi-b-02",
+      "title": "대구경북통합신공항 접근 교통망 대폭 확충",
+      "category": "",
+      "status": "notJudged",
+      "source": {
+        "sourceUrl": "https://policy.nec.go.kr/policy_pdf/20240410/PDF/PBINFO_PUB/2702/003_100152715_20240402_2.pdf",
+        "fetchedAt": "2026-09-28T02:20:00Z",
+        "publisher": "중앙선거관리위원회"
+      }
+    },
+    {
+      "id": "22-daegu-dong-gunwi-b-03",
+      "title": "대구도시철도 순환선 우리 지역 통과 노선 확정 및 사업 조기 추진",
+      "category": "",
+      "status": "notJudged",
+      "source": {
+        "sourceUrl": "https://policy.nec.go.kr/policy_pdf/20240410/PDF/PBINFO_PUB/2702/003_100152715_20240402_2.pdf",
+        "fetchedAt": "2026-09-28T02:20:00Z",
+        "publisher": "중앙선거관리위원회"
+      }
+    },
+    {
+      "id": "22-daegu-dong-gunwi-b-04",
+      "title": "교육발전특구 지정",
+      "category": "",
+      "status": "notJudged",
+      "source": {
+        "sourceUrl": "https://policy.nec.go.kr/policy_pdf/20240410/PDF/PBINFO_PUB/2702/003_100152715_20240402_2.pdf",
+        "fetchedAt": "2026-09-28T02:20:00Z",
+        "publisher": "중앙선거관리위원회"
+      }
+    },
+    {
+      "id": "22-daegu-dong-gunwi-b-05",
+      "title": "노인일자리 지원센터 건립(취업정보센터, 교육장, 강당 등 설치)",
+      "category": "",
+      "status": "notJudged",
+      "source": {
+        "sourceUrl": "https://policy.nec.go.kr/policy_pdf/20240410/PDF/PBINFO_PUB/2702/003_100152715_20240402_2.pdf",
+        "fetchedAt": "2026-09-28T02:20:00Z",
+        "publisher": "중앙선거관리위원회"
+      }
+    },
+    {
+      "id": "22-daegu-dong-gunwi-b-06",
+      "title": "대구경북통합신공항 건설",
+      "category": "",
+      "status": "notJudged",
+      "source": {
+        "sourceUrl": "https://policy.nec.go.kr/policy_pdf/20240410/PDF/PBINFO_PUB/2702/003_100152715_20240402_2.pdf",
+        "fetchedAt": "2026-09-28T02:20:00Z",
+        "publisher": "중앙선거관리위원회"
+      }
+    },
+    {
+      "id": "22-daegu-dong-gunwi-b-07",
+      "title": "대구경북통합신공항 접근 교통망 대폭 확충",
+      "category": "",
+      "status": "notJudged",
+      "source": {
+        "sourceUrl": "https://policy.nec.go.kr/policy_pdf/20240410/PDF/PBINFO_PUB/2702/003_100152715_20240402_2.pdf",
+        "fetchedAt": "2026-09-28T02:20:00Z",
+        "publisher": "중앙선거관리위원회"
+      }
+    },
+    {
+      "id": "22-daegu-dong-gunwi-b-08",
+      "title": "대구경북통합신공항 배후 첨단산업단지 조성",
+      "category": "",
+      "status": "notJudged",
+      "source": {
+        "sourceUrl": "https://policy.nec.go.kr/policy_pdf/20240410/PDF/PBINFO_PUB/2702/003_100152715_20240402_2.pdf",
+        "fetchedAt": "2026-09-28T02:20:00Z",
+        "publisher": "중앙선거관리위원회"
+      }
+    },
+    {
+      "id": "22-daegu-dong-gunwi-b-09",
+      "title": "통합신공항 건설에 따른 이주민의 이주대책 및 보상 적극 지원",
+      "category": "",
+      "status": "notJudged",
+      "source": {
+        "sourceUrl": "https://policy.nec.go.kr/policy_pdf/20240410/PDF/PBINFO_PUB/2702/003_100152715_20240402_2.pdf",
+        "fetchedAt": "2026-09-28T02:20:00Z",
+        "publisher": "중앙선거관리위원회"
+      }
+    },
+    {
+      "id": "22-daegu-dong-gunwi-b-10",
+      "title": "‘대구 도심 국군부대 통합 이전’ 유치 및 복합 밀리터리 타운 조성",
+      "category": "",
+      "status": "notJudged",
+      "source": {
+        "sourceUrl": "https://policy.nec.go.kr/policy_pdf/20240410/PDF/PBINFO_PUB/2702/003_100152715_20240402_2.pdf",
+        "fetchedAt": "2026-09-28T02:20:00Z",
+        "publisher": "중앙선거관리위원회"
+      }
+    },
+    {
+      "id": "22-daegu-dong-gunwi-b-11",
+      "title": "국립 효령 항공고등학교 전환을 위해 교육청과 적극 협의",
+      "category": "",
+      "status": "notJudged",
+      "source": {
+        "sourceUrl": "https://policy.nec.go.kr/policy_pdf/20240410/PDF/PBINFO_PUB/2702/003_100152715_20240402_2.pdf",
+        "fetchedAt": "2026-09-28T02:20:00Z",
+        "publisher": "중앙선거관리위원회"
+      }
+    },
+    {
+      "id": "22-daegu-dong-gunwi-b-12",
+      "title": "소보(서군위IC)~군위(내량리)간 신설도로 추진",
+      "category": "",
+      "status": "notJudged",
+      "source": {
+        "sourceUrl": "https://policy.nec.go.kr/policy_pdf/20240410/PDF/PBINFO_PUB/2702/003_100152715_20240402_2.pdf",
+        "fetchedAt": "2026-09-28T02:20:00Z",
+        "publisher": "중앙선거관리위원회"
+      }
+    },
+    {
+      "id": "22-daegu-dong-gunwi-b-13",
+      "title": "토지거래 허가구역 현실화",
+      "category": "",
+      "status": "notJudged",
+      "source": {
+        "sourceUrl": "https://policy.nec.go.kr/policy_pdf/20240410/PDF/PBINFO_PUB/2702/003_100152715_20240402_2.pdf",
+        "fetchedAt": "2026-09-28T02:20:00Z",
+        "publisher": "중앙선거관리위원회"
+      }
+    },
+    {
+      "id": "22-daegu-dong-gunwi-b-14",
+      "title": "염색산단 이전 전략적 재검토",
+      "category": "",
+      "status": "notJudged",
+      "source": {
+        "sourceUrl": "https://policy.nec.go.kr/policy_pdf/20240410/PDF/PBINFO_PUB/2702/003_100152715_20240402_2.pdf",
+        "fetchedAt": "2026-09-28T02:20:00Z",
+        "publisher": "중앙선거관리위원회"
+      }
+    },
+    {
+      "id": "22-daegu-dong-gunwi-b-15",
+      "title": "군위군 푸드플랜 종합계획 수립",
+      "category": "",
+      "status": "notJudged",
+      "source": {
+        "sourceUrl": "https://policy.nec.go.kr/policy_pdf/20240410/PDF/PBINFO_PUB/2702/003_100152715_20240402_2.pdf",
+        "fetchedAt": "2026-09-28T02:20:00Z",
+        "publisher": "중앙선거관리위원회"
+      }
+    },
+    {
+      "id": "22-daegu-dong-gunwi-b-16",
+      "title": "군위군소방서 설치",
+      "category": "",
+      "status": "notJudged",
+      "source": {
+        "sourceUrl": "https://policy.nec.go.kr/policy_pdf/20240410/PDF/PBINFO_PUB/2702/003_100152715_20240402_2.pdf",
+        "fetchedAt": "2026-09-28T02:20:00Z",
+        "publisher": "중앙선거관리위원회"
+      }
+    },
+    {
+      "id": "22-daegu-dong-gunwi-b-17",
+      "title": "교육발전특구 지정",
+      "category": "",
+      "status": "notJudged",
+      "source": {
+        "sourceUrl": "https://policy.nec.go.kr/policy_pdf/20240410/PDF/PBINFO_PUB/2702/003_100152715_20240402_2.pdf",
+        "fetchedAt": "2026-09-28T02:20:00Z",
+        "publisher": "중앙선거관리위원회"
+      }
+    },
+    {
+      "id": "22-daegu-dong-gunwi-b-18",
+      "title": "합리적인 농업경영을 위한 「농지법」 개정 추진",
+      "category": "",
+      "status": "notJudged",
+      "source": {
+        "sourceUrl": "https://policy.nec.go.kr/policy_pdf/20240410/PDF/PBINFO_PUB/2702/003_100152715_20240402_2.pdf",
+        "fetchedAt": "2026-09-28T02:20:00Z",
+        "publisher": "중앙선거관리위원회"
+      }
+    },
+    {
+      "id": "22-daegu-dong-gunwi-b-19",
+      "title": "폐교 활용 ‘에듀 플레이 파크’ 조성하여 교육환경 개선",
+      "category": "",
+      "status": "notJudged",
+      "source": {
+        "sourceUrl": "https://policy.nec.go.kr/policy_pdf/20240410/PDF/PBINFO_PUB/2702/003_100152715_20240402_2.pdf",
+        "fetchedAt": "2026-09-28T02:20:00Z",
+        "publisher": "중앙선거관리위원회"
+      }
+    }
+  ]
+}
