@@ -1,0 +1,66 @@
+{
+  "_note": "제22대 국회의원선거 전북 정읍시고창군 당선인 윤준병 (더불어민주당). 책자형 선거공보 PDF 3–6쪽의 핵심 공약 프로젝트 제목 5개(정읍 핵심 공약, 공통 핵심 공약 3개, 고창 핵심 공약)를 쪽 순서대로 넣었다. 대괄호만 덜어냈다. 각 프로젝트 아래 굵은 소제목과 - 세부 사업, 따옴표 구호는 넣지 않았다. 글자층에서 숫자가 빠져 있어 필요한 곳은 쪽 이미지로 확인했다. 제목은 원문 문구를 따랐고 바꾼 것은 앞 번호·끝의 !·장식 기호 덜어내기와 줄바꿈 이어 붙이기뿐이다. 분류(category)는 앱에 정해진 분류 체계가 없어 비워 두었다. 이행 여부는 판정하지 않았다(notJudged).",
+  "districtId": "nec-84488711",
+  "source": {
+    "sourceUrl": "https://policy.nec.go.kr/policy_pdf/20240410/PDF/PBINFO_PUB/5307/003_100152161_20240402_2.pdf",
+    "fetchedAt": "2026-09-28T02:30:00Z",
+    "publisher": "중앙선거관리위원회"
+  },
+  "pledges": [
+    {
+      "id": "22-jeonbuk-jeongeup-gochang-01",
+      "title": "동진강 회복 프로젝트",
+      "category": "",
+      "status": "notJudged",
+      "source": {
+        "sourceUrl": "https://policy.nec.go.kr/policy_pdf/20240410/PDF/PBINFO_PUB/5307/003_100152161_20240402_2.pdf",
+        "fetchedAt": "2026-09-28T02:30:00Z",
+        "publisher": "중앙선거관리위원회"
+      }
+    },
+    {
+      "id": "22-jeonbuk-jeongeup-gochang-02",
+      "title": "지방경제 회생(回生) 프로젝트",
+      "category": "",
+      "status": "notJudged",
+      "source": {
+        "sourceUrl": "https://policy.nec.go.kr/policy_pdf/20240410/PDF/PBINFO_PUB/5307/003_100152161_20240402_2.pdf",
+        "fetchedAt": "2026-09-28T02:30:00Z",
+        "publisher": "중앙선거관리위원회"
+      }
+    },
+    {
+      "id": "22-jeonbuk-jeongeup-gochang-03",
+      "title": "농어촌 재구조화 프로젝트",
+      "category": "",
+      "status": "notJudged",
+      "source": {
+        "sourceUrl": "https://policy.nec.go.kr/policy_pdf/20240410/PDF/PBINFO_PUB/5307/003_100152161_20240402_2.pdf",
+        "fetchedAt": "2026-09-28T02:30:00Z",
+        "publisher": "중앙선거관리위원회"
+      }
+    },
+    {
+      "id": "22-jeonbuk-jeongeup-gochang-04",
+      "title": "동행(同行) 프로젝트",
+      "category": "",
+      "status": "notJudged",
+      "source": {
+        "sourceUrl": "https://policy.nec.go.kr/policy_pdf/20240410/PDF/PBINFO_PUB/5307/003_100152161_20240402_2.pdf",
+        "fetchedAt": "2026-09-28T02:30:00Z",
+        "publisher": "중앙선거관리위원회"
+      }
+    },
+    {
+      "id": "22-jeonbuk-jeongeup-gochang-05",
+      "title": "서해안 철도 건설",
+      "category": "",
+      "status": "notJudged",
+      "source": {
+        "sourceUrl": "https://policy.nec.go.kr/policy_pdf/20240410/PDF/PBINFO_PUB/5307/003_100152161_20240402_2.pdf",
+        "fetchedAt": "2026-09-28T02:30:00Z",
+        "publisher": "중앙선거관리위원회"
+      }
+    }
+  ]
+}
