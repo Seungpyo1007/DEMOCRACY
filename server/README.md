@@ -26,14 +26,14 @@ Reading needs no account; the account routes need a Supabase Auth sign-in.
 | `supabase/functions/ingest-nec/`                           | Election and district codes and candidates (weekly), historical winners (`?mode=backfill`)                    |
 | `supabase/functions/bff/`                                  | The API. `contract.ts` mirrors the app's Dart parsers. `account.ts`, `residency.ts`: signed-in.               |
 | `scripts/`                                                 | One-off importers that write SQL to stdout; `build_district_areas.ts` builds the mapping CSV                  |
-| `data/`                                                    | Generated inputs kept in git: the 22대 district mapping                                                       |
+| `data/`                                                    | Inputs kept in git: the 22대 district mapping; `pledges_22/`, pilot pledge lists from 선거공보                |
 | `testdata/`                                                | Hand-written API samples and district-mapping samples. See `testdata/README.md`.                              |
 
 ## Develop
 
 ```sh
 brew install deno
-deno task ci      # fmt --check, lint, check, test (offline; 79 tests)
+deno task ci      # fmt --check, lint, check, test (offline; 80 tests)
 ```
 
 ## BFF contract (fixed; the app is built against it)
@@ -198,7 +198,10 @@ cached (`no-store`). "Me" below is `{profile|null, consents, residency|null}`:
    - `import_historical_results.ts`: older results from CSV.
    - `import_geojson.ts`: 22대 boundaries. Confirm the OhmyNews `2024_22_elec_map` license first;
      `--license` is required.
-   - `import_curated.ts --kind pledges|region`: pilot districts only.
+   - `import_curated.ts --kind pledges|region`: pilot districts only. The 22대 pilot pledge lists
+     are in `data/pledges_22/`, one file per district, taken from each winner's 선거공보 and marked
+     `notJudged`:
+     `for f in data/pledges_22/*.json; do deno run --allow-read scripts/import_curated.ts --kind pledges "$f"; done > pledges_22.sql`
 8. **Handle election periods.** Switch candidates to hourly:
    `select cron.alter_job((select jobid from cron.job where jobname='ingest-nec-candidates'), schedule := '5 * * * *');`
    - While a count runs, set
