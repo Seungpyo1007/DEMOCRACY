@@ -560,27 +560,26 @@ Deno.test("committed 선거구 변천: every region doc and the lineage CSV impo
   assertStringIncludes(lineageToSql(csv), "insert into public.district_lineage");
 });
 
-Deno.test("22대 pilot pledge lists: 선거공보 only, nothing judged, importable", async () => {
+Deno.test("22대 pledge lists: one per 선거구, 선거공보 only, nothing judged, importable", async () => {
   const dir = new URL("../data/pledges_22/", import.meta.url);
-  const expected: Record<string, [string, string]> = {
-    "seoul-mapo-b.json": ["서울특별시", "마포구을"],
-    "seoul-yeongdeungpo-a.json": ["서울특별시", "영등포구갑"],
-    "seoul-jongno.json": ["서울특별시", "종로구"],
-    "gwangju-seo-a.json": ["광주광역시", "서구갑"],
-    "gyeonggi-hwaseong-d.json": ["경기도", "화성시정"],
-  };
-  const seen = new Set<string>();
+  // Every 22대 선거구, from the committed mapping; each needs exactly one list.
+  const areas = parseCsvObjects(
+    await Deno.readTextFile(new URL("../data/district_areas_20240410.csv", import.meta.url)),
+  );
+  const districts = new Set(areas.map((r) => districtIdFor(necSggCode(r.sd_name, r.sgg_name))));
+  assertEquals(districts.size, 254);
+  const covered = new Set<string>();
   const ids = new Set<string>();
   for await (const entry of Deno.readDir(dir)) {
     if (!entry.name.endsWith(".json")) continue;
-    seen.add(entry.name);
     const doc = JSON.parse(await Deno.readTextFile(new URL(entry.name, dir)));
-    const [sd, sgg] = expected[entry.name] ?? [];
-    assert(sd, `unexpected file ${entry.name}`);
-    assertEquals(doc.districtId, districtIdFor(necSggCode(sd, sgg)), entry.name);
+    assert(districts.has(doc.districtId), `${entry.name}: ${doc.districtId} is not a 22대 선거구`);
+    assert(!covered.has(doc.districtId), `${entry.name}: second list for ${doc.districtId}`);
+    covered.add(doc.districtId);
     const pdf = doc.source.sourceUrl as string;
     assertMatch(pdf, /^https:\/\/policy\.nec\.go\.kr\/policy_pdf\/20240410\/.+\.pdf$/);
     assertEquals(doc.source.publisher, "중앙선거관리위원회");
+    assert(doc.pledges.length > 0, entry.name);
     for (const p of doc.pledges) {
       assert(!ids.has(p.id), `duplicate id ${p.id}`);
       ids.add(p.id);
@@ -592,7 +591,7 @@ Deno.test("22대 pilot pledge lists: 선거공보 only, nothing judged, importab
     const sql = pledgesToSql(doc);
     assert(!/'(fulfilled|inProgress|unfulfilled|reversed)'/.test(sql), entry.name);
   }
-  assertEquals([...seen].sort(), Object.keys(expected).sort());
+  assertEquals(covered.size, districts.size, "a 선거구 has no pledge list");
 });
 
 // ------------------------------------------------------------------ 본회의 출결 xlsx
