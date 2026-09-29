@@ -72,12 +72,12 @@ class GeminiNanoBridge {
         return if (system) {
             generateContentRequest(
                 SystemInstruction(request.instructions),
-                TextPart(request.prompt),
+                TextPart(request.fullPrompt),
                 configure,
             )
         } else {
             generateContentRequest(
-                TextPart("${request.instructions}\n\n${request.prompt}"),
+                TextPart("${request.instructions}\n\n${request.fullPrompt}"),
                 configure,
             )
         }

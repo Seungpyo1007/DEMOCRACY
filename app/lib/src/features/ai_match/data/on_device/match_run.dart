@@ -46,7 +46,7 @@ class MatchInput {
 
 /// Bumped whenever the instructions change, so cached answers to the old
 /// wording are not served as answers to the new one.
-const matchPromptVersion = 'match-v1';
+const matchPromptVersion = 'match-v2';
 
 /// The most pledges and bills one run reads. A small on-device context has
 /// room for about this much Korean alongside the instructions and the answer.
@@ -93,27 +93,27 @@ OnDeviceRequest matchRequest(MatchInput input) {
   }
   buffer
     ..writeln()
-    ..writeln('관심 분야마다 axes 항목을 하나씩 만든다.')
-    ..writeln('label: 관심 분야 이름을 그대로 쓴다.')
-    ..writeln(
-      'score: 0~100 정수. 그 분야를 직접 다루는 공약·법안이 많고 구체적일수록 높다. '
-      '관련 항목이 없으면 0.',
-    )
-    ..writeln(
-      'reasons: 최대 $matchReasonsPerAxis개. id는 위 번호 하나, '
-      'text는 그 항목이 이 분야와 어떻게 관련되는지 60자 이내 한 문장(사실만).',
-    )
-    ..writeln(
-      '형식(JSON만): {"axes":[{"label":"...","score":0,'
-      '"reasons":[{"id":"P1","text":"..."}]}]}',
-    );
+    ..writeln('관심 분야마다 axes 항목을 하나씩 만든다.');
 
   return OnDeviceRequest(
     task: OnDeviceTask.match,
     instructions: _matchInstructions,
     prompt: buffer.toString(),
+    format: _matchFormat,
   );
 }
+
+/// The fields, for a model without guided generation (on iOS the same
+/// words are the `@Generable` guides). A rubric, not "higher is more":
+/// without one the on-device model gave every interest with any match 100.
+const _matchFormat =
+    'label: 관심 분야 이름을 그대로 쓴다.\n'
+    'score: 0~100 정수. 관련 항목 없음 0, 간접 관련 1건 20, 직접 관련 1건 40, '
+    '직접 관련 2~3건 60, 직접 관련 4건 이상 80.\n'
+    'reasons: 최대 $matchReasonsPerAxis개. id는 위 번호 하나, '
+    'text는 그 항목이 이 분야와 어떻게 관련되는지 60자 이내 한 문장(사실만).\n'
+    '형식(JSON만): {"axes":[{"label":"...","score":...,'
+    '"reasons":[{"id":"...","text":"..."}]}]}';
 
 /// One reason that survived validation.
 class VerifiedReason {

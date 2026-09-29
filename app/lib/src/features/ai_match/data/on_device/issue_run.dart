@@ -128,12 +128,12 @@ OnDeviceRequest issueRequest(List<CitedItem> batch) {
   buffer
     ..writeln()
     ..writeln('모든 제목에 대해 items 항목을 하나씩 만든다. id는 번호 그대로.')
-    ..writeln('label: 제목이 주로 다루는 쟁점을 목록에서 하나만 골라 그대로 쓴다.')
-    ..writeln('형식(JSON만): {"items":[{"id":"I1","label":"교통"}]}');
+    ..writeln('label: 제목이 주로 다루는 쟁점을 목록에서 하나만 골라 그대로 쓴다.');
   return OnDeviceRequest(
     task: OnDeviceTask.issues,
     instructions: _issueInstructions,
     prompt: buffer.toString(),
+    format: '형식(JSON만): {"items":[{"id":"...","label":"..."}]}',
   );
 }
 

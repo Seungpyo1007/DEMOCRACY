@@ -146,7 +146,10 @@ final class OnDeviceAiPlugin: NSObject, FlutterPlugin, FlutterStreamHandler {
   }
 }
 
-/// `{task, instructions, prompt}` from Dart.
+/// `{task, instructions, prompt, format}` from Dart. `format` spells out the
+/// fields for a platform without guided generation; here the `@Generable`
+/// guides say the same, and repeating it in the prompt (with its example)
+/// pulled the model toward the example's values, so it is not used.
 struct OnDeviceRequest {
   let task: String
   let instructions: String
@@ -180,9 +183,11 @@ struct OnDeviceRequest {
   struct MatchAxisOutput {
     @Guide(description: "관심 분야 이름. 입력에 적힌 그대로")
     var label: String
-    @Guide(description: "그 분야를 직접 다루는 공약·법안이 얼마나 있는지. 없으면 0", .range(0...100))
+    @Guide(
+      description: "관련도. 관련 항목 없음 0, 간접 관련 1건 20, 직접 관련 1건 40, 직접 관련 2~3건 60, 직접 관련 4건 이상 80",
+      .range(0...100))
     var score: Int
-    @Guide(description: "근거. 입력 항목 하나씩", .maximumCount(2))
+    @Guide(description: "근거. 이 분야와 직접 관련된 입력 항목", .maximumCount(2))
     var reasons: [MatchReasonOutput]
   }
 
@@ -207,10 +212,21 @@ struct OnDeviceRequest {
   struct StanceItem {
     @Guide(description: "공약 번호. 예: P1")
     var id: String
-    @Guide(description: "성장·투자 확대 -1, 소득 재분배·복지 확대 1, 둘 다 아니면 0", .range(-1...1))
-    var x: Int
-    @Guide(description: "규제 신설·공공 관리 강화 -1, 규제 완화·민간 자율 1, 둘 다 아니면 0", .range(-1...1))
-    var y: Int
+    // Said before the sides, so each pledge is read on its own: without it
+    // the model tended to repeat the previous item's answer down a batch.
+    // The app does not use it.
+    @Guide(description: "이 공약이 누구에게 무엇을 하려는지 15자 이내. 예: 기업 세금 감면, 노인 급식 지원, 공장 배출 단속")
+    var action: String
+    // Named sides rather than -1/0/1: asked for numbers, the model put every
+    // pledge at 1 on both axes.
+    @Guide(
+      description: "경제 축. 성장·투자·산업 육성을 앞세우면 성장, 소득 재분배·복지 지출 확대를 앞세우면 분배, 어느 쪽도 아니면 중립",
+      .anyOf(["성장", "분배", "중립"]))
+    var economy: String
+    @Guide(
+      description: "규제 축. 규제 신설·공공 관리 강화를 제안하면 규제, 규제 완화·민간 자율을 제안하면 자율, 어느 쪽도 아니면 중립",
+      .anyOf(["규제", "자율", "중립"]))
+    var regulation: String
   }
 
   @available(iOS 26.0, *)

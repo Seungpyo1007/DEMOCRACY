@@ -97,16 +97,24 @@ class OnDeviceRequest {
     required this.task,
     required this.instructions,
     required this.prompt,
+    this.format = '',
   });
 
   final OnDeviceTask task;
   final String instructions;
   final String prompt;
 
+  /// The output fields and JSON shape, spelled out for a platform with no
+  /// guided generation (Android appends it to the prompt). iOS leaves it
+  /// out: there the `@Generable` guides carry the same words, and repeating
+  /// them in the prompt pulled the model toward the example's values.
+  final String format;
+
   Map<String, Object?> toMap() => {
     'task': task.name,
     'instructions': instructions,
     'prompt': prompt,
+    'format': format,
   };
 }
 

@@ -138,15 +138,28 @@ class OnDeviceAiPlugin : FlutterPlugin, MethodChannel.MethodCallHandler,
     }
 }
 
-/** `{task, instructions, prompt}` from Dart. */
-data class OnDeviceRequest(val task: String, val instructions: String, val prompt: String) {
+/**
+ * `{task, instructions, prompt, format}` from Dart. [format] spells out the
+ * output fields and JSON shape; this path has no guided generation, so it is
+ * appended to the prompt (iOS leaves it out and uses its `@Generable` guides).
+ */
+data class OnDeviceRequest(
+    val task: String,
+    val instructions: String,
+    val prompt: String,
+    val format: String,
+) {
+    val fullPrompt: String
+        get() = if (format.isBlank()) prompt else "$prompt\n$format"
+
     companion object {
         fun from(arguments: Any?): OnDeviceRequest? {
             val map = arguments as? Map<*, *> ?: return null
             val task = map["task"] as? String ?: return null
             val instructions = map["instructions"] as? String ?: return null
             val prompt = map["prompt"] as? String ?: return null
-            return OnDeviceRequest(task, instructions, prompt)
+            val format = map["format"] as? String ?: ""
+            return OnDeviceRequest(task, instructions, prompt, format)
         }
     }
 }

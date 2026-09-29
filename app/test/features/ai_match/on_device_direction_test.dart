@@ -41,12 +41,12 @@ void main() {
   group('stances', () {
     final batch = [_item('P1'), _item('P2'), _item('P3')];
 
-    test('keeps -1, 0 and 1 for pledges in the batch', () {
+    test('reads the named sides as -1, 0 and 1', () {
       final marks = validateStances({
         'items': [
-          {'id': 'P1', 'x': -1, 'y': 1},
-          {'id': 'P2', 'x': 0, 'y': 0},
-          {'id': 'P3', 'x': 1.0, 'y': -1},
+          {'id': 'P1', 'economy': '성장', 'regulation': '자율'},
+          {'id': 'P2', 'economy': '중립', 'regulation': '중립'},
+          {'id': 'P3', 'economy': ' 분배 ', 'regulation': '규제'},
         ],
       }, batch);
       expect(marks.map((m) => (m.key, m.x, m.y)), [
@@ -56,16 +56,16 @@ void main() {
       ]);
     });
 
-    test('drops out-of-range values, unknown pledges and repeats', () {
+    test('drops other words, numbers, unknown pledges and repeats', () {
       final marks = validateStances({
         'items': [
-          {'id': 'P1', 'x': 2, 'y': 0}, // off the scale
-          {'id': 'P2', 'x': 0.5, 'y': 0}, // not a class
-          {'id': 'P3', 'x': '1', 'y': 0}, // not a number
-          {'id': 'P9', 'x': 1, 'y': 1}, // not in the batch
-          {'id': 'P3', 'x': 1, 'y': 1},
-          {'id': 'P3', 'x': -1, 'y': -1}, // repeat
-          {'x': 1, 'y': 1}, // no id
+          {'id': 'P1', 'economy': '진보', 'regulation': '중립'}, // not a side
+          {'id': 'P2', 'economy': 1, 'regulation': 0}, // a number
+          {'id': 'P3', 'economy': '분배'}, // one axis missing
+          {'id': 'P9', 'economy': '분배', 'regulation': '자율'}, // not here
+          {'id': 'P3', 'economy': '분배', 'regulation': '자율'},
+          {'id': 'P3', 'economy': '성장', 'regulation': '규제'}, // repeat
+          {'economy': '분배', 'regulation': '자율'}, // no id
         ],
       }, batch);
       expect(marks.map((m) => (m.key, m.x, m.y)), [('P3', 1, 1)]);
@@ -274,7 +274,8 @@ void main() {
       return switch (request.task) {
         OnDeviceTask.stances => {
           'items': [
-            for (final key in keys) {'id': key, 'x': 1, 'y': 1},
+            for (final key in keys)
+              {'id': key, 'economy': '분배', 'regulation': '자율'},
           ],
         },
         OnDeviceTask.issues => {
@@ -297,10 +298,9 @@ void main() {
       expect(blocks.unavailable, isNull);
       final point = blocks.stances!.candidates.single;
       expect((point.x, point.y, point.pledgeCount), (1.0, 1.0, 24));
-      // 24 pledges in batches of 12, then one batch of titles.
+      // 24 pledges in batches of 6, then one batch of titles.
       expect(model.requests.map((r) => r.task), [
-        OnDeviceTask.stances,
-        OnDeviceTask.stances,
+        ...List.filled(4, OnDeviceTask.stances),
         OnDeviceTask.issues,
       ]);
 
@@ -314,7 +314,7 @@ void main() {
     test('the second visit is served from the cache', () async {
       await source().load(district);
       await source().load(district);
-      expect(model.requests, hasLength(3));
+      expect(model.requests, hasLength(5));
     });
 
     test('a device without the model gets the reason and no blocks', () async {
@@ -342,7 +342,7 @@ void main() {
     test('an answer that never validates is a note, not a figure', () async {
       model.answer = (_) => {
         'items': [
-          {'id': 'P1', 'x': 5, 'y': 5},
+          {'id': 'P1', 'economy': '많이 분배', 'regulation': '자율'},
         ],
       };
       final blocks = await source().load(district);

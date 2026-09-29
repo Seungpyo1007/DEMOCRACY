@@ -153,7 +153,8 @@ Object? _answer(OnDeviceRequest request) {
     },
     OnDeviceTask.stances => {
       'items': [
-        for (final key in keys) {'id': key, 'x': 1, 'y': 0},
+        for (final key in keys)
+          {'id': key, 'economy': '분배', 'regulation': '중립'},
       ],
     },
     OnDeviceTask.issues => {

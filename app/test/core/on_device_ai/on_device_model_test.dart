@@ -115,6 +115,7 @@ void main() {
         'task': 'stances',
         'instructions': 'i',
         'prompt': 'p',
+        'format': '',
       });
     });
 
