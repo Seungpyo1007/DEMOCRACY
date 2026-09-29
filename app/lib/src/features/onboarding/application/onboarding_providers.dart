@@ -27,6 +27,13 @@ class ResidentProfileController extends Notifier<ResidentProfile> {
 
   void toggleTag(String tag) => state = state.toggle(tag);
 
+  /// Replaces every chip at once, so a sheet that edits several commits them
+  /// as one change (and anything reading them reruns once, not per chip).
+  void setTags(Set<String> tags) => state = ResidentProfile(
+    tags: Set.unmodifiable(tags),
+    interest: state.interest,
+  );
+
   void setInterest(int value) => state = state.withInterest(value);
 }
 
