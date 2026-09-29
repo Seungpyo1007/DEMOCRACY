@@ -1,0 +1,34 @@
+{
+  "_note": "Sample payload for local development. Not real bills.",
+  "district": { "id": "fixture-seoul-mapo-b", "displayName": "서울 마포구 을" },
+  "legislator": { "id": "fixture-legislator-1", "name": "가상 의원" },
+  "since": "2026-02-01",
+  "months": 6,
+  "bills": [
+    {
+      "id": "fixture-bill-3",
+      "title": "주택임대차보호법 일부개정법률안",
+      "committee": "법제사법위원회",
+      "proposedOn": "2026-07-09",
+      "sourceUrl": "https://likms.assembly.go.kr/bill/fixture-bill-3"
+    },
+    {
+      "id": "fixture-bill-2",
+      "title": "도시철도법 일부개정법률안",
+      "committee": "국토교통위원회",
+      "proposedOn": "2026-05-20",
+      "sourceUrl": "https://likms.assembly.go.kr/bill/fixture-bill-2"
+    },
+    {
+      "id": "fixture-bill-1",
+      "title": "영유아보육법 일부개정법률안",
+      "committee": null,
+      "proposedOn": "2026-03-02",
+      "sourceUrl": "https://likms.assembly.go.kr/bill/fixture-bill-1"
+    }
+  ],
+  "source": {
+    "sourceUrl": "https://open.assembly.go.kr/portal/openapi/fixture-bills",
+    "fetchedAt": "2026-07-30T09:00:00Z"
+  }
+}

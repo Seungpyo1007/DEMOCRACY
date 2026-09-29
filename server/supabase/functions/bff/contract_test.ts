@@ -11,9 +11,11 @@ import {
   validateElectionResults,
   validateEnvelope,
   validateHistoryRecord,
+  validateMemberBills,
   validatePledgeBoard,
   validateReviewBoard,
 } from "./contract.ts";
+import { windowStart } from "./bills.ts";
 import { createHandler } from "./handler.ts";
 import { MemoryStore } from "./store.ts";
 import { signedOut } from "../../../testdata/fake_auth.ts";
@@ -530,6 +532,54 @@ Deno.test("the app's own fixtures pass the validator (validator is not too stric
   // The offline fixture also carries sample AI blocks; only its trend is the served shape.
   const direction = JSON.parse(await text("ai_direction_fixture-seoul-mapo-b.json"));
   assertEquals(validateDirectionReport({ trend: direction.trend }), []);
+  assertEquals(
+    validateMemberBills(JSON.parse(await text("member_bills_fixture-seoul-mapo-b.json"))),
+    [],
+  );
+});
+
+Deno.test("bills: the incumbent's 대표발의 bills in the last N KST months, each with its page", async () => {
+  const { get } = await setup();
+  const { res, body } = await get(`/districts/${MAPO_B}/bills`);
+  assertEquals(res.status, 200);
+  assertEquals(res.headers.get("Cache-Control"), "public, max-age=300");
+  assertEquals(validateEnvelope(body, false), []);
+  assertEquals(validateMemberBills(body.data), []);
+  assertClean(body);
+
+  const d = body.data;
+  // NOW is 2026-09-24: six calendar months is April through September.
+  assertEquals([d.since, d.months, d.legislator.name], ["2026-04-01", 6, "가상 의원"]);
+  // Newest first; the March bill is outside the window, another member's bill is not here.
+  assertEquals(
+    d.bills.map((b: { id: string; proposedOn: string }) => [b.id, b.proposedOn]),
+    [["PRC_FAKE0003", "2026-07-09"], ["PRC_FAKE0002", "2026-06-03"]],
+  );
+  assertEquals(
+    d.bills[0].sourceUrl,
+    "http://likms.assembly.go.kr/bill/billDetail.do?billId=PRC_FAKE0003",
+  );
+  assertEquals(d.bills[0].committee, "국토교통위원회");
+  assertEquals(
+    d.source.sourceUrl,
+    "https://open.assembly.go.kr/portal/data/service/selectAPIServicePage.do/OK7XM1000938DS17215",
+  );
+
+  const wider = await get(`/districts/${MAPO_B}/bills?months=12`);
+  assertEquals(wider.body.data.since, "2025-10-01");
+  assertEquals(wider.body.data.bills.length, 3);
+
+  for (const months of ["0", "13", "2.5", "x"]) {
+    const bad = await get(`/districts/${MAPO_B}/bills?months=${months}`);
+    assertEquals([months, bad.res.status, bad.body.error.code], [months, 400, "bad_request"]);
+  }
+});
+
+Deno.test("bills: windowStart counts calendar months in KST", () => {
+  // 2026-08-31T16:00Z is already 9월 1일 in Seoul.
+  assertEquals(windowStart(new Date("2026-08-31T16:00:00Z"), 1), "2026-09-01");
+  assertEquals(windowStart(new Date("2026-08-31T14:00:00Z"), 1), "2026-08-01");
+  assertEquals(windowStart(new Date("2026-02-10T00:00:00Z"), 6), "2025-09-01");
 });
 
 Deno.test("validator catches what the Dart parsers reject", () => {

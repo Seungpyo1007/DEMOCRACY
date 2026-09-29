@@ -246,6 +246,39 @@ export function validateDirectionReport(json: unknown): string[] {
   return errs;
 }
 
+const isoDate = (v: unknown) => typeof v === "string" && /^\d{4}-\d{2}-\d{2}$/.test(v);
+
+/**
+ * MemberBills (features/ai_match/domain/member_bills.dart): the incumbent's bills in a window,
+ * the raw text the app's on-device AI reads. Every bill needs an id, a title, a KST date and its
+ * own presentable link, because the app cites each one back to the reader by that link.
+ */
+export function validateMemberBills(json: unknown): string[] {
+  const errs: string[] = [];
+  if (!isMap(json)) return ["bills: not an object"];
+  const l = json.legislator;
+  if (!isMap(l) || !nonEmpty(l.id) || !nonEmpty(l.name)) errs.push("legislator: id and name");
+  if (!isoDate(json.since)) errs.push("since: YYYY-MM-DD");
+  if (!Array.isArray(json.bills)) errs.push("bills: list required");
+  (Array.isArray(json.bills) ? json.bills : []).forEach((b, i) => {
+    if (!isMap(b) || !nonEmpty(b.id) || !nonEmpty(b.title)) {
+      return errs.push(`bills[${i}]: id and title`);
+    }
+    if (!isoDate(b.proposedOn)) errs.push(`bills[${i}].proposedOn: YYYY-MM-DD`);
+    if (b.committee !== null && b.committee !== undefined && typeof b.committee !== "string") {
+      errs.push(`bills[${i}].committee: string or null`);
+    }
+    // A bill carries its link; its fetch time is the list's.
+    source(
+      { sourceUrl: b.sourceUrl, fetchedAt: "1970-01-01T00:00:00Z" },
+      `bills[${i}]`,
+      errs,
+    );
+  });
+  source(json.source, "bills", errs);
+  return errs;
+}
+
 /** KstInstant.parse: parseable, and stating its offset (Z or ±hh:mm). */
 function offsetTimestamp(v: unknown): boolean {
   return nonEmpty(v) && !Number.isNaN(Date.parse(v)) && /(Z|[+-]\d{2}:?\d{2})$/.test(v);
