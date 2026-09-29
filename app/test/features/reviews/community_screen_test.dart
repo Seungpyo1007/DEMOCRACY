@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:democracy/src/app/app_routes.dart';
 import 'package:democracy/src/core/auth/address_controller.dart';
 import 'package:democracy/src/core/auth/address_state.dart';
@@ -70,6 +72,34 @@ class _EmptyCommunity implements CommunityRepository {
   Future<List<DiscussionThread>> loadThreads(String districtId) async =>
       const [];
 }
+
+/// A channel that others keep writing in: the test pushes what the socket
+/// would deliver.
+class _LiveCommunity extends _EmptyCommunity {
+  _LiveCommunity(this.messages);
+
+  List<ChatMessage> messages;
+  final _updates = StreamController<List<ChatMessage>>.broadcast();
+
+  void arrive(ChatMessage message) {
+    messages = [...messages, message];
+    _updates.add(messages);
+  }
+
+  @override
+  Stream<List<ChatMessage>> watchChannel(String districtId) async* {
+    yield messages;
+    yield* _updates.stream;
+  }
+}
+
+ChatMessage _said(int i, {bool mine = false}) => ChatMessage(
+  id: 'm$i',
+  author: '익명 주민',
+  body: '메시지 $i',
+  verifiedResident: true,
+  mine: mine,
+);
 
 void main() {
   Future<ProviderContainer> pumpCommunity(
@@ -620,6 +650,101 @@ void main() {
       await tester.pumpAndSettle();
       expect(find.text('로그인하고 계속'), findsOneWidget);
       expect(find.byType(TextField), findsOneWidget);
+    });
+
+    group('as others write', () {
+      ScrollPosition page(WidgetTester tester) => tester
+          .state<ScrollableState>(
+            find
+                .descendant(
+                  of: find.byType(CustomScrollView),
+                  matching: find.byType(Scrollable),
+                )
+                .first,
+          )
+          .position;
+
+      testWidgets('a reader scrolled up is not moved; 「새 메시지」 takes them '
+          'down', (tester) async {
+        final live = _LiveCommunity([for (var i = 0; i < 30; i++) _said(i)]);
+        await pumpCommunity(tester, community: live);
+        await openTab(tester, '지역 채팅');
+        page(tester).jumpTo(200);
+        await tester.pumpAndSettle();
+
+        live.arrive(_said(30));
+        await tester.pumpAndSettle();
+
+        expect(page(tester).pixels, 200, reason: 'the page did not jump');
+        expect(find.text('새 메시지'), findsOneWidget);
+        expect(find.bySemanticsLabel('새 메시지, 아래로 이동'), findsOneWidget);
+
+        await tester.tap(find.text('새 메시지'));
+        await tester.pumpAndSettle();
+
+        expect(page(tester).pixels, page(tester).maxScrollExtent);
+        expect(find.text('메시지 30'), findsOneWidget);
+        expect(find.text('새 메시지'), findsNothing);
+      });
+
+      testWidgets('a reader at the end is taken to the new message', (
+        tester,
+      ) async {
+        final live = _LiveCommunity([for (var i = 0; i < 30; i++) _said(i)]);
+        await pumpCommunity(tester, community: live);
+        await openTab(tester, '지역 채팅');
+        page(tester).jumpTo(page(tester).maxScrollExtent);
+        await tester.pumpAndSettle();
+
+        live.arrive(_said(30));
+        await tester.pumpAndSettle();
+
+        expect(find.text('새 메시지'), findsNothing);
+        expect(page(tester).pixels, page(tester).maxScrollExtent);
+        expect(
+          tester.getRect(find.text('메시지 30')).bottom,
+          lessThan(tester.view.physicalSize.height),
+        );
+      });
+
+      testWidgets('scrolling down to it clears 「새 메시지」', (tester) async {
+        final live = _LiveCommunity([for (var i = 0; i < 30; i++) _said(i)]);
+        await pumpCommunity(tester, community: live);
+        await openTab(tester, '지역 채팅');
+
+        live.arrive(_said(30));
+        await tester.pumpAndSettle();
+        expect(find.text('새 메시지'), findsOneWidget);
+
+        page(tester).jumpTo(page(tester).maxScrollExtent);
+        await tester.pumpAndSettle();
+        expect(find.text('새 메시지'), findsNothing);
+      });
+
+      testWidgets('one\'s own message and the first read raise no notice', (
+        tester,
+      ) async {
+        final live = _LiveCommunity([for (var i = 0; i < 30; i++) _said(i)]);
+        await pumpCommunity(tester, community: live);
+        await openTab(tester, '지역 채팅');
+        expect(find.text('새 메시지'), findsNothing);
+
+        live.arrive(_said(30, mine: true));
+        await tester.pumpAndSettle();
+        expect(find.text('새 메시지'), findsNothing);
+      });
+
+      testWidgets('another tab hears nothing of the channel', (tester) async {
+        final live = _LiveCommunity([for (var i = 0; i < 30; i++) _said(i)]);
+        await pumpCommunity(tester, community: live);
+        await openTab(tester, '지역 채팅');
+        await openTab(tester, '정책 토론');
+
+        live.arrive(_said(30));
+        await tester.pumpAndSettle();
+        expect(find.text('새 메시지'), findsNothing);
+        expect(live._updates.hasListener, isFalse, reason: 'socket let go');
+      });
     });
 
     testWidgets('sends and shows the message', (tester) async {
