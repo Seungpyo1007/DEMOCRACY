@@ -25,6 +25,7 @@ dependencies:
   local_auth: ^3.0.2
   native_liquid_glass: ^0.2.14
   path_provider: ^2.1.6
+  realtime_client: ^2.13.0
   share_plus: ^13.3.0
   shared_preferences: ^2.5.5
   sign_in_with_apple: ^8.2.0

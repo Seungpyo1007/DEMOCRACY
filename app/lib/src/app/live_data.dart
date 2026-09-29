@@ -4,6 +4,7 @@ import 'package:democracy/src/core/account/auth_controller.dart';
 import 'package:democracy/src/core/account/gotrue_auth_repository.dart';
 import 'package:democracy/src/core/auth/address_state.dart';
 import 'package:democracy/src/core/auth/address_store.dart';
+import 'package:democracy/src/core/lifecycle/app_foreground.dart';
 import 'package:democracy/src/core/network/bff_client.dart';
 import 'package:democracy/src/core/network/bff_config.dart';
 import 'package:democracy/src/core/network/not_available.dart';
@@ -23,6 +24,7 @@ import 'package:democracy/src/features/pledges/data/remote_pledge_repository.dar
 import 'package:democracy/src/features/results/application/results_providers.dart';
 import 'package:democracy/src/features/results/data/remote_results_repository.dart';
 import 'package:democracy/src/features/reviews/application/review_providers.dart';
+import 'package:democracy/src/features/reviews/data/realtime_channel_transport.dart';
 import 'package:democracy/src/features/reviews/data/remote_review_repository.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter_riverpod/misc.dart';
@@ -84,7 +86,16 @@ List<Override> liveDataOverrides(BffConfig? config) {
     ),
     reviewRepositoryProvider.overrideWithValue(RemoteReviewRepository(client)),
     communityRepositoryProvider.overrideWithValue(
-      RemoteCommunityRepository(client),
+      RemoteCommunityRepository(
+        client,
+        // Realtime lives beside the BFF at <project>/realtime/v1 and takes
+        // the same anon key; the channel's topics are public.
+        transport: RealtimeChannelTransport(
+          projectUrl: config.baseUrl.replace(path: '/'),
+          anonKey: config.anonKey,
+        ),
+        foreground: appForegroundChanges,
+      ),
     ),
     addressStoreProvider.overrideWith(
       (ref) => LiveAddressStore(const SecureAddressStore()),
