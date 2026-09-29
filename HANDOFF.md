@@ -108,7 +108,8 @@
 - 켜는 법: `flutter run --dart-define=BFF_URL=https://<ref>.supabase.co/functions/v1/bff --dart-define=BFF_ANON_KEY=<anon>`. 없으면 지금처럼 전부 fixture이고, 테스트·골든도 fixture로 돈다(`lib/src/app/live_data.dart`).
 - 실데이터: 지역구 프로필, 역사, 주소 검색, 위치 → 지역구, 공약(큐레이션된 지역구만), 개표(22대 최종 결과, `/districts/{id}/results`), 주민 평가·지역 채팅·정책 토론. AI는 BFF 모드에서 "준비 중"이다.
 - 개표는 선거 없는 기간이라 `electionSchedule: null`, `live: false`, `polls: []`로 옴. 한 번 받고 끝(`RemoteResultsRepository`). 254개 지역구가 오므로 지도는 시도 칩으로 한 시도씩 보여 주고, 13개 넘으면 3열로 줄인다. 선거 기간 SSE/폴링과 서버 쪽 공표 차단은 아직 없음.
-- 평가·채팅·토론은 처음엔 비어 있다. 빈 상태는 "아직 올라온 평가가 없습니다" 같은 안내로 보이고 0.0 평균은 그리지 않는다. 토론 스레드는 현직 의원 대표발의 법안에서 서버가 연다(`sync_bill_threads`). 채팅은 소켓이 없어 열 때와 보낸 뒤에만 다시 읽는다.
+- 평가·채팅·토론은 처음엔 비어 있다. 빈 상태는 "아직 올라온 평가가 없습니다" 같은 안내로 보이고 0.0 평균은 그리지 않는다. 토론 스레드는 현직 의원 대표발의 법안에서 서버가 연다(`sync_bill_threads`).
+- 채팅은 실시간이다. `community_messages` insert/delete 트리거가 Supabase Realtime Broadcast(`realtime.send`)로 공개 토픽 `district-chat:<district_id>`에 보낸다. 이벤트 `message`는 GET 응답의 메시지 하나와 같은 모양(`mine` 없음), `delete`는 `{id, deleted:true}`. 테이블은 여전히 RLS deny-all이고 publication에 넣지 않는다. 앱은 채팅 탭이 보이는 동안만 `realtime_client`로 붙고(`LiveChannel`, `RealtimeChannelTransport`), 탭을 떠나거나 백그라운드로 가면 끊는다. 붙을 때마다 한 번 다시 읽어 끊긴 동안의 메시지를 메우고, 실패하면 1·2·4…30초 간격으로 다시 붙는다. 소켓이 안 되면 예전처럼 열 때와 보낸 뒤에 읽는다. 내가 보낸 건 POST 응답으로 바로 보이고 브로드캐스트로 또 와도 id로 한 번만 보인다. 위로 스크롤해 읽는 중이면 화면을 움직이지 않고 「새 메시지」를 띄운다. 프로젝트에서 Realtime → Settings의 Allow public access가 켜져 있어야 한다(기본값). 활동명 변경·탈퇴는 다시 방송하지 않아 다음 읽기에서 반영된다.
 - 캐시: 프로필·역사·공약·개표(최종 결과라서)만 마지막 응답을 보관해 오프라인에 보여 준다. 각 수치의 `fetchedAt`이 배지에 찍히므로 별도 stale 표시는 두지 않았다. 주소 질의와 좌표는 캐시하지 않는다.
 - `LegislatorRecord.attendance`·`votes`는 선택 필드가 됐다. 본회의 출결은 API가 아니라 회기별 파일이라 없을 수 있다.
 - `servedAt`은 `BffResponse`까지 온다. `ServerAnchoredClock`은 아직 만들지 않았다.
@@ -126,7 +127,7 @@
 | 의원·후보·공약 | `DistrictRepository` · `PledgeRepository` | 열린국회정보·선관위 API 계약과 키 |
 | AI 매칭 | `MatchRepository` | LLM 공급자, 가중치 정책, 비용 상한, 편향 감사 기준 |
 | 평가 쓰기 | `ReviewRepository.submit` → `POST /districts/{id}/reviews` | 서버 저장·주민 인증 확인·분당 5건 제한은 됨. 조작 방지 정책은 아직 |
-| 채팅 | `CommunityRepository` → `GET /community`, `POST /messages` | WebSocket 엔드포인트, moderation·신고 정책 |
+| 채팅 | `CommunityRepository` → `GET /community`, `POST /messages`, Realtime `district-chat:<id>` | 실시간 수신은 됨. moderation·신고 정책은 아직 |
 | 혐오·허위 감지 | `ContentGuard` + BFF `_shared/content_guard.ts` | 혐오 목록만 서버가 거절(422)하고 앱도 막는다. 허위 주장 목록은 앱 경고로만 남김(한 번 더 누르면 보냄). 둘 다 키워드 목록이지 분류기가 아님 |
 | 개표 | `ResultsRepository` | SSE 엔드포인트, 폴링 주기 헤더 |
 | 지도 타일 | `CountMap` | Google Maps 키. 현재 목업과 같은 회색 격자 |
