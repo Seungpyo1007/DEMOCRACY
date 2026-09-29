@@ -166,6 +166,15 @@ class ChatMessage {
   final String body;
   final bool verifiedResident;
   final bool mine;
+
+  /// The same message, known to be the reader's own.
+  ChatMessage asMine() => ChatMessage(
+    id: id,
+    author: author,
+    body: body,
+    verifiedResident: verifiedResident,
+    mine: true,
+  );
 }
 
 /// A thread opened by a bill or a judgement.

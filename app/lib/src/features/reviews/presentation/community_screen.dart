@@ -56,9 +56,24 @@ class _CommunityScreenState extends ConsumerState<CommunityScreen> {
   bool _acknowledged = false;
   bool _sending = false;
 
+  /// Someone else's message arrived while the reader was scrolled up. The
+  /// page is not moved under them; a small 「새 메시지」 says so instead.
+  bool _unseen = false;
+
+  /// How close to the end counts as reading the newest messages.
+  static const _followSlack = 96.0;
+
+  @override
+  void initState() {
+    super.initState();
+    _scroll.addListener(_onScroll);
+  }
+
   @override
   void dispose() {
-    _scroll.dispose();
+    _scroll
+      ..removeListener(_onScroll)
+      ..dispose();
     _message.dispose();
     super.dispose();
   }
@@ -68,7 +83,56 @@ class _CommunityScreenState extends ConsumerState<CommunityScreen> {
       return;
     }
     PlatformAdaptiveHaptics.selection();
-    setState(() => _tab = index);
+    setState(() {
+      _tab = index;
+      _unseen = false;
+    });
+  }
+
+  bool get _atEnd {
+    if (!_scroll.hasClients) {
+      return true;
+    }
+    final position = _scroll.position;
+    return position.maxScrollExtent - position.pixels <= _followSlack;
+  }
+
+  void _onScroll() {
+    if (_unseen && _atEnd) {
+      setState(() => _unseen = false);
+    }
+  }
+
+  /// A message landed in the open channel. A reader at the end is taken to
+  /// it; one who scrolled up to read is left where they are.
+  void _onChannel(
+    AsyncValue<List<ChatMessage>>? previous,
+    AsyncValue<List<ChatMessage>> next,
+  ) {
+    final before = previous?.value;
+    final after = next.value;
+    // The first read is not news; it is the channel.
+    if (before == null || after == null || after.isEmpty) {
+      return;
+    }
+    final newest = after.last;
+    if (before.any((m) => m.id == newest.id)) {
+      return;
+    }
+    // One's own message is brought into view by _send.
+    if (newest.mine) {
+      return;
+    }
+    if (_atEnd) {
+      _revealLatest();
+    } else if (!_unseen) {
+      setState(() => _unseen = true);
+    }
+  }
+
+  void _showUnseen() {
+    setState(() => _unseen = false);
+    _revealLatest();
   }
 
   /// The channel is read from the bottom, so what was just sent -- or the
@@ -154,6 +218,12 @@ class _CommunityScreenState extends ConsumerState<CommunityScreen> {
     final reduced = AppMotion.reduced(context);
     final verified = ref.watch(addressControllerProvider).isVerified;
 
+    // Only while the channel is the open tab: the socket behind it is held
+    // for as long as anything listens.
+    if (_tab == 1) {
+      ref.listen(channelProvider, _onChannel);
+    }
+
     // The channel's field is a bar across the foot; the review tab's write
     // action is a compact floating button, placed as the tracker's is.
     final composer = _tab == 1
@@ -233,6 +303,16 @@ class _CommunityScreenState extends ConsumerState<CommunityScreen> {
                 ],
               ),
             ),
+            if (composer != null && _unseen)
+              Positioned(
+                left: 0,
+                right: 0,
+                bottom:
+                    56 +
+                    AppSpacing.x4 * 2 +
+                    MediaQuery.paddingOf(context).bottom,
+                child: Center(child: _NewMessages(onPressed: _showUnseen)),
+              ),
             if (composer != null)
               Positioned(left: 0, right: 0, bottom: 0, child: composer),
           ],
@@ -670,6 +750,66 @@ class _Message extends StatelessWidget {
       ],
     );
   }
+}
+
+/// 「새 메시지」: what arrived below while the reader was scrolled up. It
+/// rises in like a message does, and takes the reader down when tapped.
+class _NewMessages extends StatelessWidget {
+  const _NewMessages({required this.onPressed});
+
+  final VoidCallback onPressed;
+
+  @override
+  Widget build(BuildContext context) {
+    return RevealIn(
+      child: Semantics(
+        button: true,
+        liveRegion: true,
+        label: '새 메시지, 아래로 이동',
+        excludeSemantics: true,
+        child: GestureDetector(
+          onTap: onPressed,
+          behavior: HitTestBehavior.opaque,
+          // The pill is drawn small; the target around it is not.
+          child: ConstrainedBox(
+            constraints: const BoxConstraints(minHeight: 48, minWidth: 48),
+            child: Center(child: _pill),
+          ),
+        ),
+      ),
+    );
+  }
+
+  static final Widget _pill = DecoratedBox(
+    decoration: BoxDecoration(
+      color: AppColors.ink,
+      borderRadius: BorderRadius.circular(999),
+    ),
+    child: Padding(
+      padding: const EdgeInsets.symmetric(
+        horizontal: AppSpacing.x3,
+        vertical: AppSpacing.x2 - 2,
+      ),
+      child: Row(
+        mainAxisSize: MainAxisSize.min,
+        children: [
+          const Icon(
+            Icons.arrow_downward_rounded,
+            size: 14,
+            color: AppColors.white,
+          ),
+          const SizedBox(width: AppSpacing.x1),
+          Text(
+            '새 메시지',
+            style: AppTextStyles.statLabel.copyWith(
+              color: AppColors.white,
+              fontWeight: FontWeight.w600,
+            ),
+          ),
+        ],
+      ),
+    ),
+  );
 }
 
 /// The message field: a Cupertino text field with a glass send button on

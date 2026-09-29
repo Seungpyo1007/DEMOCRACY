@@ -4,6 +4,7 @@ import 'package:democracy/src/core/account/auth_controller.dart';
 import 'package:democracy/src/core/account/gotrue_auth_repository.dart';
 import 'package:democracy/src/core/auth/address_state.dart';
 import 'package:democracy/src/core/auth/address_store.dart';
+import 'package:democracy/src/core/lifecycle/app_foreground.dart';
 import 'package:democracy/src/core/network/bff_client.dart';
 import 'package:democracy/src/core/network/bff_config.dart';
 import 'package:democracy/src/core/network/response_cache.dart';
@@ -30,6 +31,7 @@ import 'package:democracy/src/features/pledges/data/remote_pledge_repository.dar
 import 'package:democracy/src/features/results/application/results_providers.dart';
 import 'package:democracy/src/features/results/data/remote_results_repository.dart';
 import 'package:democracy/src/features/reviews/application/review_providers.dart';
+import 'package:democracy/src/features/reviews/data/realtime_channel_transport.dart';
 import 'package:democracy/src/features/reviews/data/remote_review_repository.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -67,7 +69,18 @@ List<Override> liveDataOverrides(BffConfig? config) {
   final districts = RemoteDistrictRepository(client);
   final pledges = RemotePledgeRepository(client);
   final bills = RemoteMemberBillsRepository(client);
-  final community = RemoteCommunityRepository(client);
+  // One instance for the community tab and the direction view's thread
+  // titles, so both read the same channel.
+  final community = RemoteCommunityRepository(
+    client,
+    // Realtime lives beside the BFF at <project>/realtime/v1 and takes the
+    // same anon key; the channel's topics are public.
+    transport: RealtimeChannelTransport(
+      projectUrl: config.baseUrl.replace(path: '/'),
+      anonKey: config.anonKey,
+    ),
+    foreground: appForegroundChanges,
+  );
   const model = PlatformOnDeviceModel();
   final aiCache = SharedPreferencesOnDeviceResultCache();
   // One runner for both views, so their runs queue instead of colliding.
