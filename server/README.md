@@ -11,6 +11,7 @@ Reading needs no account; the account routes need a Supabase Auth sign-in.
 [juso.go.kr / V-World] ◀── proxied live by bff (query never logged or stored)
 [Supabase Auth: Apple / Kakao / Google / email] ──user JWT──▶ bff /me ──▶ profiles, consents
                                                  ──user JWT──▶ bff posts ──▶ reviews, community_*
+community_messages insert/delete ──trigger→realtime.send──▶ Realtime topic district-chat:<id> ──▶ app
 [공직선거법 [별표 1], 출결 file, curated pledges/region] ──scripts/*.ts──▶ SQL ──▶ tables
 ```
 
@@ -23,6 +24,7 @@ Reading needs no account; the account routes need a Supabase Auth sign-in.
 | `supabase/migrations/20260927000000_community.sql`         | Reviews, channel messages, bill threads and replies; write functions (residency, rate limit); thread sync                                                          |
 | `supabase/migrations/20260927120000_district_counts.sql`   | Final 개표 per 선거구 per election (`district_counts`)                                                                                                             |
 | `supabase/migrations/20260927130000_pledge_not_judged.sql` | Pledge status `notJudged` (「판정 전」), which may carry no evidence, judgement or bills                                                                           |
+| `supabase/migrations/20260930000000_channel_broadcast.sql` | 지역 채팅 live: a trigger broadcasts each new or deleted channel message to Realtime                                                                               |
 | `supabase/seed.sql`                                        | **Sample** 마포구 갑/을 + 종로구 district mapping, generated from `testdata/`. Not verified against [별표 1].                                                      |
 | `supabase/functions/_shared/`                              | API clients, normalizers (one per source), envelope, provenance, PostgREST client                                                                                  |
 | `supabase/functions/ingest-assembly/`                      | Members (daily), bills and plenary votes (every 6 h), 21대 bills (`?mode=bills_backfill&age=21`)                                                                   |
@@ -210,6 +212,19 @@ write function.
   district's current member, linked to the bill's likms page. Replies have a table and a count but
   no route yet; the app does not open threads.
 - Post bodies are never logged.
+- **The channel is live.** A trigger on `community_messages`
+  (`20260930000000_channel_broadcast.sql`) sends each insert and delete through Supabase Realtime
+  **Broadcast from the database** (`realtime.send`), on the public topic
+  `district-chat:<district_id>`:
+  - event `message`, payload `{id, author, body, verifiedResident, createdAt}`: one message exactly
+    as `GET /community` shows it, without `mine` (the sending device knows its own ids);
+  - event `delete`, payload `{id, deleted: true}`.
+
+  The tables stay RLS deny-all and are in no publication, so `postgres_changes` streams nothing;
+  what leaves is only this composed payload. `author_id` and the anonymous flag never do. The topic
+  is public because the channel is already publicly readable through the BFF; joining needs only the
+  anon key. A failed or missing Realtime never fails a post. A later 활동명 change or account
+  deletion is not re-broadcast; readers see it on their next `GET`.
 
 - **활동명** (handle) is a neutral nature word, a space and two digits (`솔숲 42`), drawn by the
   server from `_shared/handles.ts`. The list excludes surname-like words, party names, party colours
@@ -244,6 +259,10 @@ write function.
      requires it, enable both under Database → Extensions.
    - If the app uses the new `sb_publishable_...` key instead of the legacy anon JWT, deploy `bff`
      with `--no-verify-jwt`. That key is not a JWT.
+   - Realtime (live 지역 채팅): Dashboard → Realtime → Settings, keep **Allow public access** on
+     (the default). The channel topics are public; turning it off makes every join fail and the app
+     falls back to reading on open and after sending. No table needs to be added to the
+     `supabase_realtime` publication: the trigger writes to `realtime.messages` itself.
 3. **Set up Supabase Auth** (Dashboard → Authentication).
    - Providers: enable Apple, Kakao (with OpenID Connect on in Kakao Developers) and Google, each
      with its client id and secret; add the iOS/Android client ids so `signInWithIdToken` works.
