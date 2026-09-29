@@ -8,6 +8,7 @@ import 'package:democracy/src/core/network/not_available.dart';
 import 'package:democracy/src/core/provenance/source_metadata.dart';
 import 'package:democracy/src/core/time/kst.dart';
 import 'package:democracy/src/features/ai_match/data/remote_direction_repository.dart';
+import 'package:democracy/src/features/ai_match/data/remote_member_bills_repository.dart';
 import 'package:democracy/src/features/district/data/remote_district_repository.dart';
 import 'package:democracy/src/features/district/domain/legislator_record.dart';
 import 'package:democracy/src/features/history/data/remote_history_repository.dart';
@@ -121,6 +122,72 @@ void main() {
       RemotePledgeRepository(client).loadBoard(id),
       throwsA(isA<NotAvailableException>()),
     );
+  });
+
+  group('member bills', () {
+    test(
+      'the fixture is a valid bills response, each bill with its page',
+      () async {
+        final adapter = FakeBffAdapter({
+          '/districts/$id/bills': (
+            status: 200,
+            body: envelope(fixture('member_bills_fixture-seoul-mapo-b')),
+          ),
+        });
+
+        final bills = await RemoteMemberBillsRepository(
+          fakeBffClient(adapter),
+        ).loadRecent(id);
+
+        expect(bills.legislatorName, '가상 의원');
+        expect(bills.bills.map((b) => b.month), [
+          '2026-07',
+          '2026-05',
+          '2026-03',
+        ]);
+        expect(
+          bills.bills.first.source.sourceUrl.toString(),
+          'https://likms.assembly.go.kr/bill/fixture-bill-3',
+        );
+        expect(adapter.requests.single.queryParameters, {'months': '6'});
+      },
+    );
+
+    test('a bill without a usable page is refused', () async {
+      final body = fixture('member_bills_fixture-seoul-mapo-b');
+      (body['bills']! as List).add({
+        'id': 'x',
+        'title': '링크 없는 법안',
+        'proposedOn': '2026-07-01',
+        'sourceUrl': '/relative',
+      });
+      final client = fakeBffClient(
+        FakeBffAdapter({
+          '/districts/$id/bills': (status: 200, body: envelope(body)),
+        }),
+      );
+
+      await expectLater(
+        RemoteMemberBillsRepository(client).loadRecent(id),
+        throwsA(isA<MissingSourceException>()),
+      );
+    });
+
+    test('no sitting member is not available', () async {
+      final client = fakeBffClient(
+        FakeBffAdapter({
+          '/districts/$id/bills': (
+            status: 404,
+            body: errorEnvelope('not_found'),
+          ),
+        }),
+      );
+
+      await expectLater(
+        RemoteMemberBillsRepository(client).loadRecent(id),
+        throwsA(isA<NotAvailableException>()),
+      );
+    });
   });
 
   group('direction', () {

@@ -17,7 +17,10 @@ class FakeMatchRepository implements MatchRepository {
   final Duration tokenDelay;
 
   @override
-  Future<MatchReport> loadReport(String districtId) async {
+  Future<MatchReport> loadReport(
+    String districtId, {
+    MatchQuery query = const MatchQuery(),
+  }) async {
     final payload = await loader.load('ai_match_$districtId');
     return MatchReport.fromJson(payload);
   }
