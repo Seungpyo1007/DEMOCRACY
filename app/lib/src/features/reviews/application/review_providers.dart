@@ -89,7 +89,11 @@ String writeFailureMessage(Object error) => switch (error) {
   _ => CommunityWriteException.generic.message,
 };
 
-final channelProvider = StreamProvider<List<ChatMessage>>((ref) {
+/// The open district channel, kept current while anything watches it.
+///
+/// Disposed when the channel tab stops being shown, which cancels the stream
+/// and so closes its socket; opening the tab again reads the channel afresh.
+final channelProvider = StreamProvider.autoDispose<List<ChatMessage>>((ref) {
   final district = ref.watch(districtProvider);
 
   if (district == null) {

@@ -3,7 +3,7 @@ import { inspectContent } from "../_shared/content_guard.ts";
 import { ApiError } from "../_shared/envelope.ts";
 import { MemoryPostgrest } from "../_shared/memory_postgrest.ts";
 import { MemoryAccountStore, raised } from "./account_store.ts";
-import { communityError } from "./community.ts";
+import { ANONYMOUS_AUTHOR, communityError, DELETED_AUTHOR } from "./community.ts";
 import { MemoryCommunityStore, PostgrestCommunityStore } from "./community_store.ts";
 import { validateCommunity, validateEnvelope, validateReviewBoard } from "./contract.ts";
 import { createHandler } from "./handler.ts";
@@ -406,4 +406,33 @@ Deno.test("content guard: the app's hate list, spaces ignored; claims are not re
   assertEquals(inspectContent("쓰레기같은 정책"), "hate");
   assertEquals(inspectContent("이건 확실히조작입니다"), null);
   assertEquals(inspectContent("판정문 읽어보셨나요?"), null);
+});
+
+Deno.test("channel broadcast: the trigger's payload is the GET message minus `mine`", async () => {
+  // The broadcast is composed in SQL (migrations/*_channel_broadcast.sql), not here, so this
+  // pins the two together: the same keys, the same author labels, createdAt in the same form.
+  const sql = await Deno.readTextFile(
+    new URL("../../migrations/20260930000000_channel_broadcast.sql", import.meta.url),
+  );
+  const payload = /function public\.channel_message_payload[\s\S]*?\$\$;/.exec(sql)?.[0] ?? "";
+  const sqlKeys = [...payload.matchAll(/^\s+'(\w+)', /gm)].map((m) => m[1]).sort();
+
+  const { call, signUp, reside } = await setup();
+  await signUp();
+  reside(USER);
+  const sent = await call("POST", `/districts/${MAPO_B}/messages`, {
+    body: { body: "안녕하세요" },
+  });
+  const message = sent.body.data.message;
+  const viewKeys = Object.keys(message).filter((k) => k !== "mine").sort();
+  assertEquals(sqlKeys, viewKeys);
+
+  assert(payload.includes(`'${ANONYMOUS_AUTHOR}'`));
+  assert(payload.includes(`'${DELETED_AUTHOR}'`));
+  assert(!/'author_id'|'anonymous'|'mine'/.test(payload), "no author id, flag or `mine` leaves");
+  assert(/"T"HH24:MI:SS\.MS"Z"/.test(payload), "createdAt as toISOString writes it");
+  assert(/^\d{4}-\d\d-\d\dT\d\d:\d\d:\d\d\.\d{3}Z$/.test(message.createdAt));
+
+  assert(sql.includes("'district-chat:' || msg.district_id"));
+  assert(/jsonb_build_object\('id', old\.id, 'deleted', true\)/.test(sql));
 });

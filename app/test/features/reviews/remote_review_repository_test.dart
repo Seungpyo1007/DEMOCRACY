@@ -8,6 +8,7 @@ import 'package:democracy/src/features/reviews/domain/review_draft.dart';
 import 'package:flutter_test/flutter_test.dart';
 
 import '../../support/fake_bff.dart';
+import '../../support/fake_channel_transport.dart';
 
 /// The fixtures are the contract the BFF's community routes are written to
 /// (server/supabase/functions/bff/contract.ts checks them too).
@@ -240,29 +241,37 @@ void main() {
       expect(await repo.loadThreads(_id), isEmpty);
     });
 
-    test('sending posts anonymously, then the channel reads again', () async {
+    test('sending posts anonymously, shows the message at once, then reads '
+        'again without a socket', () async {
+      final channel = fixture('community_fixture-seoul-mapo-b');
+      final sent = {
+        'id': 'm9',
+        'author': '익명 주민',
+        'body': '안녕',
+        'verifiedResident': true,
+        'mine': true,
+        'createdAt': '2026-09-24T03:00:00.000Z',
+      };
       final adapter = FakeBffAdapter({
-        _community: (
-          status: 200,
-          body: envelope(fixture('community_fixture-seoul-mapo-b')),
-        ),
-        'POST $_messages': (
-          status: 200,
-          body: envelope({
-            'message': {'id': 'm9', 'author': '익명 주민', 'body': '안녕'},
-          }),
-        ),
+        _community: (status: 200, body: envelope(channel)),
+        'POST $_messages': (status: 200, body: envelope({'message': sent})),
       });
       final repo = RemoteCommunityRepository(
         fakeBffClient(adapter, userToken: () async => 'user-jwt'),
       );
 
-      final seen = <int>[];
-      final subscription = repo
-          .watchChannel(_id)
-          .listen((messages) => seen.add(messages.length));
+      final seen = <List<ChatMessage>>[];
+      final subscription = repo.watchChannel(_id).listen(seen.add);
       await pumpEventQueue();
 
+      // The server has it from here on.
+      adapter.routes[_community] = (
+        status: 200,
+        body: envelope({
+          ...channel,
+          'messages': [...channel['messages']! as List, sent],
+        }),
+      );
       await repo.send(_id, '  안녕  ');
       await pumpEventQueue();
       await subscription.cancel();
@@ -272,8 +281,68 @@ void main() {
         'body': '안녕',
         'anonymous': true,
       });
-      // Once on opening, once after the send.
-      expect(seen, [3, 3]);
+      // The read on opening, then the POST's answer; the read after the send
+      // agrees, so it is not shown again.
+      expect(seen.map((m) => m.length), [3, 4]);
+      expect(seen.last.last.mine, isTrue);
+      expect(adapter.requests.where((r) => r.method == 'GET'), hasLength(2));
+    });
+
+    test('live: one\'s own message shows once, from the POST and the socket, '
+        'with no read after sending', () async {
+      final channel = fixture('community_fixture-seoul-mapo-b');
+      final sent = {
+        'id': 'm9',
+        'author': '익명 주민',
+        'body': '안녕',
+        'verifiedResident': true,
+        'mine': true,
+        'createdAt': '2026-09-24T03:00:00.000Z',
+      };
+      final adapter = FakeBffAdapter({
+        _community: (status: 200, body: envelope(channel)),
+        'POST $_messages': (status: 200, body: envelope({'message': sent})),
+      });
+      final transport = FakeChannelTransport();
+      final repo = RemoteCommunityRepository(
+        fakeBffClient(adapter, userToken: () async => 'user-jwt'),
+        transport: transport,
+      );
+
+      final seen = <List<ChatMessage>>[];
+      final subscription = repo.watchChannel(_id).listen(seen.add);
+      await pumpEventQueue();
+      expect(transport.last.topic, 'district-chat:$_id');
+      transport.last.accept();
+      await pumpEventQueue();
+      final readsBefore = adapter.requests.where((r) => r.method == 'GET');
+
+      await repo.send(_id, '안녕');
+      // The broadcast carries no `mine`; the sender's copy wins.
+      transport.last.broadcast('message', {...sent}..remove('mine'));
+      transport.last.broadcast('message', {
+        'id': 'm10',
+        'author': '솔숲 42',
+        'body': '반갑습니다',
+        'verifiedResident': true,
+      });
+      await pumpEventQueue();
+
+      expect(
+        adapter.requests.where((r) => r.method == 'GET'),
+        hasLength(readsBefore.length),
+      );
+      final ids = [for (final m in seen.last) m.id];
+      expect(ids.where((id) => id == 'm9'), hasLength(1));
+      expect(ids.last, 'm10');
+      expect(seen.last.firstWhere((m) => m.id == 'm9').mine, isTrue);
+
+      transport.last.broadcast('delete', {'id': 'm10', 'deleted': true});
+      await pumpEventQueue();
+      expect(seen.last.map((m) => m.id), isNot(contains('m10')));
+
+      await subscription.cancel();
+      expect(transport.open, isEmpty, reason: 'leaving closes the socket');
     });
 
     test('a refused message is a write failure the screen can show', () async {
