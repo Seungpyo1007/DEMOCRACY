@@ -209,6 +209,8 @@ export interface ReadStore {
   memberList(): Promise<MemberListStatus>;
   billCount(monaCd: string, age: number): Promise<{ count: number; fetched_at: string | null }>;
   recentBills(monaCd: string, age: number, limit: number): Promise<BillRec[]>;
+  /** Bills the member led in a term, proposed on or after a KST date, newest first. */
+  billsSince(monaCd: string, age: number, sinceIsoDate: string, limit: number): Promise<BillRec[]>;
   /** The committee of every bill the member led in a term. */
   billCommittees(monaCd: string, age: number): Promise<BillCommitteeRec[]>;
   monthlyVoteParticipation(monaCd: string, months: number): Promise<MonthlyRate[]>;
@@ -315,6 +317,19 @@ export class MemoryStore implements ReadStore {
     return Promise.resolve(
       this.t.bills
         .filter((b) => b.rst_mona_cd === monaCd && b.age === age)
+        .sort((a, b) =>
+          (b.propose_dt ?? "").localeCompare(a.propose_dt ?? "") ||
+          b.bill_id.localeCompare(a.bill_id)
+        )
+        .slice(0, limit),
+    );
+  }
+  billsSince(monaCd: string, age: number, sinceIsoDate: string, limit: number) {
+    return Promise.resolve(
+      this.t.bills
+        .filter((b) =>
+          b.rst_mona_cd === monaCd && b.age === age && (b.propose_dt ?? "") >= sinceIsoDate
+        )
         .sort((a, b) =>
           (b.propose_dt ?? "").localeCompare(a.propose_dt ?? "") ||
           b.bill_id.localeCompare(a.bill_id)
@@ -500,6 +515,17 @@ export class PostgrestStore implements ReadStore {
         `bill_id,bill_name,age,rst_mona_cd,propose_dt,committee_dt,cmt_proc_dt,proc_result,${SRC}`,
       rst_mona_cd: `eq.${monaCd}`,
       age: `eq.${age}`,
+      order: "propose_dt.desc.nullslast,bill_id.desc",
+      limit: String(limit),
+    });
+  }
+  billsSince(monaCd: string, age: number, sinceIsoDate: string, limit: number) {
+    return this.db.select<BillRec>("bills", {
+      select: `bill_id,bill_name,age,rst_mona_cd,committee,propose_dt,committee_dt,cmt_proc_dt,` +
+        `proc_result,detail_link,${SRC}`,
+      rst_mona_cd: `eq.${monaCd}`,
+      age: `eq.${age}`,
+      propose_dt: `gte.${sinceIsoDate}`,
       order: "propose_dt.desc.nullslast,bill_id.desc",
       limit: String(limit),
     });

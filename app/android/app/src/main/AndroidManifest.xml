@@ -1,4 +1,8 @@
-<manifest xmlns:android="http://schemas.android.com/apk/res/android">
+<manifest xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools">
+    <!-- ML Kit GenAI (Gemini Nano) declares minSdk 26. The app keeps 24 and
+         only touches it on 26+ (OnDeviceAiPlugin / GeminiNanoBridge). -->
+    <uses-sdk tools:overrideLibrary="com.google.mlkit.genai.prompt,com.google.mlkit.genai.common,com.google.mlkit.genai.schema" />
     <uses-permission android:name="android.permission.INTERNET" />
     <!-- Coarse only: a district is kilometres wide. -->
     <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />

@@ -36,6 +36,8 @@ Deno.test("error envelope and codes", async () => {
     ["/districts/fixture-seoul-mapo-b/profile", 400, "bad_request"],
     ["/districts/nec-00000000/pledges", 404, "not_found"],
     ["/districts/nec-00000000/direction", 404, "not_found"],
+    ["/districts/nec-00000000/bills", 404, "not_found"],
+    ["/districts/fixture-seoul-mapo-b/bills", 400, "bad_request"],
     ["/nope", 404, "not_found"],
     ["/address/search", 400, "bad_request"],
     ["/address/search?q=a", 400, "bad_request"],

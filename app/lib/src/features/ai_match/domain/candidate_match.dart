@@ -1,5 +1,40 @@
+import 'package:democracy/src/core/on_device_ai/on_device_run.dart';
 import 'package:democracy/src/core/provenance/source_metadata.dart';
 import 'package:democracy/src/features/district/domain/district_profile.dart';
+
+/// Who a match is against.
+///
+/// At election time, the registered candidates. Between elections there are
+/// none, so the match reads the sitting member's own pledges and bills
+/// against the reader's interests -- and the screen says so, rather than
+/// dressing one person up as a field of candidates.
+enum MatchSubject {
+  candidates,
+  incumbent;
+
+  static MatchSubject parse(Object? raw) =>
+      raw == 'incumbent' ? incumbent : candidates;
+}
+
+/// What the reader asked the match to be about.
+///
+/// [interests] are the policy areas the score is broken down by, in the order
+/// the reader was offered them; [context] is who is asking (자영업, 1인 가구),
+/// read as background only.
+class MatchQuery {
+  const MatchQuery({this.interests = const [], this.context = const []});
+
+  final List<String> interests;
+  final List<String> context;
+}
+
+/// Raised when an on-device match has no interests to be about.
+///
+/// A match with no stated interest would have to invent its axes; the screen
+/// asks the reader to pick some instead.
+class MatchNeedsInterestsException implements Exception {
+  const MatchNeedsInterestsException();
+}
 
 /// One axis of a match: a policy area and how well a candidate lines up on it.
 ///
@@ -41,7 +76,12 @@ class MatchAxis {
 /// original wording is, and a reason the reader cannot trace back to it is
 /// exactly the kind of unfalsifiable claim this product exists to avoid.
 class MatchReason {
-  const MatchReason({required this.text, required this.source});
+  const MatchReason({
+    required this.text,
+    required this.source,
+    this.axis,
+    this.cites,
+  });
 
   factory MatchReason.fromJson(Object? json, {required String field}) {
     if (json is! Map) {
@@ -62,11 +102,20 @@ class MatchReason {
     return MatchReason(
       text: text,
       source: SourceMetadata.fromJson(json['source'], field: field),
+      axis: json['axis'] is String ? json['axis']! as String : null,
+      cites: json['cites'] is String ? json['cites']! as String : null,
     );
   }
 
   final String text;
   final SourceMetadata source;
+
+  /// The interest this reason is about, when the run gave one.
+  final String? axis;
+
+  /// The title of the pledge or bill it cites, as the input had it -- so the
+  /// reader can see what the sentence is about before following the link.
+  final String? cites;
 }
 
 /// How one candidate scored against the reader's stated interests.
@@ -137,6 +186,9 @@ class MatchReport {
     required this.comparedPledges,
     required this.weights,
     required this.generatedAt,
+    this.subject = MatchSubject.candidates,
+    this.comparedBills = 0,
+    this.onDevice,
   });
 
   factory MatchReport.fromJson(Map<String, Object?> json) {
@@ -164,10 +216,23 @@ class MatchReport {
       generatedAt: generated is String
           ? DateTime.tryParse(generated)?.toUtc()
           : null,
+      subject: MatchSubject.parse(json['subject']),
+      comparedBills: json['comparedBills'] is int
+          ? json['comparedBills']! as int
+          : 0,
     );
   }
 
   final List<CandidateMatch> matches;
+
+  /// Candidates at election time; the sitting member between elections.
+  final MatchSubject subject;
+
+  /// How many bills the run compared, next to [comparedPledges].
+  final int comparedBills;
+
+  /// Set when this device's own model produced the result.
+  final OnDeviceRun? onDevice;
 
   /// How many pledges the run compared, shown while it is still running.
   final int comparedPledges;
@@ -184,7 +249,10 @@ class MatchReport {
 }
 
 abstract interface class MatchRepository {
-  Future<MatchReport> loadReport(String districtId);
+  Future<MatchReport> loadReport(
+    String districtId, {
+    MatchQuery query = const MatchQuery(),
+  });
 
   /// The reasoning, delivered the way a model produces it.
   ///
@@ -192,4 +260,24 @@ abstract interface class MatchRepository {
   /// token, and a screen built against a completed string would have to be
   /// rewritten to show it arriving.
   Stream<String> streamReasoning(String districtId, String candidateId);
+}
+
+/// What a run in progress has produced so far.
+///
+/// [verified] holds only reasons whose cited pledge or bill exists in the
+/// input -- a reason is shown while the model is still writing only once it
+/// has passed the same check the final result does.
+class MatchProgress {
+  const MatchProgress({required this.verified, required this.characters});
+
+  final List<MatchReason> verified;
+
+  /// How much the model has written, for a platform whose snapshots do not
+  /// parse until the end.
+  final int characters;
+}
+
+/// A repository whose runs report progress while they go (the on-device one).
+abstract interface class MatchProgressSource {
+  Stream<MatchProgress> get progress;
 }

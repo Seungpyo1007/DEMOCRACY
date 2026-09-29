@@ -184,6 +184,8 @@ class DiscussionThread {
     required this.title,
     required this.origin,
     required this.replies,
+    this.openedAt,
+    this.sourceUrl,
   });
 
   factory DiscussionThread.fromJson(Object? json) {
@@ -202,6 +204,12 @@ class DiscussionThread {
       title: title,
       origin: json['origin'] as String? ?? '',
       replies: json['replies'] is int ? json['replies']! as int : 0,
+      openedAt: json['openedAt'] is String
+          ? DateTime.tryParse(json['openedAt']! as String)?.toUtc()
+          : null,
+      sourceUrl: json['sourceUrl'] is String
+          ? Uri.tryParse(json['sourceUrl']! as String)
+          : null,
     );
   }
 
@@ -213,4 +221,10 @@ class DiscussionThread {
   final String origin;
 
   final int replies;
+
+  /// When the thread was opened; for a bill thread, the bill's proposal.
+  final DateTime? openedAt;
+
+  /// What opened it -- a bill's own page.
+  final Uri? sourceUrl;
 }

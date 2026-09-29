@@ -106,7 +106,7 @@
 - **fixture가 곧 계약이다.** BFF의 `data`는 `assets/fixtures/*.json`과 같은 모양이다(`_note`만 뺀다). `test/core/network/remote_repositories_test.dart`가 각 fixture를 envelope에 싸서 remote 리포지토리로 파싱한다. fixture 모양을 바꾸면 서버도 바꿔야 한다.
 - envelope: `{servedAt, data}` / `{servedAt, error:{code,message}}`. `not_found`·`not_curated`는 `NotAvailableException`이 되고 화면은 "준비 중"을 보인다(재시도 없음). 샘플 데이터로 대신 채우지 않는다.
 - 켜는 법: `flutter run --dart-define=BFF_URL=https://<ref>.supabase.co/functions/v1/bff --dart-define=BFF_ANON_KEY=<anon>`. 없으면 지금처럼 전부 fixture이고, 테스트·골든도 fixture로 돈다(`lib/src/app/live_data.dart`).
-- 실데이터: 지역구 프로필, 역사, 주소 검색, 위치 → 지역구, 공약(큐레이션된 지역구만), 개표(22대 최종 결과, `/districts/{id}/results`), 주민 평가·지역 채팅·정책 토론. AI는 BFF 모드에서 "준비 중"이다.
+- 실데이터: 지역구 프로필, 역사, 주소 검색, 위치 → 지역구, 공약(큐레이션된 지역구만), 개표(22대 최종 결과, `/districts/{id}/results`), 주민 평가·지역 채팅·정책 토론. AI는 기기에서 계산한다(아래 「온디바이스 AI」).
 - 개표는 선거 없는 기간이라 `electionSchedule: null`, `live: false`, `polls: []`로 옴. 한 번 받고 끝(`RemoteResultsRepository`). 254개 지역구가 오므로 지도는 시도 칩으로 한 시도씩 보여 주고, 13개 넘으면 3열로 줄인다. 선거 기간 SSE/폴링과 서버 쪽 공표 차단은 아직 없음.
 - 평가·채팅·토론은 처음엔 비어 있다. 빈 상태는 "아직 올라온 평가가 없습니다" 같은 안내로 보이고 0.0 평균은 그리지 않는다. 토론 스레드는 현직 의원 대표발의 법안에서 서버가 연다(`sync_bill_threads`).
 - 채팅은 실시간이다. `community_messages` insert/delete 트리거가 Supabase Realtime Broadcast(`realtime.send`)로 공개 토픽 `district-chat:<district_id>`에 보낸다. 이벤트 `message`는 GET 응답의 메시지 하나와 같은 모양(`mine` 없음), `delete`는 `{id, deleted:true}`. 테이블은 여전히 RLS deny-all이고 publication에 넣지 않는다. 앱은 채팅 탭이 보이는 동안만 `realtime_client`로 붙고(`LiveChannel`, `RealtimeChannelTransport`), 탭을 떠나거나 백그라운드로 가면 끊는다. 붙을 때마다 한 번 다시 읽어 끊긴 동안의 메시지를 메우고, 실패하면 1·2·4…30초 간격으로 다시 붙는다. 소켓이 안 되면 예전처럼 열 때와 보낸 뒤에 읽는다. 내가 보낸 건 POST 응답으로 바로 보이고 브로드캐스트로 또 와도 id로 한 번만 보인다. 위로 스크롤해 읽는 중이면 화면을 움직이지 않고 「새 메시지」를 띄운다. 프로젝트에서 Realtime → Settings의 Allow public access가 켜져 있어야 한다(기본값). 활동명 변경·탈퇴는 다시 방송하지 않아 다음 읽기에서 반영된다.
@@ -114,6 +114,22 @@
 - `LegislatorRecord.attendance`·`votes`는 선택 필드가 됐다. 본회의 출결은 API가 아니라 회기별 파일이라 없을 수 있다.
 - `servedAt`은 `BffResponse`까지 온다. `ServerAnchoredClock`은 아직 만들지 않았다.
 - 국회의원 공약은 API가 없다(선관위 공약 API는 대통령·단체장·교육감만). 선거공보 PDF에서 손으로 입력한다.
+
+## 온디바이스 AI (2026-09-30)
+
+준비 중이던 AI 세 기능(매칭, 방향 분석 01 공약 성향, 03 지역 쟁점 흐름)을 **독자 기기의 모델로** 계산한다. 클라우드 LLM·API 키 없음, 결과는 서버로 보내지 않음. 02 의원 행보 추세는 그대로 서버 집계이고 AI 라벨 없음.
+
+- **플랫폼.** iOS 26+ Apple Foundation Models(`ios/Runner/OnDeviceAiPlugin.swift`, `@Generable` 출력 + greedy), Android ML Kit GenAI Prompt API 1.0.0-beta4 = Gemini Nano(`GeminiNanoBridge.kt`, JSON 프롬프트 + temperature 0/top-k 1/seed 0). 채널 `democracy/on_device_ai`(+`/stream`). iOS 배포 타깃 15.0 유지(FoundationModels는 weak link), Android minSdk 24 유지(GenAI 라이브러리의 26은 manifest에서 override, 26 미만은 osTooOld).
+- **못 돌리는 기기.** 「이 기기에서는 온디바이스 AI를 쓸 수 없습니다」 + 이유(지원 기기 아님 / Apple Intelligence 꺼짐 / 모델 준비 중 / 한국어 미지원 / OS 버전 미지원). Android에서 받을 수 있는 모델이면 「모델 내려받기」. fixture로 대신 채우지 않는다.
+- **입력.** 공약 `/pledges`(254개 지역구 전부 notJudged 목록), 법안 **신규 `GET /districts/{id}/bills?months=6`**(현직 의원 22대 대표발의, 법안별 likms 링크·발의일), 토론 `/community`의 스레드(법안 스레드는 같은 법안이면 한 번만 셈).
+- **매칭.** 선거 없는 기간이라 후보 대신 현 의원 1명. 독자의 정책 칩(부동산·세금·복지·교육·청년)이 축, 나머지 칩은 참고. 모델이 축별 0~100 관련도와 근거(번호로 인용)를 내면 앱이 검증: 입력에 없는 번호 인용 버림, 범위 밖 점수는 축째 버림, 확인된 근거 없는 축은 0점. 종합점은 축 평균. 제목 「현 의원 공약과 내 관심사」, 매칭 화면에서 「관심사 바꾸기」.
+- **01.** 공약마다 경제 축(성장/중립/분배)·규제 축(규제/중립/자율)을 말로 고르게 해 -1/0/+1로 바꾸고(6건씩), 평균 한 점 + 분류된 공약 수.
+- **03.** 최근 6개월(KST 달력 월) 법안·토론 제목을 고정 쟁점 목록으로 분류해 월별 집계, 기타 제외 상위 5개. 근거 문구 「대표발의 법안·토론 제목 기준 · 기기 내 AI 분류」.
+- **캐시.** `SharedPreferences`에 검증을 통과한 결과만, 키 = 작업|지역구|입력 SHA-256|모델 버전. 화면에 「이 기기에서 생성 · 날짜」.
+- **재시도.** AI provider는 자동 재시도하지 않는다(같은 입력·모델이면 같은 실패).
+- **실제 모델로 확인한 것(macOS 27의 같은 Foundation Models, 앱과 같은 프롬프트·@Generable).** 한국어 지원(`supportsLocale(ko_KR)` true), 부분 스냅샷이 매번 유효한 JSON, greedy에서 같은 입력 같은 답. 매칭 1회 약 8초, 공약 6건 분류 약 7초, 제목 8건 쟁점 분류 약 5초. 여기서 프롬프트를 고쳤다: 숫자(-1/0/1)로 물으면 모든 공약을 1로 답해 축 값을 말로 바꿨고, 프롬프트에 채운 JSON 예시를 넣으면 전부 「중립」으로 끌려가서 형식 설명은 `format`으로 빼 Android에만 붙인다. 12건 배치에서는 앞 항목의 답을 되풀이해 6건으로 줄이고 공약마다 `action`(무엇을 하는지)을 먼저 쓰게 했다. 점수는 기준표가 없으면 관련만 있으면 100이라 기준표(0/20/40/60/80)를 넣었다. 매칭 근거 문장은 이 모델이 대개 항목 제목을 되풀이한다 — 그래서 화면은 인용한 공약·법안 제목과 링크를 따로 보여 준다.
+- **실기기 미검증.** iOS 실기기·Android(Gemini Nano) 실행은 못 했다. Android 쪽 한국어 품질, JSON을 지키는지, 스트림 청크가 델타인지(델타로 가정), guardrail 거절 빈도는 실기기에서 확인해야 한다.
+- **남은 것.** 관심사 칩은 여전히 메모리에만 있어 앱을 다시 켜면 비어 있다(매칭 화면에서 다시 고르게 함). 선거 기간 후보 대상 전환은 `matchSubjectProvider`와 리포트 `subject`로 갈라 두었지만 후보 공약 입력은 아직 없다.
 
 ## 지금 fake인 것
 
@@ -125,7 +141,7 @@
 | 위치 → 지역구 | `LocationRepository` | `geolocator` 도입 + 역지오코딩 계약 |
 | 거주지 인증 | `AuthController.verifyResidency` → `POST /residency/verify` | 서버가 주소로 선거구를 다시 도출하고 토큰을 발급한다. 방식은 자기 신고 주소 확인 |
 | 의원·후보·공약 | `DistrictRepository` · `PledgeRepository` | 열린국회정보·선관위 API 계약과 키 |
-| AI 매칭 | `MatchRepository` | LLM 공급자, 가중치 정책, 비용 상한, 편향 감사 기준 |
+| AI 매칭·방향 분석 01/03 | `MatchRepository` · `DirectionAiSource` | 운영에서는 온디바이스 모델로 실제 계산함(아래 절). 남은 것은 실기기 검증, 편향 감사 기준, 선거 기간 후보 대상 전환 |
 | 평가 쓰기 | `ReviewRepository.submit` → `POST /districts/{id}/reviews` | 서버 저장·주민 인증 확인·분당 5건 제한은 됨. 조작 방지 정책은 아직 |
 | 채팅 | `CommunityRepository` → `GET /community`, `POST /messages`, Realtime `district-chat:<id>` | 실시간 수신은 됨. moderation·신고 정책은 아직 |
 | 혐오·허위 감지 | `ContentGuard` + BFF `_shared/content_guard.ts` | 혐오 목록만 서버가 거절(422)하고 앱도 막는다. 허위 주장 목록은 앱 경고로만 남김(한 번 더 누르면 보냄). 둘 다 키워드 목록이지 분류기가 아님 |

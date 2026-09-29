@@ -7,9 +7,13 @@ import 'package:democracy/src/design/app_tokens.dart';
 import 'package:democracy/src/design/components/editorial.dart';
 import 'package:democracy/src/design/components/motion.dart';
 import 'package:democracy/src/features/ai_match/application/direction_providers.dart';
+import 'package:democracy/src/features/ai_match/application/match_providers.dart';
+import 'package:democracy/src/features/ai_match/data/on_device/stance_run.dart';
+import 'package:democracy/src/features/ai_match/domain/candidate_match.dart';
 import 'package:democracy/src/features/ai_match/domain/direction_report.dart';
 import 'package:democracy/src/features/ai_match/presentation/ai_disclosure.dart';
 import 'package:democracy/src/features/ai_match/presentation/ai_tab_chrome.dart';
+import 'package:democracy/src/features/ai_match/presentation/on_device_notice.dart';
 import 'package:democracy/src/features/shared/presentation/provenance_widgets.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -26,8 +30,11 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 /// it AI would misdescribe it.
 ///
 /// Each block renders on its own. One the payload leaves out shows 준비 중
-/// under its header while the others draw; a live build today has the trend
-/// only. Every section says what it was read from, and nothing on it ranks a
+/// under its header while the others draw. In a live build the server sends
+/// the trend only, and the two model-made blocks are computed on the reader's
+/// device ([directionAiProvider]) from the sitting member's pledges, bills
+/// and the district's threads -- or, where the model cannot run, the block
+/// says so and why. Every section says what it was read from, and nothing on it ranks a
 /// candidate -- the plot draws every point the same, and the issue list is
 /// ordered by how often an issue came up, which is said in so many words.
 class AiDirectionScreen extends ConsumerWidget {
@@ -36,6 +43,13 @@ class AiDirectionScreen extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final report = ref.watch(directionReportProvider);
+    final hasAi = ref.watch(directionAiSourceProvider) != null;
+    final ai = ref.watch(directionAiProvider);
+    final stanceLabel =
+        ref.watch(matchSubjectProvider) == MatchSubject.incumbent
+        ? _incumbentStanceLabel
+        : _stanceLabel;
+    void retry() => ref.invalidate(directionAiProvider);
 
     return AiTabScaffold(
       mode: AiMode.direction,
@@ -73,14 +87,19 @@ class AiDirectionScreen extends ConsumerWidget {
             sliver: SliverList.list(
               children: [
                 RevealIn(
-                  child: switch (data.stances) {
-                    final stances? => _StanceSection(stances: stances),
-                    null => const _PendingSection(
-                      number: '01',
-                      label: _stanceLabel,
-                      note: '후보 공약 문구의 정책 성향 분석은 아직 준비 중입니다.',
-                    ),
-                  },
+                  child: _aiBlock<PolicyStances>(
+                    fromReport: data.stances,
+                    hasAi: hasAi,
+                    ai: ai,
+                    pick: (blocks) => blocks.stances,
+                    note: (blocks) => blocks.stancesNote,
+                    draw: (stances) => _StanceSection(stances: stances),
+                    number: '01',
+                    label: stanceLabel,
+                    pendingNote: '후보 공약 문구의 정책 성향 분석은 아직 준비 중입니다.',
+                    runningNote: '이 기기에서 공약 문구를 두 축으로 분류하고 있습니다.',
+                    onRetry: retry,
+                  ),
                 ),
                 const SizedBox(height: AppSpacing.x8),
                 RevealIn(
@@ -97,14 +116,19 @@ class AiDirectionScreen extends ConsumerWidget {
                 const SizedBox(height: AppSpacing.x8),
                 RevealIn(
                   index: 2,
-                  child: switch (data.issues) {
-                    final flow? => _IssueSection(flow: flow),
-                    null => const _PendingSection(
-                      number: '03',
-                      label: _issueLabel,
-                      note: '지역 쟁점 흐름 분석은 아직 준비 중입니다.',
-                    ),
-                  },
+                  child: _aiBlock<IssueFlow>(
+                    fromReport: data.issues,
+                    hasAi: hasAi,
+                    ai: ai,
+                    pick: (blocks) => blocks.issues,
+                    note: (blocks) => blocks.issuesNote,
+                    draw: (flow) => _IssueSection(flow: flow),
+                    number: '03',
+                    label: _issueLabel,
+                    pendingNote: '지역 쟁점 흐름 분석은 아직 준비 중입니다.',
+                    runningNote: '이 기기에서 법안·토론 제목을 쟁점별로 분류하고 있습니다.',
+                    onRetry: retry,
+                  ),
                 ),
               ],
             ),
@@ -116,12 +140,111 @@ class AiDirectionScreen extends ConsumerWidget {
 }
 
 const _stanceLabel = '후보 정책 성향';
+const _incumbentStanceLabel = '현 의원 공약 성향';
 const _trendLabel = '의원 행보 추세';
 const _issueLabel = '지역 쟁점 흐름';
 
 /// What the bill trend was counted from, said under the chart in place of
 /// the AI label it does not carry.
 const trendBasis = '대표발의 법안의 소관 위원회 기준 집계 · 위원회 미정 법안 제외';
+
+/// One model-made block, from wherever it comes.
+///
+/// A fixture report carries its sample block and draws it. Otherwise the
+/// block is this device's to make: running, made, not made (with the note
+/// saying why), or impossible here (the model cannot run on this device).
+Widget _aiBlock<T>({
+  required T? fromReport,
+  required bool hasAi,
+  required AsyncValue<DirectionAiBlocks?> ai,
+  required T? Function(DirectionAiBlocks blocks) pick,
+  required String? Function(DirectionAiBlocks blocks) note,
+  required Widget Function(T value) draw,
+  required String number,
+  required String label,
+  required String pendingNote,
+  required String runningNote,
+  required VoidCallback onRetry,
+}) {
+  if (fromReport != null) {
+    return draw(fromReport);
+  }
+  Widget pending(String text) =>
+      _PendingSection(number: number, label: label, note: text);
+  if (!hasAi) {
+    return pending(pendingNote);
+  }
+  return ai.when(
+    loading: () =>
+        _RunningSection(number: number, label: label, note: runningNote),
+    error: (_, _) => pending('기기 모델이 분석을 끝내지 못했습니다.'),
+    data: (blocks) {
+      if (blocks == null) {
+        return pending(pendingNote);
+      }
+      final reason = blocks.unavailable;
+      if (reason != null) {
+        return Column(
+          crossAxisAlignment: CrossAxisAlignment.stretch,
+          children: [
+            SectionHeader(number: number, label: label),
+            const SizedBox(height: AppSpacing.x3),
+            OnDeviceUnavailableNotice(
+              reason: reason,
+              compact: true,
+              onRetry: onRetry,
+            ),
+          ],
+        );
+      }
+      final value = pick(blocks);
+      return value != null ? draw(value) : pending(note(blocks) ?? pendingNote);
+    },
+  );
+}
+
+/// A block the device's model is still working on: its header, and what the
+/// model is reading, in words. No figure yet, so no label either.
+class _RunningSection extends StatelessWidget {
+  const _RunningSection({
+    required this.number,
+    required this.label,
+    required this.note,
+  });
+
+  final String number;
+  final String label;
+  final String note;
+
+  @override
+  Widget build(BuildContext context) {
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.stretch,
+      children: [
+        SectionHeader(number: number, label: label),
+        const SizedBox(height: AppSpacing.x3),
+        Row(
+          children: [
+            SizedBox(
+              width: 16,
+              height: 16,
+              child: PlatformAdaptiveProgress.circular(context),
+            ),
+            const SizedBox(width: AppSpacing.x2),
+            Expanded(
+              child: Text(
+                note,
+                style: AppTextStyles.cardBody.copyWith(
+                  color: AppColors.neutral700,
+                ),
+              ),
+            ),
+          ],
+        ),
+      ],
+    );
+  }
+}
 
 /// A block this district has no data for yet: its header, and 준비 중 in
 /// words. No label and no figure, so nothing here asks for the disclosure.
@@ -197,13 +320,15 @@ class _StanceSection extends StatelessWidget {
       for (final candidate in stances.candidates)
         '${candidate.name} ${candidate.pledgeCount}건',
     ].join(' · ');
+    final incumbent = stances.subject == MatchSubject.incumbent;
+    final onDevice = stances.onDevice;
 
     return Column(
       crossAxisAlignment: CrossAxisAlignment.stretch,
       children: [
         SectionHeader(
           number: '01',
-          label: _stanceLabel,
+          label: incumbent ? _incumbentStanceLabel : _stanceLabel,
           trailing: _AiTrailing(
             TextLink(
               label: '축 정의 공개 ↗',
@@ -222,8 +347,15 @@ class _StanceSection extends StatelessWidget {
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  SourceLine('등록 공약 ${stances.pledgeCount}건 문구 기준'),
-                  SourceLine(counts),
+                  if (onDevice != null) ...[
+                    SourceLine(
+                      '22대 공약 ${stances.pledgeCount}건 · $onDeviceStanceMethod',
+                    ),
+                    OnDeviceStamp(run: onDevice),
+                  ] else ...[
+                    SourceLine('등록 공약 ${stances.pledgeCount}건 문구 기준'),
+                    SourceLine(counts),
+                  ],
                 ],
               ),
             ),
@@ -336,9 +468,13 @@ class _StancePlot extends StatelessWidget {
             '${_side(candidate.y, axes.yLow, axes.yHigh)}',
     ].join('. ');
 
+    final who = stances.subject == MatchSubject.incumbent
+        ? '현 의원 공약의 정책 성향 위치'
+        : '후보 ${stances.candidates.length}명의 정책 성향 위치';
+
     return Semantics(
       label:
-          '후보 ${stances.candidates.length}명의 정책 성향 위치. '
+          '$who. '
           '가로 ${axes.xLow}에서 ${axes.xHigh}, '
           '세로 ${axes.yLow}에서 ${axes.yHigh}. $description',
       container: true,
@@ -820,7 +956,10 @@ class _IssueSection extends StatelessWidget {
             Expanded(
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
-                children: [SourceLine(flow.basis)],
+                children: [
+                  SourceLine(flow.basis),
+                  if (flow.onDevice != null) OnDeviceStamp(run: flow.onDevice!),
+                ],
               ),
             ),
             const SizedBox(width: AppSpacing.x3),

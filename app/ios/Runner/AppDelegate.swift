@@ -12,5 +12,10 @@ import UIKit
 
   func didInitializeImplicitFlutterEngine(_ engineBridge: FlutterImplicitEngineBridge) {
     GeneratedPluginRegistrant.register(with: engineBridge.pluginRegistry)
+    // The on-device model bridge (Apple Foundation Models). App code, not a
+    // package, so it is registered by hand beside the generated ones.
+    if let registrar = engineBridge.pluginRegistry.registrar(forPlugin: "OnDeviceAiPlugin") {
+      OnDeviceAiPlugin.register(with: registrar)
+    }
   }
 }

@@ -60,6 +60,7 @@ text) and `rate_limited` (429).
 | `GET /districts/{id}/pledges`      | PledgeBoard, or `404 not_curated`                                                           |
 | `GET /districts/{id}/results`      | RawElectionResults: the 22대 final count. Cached 300 s.                                     |
 | `GET /districts/{id}/direction`    | DirectionReport: `trend` only (or `null`); `stances`, `issues` always `null`. Cached 300 s. |
+| `GET /districts/{id}/bills`        | MemberBills: the incumbent's 대표발의 bills of the last `months` (1-12, default 6). 300 s.  |
 | `GET /address/search?q=`           | `{suggestions:[{address, district:{id, displayName}}]}`. Unmapped addresses are dropped.    |
 | `GET /location/district?lat=&lng=` | `{district:{id, displayName}}`, or `404 no_match`                                           |
 
@@ -112,8 +113,17 @@ text) and `rate_limited` (429).
     - `summary` is a template over the numbers: which field had the largest share in each term.
     - `trend` is `null` until the 21대 backfill has run (no 21대 rows at all), or when neither term
       has a counted bill.
-    - No model is involved. `stances` and `issues` would need one and are not served; the app shows
-      them as 준비 중.
+    - No model is involved. `stances` and `issues` need one and are never served from here: the app
+      computes them on the reader's device (Apple Foundation Models / Gemini Nano) from `/pledges`,
+      `/bills` and `/community`, and nothing it computes is sent back.
+  - bills (`/bills?months=N`) = the incumbent's 22대 대표발의 bills proposed on or after the 1st of
+    the KST month `N - 1` months before this one, newest first, at most 200.
+    - `{district, legislator:{id, name}, since, months, bills:[{id, title, committee, proposedOn,
+      sourceUrl}], source}`.
+      `sourceUrl` is the bill's likms page, or the dataset when there is none; a bill with no
+      proposal date is left out.
+    - Raw public text for the app's on-device AI, which cites each bill back by its link. No score
+      or label is computed here. A district with no sitting member is `404 not_found`.
   - There are no rankings, scores or labels.
 - **Results** (`/results`) is RawElectionResults:
   - `live: false` and `overallCountedShare: 100`; it is a final count.

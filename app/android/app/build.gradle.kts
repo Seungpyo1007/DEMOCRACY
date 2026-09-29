@@ -64,3 +64,11 @@ kotlin {
 flutter {
     source = "../.."
 }
+
+dependencies {
+    // Gemini Nano on the device through AICore, for the AI tab. No cloud
+    // model and no key: see OnDeviceAiPlugin.kt. The GenAI libraries declare
+    // minSdk 26; the manifest overrides that and the bridge only loads on 26+.
+    implementation("com.google.mlkit:genai-prompt:1.0.0-beta4")
+    implementation("org.jetbrains.kotlinx:kotlinx-coroutines-android:1.10.2")
+}

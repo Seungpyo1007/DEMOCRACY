@@ -1,4 +1,7 @@
+import 'package:democracy/src/core/on_device_ai/on_device_model.dart';
+import 'package:democracy/src/core/on_device_ai/on_device_run.dart';
 import 'package:democracy/src/core/provenance/source_metadata.dart';
+import 'package:democracy/src/features/ai_match/domain/candidate_match.dart';
 
 /// The two axes the policy-position plot is drawn on, and what each end means.
 ///
@@ -114,6 +117,8 @@ class PolicyStances {
     required this.axes,
     required this.candidates,
     required this.source,
+    this.subject = MatchSubject.candidates,
+    this.onDevice,
   });
 
   factory PolicyStances.fromJson(Object? json) {
@@ -142,6 +147,12 @@ class PolicyStances {
   final StanceAxes axes;
   final List<CandidateStance> candidates;
   final SourceMetadata source;
+
+  /// Candidates at election time; the sitting member's pledges between them.
+  final MatchSubject subject;
+
+  /// Set when this device's own model classified the pledges.
+  final OnDeviceRun? onDevice;
 
   /// Every pledge the plot was read from, across candidates.
   int get pledgeCount =>
@@ -381,6 +392,7 @@ class IssueFlow {
     required this.basis,
     required this.issues,
     required this.source,
+    this.onDevice,
   });
 
   factory IssueFlow.fromJson(Object? json) {
@@ -421,6 +433,9 @@ class IssueFlow {
 
   final List<LocalIssue> issues;
   final SourceMetadata source;
+
+  /// Set when this device's own model labelled the text.
+  final OnDeviceRun? onDevice;
 }
 
 /// The whole direction analysis for one district.
@@ -467,4 +482,33 @@ class DirectionReport {
 
 abstract interface class DirectionRepository {
   Future<DirectionReport> loadReport(String districtId);
+}
+
+/// The two model-made blocks, as this device's model produced them.
+///
+/// A live build gets the bill trend from the server (a count, no model) and
+/// computes these two here. Each is null with a [stancesNote] / [issuesNote]
+/// saying why when it could not be made -- no pledges on record, an answer
+/// that failed validation -- and [unavailable] is set, with both null, when
+/// the model cannot run on this device at all.
+class DirectionAiBlocks {
+  const DirectionAiBlocks({
+    this.stances,
+    this.issues,
+    this.stancesNote,
+    this.issuesNote,
+    this.unavailable,
+  });
+
+  final PolicyStances? stances;
+  final IssueFlow? issues;
+  final String? stancesNote;
+  final String? issuesNote;
+  final ModelUnavailableReason? unavailable;
+}
+
+/// Where [DirectionAiBlocks] come from: the on-device model in a live build,
+/// nothing in a fixture build (whose report already carries sample blocks).
+abstract interface class DirectionAiSource {
+  Future<DirectionAiBlocks> load(String districtId);
 }

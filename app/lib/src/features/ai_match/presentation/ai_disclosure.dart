@@ -9,7 +9,13 @@ const aiDisclosure = '공약 원문 기반 참고 자료이며 공인 평가가 
 
 /// How the numbers are made, said once in the dialog so the label beside each
 /// of them can stay two words long.
-const aiDisclosureMethod = '점수와 위치는 등록된 공약 문구를 공개된 축과 가중치로 대조해 계산합니다.';
+///
+/// It also says where: the model runs on the reader's device, and what it
+/// produces is not sent anywhere. A reader deciding how far to trust a
+/// figure is owed that as much as the method.
+const aiDisclosureMethod =
+    '점수와 위치는 공약·법안 문구를 공개된 축과 가중치로 대조해 계산합니다. '
+    '분석은 이 기기 안의 AI 모델이 하며, 결과를 서버로 보내지 않습니다.';
 
 /// The label set beside every AI-produced score and position.
 const aiReferenceLabel = 'AI 참고 자료';
