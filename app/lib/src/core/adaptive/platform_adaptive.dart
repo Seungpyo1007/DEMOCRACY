@@ -3,6 +3,7 @@ import 'dart:ui' show lerpDouble;
 import 'package:cupertino_native_better/cupertino_native_better.dart';
 import 'package:democracy/src/design/app_motion.dart';
 import 'package:democracy/src/design/app_tokens.dart';
+import 'package:democracy/src/design/components/motion.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -186,16 +187,16 @@ class PlatformAdaptiveTabBar extends StatelessWidget {
     // iOS 26 one: a capsule only as wide as its own items. The material
     // underneath does differ -- iOS gets real glass, Android an opaque
     // surface -- but that is [_FloatingBarFrame]'s business, not this one's.
-    // Android: the same floating shape as iOS -- a capsule only as wide as
-    // its tabs, with the sixth destination as a round button beside it --
-    // made of Material 3 rather than glass: a tonal surface, a level-3
-    // shadow, the pill indicator behind the active icon and M3's ripple.
+    // Android: an edge-to-edge bar with all six destinations. The selection
+    // is one pill that travels between tabs -- its leading edge runs ahead
+    // and the trailing edge catches up, so it stretches on the way and
+    // settles on arrival -- and a press squeezes the icon instead of
+    // spreading a ripple.
     if (!surfaceTokens.isGlass) {
-      return _MaterialFloatingBar(
+      return _SlidingNavigationBar(
         currentIndex: currentIndex,
         items: items,
         onTap: onTap,
-        inset: surfaceTokens.navBarInset,
       );
     }
 
@@ -441,116 +442,152 @@ class _CapsuleTabItem extends StatelessWidget {
   }
 }
 
-/// Android's bar: an iOS 26 layout in Material 3.
+/// Android's bar: full width on the bottom edge, one pill for the selection.
 ///
-/// Five destinations sit in a floating capsule sized to them; a sixth and
-/// later become round buttons beside it, where iOS puts its separate tab.
-/// Both are the same M3 surface at elevation 3. Each destination draws the
-/// M3 active indicator, a pill behind the icon that opens from its centre,
-/// and a labelMedium label, the way Material's own NavigationBar does.
-class _MaterialFloatingBar extends StatelessWidget {
-  const _MaterialFloatingBar({
+/// The pill is a single shape that moves rather than one per destination, so
+/// changing tab reads as travel. Its two edges run on different curves: the
+/// edge on the side it is heading for leaves fast and the other follows,
+/// which stretches the pill across the distance and lets it settle into its
+/// 56dp on arrival. Presses give no ink; the icon squeezes under the finger
+/// ([PressScale]) and the newly selected one springs back up.
+class _SlidingNavigationBar extends StatefulWidget {
+  const _SlidingNavigationBar({
     required this.currentIndex,
     required this.items,
     required this.onTap,
-    required this.inset,
   });
-
-  static const maxTabs = 5;
-
-  /// Five 54dp tabs, the capsule's padding, the gap and one 64dp button fit
-  /// a 390dp screen inside the 16dp insets.
-  static const itemWidth = 54.0;
-  static const height = 64.0;
-  static const gap = 8.0;
 
   final int currentIndex;
   final List<AdaptiveTabItem> items;
   final ValueChanged<int> onTap;
-  final double inset;
+
+  static const barHeight = 72.0;
+  static const pillWidth = 56.0;
+  static const pillHeight = 32.0;
+  static const pillTop = 10.0;
+
+  @override
+  State<_SlidingNavigationBar> createState() => _SlidingNavigationBarState();
+}
+
+class _SlidingNavigationBarState extends State<_SlidingNavigationBar>
+    with SingleTickerProviderStateMixin {
+  late final AnimationController _travel = AnimationController(
+    vsync: this,
+    duration: AppMotion.base,
+    value: 1,
+  );
+  late int _from = widget.currentIndex;
+
+  /// The front edge leaves at once; the back edge waits, then catches up.
+  static const _lead = Cubic(0.2, 0.9, 0.3, 1);
+  static const _trail = Cubic(0.6, 0, 0.2, 1);
+
+  @override
+  void didUpdateWidget(_SlidingNavigationBar oldWidget) {
+    super.didUpdateWidget(oldWidget);
+    if (oldWidget.currentIndex != widget.currentIndex) {
+      _from = oldWidget.currentIndex;
+      if (AppMotion.reduced(context)) {
+        _travel.value = 1;
+      } else {
+        _travel.forward(from: 0);
+      }
+    }
+  }
+
+  @override
+  void dispose() {
+    _travel.dispose();
+    super.dispose();
+  }
 
   @override
   Widget build(BuildContext context) {
     final colors = Theme.of(context).colorScheme;
-    // surfaceContainerLowest, not surfaceContainer: this scheme is seeded
-    // monochrome, so the mid container roles collapse onto the page and the
-    // capsule would stop reading as lifted.
-    final surface = colors.surfaceContainerLowest;
-    final shadow = AppColors.ink.withValues(alpha: 0.22);
-    final tabs = items.take(maxTabs).toList();
-    final extras = items.skip(maxTabs).toList();
+    final items = widget.items;
 
-    return SafeArea(
-      top: false,
-      child: Padding(
-        padding: EdgeInsets.fromLTRB(inset, 0, inset, inset),
-        child: Row(
-          mainAxisSize: MainAxisSize.min,
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            Material(
-              key: PlatformAdaptiveTabBar.surfaceKey,
-              color: surface,
-              surfaceTintColor: Colors.transparent,
-              shadowColor: shadow,
-              elevation: 3,
-              shape: const StadiumBorder(),
-              clipBehavior: Clip.antiAlias,
-              child: Padding(
-                padding: const EdgeInsets.symmetric(horizontal: 4),
-                child: SizedBox(
-                  height: height,
-                  child: Row(
-                    mainAxisSize: MainAxisSize.min,
-                    children: [
-                      for (var i = 0; i < tabs.length; i++)
-                        SizedBox(
-                          width: itemWidth,
-                          child: _MaterialDestination(
-                            item: tabs[i],
-                            selected: i == currentIndex,
-                            onTap: () => onTap(i),
+    return Material(
+      key: PlatformAdaptiveTabBar.surfaceKey,
+      color: colors.surfaceContainerLowest,
+      surfaceTintColor: Colors.transparent,
+      child: DecoratedBox(
+        decoration: const BoxDecoration(
+          border: Border(top: BorderSide(color: AppColors.divider)),
+        ),
+        child: SafeArea(
+          top: false,
+          child: SizedBox(
+            height: _SlidingNavigationBar.barHeight,
+            child: LayoutBuilder(
+              builder: (context, constraints) {
+                final slot = constraints.maxWidth / items.length;
+                double centre(int i) => slot * i + slot / 2;
+                return Stack(
+                  children: [
+                    AnimatedBuilder(
+                      animation: _travel,
+                      builder: (context, _) {
+                        final from = centre(_from);
+                        final to = centre(widget.currentIndex);
+                        const half = _SlidingNavigationBar.pillWidth / 2;
+                        final forward = to >= from;
+                        final front = lerpDouble(
+                          from,
+                          to,
+                          _lead.transform(_travel.value),
+                        )!;
+                        final back = lerpDouble(
+                          from,
+                          to,
+                          _trail.transform(_travel.value),
+                        )!;
+                        final left = (forward ? back : front) - half;
+                        final right = (forward ? front : back) + half;
+                        return Positioned(
+                          key: const ValueKey('tab-indicator'),
+                          left: left,
+                          width: right - left,
+                          top: _SlidingNavigationBar.pillTop,
+                          height: _SlidingNavigationBar.pillHeight,
+                          child: DecoratedBox(
+                            decoration: ShapeDecoration(
+                              color: colors.secondaryContainer,
+                              shape: const StadiumBorder(),
+                            ),
                           ),
-                        ),
-                    ],
-                  ),
-                ),
-              ),
+                        );
+                      },
+                    ),
+                    Row(
+                      children: [
+                        for (var i = 0; i < items.length; i++)
+                          SizedBox(
+                            width: slot,
+                            child: _SlidingDestination(
+                              item: items[i],
+                              selected: i == widget.currentIndex,
+                              onTap: () => widget.onTap(i),
+                            ),
+                          ),
+                      ],
+                    ),
+                  ],
+                );
+              },
             ),
-            for (var i = 0; i < extras.length; i++) ...[
-              const SizedBox(width: gap),
-              Material(
-                key: ValueKey('tab-extra-${maxTabs + i}'),
-                color: surface,
-                surfaceTintColor: Colors.transparent,
-                shadowColor: shadow,
-                elevation: 3,
-                shape: const CircleBorder(),
-                clipBehavior: Clip.antiAlias,
-                child: SizedBox.square(
-                  dimension: height,
-                  child: _MaterialDestination(
-                    item: extras[i],
-                    selected: currentIndex == maxTabs + i,
-                    onTap: () => onTap(maxTabs + i),
-                    showLabel: false,
-                  ),
-                ),
-              ),
-            ],
-          ],
+          ),
         ),
       ),
     );
   }
 }
 
-class _MaterialDestination extends StatelessWidget {
-  const _MaterialDestination({
+class _SlidingDestination extends StatelessWidget {
+  const _SlidingDestination({
     required this.item,
     required this.selected,
     required this.onTap,
-    this.showLabel = true,
   });
 
   /// The labels sit in a bar of fixed height; past this they would clip.
@@ -559,83 +596,77 @@ class _MaterialDestination extends StatelessWidget {
   final AdaptiveTabItem item;
   final bool selected;
   final VoidCallback onTap;
-  final bool showLabel;
 
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
     final colors = theme.colorScheme;
     final reduced = AppMotion.reduced(context);
-    final duration = reduced ? Duration.zero : AppMotion.fast;
-    final iconColor = selected
-        ? colors.onSecondaryContainer
-        : colors.onSurfaceVariant;
-
-    final icon = SizedBox(
-      width: 48,
-      height: 32,
-      child: Stack(
-        alignment: Alignment.center,
-        children: [
-          // M3's active indicator: opens from the icon's centre.
-          AnimatedContainer(
-            duration: duration,
-            curve: AppMotion.settle,
-            width: selected ? 48 : 0,
-            height: 32,
-            decoration: ShapeDecoration(
-              color: selected ? colors.secondaryContainer : Colors.transparent,
-              shape: const StadiumBorder(),
-            ),
-          ),
-          Icon(
-            selected ? (item.activeIcon ?? item.icon) : item.icon,
-            size: 22,
-            color: iconColor,
-          ),
-        ],
-      ),
-    );
-
-    final tap = InkWell(
-      onTap: onTap,
-      customBorder: showLabel ? const StadiumBorder() : const CircleBorder(),
-      child: Column(
-        mainAxisAlignment: MainAxisAlignment.center,
-        children: [
-          icon,
-          if (showLabel) ...[
-            const SizedBox(height: 4),
-            MediaQuery.withClampedTextScaling(
-              maxScaleFactor: _maxLabelScale,
-              child: Text(
-                item.label,
-                maxLines: 1,
-                overflow: TextOverflow.ellipsis,
-                style: theme.textTheme.labelMedium?.copyWith(
-                  fontSize: 11,
-                  fontWeight: selected ? FontWeight.w700 : FontWeight.w500,
-                  color: selected ? colors.onSurface : colors.onSurfaceVariant,
-                ),
-              ),
-            ),
-          ],
-        ],
-      ),
-    );
 
     return Semantics(
       button: true,
       selected: selected,
       label: item.label,
       excludeSemantics: true,
-      // The round button has no label of its own; the tooltip names it on
-      // long press, as Material does for icon-only destinations.
-      child: showLabel ? tap : Tooltip(message: item.label, child: tap),
+      child: GestureDetector(
+        behavior: HitTestBehavior.opaque,
+        onTap: onTap,
+        child: PressScale(
+          child: Column(
+            children: [
+              const SizedBox(height: _SlidingNavigationBar.pillTop),
+              SizedBox(
+                height: _SlidingNavigationBar.pillHeight,
+                child: Center(
+                  // The newly selected icon springs up from a little small.
+                  child: TweenAnimationBuilder<double>(
+                    key: ValueKey(selected),
+                    tween: Tween(begin: selected && !reduced ? 0.8 : 1, end: 1),
+                    duration: reduced ? Duration.zero : AppMotion.slow,
+                    curve: Curves.elasticOut,
+                    builder: (context, scale, child) =>
+                        Transform.scale(scale: scale, child: child),
+                    child: Icon(
+                      selected ? (item.activeIcon ?? item.icon) : item.icon,
+                      size: 22,
+                      color: selected
+                          ? colors.onSecondaryContainer
+                          : colors.onSurfaceVariant,
+                    ),
+                  ),
+                ),
+              ),
+              const SizedBox(height: 4),
+              MediaQuery.withClampedTextScaling(
+                maxScaleFactor: _maxLabelScale,
+                child: Text(
+                  item.label,
+                  maxLines: 1,
+                  overflow: TextOverflow.ellipsis,
+                  style: theme.textTheme.labelMedium?.copyWith(
+                    fontSize: 11,
+                    fontWeight: selected ? FontWeight.w700 : FontWeight.w500,
+                    color: selected
+                        ? colors.onSurface
+                        : colors.onSurfaceVariant,
+                  ),
+                ),
+              ),
+            ],
+          ),
+        ),
+      ),
     );
   }
 }
 
+/// Lifts a navigation bar off the bottom edge as a detached capsule.
+///
+/// [Center] lets the capsule take only the width its items need, which is the
+/// part that makes it read as an iOS 26 tab bar rather than a bar with rounded
+/// ends. [StadiumBorder] keeps the ends fully round at whatever height the bar
+/// resolves to. The elevation is a real shadow on an opaque surface, so
+/// nothing here depends on translucency or a Liquid Glass implementation.
 class _FloatingBarFrame extends StatelessWidget {
   const _FloatingBarFrame({
     required this.inset,
