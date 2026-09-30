@@ -1,0 +1,297 @@
+{
+  "_note": "제22대 국회의원선거 경기 수원시 갑 당선인 김승원 (더불어민주당). 책자형 선거공보 PDF 8쪽 「검증된 재선의원의 힘!」 01 교통혁명·02 도시혁명·03 미래혁명 세 칸의 낱항목 26개를 칸 순서대로 담았다. 칸 안의 소제목(철도 교통망 조기 개통, 3대 발전축 이름, 청년 및 신혼주택·중장년·노년)은 묶음 이름이라 따로 넣지 않았다. PDF 글자층이 깨져 있어 쪽 이미지를 보고 옮겼다. PDF 4쪽은 지난 임기 실적이라, PDF 9–10쪽은 동별 공약이라 넣지 않았다. 제목은 원문 문구를 따랐고 바꾼 것은 위에 적은 구호·수식어 덜어내기뿐이다. 분류(category)는 앱에 정해진 분류 체계가 없어 비워 두었다. 이행 여부는 판정하지 않았다(notJudged).",
+  "districtId": "nec-f17864d3",
+  "source": {
+    "sourceUrl": "https://policy.nec.go.kr/policy_pdf/20240410/PDF/PBINFO_PUB/4101/003_100152655_20240402_2.pdf",
+    "fetchedAt": "2026-09-27T17:34:00Z",
+    "publisher": "중앙선거관리위원회"
+  },
+  "pledges": [
+    {
+      "id": "22-gyeonggi-suwon-a-01",
+      "title": "동탄인덕원선(28년 예정)",
+      "category": "",
+      "status": "notJudged",
+      "source": {
+        "sourceUrl": "https://policy.nec.go.kr/policy_pdf/20240410/PDF/PBINFO_PUB/4101/003_100152655_20240402_2.pdf",
+        "fetchedAt": "2026-09-27T17:34:00Z",
+        "publisher": "중앙선거관리위원회"
+      }
+    },
+    {
+      "id": "22-gyeonggi-suwon-a-02",
+      "title": "신분당선 연장(27년 예정)",
+      "category": "",
+      "status": "notJudged",
+      "source": {
+        "sourceUrl": "https://policy.nec.go.kr/policy_pdf/20240410/PDF/PBINFO_PUB/4101/003_100152655_20240402_2.pdf",
+        "fetchedAt": "2026-09-27T17:34:00Z",
+        "publisher": "중앙선거관리위원회"
+      }
+    },
+    {
+      "id": "22-gyeonggi-suwon-a-03",
+      "title": "수원발KTX(26년 예정)",
+      "category": "",
+      "status": "notJudged",
+      "source": {
+        "sourceUrl": "https://policy.nec.go.kr/policy_pdf/20240410/PDF/PBINFO_PUB/4101/003_100152655_20240402_2.pdf",
+        "fetchedAt": "2026-09-27T17:34:00Z",
+        "publisher": "중앙선거관리위원회"
+      }
+    },
+    {
+      "id": "22-gyeonggi-suwon-a-04",
+      "title": "GTX-C(28년 예정)",
+      "category": "",
+      "status": "notJudged",
+      "source": {
+        "sourceUrl": "https://policy.nec.go.kr/policy_pdf/20240410/PDF/PBINFO_PUB/4101/003_100152655_20240402_2.pdf",
+        "fetchedAt": "2026-09-27T17:34:00Z",
+        "publisher": "중앙선거관리위원회"
+      }
+    },
+    {
+      "id": "22-gyeonggi-suwon-a-05",
+      "title": "지역 기반 연계 문화관광트램",
+      "category": "",
+      "status": "notJudged",
+      "source": {
+        "sourceUrl": "https://policy.nec.go.kr/policy_pdf/20240410/PDF/PBINFO_PUB/4101/003_100152655_20240402_2.pdf",
+        "fetchedAt": "2026-09-27T17:34:00Z",
+        "publisher": "중앙선거관리위원회"
+      }
+    },
+    {
+      "id": "22-gyeonggi-suwon-a-06",
+      "title": "장안발 광역급행버스 운행",
+      "category": "",
+      "status": "notJudged",
+      "source": {
+        "sourceUrl": "https://policy.nec.go.kr/policy_pdf/20240410/PDF/PBINFO_PUB/4101/003_100152655_20240402_2.pdf",
+        "fetchedAt": "2026-09-27T17:34:00Z",
+        "publisher": "중앙선거관리위원회"
+      }
+    },
+    {
+      "id": "22-gyeonggi-suwon-a-07",
+      "title": "철도 연계 간선급행버스(BRT)",
+      "category": "",
+      "status": "notJudged",
+      "source": {
+        "sourceUrl": "https://policy.nec.go.kr/policy_pdf/20240410/PDF/PBINFO_PUB/4101/003_100152655_20240402_2.pdf",
+        "fetchedAt": "2026-09-27T17:34:00Z",
+        "publisher": "중앙선거관리위원회"
+      }
+    },
+    {
+      "id": "22-gyeonggi-suwon-a-08",
+      "title": "버스 운송 연계 체계 고도화",
+      "category": "",
+      "status": "notJudged",
+      "source": {
+        "sourceUrl": "https://policy.nec.go.kr/policy_pdf/20240410/PDF/PBINFO_PUB/4101/003_100152655_20240402_2.pdf",
+        "fetchedAt": "2026-09-27T17:34:00Z",
+        "publisher": "중앙선거관리위원회"
+      }
+    },
+    {
+      "id": "22-gyeonggi-suwon-a-09",
+      "title": "공공주차공간 1,000면 조성",
+      "category": "",
+      "status": "notJudged",
+      "source": {
+        "sourceUrl": "https://policy.nec.go.kr/policy_pdf/20240410/PDF/PBINFO_PUB/4101/003_100152655_20240402_2.pdf",
+        "fetchedAt": "2026-09-27T17:34:00Z",
+        "publisher": "중앙선거관리위원회"
+      }
+    },
+    {
+      "id": "22-gyeonggi-suwon-a-10",
+      "title": "종합운동장 주변 복합스포츠 문화단지 조성",
+      "category": "",
+      "status": "notJudged",
+      "source": {
+        "sourceUrl": "https://policy.nec.go.kr/policy_pdf/20240410/PDF/PBINFO_PUB/4101/003_100152655_20240402_2.pdf",
+        "fetchedAt": "2026-09-27T17:34:00Z",
+        "publisher": "중앙선거관리위원회"
+      }
+    },
+    {
+      "id": "22-gyeonggi-suwon-a-11",
+      "title": "경기도인재개발원 부지 첨단산업단지, 공공주택 등 대규모 복합공간 조성",
+      "category": "",
+      "status": "notJudged",
+      "source": {
+        "sourceUrl": "https://policy.nec.go.kr/policy_pdf/20240410/PDF/PBINFO_PUB/4101/003_100152655_20240402_2.pdf",
+        "fetchedAt": "2026-09-27T17:34:00Z",
+        "publisher": "중앙선거관리위원회"
+      }
+    },
+    {
+      "id": "22-gyeonggi-suwon-a-12",
+      "title": "수성중사거리 주변 역세권 개발",
+      "category": "",
+      "status": "notJudged",
+      "source": {
+        "sourceUrl": "https://policy.nec.go.kr/policy_pdf/20240410/PDF/PBINFO_PUB/4101/003_100152655_20240402_2.pdf",
+        "fetchedAt": "2026-09-27T17:34:00Z",
+        "publisher": "중앙선거관리위원회"
+      }
+    },
+    {
+      "id": "22-gyeonggi-suwon-a-13",
+      "title": "재개발·재건축 조건 완화 및 촉진",
+      "category": "",
+      "status": "notJudged",
+      "source": {
+        "sourceUrl": "https://policy.nec.go.kr/policy_pdf/20240410/PDF/PBINFO_PUB/4101/003_100152655_20240402_2.pdf",
+        "fetchedAt": "2026-09-27T17:34:00Z",
+        "publisher": "중앙선거관리위원회"
+      }
+    },
+    {
+      "id": "22-gyeonggi-suwon-a-14",
+      "title": "이목·정자 일원 활력교육지구 조성",
+      "category": "",
+      "status": "notJudged",
+      "source": {
+        "sourceUrl": "https://policy.nec.go.kr/policy_pdf/20240410/PDF/PBINFO_PUB/4101/003_100152655_20240402_2.pdf",
+        "fetchedAt": "2026-09-27T17:34:00Z",
+        "publisher": "중앙선거관리위원회"
+      }
+    },
+    {
+      "id": "22-gyeonggi-suwon-a-15",
+      "title": "생태박물관, 반려동물공원 등 생태테마파크",
+      "category": "",
+      "status": "notJudged",
+      "source": {
+        "sourceUrl": "https://policy.nec.go.kr/policy_pdf/20240410/PDF/PBINFO_PUB/4101/003_100152655_20240402_2.pdf",
+        "fetchedAt": "2026-09-27T17:34:00Z",
+        "publisher": "중앙선거관리위원회"
+      }
+    },
+    {
+      "id": "22-gyeonggi-suwon-a-16",
+      "title": "영화문화관광지구 활용방안 현실화",
+      "category": "",
+      "status": "notJudged",
+      "source": {
+        "sourceUrl": "https://policy.nec.go.kr/policy_pdf/20240410/PDF/PBINFO_PUB/4101/003_100152655_20240402_2.pdf",
+        "fetchedAt": "2026-09-27T17:34:00Z",
+        "publisher": "중앙선거관리위원회"
+      }
+    },
+    {
+      "id": "22-gyeonggi-suwon-a-17",
+      "title": "재개발·재건축을 통한 도시활력 증진",
+      "category": "",
+      "status": "notJudged",
+      "source": {
+        "sourceUrl": "https://policy.nec.go.kr/policy_pdf/20240410/PDF/PBINFO_PUB/4101/003_100152655_20240402_2.pdf",
+        "fetchedAt": "2026-09-27T17:34:00Z",
+        "publisher": "중앙선거관리위원회"
+      }
+    },
+    {
+      "id": "22-gyeonggi-suwon-a-18",
+      "title": "문화관광트램",
+      "category": "",
+      "status": "notJudged",
+      "source": {
+        "sourceUrl": "https://policy.nec.go.kr/policy_pdf/20240410/PDF/PBINFO_PUB/4101/003_100152655_20240402_2.pdf",
+        "fetchedAt": "2026-09-27T17:34:00Z",
+        "publisher": "중앙선거관리위원회"
+      }
+    },
+    {
+      "id": "22-gyeonggi-suwon-a-19",
+      "title": "아이사랑 주택, 아동전문병원(수원의료원) 육아 및 보육친화 환경 조성",
+      "category": "",
+      "status": "notJudged",
+      "source": {
+        "sourceUrl": "https://policy.nec.go.kr/policy_pdf/20240410/PDF/PBINFO_PUB/4101/003_100152655_20240402_2.pdf",
+        "fetchedAt": "2026-09-27T17:34:00Z",
+        "publisher": "중앙선거관리위원회"
+      }
+    },
+    {
+      "id": "22-gyeonggi-suwon-a-20",
+      "title": "정자·이목 에듀타운",
+      "category": "",
+      "status": "notJudged",
+      "source": {
+        "sourceUrl": "https://policy.nec.go.kr/policy_pdf/20240410/PDF/PBINFO_PUB/4101/003_100152655_20240402_2.pdf",
+        "fetchedAt": "2026-09-27T17:34:00Z",
+        "publisher": "중앙선거관리위원회"
+      }
+    },
+    {
+      "id": "22-gyeonggi-suwon-a-21",
+      "title": "직장맘센터, 교육정보센터 등",
+      "category": "",
+      "status": "notJudged",
+      "source": {
+        "sourceUrl": "https://policy.nec.go.kr/policy_pdf/20240410/PDF/PBINFO_PUB/4101/003_100152655_20240402_2.pdf",
+        "fetchedAt": "2026-09-27T17:34:00Z",
+        "publisher": "중앙선거관리위원회"
+      }
+    },
+    {
+      "id": "22-gyeonggi-suwon-a-22",
+      "title": "건강생활지원센터(장안보건소)",
+      "category": "",
+      "status": "notJudged",
+      "source": {
+        "sourceUrl": "https://policy.nec.go.kr/policy_pdf/20240410/PDF/PBINFO_PUB/4101/003_100152655_20240402_2.pdf",
+        "fetchedAt": "2026-09-27T17:34:00Z",
+        "publisher": "중앙선거관리위원회"
+      }
+    },
+    {
+      "id": "22-gyeonggi-suwon-a-23",
+      "title": "가족친화형 체육·여가시설 등",
+      "category": "",
+      "status": "notJudged",
+      "source": {
+        "sourceUrl": "https://policy.nec.go.kr/policy_pdf/20240410/PDF/PBINFO_PUB/4101/003_100152655_20240402_2.pdf",
+        "fetchedAt": "2026-09-27T17:34:00Z",
+        "publisher": "중앙선거관리위원회"
+      }
+    },
+    {
+      "id": "22-gyeonggi-suwon-a-24",
+      "title": "경로당 주5일 점심제공",
+      "category": "",
+      "status": "notJudged",
+      "source": {
+        "sourceUrl": "https://policy.nec.go.kr/policy_pdf/20240410/PDF/PBINFO_PUB/4101/003_100152655_20240402_2.pdf",
+        "fetchedAt": "2026-09-27T17:34:00Z",
+        "publisher": "중앙선거관리위원회"
+      }
+    },
+    {
+      "id": "22-gyeonggi-suwon-a-25",
+      "title": "지역사회 돌봄체계 구축(동남보건대-수원의료원-지자체)",
+      "category": "",
+      "status": "notJudged",
+      "source": {
+        "sourceUrl": "https://policy.nec.go.kr/policy_pdf/20240410/PDF/PBINFO_PUB/4101/003_100152655_20240402_2.pdf",
+        "fetchedAt": "2026-09-27T17:34:00Z",
+        "publisher": "중앙선거관리위원회"
+      }
+    },
+    {
+      "id": "22-gyeonggi-suwon-a-26",
+      "title": "무릎·허리 치료재활센터(수원의료원)",
+      "category": "",
+      "status": "notJudged",
+      "source": {
+        "sourceUrl": "https://policy.nec.go.kr/policy_pdf/20240410/PDF/PBINFO_PUB/4101/003_100152655_20240402_2.pdf",
+        "fetchedAt": "2026-09-27T17:34:00Z",
+        "publisher": "중앙선거관리위원회"
+      }
+    }
+  ]
+}

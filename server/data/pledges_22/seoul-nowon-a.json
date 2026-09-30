@@ -1,0 +1,187 @@
+{
+  "_note": "제22대 국회의원선거 서울 노원구 갑 당선인 우원식 (더불어민주당). 책자형 선거공보 PDF 9쪽 「노원발전 3대 경제축 완성」 3개, PDF 10쪽 큰 제목 「철도구간 지하화」 1개(아래 ✓ 세 줄은 그 설명이라 따로 넣지 않았다), 같은 쪽 「우원식의 약속, 노원 동북권 중심도시」 · 항목 12개. 3대 경제축 제목 아래 - 세부 줄과 PDF 5–8쪽의 지난 의정활동·성과는 넣지 않았다. 제목은 원문 문구를 따랐고 바꾼 것은 위에 적은 구호·수식어 덜어내기뿐이다. 분류(category)는 앱에 정해진 분류 체계가 없어 비워 두었다. 이행 여부는 판정하지 않았다(notJudged).",
+  "districtId": "nec-4b6862e5",
+  "source": {
+    "sourceUrl": "https://policy.nec.go.kr/policy_pdf/20240410/PDF/PBINFO_PUB/1111/003_100151755_20240402_2.pdf",
+    "fetchedAt": "2026-09-27T17:33:02Z",
+    "publisher": "중앙선거관리위원회"
+  },
+  "pledges": [
+    {
+      "id": "22-seoul-nowon-a-01",
+      "title": "광운대 역세권 대기업 본사 유치 및 광역교통망 확충 (월계동)",
+      "category": "",
+      "status": "notJudged",
+      "source": {
+        "sourceUrl": "https://policy.nec.go.kr/policy_pdf/20240410/PDF/PBINFO_PUB/1111/003_100151755_20240402_2.pdf",
+        "fetchedAt": "2026-09-27T17:33:02Z",
+        "publisher": "중앙선거관리위원회"
+      }
+    },
+    {
+      "id": "22-seoul-nowon-a-02",
+      "title": "한전부지 산학연계 판교급 테크노밸리 조성 (공릉동)",
+      "category": "",
+      "status": "notJudged",
+      "source": {
+        "sourceUrl": "https://policy.nec.go.kr/policy_pdf/20240410/PDF/PBINFO_PUB/1111/003_100151755_20240402_2.pdf",
+        "fetchedAt": "2026-09-27T17:33:02Z",
+        "publisher": "중앙선거관리위원회"
+      }
+    },
+    {
+      "id": "22-seoul-nowon-a-03",
+      "title": "상계 바이오메디컬 클러스터 추진 (창동차량기지)",
+      "category": "",
+      "status": "notJudged",
+      "source": {
+        "sourceUrl": "https://policy.nec.go.kr/policy_pdf/20240410/PDF/PBINFO_PUB/1111/003_100151755_20240402_2.pdf",
+        "fetchedAt": "2026-09-27T17:33:02Z",
+        "publisher": "중앙선거관리위원회"
+      }
+    },
+    {
+      "id": "22-seoul-nowon-a-04",
+      "title": "철도구간 지하화",
+      "category": "",
+      "status": "notJudged",
+      "source": {
+        "sourceUrl": "https://policy.nec.go.kr/policy_pdf/20240410/PDF/PBINFO_PUB/1111/003_100151755_20240402_2.pdf",
+        "fetchedAt": "2026-09-27T17:33:02Z",
+        "publisher": "중앙선거관리위원회"
+      }
+    },
+    {
+      "id": "22-seoul-nowon-a-05",
+      "title": "GTX-C 및 경전철 동북선 차질없는 준공('26년) + 광운대역 SRT연결",
+      "category": "",
+      "status": "notJudged",
+      "source": {
+        "sourceUrl": "https://policy.nec.go.kr/policy_pdf/20240410/PDF/PBINFO_PUB/1111/003_100151755_20240402_2.pdf",
+        "fetchedAt": "2026-09-27T17:33:02Z",
+        "publisher": "중앙선거관리위원회"
+      }
+    },
+    {
+      "id": "22-seoul-nowon-a-06",
+      "title": "교통체증 해결 : 한천교 4차선 확장 및 진출입로 신설",
+      "category": "",
+      "status": "notJudged",
+      "source": {
+        "sourceUrl": "https://policy.nec.go.kr/policy_pdf/20240410/PDF/PBINFO_PUB/1111/003_100151755_20240402_2.pdf",
+        "fetchedAt": "2026-09-27T17:33:02Z",
+        "publisher": "중앙선거관리위원회"
+      }
+    },
+    {
+      "id": "22-seoul-nowon-a-07",
+      "title": "신속한 재개발·재건축 추진",
+      "category": "",
+      "status": "notJudged",
+      "source": {
+        "sourceUrl": "https://policy.nec.go.kr/policy_pdf/20240410/PDF/PBINFO_PUB/1111/003_100151755_20240402_2.pdf",
+        "fetchedAt": "2026-09-27T17:33:02Z",
+        "publisher": "중앙선거관리위원회"
+      }
+    },
+    {
+      "id": "22-seoul-nowon-a-08",
+      "title": "경춘선숲길 연장(이마트구간) 및 초안산·영축산 힐링 명소화",
+      "category": "",
+      "status": "notJudged",
+      "source": {
+        "sourceUrl": "https://policy.nec.go.kr/policy_pdf/20240410/PDF/PBINFO_PUB/1111/003_100151755_20240402_2.pdf",
+        "fetchedAt": "2026-09-27T17:33:02Z",
+        "publisher": "중앙선거관리위원회"
+      }
+    },
+    {
+      "id": "22-seoul-nowon-a-09",
+      "title": "노원형 복지모델 완성(어린이 - 어르신 - 청년 - 장애인 돌봄 강화)",
+      "category": "",
+      "status": "notJudged",
+      "source": {
+        "sourceUrl": "https://policy.nec.go.kr/policy_pdf/20240410/PDF/PBINFO_PUB/1111/003_100151755_20240402_2.pdf",
+        "fetchedAt": "2026-09-27T17:33:02Z",
+        "publisher": "중앙선거관리위원회"
+      }
+    },
+    {
+      "id": "22-seoul-nowon-a-10",
+      "title": "새로운 교육거점도시 월계·공릉(교육환경개선·노원영어캠프추진 등)",
+      "category": "",
+      "status": "notJudged",
+      "source": {
+        "sourceUrl": "https://policy.nec.go.kr/policy_pdf/20240410/PDF/PBINFO_PUB/1111/003_100151755_20240402_2.pdf",
+        "fetchedAt": "2026-09-27T17:33:02Z",
+        "publisher": "중앙선거관리위원회"
+      }
+    },
+    {
+      "id": "22-seoul-nowon-a-11",
+      "title": "탁 트인 월계공릉, 깨끗한 노원 스카이라인을 위한 ‘전신주·공중선 지중화’",
+      "category": "",
+      "status": "notJudged",
+      "source": {
+        "sourceUrl": "https://policy.nec.go.kr/policy_pdf/20240410/PDF/PBINFO_PUB/1111/003_100151755_20240402_2.pdf",
+        "fetchedAt": "2026-09-27T17:33:02Z",
+        "publisher": "중앙선거관리위원회"
+      }
+    },
+    {
+      "id": "22-seoul-nowon-a-12",
+      "title": "태릉선수촌, 주민에게 개방하는 체육문화단지 조성",
+      "category": "",
+      "status": "notJudged",
+      "source": {
+        "sourceUrl": "https://policy.nec.go.kr/policy_pdf/20240410/PDF/PBINFO_PUB/1111/003_100151755_20240402_2.pdf",
+        "fetchedAt": "2026-09-27T17:33:02Z",
+        "publisher": "중앙선거관리위원회"
+      }
+    },
+    {
+      "id": "22-seoul-nowon-a-13",
+      "title": "저출생위기 극복, 출생기본소득 도입",
+      "category": "",
+      "status": "notJudged",
+      "source": {
+        "sourceUrl": "https://policy.nec.go.kr/policy_pdf/20240410/PDF/PBINFO_PUB/1111/003_100151755_20240402_2.pdf",
+        "fetchedAt": "2026-09-27T17:33:02Z",
+        "publisher": "중앙선거관리위원회"
+      }
+    },
+    {
+      "id": "22-seoul-nowon-a-14",
+      "title": "온동네초등돌봄 도입 / 노원형 안심어린이집 확대",
+      "category": "",
+      "status": "notJudged",
+      "source": {
+        "sourceUrl": "https://policy.nec.go.kr/policy_pdf/20240410/PDF/PBINFO_PUB/1111/003_100151755_20240402_2.pdf",
+        "fetchedAt": "2026-09-27T17:33:02Z",
+        "publisher": "중앙선거관리위원회"
+      }
+    },
+    {
+      "id": "22-seoul-nowon-a-15",
+      "title": "공립 노원예술중고등학교 신설",
+      "category": "",
+      "status": "notJudged",
+      "source": {
+        "sourceUrl": "https://policy.nec.go.kr/policy_pdf/20240410/PDF/PBINFO_PUB/1111/003_100151755_20240402_2.pdf",
+        "fetchedAt": "2026-09-27T17:33:02Z",
+        "publisher": "중앙선거관리위원회"
+      }
+    },
+    {
+      "id": "22-seoul-nowon-a-16",
+      "title": "경춘선숲길, 당현천 업그레이드",
+      "category": "",
+      "status": "notJudged",
+      "source": {
+        "sourceUrl": "https://policy.nec.go.kr/policy_pdf/20240410/PDF/PBINFO_PUB/1111/003_100151755_20240402_2.pdf",
+        "fetchedAt": "2026-09-27T17:33:02Z",
+        "publisher": "중앙선거관리위원회"
+      }
+    }
+  ]
+}

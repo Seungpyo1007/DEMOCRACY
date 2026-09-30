@@ -1,0 +1,525 @@
+import 'package:cupertino_native_better/cupertino_native.dart';
+import 'package:democracy/src/design/app_motion.dart';
+import 'package:democracy/src/design/app_theme.dart';
+import 'package:democracy/src/design/app_tokens.dart';
+import 'package:democracy/src/design/components/app_card.dart';
+import 'package:democracy/src/design/components/app_controls.dart';
+import 'package:democracy/src/design/components/app_labels.dart';
+import 'package:democracy/src/design/components/app_timeline.dart';
+import 'package:democracy/src/design/components/editorial.dart';
+import 'package:democracy/src/design/components/labeled_bar.dart';
+import 'package:democracy/src/design/components/motion.dart';
+import 'package:flutter/material.dart';
+import 'package:flutter_test/flutter_test.dart';
+import 'package:liquid_glass_widgets/liquid_glass_widgets.dart';
+
+void main() {
+  Future<void> pump(
+    WidgetTester tester,
+    TargetPlatform platform,
+    Widget child,
+  ) async {
+    await tester.pumpWidget(
+      MaterialApp(
+        theme: AppTheme.light(platform),
+        home: Scaffold(body: Center(child: child)),
+      ),
+    );
+    await tester.pumpAndSettle();
+  }
+
+  group('AppCard', () {
+    // Content sits on the paper in the redesign; glass is kept for what
+    // floats. A card that quietly turned back into a surface would bring the
+    // card-grid look back one screen at a time.
+    testWidgets('draws no surface on either platform', (tester) async {
+      for (final platform in [TargetPlatform.iOS, TargetPlatform.android]) {
+        await pump(tester, platform, const AppCard(child: Text('x')));
+        expect(find.byType(GlassCard), findsNothing);
+        expect(
+          find.descendant(
+            of: find.byType(AppCard),
+            matching: find.byType(DecoratedBox),
+          ),
+          findsNothing,
+        );
+      }
+    });
+  });
+
+  group('native controls', () {
+    // A platform view draws nothing under `flutter test`, so a theme built for
+    // iOS in a test has to keep resolving to the Flutter controls. Only the
+    // running app declares the capability.
+    testWidgets('are off unless the process declares it can host them', (
+      tester,
+    ) async {
+      expect(
+        AppTheme.light(TargetPlatform.iOS).extension<AppCapabilities>(),
+        AppCapabilities.none,
+      );
+      expect(
+        AppTheme.light(
+          TargetPlatform.iOS,
+          nativeControls: true,
+        ).extension<AppCapabilities>(),
+        AppCapabilities.uiKit,
+      );
+
+      await pump(
+        tester,
+        TargetPlatform.iOS,
+        AppSwitch(value: false, onChanged: (_) {}, semanticLabel: '실명'),
+      );
+      expect(find.byType(CNSwitch), findsNothing);
+    });
+  });
+
+  group('LabeledBar', () {
+    // The fill first shipped at zero height: a ColoredBox has no child to take
+    // a height from, so the track rendered empty while widthFactor was
+    // perfectly correct. Measuring the painted box is what catches that.
+    testWidgets('actually paints the fill across the track height', (
+      tester,
+    ) async {
+      await pump(
+        tester,
+        TargetPlatform.android,
+        const SizedBox(
+          width: 200,
+          child: LabeledBar(
+            label: '교통',
+            fraction: 0.5,
+            valueText: '72%',
+            trackHeight: 10,
+          ),
+        ),
+      );
+
+      final fill = tester.getSize(find.byType(FractionallySizedBox));
+      expect(fill.height, 10);
+      expect(fill.width, greaterThan(0));
+    });
+
+    testWidgets('clamps a fraction that leaves the range', (tester) async {
+      await pump(
+        tester,
+        TargetPlatform.android,
+        const LabeledBar(label: '소통', fraction: 4.1, valueText: '4.1'),
+      );
+
+      final box = tester.widget<FractionallySizedBox>(
+        find.byType(FractionallySizedBox),
+      );
+      expect(box.widthFactor, 1.0);
+    });
+
+    testWidgets('is square on both platforms: a quantity, not a control', (
+      tester,
+    ) async {
+      const bar = LabeledBar(label: '교통', fraction: 0.72, valueText: '72%');
+      for (final platform in [TargetPlatform.iOS, TargetPlatform.android]) {
+        await pump(tester, platform, bar);
+        expect(
+          find.descendant(
+            of: find.byType(LabeledBar),
+            matching: find.byType(ClipRRect),
+          ),
+          findsNothing,
+        );
+      }
+    });
+  });
+
+  group('MonotonicBar', () {
+    // A share that falls between polls is an out-of-order update, not news.
+    testWidgets('holds its high-water mark when the value drops', (
+      tester,
+    ) async {
+      Future<void> pumpAt(double fraction) => pump(
+        tester,
+        TargetPlatform.android,
+        MonotonicBar(label: '박서연', fraction: fraction, valueText: '48.2%'),
+      );
+
+      await pumpAt(0.48);
+      await pumpAt(0.30);
+      await tester.pumpAndSettle();
+
+      final box = tester.widget<FractionallySizedBox>(
+        find.byType(FractionallySizedBox),
+      );
+      expect(box.widthFactor, closeTo(0.48, 0.001));
+    });
+
+    testWidgets('follows the value up', (tester) async {
+      Future<void> pumpAt(double fraction) => pump(
+        tester,
+        TargetPlatform.android,
+        MonotonicBar(label: '박서연', fraction: fraction, valueText: '52.0%'),
+      );
+
+      await pumpAt(0.48);
+      await pumpAt(0.52);
+      await tester.pumpAndSettle();
+
+      final box = tester.widget<FractionallySizedBox>(
+        find.byType(FractionallySizedBox),
+      );
+      expect(box.widthFactor, closeTo(0.52, 0.001));
+    });
+  });
+
+  group('AppFilterChip', () {
+    // Selection carried by fill alone is a state some readers cannot see.
+    // Android is Material 3's own chip, which draws the tick itself.
+    testWidgets('Android is the Material filter chip, selected', (
+      tester,
+    ) async {
+      await pump(
+        tester,
+        TargetPlatform.android,
+        AppFilterChip(label: '30대', selected: true, onSelected: (_) {}),
+      );
+
+      final chip = tester.widget<FilterChip>(find.byType(FilterChip));
+      expect(chip.selected, isTrue);
+      expect(chip.showCheckmark, isNot(isFalse));
+    });
+
+    testWidgets('iOS marks selection with a tick as well as a fill', (
+      tester,
+    ) async {
+      await pump(
+        tester,
+        TargetPlatform.iOS,
+        AppFilterChip(label: '30대', selected: true, onSelected: (_) {}),
+      );
+
+      expect(find.text('✓ 30대'), findsOneWidget);
+    });
+
+    testWidgets('reports the toggle', (tester) async {
+      final changes = <bool>[];
+      await pump(
+        tester,
+        TargetPlatform.iOS,
+        AppFilterChip(label: '세금', selected: false, onSelected: changes.add),
+      );
+
+      await tester.tap(find.text('세금'));
+      await tester.pump();
+
+      expect(changes, [true]);
+    });
+  });
+
+  group('AppSwitch', () {
+    testWidgets('reports the flip and exposes its state', (tester) async {
+      final changes = <bool>[];
+      await pump(
+        tester,
+        TargetPlatform.iOS,
+        AppSwitch(
+          value: false,
+          onChanged: changes.add,
+          semanticLabel: '실명으로 작성',
+        ),
+      );
+
+      await tester.tap(find.byType(AppSwitch));
+      await tester.pump();
+
+      expect(changes, [true]);
+    });
+  });
+
+  group('AppSegmentedControl', () {
+    for (final platform in [TargetPlatform.iOS, TargetPlatform.android]) {
+      testWidgets('$platform reports the chosen segment', (tester) async {
+        final picked = <int>[];
+        await pump(
+          tester,
+          platform,
+          AppSegmentedControl(
+            segments: const ['실시간', '역대 결과', '여론조사 비교'],
+            selectedIndex: 0,
+            onSelected: picked.add,
+          ),
+        );
+
+        await tester.tap(find.textContaining('역대 결과'));
+        await tester.pump();
+
+        expect(picked, [1]);
+      });
+    }
+  });
+
+  group('VerifiedBadge', () {
+    // Green is a status here, and status is never colour alone.
+    testWidgets('always carries a tick and a word', (tester) async {
+      await pump(
+        tester,
+        TargetPlatform.android,
+        const VerifiedBadge(label: '주민 인증됨'),
+      );
+
+      expect(find.text('✓ 주민 인증됨'), findsOneWidget);
+    });
+
+    // A tick on a state that is not a verification would read as one.
+    testWidgets('a neutral state gets a StatusChip, not a tick', (
+      tester,
+    ) async {
+      await pump(
+        tester,
+        TargetPlatform.android,
+        const StatusChip(label: '읽기 전용'),
+      );
+
+      expect(find.text('읽기 전용'), findsOneWidget);
+      expect(find.textContaining('✓'), findsNothing);
+    });
+  });
+
+  group('AppTimeline', () {
+    testWidgets('shows every step rather than only the outcome', (
+      tester,
+    ) async {
+      await pump(
+        tester,
+        TargetPlatform.iOS,
+        const AppTimeline(
+          steps: [
+            TimelineStep(
+              title: 'AI 1차 판단',
+              detail: '착공 보도·예산 집행 데이터 감지',
+              stamp: '3월 2일',
+            ),
+            TimelineStep(
+              title: '시민 제보 12건',
+              detail: '현장 사진·입주 공고 첨부',
+              stamp: '4월',
+            ),
+            TimelineStep(
+              title: '전문가 위원회 최종 판정: 이행 완료',
+              detail: '위원 7인 합의',
+              stamp: '5월 10일',
+            ),
+          ],
+        ),
+      );
+
+      expect(find.text('AI 1차 판단'), findsOneWidget);
+      expect(find.text('시민 제보 12건'), findsOneWidget);
+      expect(find.text('전문가 위원회 최종 판정: 이행 완료'), findsOneWidget);
+    });
+  });
+
+  group('AppPrimaryButton', () {
+    testWidgets('a null callback disables it without hiding it', (
+      tester,
+    ) async {
+      await pump(
+        tester,
+        TargetPlatform.android,
+        const AppPrimaryButton(label: '평가 작성하기', onPressed: null),
+      );
+
+      expect(find.text('평가 작성하기'), findsOneWidget);
+      final material = tester.widget<Material>(
+        find
+            .descendant(
+              of: find.byType(AppPrimaryButton),
+              matching: find.byType(Material),
+            )
+            .first,
+      );
+      expect(material.color, isNot(AppColors.signal));
+    });
+  });
+
+  group('motion', () {
+    testWidgets('a figure shows its value and announces only that', (
+      tester,
+    ) async {
+      await pump(
+        tester,
+        TargetPlatform.iOS,
+        const Figure(value: 58, unit: '%', style: TextStyle(fontSize: 20)),
+      );
+
+      expect(find.text('58%', findRichText: true), findsOneWidget);
+      expect(find.bySemanticsLabel('58%'), findsOneWidget);
+    });
+
+    // Figures are not counted up: the value on screen is always the record.
+    testWidgets('never shows a number other than its value', (tester) async {
+      await tester.pumpWidget(
+        MaterialApp(
+          theme: AppTheme.light(TargetPlatform.iOS),
+          home: const Scaffold(
+            body: Figure(value: 90, style: TextStyle(fontSize: 20)),
+          ),
+        ),
+      );
+      expect(find.text('90', findRichText: true), findsOneWidget);
+
+      await tester.pump(const Duration(milliseconds: 200));
+      expect(find.text('90', findRichText: true), findsOneWidget);
+      expect(find.text('0', findRichText: true), findsNothing);
+
+      await tester.pumpAndSettle();
+      expect(find.text('90', findRichText: true), findsOneWidget);
+    });
+
+    // The underline used to restart when the writing finished: the reveal
+    // swapped its wrapper at the end, which rebuilt the note inside it.
+    testWidgets('a margin note keeps its underline when the writing ends', (
+      tester,
+    ) async {
+      await tester.pumpWidget(
+        MaterialApp(
+          theme: AppTheme.light(TargetPlatform.iOS),
+          home: const Scaffold(
+            body: Center(child: MarginNote('판정 근거는 모두 원문으로 연결됩니다')),
+          ),
+        ),
+      );
+      await tester.pump(AppMotion.write - const Duration(milliseconds: 50));
+      final before = tester.state(find.byType(MotionIn).last);
+
+      await tester.pump(const Duration(milliseconds: 100));
+      await tester.pumpAndSettle();
+
+      expect(tester.state(find.byType(MotionIn).last), same(before));
+    });
+
+    test('a stagger never pushes an item past the entrance budget', () {
+      for (final bars in [false, true]) {
+        for (var i = 0; i < 100; i++) {
+          expect(
+            AppMotion.staggerFor(i, bars: bars) + AppMotion.slow,
+            lessThanOrEqualTo(AppMotion.enterBudget),
+          );
+        }
+      }
+      expect(AppMotion.staggerFor(2), AppMotion.stagger * 2);
+    });
+
+    // Reduce Motion is a promise that nothing moves. The end state has to be
+    // on the first frame, not arrive quickly.
+    testWidgets('reduced motion draws the end state on the first frame', (
+      tester,
+    ) async {
+      await tester.pumpWidget(
+        MediaQuery(
+          data: const MediaQueryData(disableAnimations: true),
+          child: MaterialApp(
+            theme: AppTheme.light(TargetPlatform.android),
+            home: const Scaffold(
+              body: Column(
+                children: [
+                  Figure(value: 92, style: TextStyle(fontSize: 20)),
+                  SizedBox(width: 200, child: GrowBar(fraction: 0.5)),
+                ],
+              ),
+            ),
+          ),
+        ),
+      );
+      await tester.pump();
+
+      expect(find.text('92', findRichText: true), findsOneWidget);
+      final bar = tester.widget<FractionallySizedBox>(
+        find.byType(FractionallySizedBox),
+      );
+      expect(bar.widthFactor, 0.5);
+    });
+
+    testWidgets('a bar grows to its value and follows a later change', (
+      tester,
+    ) async {
+      Future<void> show(double fraction) => pump(
+        tester,
+        TargetPlatform.android,
+        SizedBox(width: 200, child: GrowBar(fraction: fraction)),
+      );
+
+      await show(0.3);
+      expect(
+        tester
+            .widget<FractionallySizedBox>(find.byType(FractionallySizedBox))
+            .widthFactor,
+        closeTo(0.3, 0.0001),
+      );
+
+      await show(0.6);
+      expect(
+        tester
+            .widget<FractionallySizedBox>(find.byType(FractionallySizedBox))
+            .widthFactor,
+        closeTo(0.6, 0.0001),
+      );
+    });
+  });
+
+  // It first shipped with a LayoutBuilder under IntrinsicWidth, which throws
+  // during layout -- every screen with a note fell over.
+  testWidgets('a margin note lays out with its underline', (tester) async {
+    await pump(tester, TargetPlatform.iOS, const MarginNote('2020년 첫 당선'));
+
+    expect(tester.takeException(), isNull);
+    expect(
+      tester.getSize(find.byType(HandUnderline)).width,
+      tester.getSize(find.text('2020년 첫 당선')).width,
+    );
+  });
+
+  group('system controls on Android', () {
+    testWidgets('the switch is Material 3 with its tick', (tester) async {
+      await pump(
+        tester,
+        TargetPlatform.android,
+        AppSwitch(value: true, onChanged: (_) {}, semanticLabel: '익명'),
+      );
+      expect(find.byType(Switch), findsOneWidget);
+    });
+
+    testWidgets('segments are a Material segmented button', (tester) async {
+      await pump(
+        tester,
+        TargetPlatform.android,
+        AppSegmentedControl(
+          segments: const ['실시간', '역대 결과'],
+          selectedIndex: 0,
+          onSelected: (_) {},
+        ),
+      );
+      expect(find.byType(SegmentedButton<int>), findsOneWidget);
+    });
+
+    testWidgets('in-page tabs are Material primary tabs', (tester) async {
+      await pump(
+        tester,
+        TargetPlatform.android,
+        InlineTabs(
+          labels: const ['공약', '법안'],
+          selectedIndex: 0,
+          onSelected: (_) {},
+        ),
+      );
+      expect(find.byType(TabBar), findsOneWidget);
+    });
+
+    testWidgets('the primary action is a filled button', (tester) async {
+      await pump(
+        tester,
+        TargetPlatform.android,
+        AppPrimaryButton(label: '다음', onPressed: () {}),
+      );
+      expect(find.byType(FilledButton), findsOneWidget);
+    });
+  });
+}

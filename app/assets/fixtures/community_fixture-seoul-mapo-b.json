@@ -1,0 +1,43 @@
+{
+  "_note": "Sample community payload. Not real residents and not a real channel.",
+  "messages": [
+    {
+      "id": "fixture-msg-1",
+      "author": "익명 주민",
+      "body": "숲길 확장 번복 건, 판정문 읽어보신 분 계신가요?",
+      "verifiedResident": true
+    },
+    {
+      "id": "fixture-msg-2",
+      "author": "김○수",
+      "body": "위원회 회의록에 반대 의견이 두 건 붙어 있더라고요.",
+      "verifiedResident": true
+    },
+    {
+      "id": "fixture-msg-3",
+      "author": "익명 주민",
+      "body": "청년 임대주택은 입주 공고까지 확인했습니다.",
+      "verifiedResident": false
+    }
+  ],
+  "threads": [
+    {
+      "id": "fixture-thread-1",
+      "title": "역세권 청년주택 공급 촉진법 개정안",
+      "origin": "법안 발의로 자동 생성",
+      "replies": 18
+    },
+    {
+      "id": "fixture-thread-2",
+      "title": "숲길 확장 번복 판정",
+      "origin": "판정 확정으로 자동 생성",
+      "replies": 42
+    },
+    {
+      "id": "fixture-thread-3",
+      "title": "소상공인 임대료 부담 완화 특별법안",
+      "origin": "법안 발의로 자동 생성",
+      "replies": 7
+    }
+  ]
+}

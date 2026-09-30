@@ -1,21 +1,27 @@
 import 'package:democracy/src/core/auth/address_controller.dart';
 import 'package:democracy/src/core/auth/address_state.dart';
+import 'package:democracy/src/core/auth/address_store.dart';
 import 'package:democracy/src/core/auth/verified_gate.dart';
+import 'package:democracy/src/design/app_theme.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_test/flutter_test.dart';
 
 void main() {
-  testWidgets('blocks an unverified write action', (tester) async {
+  testWidgets('opens the gate sheet for an unverified write action', (
+    tester,
+  ) async {
     var calls = 0;
-    var verificationRequests = 0;
 
     await tester.pumpWidget(
       ProviderScope(
+        overrides: [
+          addressStoreProvider.overrideWithValue(InMemoryAddressStore()),
+        ],
         child: MaterialApp(
+          theme: AppTheme.light(TargetPlatform.android),
           home: Scaffold(
             body: VerifiedGate(
-              onVerificationRequested: () => verificationRequests += 1,
               onVerified: () => calls += 1,
               builder: (context, onPressed) {
                 return FilledButton(
@@ -33,16 +39,23 @@ void main() {
     await tester.pumpAndSettle();
 
     expect(calls, 0);
-    expect(find.text('주민 인증이 필요합니다'), findsOneWidget);
+    // The gate sheet: reading is done, an account is next.
+    expect(find.text('글은 이 지역구\n주민이 씁니다.'), findsOneWidget);
+    expect(find.text('로그인하고 계속'), findsOneWidget);
 
-    await tester.tap(find.text('인증하러 가기'));
+    await tester.tap(find.text('나중에'));
     await tester.pumpAndSettle();
 
-    expect(verificationRequests, 1);
+    expect(find.text('로그인하고 계속'), findsNothing);
+    expect(calls, 0);
   });
 
   testWidgets('runs a verified write action once', (tester) async {
-    final container = ProviderContainer();
+    final container = ProviderContainer(
+      overrides: [
+        addressStoreProvider.overrideWithValue(InMemoryAddressStore()),
+      ],
+    );
     addTearDown(container.dispose);
     container
         .read(addressControllerProvider.notifier)
@@ -62,9 +75,9 @@ void main() {
       UncontrolledProviderScope(
         container: container,
         child: MaterialApp(
+          theme: AppTheme.light(TargetPlatform.android),
           home: Scaffold(
             body: VerifiedGate(
-              onVerificationRequested: () {},
               onVerified: () => calls += 1,
               builder: (context, onPressed) {
                 return FilledButton(
@@ -82,6 +95,6 @@ void main() {
     await tester.pump();
 
     expect(calls, 1);
-    expect(find.text('주민 인증이 필요합니다'), findsNothing);
+    expect(find.text('로그인하고 계속'), findsNothing);
   });
 }

@@ -1,0 +1,55 @@
+{
+  "_note": "제22대 국회의원선거 대구 수성구 을 당선인 이인선 (국민의힘). 책자형 선거공보 PDF 7–8쪽 「이인선의 계속되는 약속 공약」 수성구 동반성장프로젝트 공약 이야기 1–4(도시개발·문화경제·주민복지·교육). 2–4는 큰 제목 문장을 옮겼고, 1은 큰 제목이 동요 구절(「뚜비야 ~ 헌 집 줄게 ~ 새 집 다오~」)이라 같은 칸에 노란 강조로 표시된 약속 문장을 옮겼다(끝의 마침표만 덜어냄). 번호 목록의 제목이 구호 성격이라 판단이 들어간 선거구다. PDF 9–10쪽의 동별 공약, 6쪽 국민의힘 주요 정책공약, 5쪽 예산 확보 성과는 넣지 않았다. 제목은 원문 문구를 따랐고 바꾼 것은 위에 적은 구호·수식어 덜어내기뿐이다. 분류(category)는 앱에 정해진 분류 체계가 없어 비워 두었다. 이행 여부는 판정하지 않았다(notJudged).",
+  "districtId": "nec-0b5a465c",
+  "source": {
+    "sourceUrl": "https://policy.nec.go.kr/policy_pdf/20240410/PDF/PBINFO_PUB/2706/003_100152826_20240402_2.pdf",
+    "fetchedAt": "2026-09-28T02:20:00Z",
+    "publisher": "중앙선거관리위원회"
+  },
+  "pledges": [
+    {
+      "id": "22-daegu-suseong-b-01",
+      "title": "지산·범물 지구를 쾌적한 100년 도시로 만들기 위해 정비계획을 면밀히 준비하고 도시기반시설을 확충하겠습니다",
+      "category": "",
+      "status": "notJudged",
+      "source": {
+        "sourceUrl": "https://policy.nec.go.kr/policy_pdf/20240410/PDF/PBINFO_PUB/2706/003_100152826_20240402_2.pdf",
+        "fetchedAt": "2026-09-28T02:20:00Z",
+        "publisher": "중앙선거관리위원회"
+      }
+    },
+    {
+      "id": "22-daegu-suseong-b-02",
+      "title": "누구나 오고 싶고 살고 싶은 거점 문화경제도시",
+      "category": "",
+      "status": "notJudged",
+      "source": {
+        "sourceUrl": "https://policy.nec.go.kr/policy_pdf/20240410/PDF/PBINFO_PUB/2706/003_100152826_20240402_2.pdf",
+        "fetchedAt": "2026-09-28T02:20:00Z",
+        "publisher": "중앙선거관리위원회"
+      }
+    },
+    {
+      "id": "22-daegu-suseong-b-03",
+      "title": "내 집 앞 어디서든 걸어서 10분 이내 누리는 주민복지",
+      "category": "",
+      "status": "notJudged",
+      "source": {
+        "sourceUrl": "https://policy.nec.go.kr/policy_pdf/20240410/PDF/PBINFO_PUB/2706/003_100152826_20240402_2.pdf",
+        "fetchedAt": "2026-09-28T02:20:00Z",
+        "publisher": "중앙선거관리위원회"
+      }
+    },
+    {
+      "id": "22-daegu-suseong-b-04",
+      "title": "대구 제일의 교육거점 도시로 발돋움",
+      "category": "",
+      "status": "notJudged",
+      "source": {
+        "sourceUrl": "https://policy.nec.go.kr/policy_pdf/20240410/PDF/PBINFO_PUB/2706/003_100152826_20240402_2.pdf",
+        "fetchedAt": "2026-09-28T02:20:00Z",
+        "publisher": "중앙선거관리위원회"
+      }
+    }
+  ]
+}

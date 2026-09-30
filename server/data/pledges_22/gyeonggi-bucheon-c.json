@@ -1,0 +1,77 @@
+{
+  "_note": "제22대 국회의원선거 경기 부천시 병 당선인 이건태 (더불어민주당). 책자형 선거공보 PDF 4쪽 「이건태의 ‘이것만은 해결’」 ➊·➋ 아래 굵은 제목 공약 5개와 PDF 6쪽 「22대 국회, 제1호 대표발의 법안」 1개. 굵은 제목 아래 · 세부 줄은 넣지 않았다. PDF 5쪽 권역별(송내·심곡, 소사, 역곡·괴안, 범박·옥길) 공약과 PDF 6쪽 「이건태와 더불어민주당이 민생을 촘촘히 챙기겠습니다」 당 공약은 넣지 않았다. 제목은 원문 문구를 따랐고 바꾼 것은 위에 적은 구호·수식어 덜어내기뿐이다. 분류(category)는 앱에 정해진 분류 체계가 없어 비워 두었다. 이행 여부는 판정하지 않았다(notJudged).",
+  "districtId": "nec-9cf8432f",
+  "source": {
+    "sourceUrl": "https://policy.nec.go.kr/policy_pdf/20240410/PDF/PBINFO_PUB/4151/003_100151441_20240401_2.pdf",
+    "fetchedAt": "2026-09-27T17:34:00Z",
+    "publisher": "중앙선거관리위원회"
+  },
+  "pledges": [
+    {
+      "id": "22-gyeonggi-bucheon-c-01",
+      "title": "제2경인선 광역철도 민자사업 부천 옥길·범박 경유 추진",
+      "category": "",
+      "status": "notJudged",
+      "source": {
+        "sourceUrl": "https://policy.nec.go.kr/policy_pdf/20240410/PDF/PBINFO_PUB/4151/003_100151441_20240401_2.pdf",
+        "fetchedAt": "2026-09-27T17:34:00Z",
+        "publisher": "중앙선거관리위원회"
+      }
+    },
+    {
+      "id": "22-gyeonggi-bucheon-c-02",
+      "title": "광역 간선 도로망 구축과 공영주차장 확충 추진",
+      "category": "",
+      "status": "notJudged",
+      "source": {
+        "sourceUrl": "https://policy.nec.go.kr/policy_pdf/20240410/PDF/PBINFO_PUB/4151/003_100151441_20240401_2.pdf",
+        "fetchedAt": "2026-09-27T17:34:00Z",
+        "publisher": "중앙선거관리위원회"
+      }
+    },
+    {
+      "id": "22-gyeonggi-bucheon-c-03",
+      "title": "경인선 도심구간 지하화 추진",
+      "category": "",
+      "status": "notJudged",
+      "source": {
+        "sourceUrl": "https://policy.nec.go.kr/policy_pdf/20240410/PDF/PBINFO_PUB/4151/003_100151441_20240401_2.pdf",
+        "fetchedAt": "2026-09-27T17:34:00Z",
+        "publisher": "중앙선거관리위원회"
+      }
+    },
+    {
+      "id": "22-gyeonggi-bucheon-c-04",
+      "title": "지역 맞춤형 도시재생사업을 통한 원도심 재정비",
+      "category": "",
+      "status": "notJudged",
+      "source": {
+        "sourceUrl": "https://policy.nec.go.kr/policy_pdf/20240410/PDF/PBINFO_PUB/4151/003_100151441_20240401_2.pdf",
+        "fetchedAt": "2026-09-27T17:34:00Z",
+        "publisher": "중앙선거관리위원회"
+      }
+    },
+    {
+      "id": "22-gyeonggi-bucheon-c-05",
+      "title": "모두가 누릴 수 있는 건강과 휴식, 문화와 예술이 있는 도시 조성",
+      "category": "",
+      "status": "notJudged",
+      "source": {
+        "sourceUrl": "https://policy.nec.go.kr/policy_pdf/20240410/PDF/PBINFO_PUB/4151/003_100151441_20240401_2.pdf",
+        "fetchedAt": "2026-09-27T17:34:00Z",
+        "publisher": "중앙선거관리위원회"
+      }
+    },
+    {
+      "id": "22-gyeonggi-bucheon-c-06",
+      "title": "표적수사 금지법(형사소송법 개정)",
+      "category": "",
+      "status": "notJudged",
+      "source": {
+        "sourceUrl": "https://policy.nec.go.kr/policy_pdf/20240410/PDF/PBINFO_PUB/4151/003_100151441_20240401_2.pdf",
+        "fetchedAt": "2026-09-27T17:34:00Z",
+        "publisher": "중앙선거관리위원회"
+      }
+    }
+  ]
+}

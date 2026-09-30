@@ -1,0 +1,1012 @@
+{
+  "_note": "제22대 국회의원선거 충남 공주시부여군청양군 당선인 박수현 (더불어민주당). 당선인은 이후 의원직을 떠났고 NEC 당선인 공약 목록에는 2026년 재선거 당선인이 올라 있어, 2024년 책자형 선거공보 PDF를 NEC 파일 경로에서 직접 찾았다. PDF 5–10쪽 공주·부여·청양 시·군별 분야 ● 항목과 각 시·군 첫머리의 강조 공약(금강국가정원, 백제문화 야간공연, 충청산업문화철도, 청양 농촌 공약 3개)을 넣었다. 선거구 전체 공통 목록이 따로 없어 시·군별 목록을 모두 옮겼다. 두 단으로 놓인 항목은 줄 단위(왼쪽→오른쪽)로 읽었고, 공주 쪽은 쪽 이미지의 위→아래 순서를 따랐다. 문화재보호법 항목 뒤의 * 참고 문구와 - 부연 설명은 넣지 않았다. PDF 11쪽의 국회의원 특권폐지 등 정치 약속 2개와 3–4쪽 이력은 넣지 않았다. 제목은 원문 문구를 따랐고 바꾼 것은 앞 번호·끝의 !·장식 기호 덜어내기와 줄바꿈 이어 붙이기뿐이다. 분류(category)는 앱에 정해진 분류 체계가 없어 비워 두었다. 이행 여부는 판정하지 않았다(notJudged).",
+  "districtId": "nec-8dca8cc2",
+  "source": {
+    "sourceUrl": "https://policy.nec.go.kr/policy_pdf/20240410/PDF/PBINFO_PUB/4402/003_100152004_20240402_2.pdf",
+    "fetchedAt": "2026-09-28T02:30:00Z",
+    "publisher": "중앙선거관리위원회"
+  },
+  "pledges": [
+    {
+      "id": "22-chungnam-gongju-buyeo-cheongyang-01",
+      "title": "신관·월송 미래형 멀티플렉스 초·중·고등학교 신설 및 기존학교 재배치",
+      "category": "",
+      "status": "notJudged",
+      "source": {
+        "sourceUrl": "https://policy.nec.go.kr/policy_pdf/20240410/PDF/PBINFO_PUB/4402/003_100152004_20240402_2.pdf",
+        "fetchedAt": "2026-09-28T02:30:00Z",
+        "publisher": "중앙선거관리위원회"
+      }
+    },
+    {
+      "id": "22-chungnam-gongju-buyeo-cheongyang-02",
+      "title": "공주대 의과대학 신설 및 종합부속병원 설립 추진 의대 지역인재전형 비율 확대",
+      "category": "",
+      "status": "notJudged",
+      "source": {
+        "sourceUrl": "https://policy.nec.go.kr/policy_pdf/20240410/PDF/PBINFO_PUB/4402/003_100152004_20240402_2.pdf",
+        "fetchedAt": "2026-09-28T02:30:00Z",
+        "publisher": "중앙선거관리위원회"
+      }
+    },
+    {
+      "id": "22-chungnam-gongju-buyeo-cheongyang-03",
+      "title": "공주 교육발전특구 조성(디지털AI교육 / 늘봄학교)",
+      "category": "",
+      "status": "notJudged",
+      "source": {
+        "sourceUrl": "https://policy.nec.go.kr/policy_pdf/20240410/PDF/PBINFO_PUB/4402/003_100152004_20240402_2.pdf",
+        "fetchedAt": "2026-09-28T02:30:00Z",
+        "publisher": "중앙선거관리위원회"
+      }
+    },
+    {
+      "id": "22-chungnam-gongju-buyeo-cheongyang-04",
+      "title": "대한민국 골프메카 ‘골프영재학교 설립’(정안초특성화 / 사립학교신설)",
+      "category": "",
+      "status": "notJudged",
+      "source": {
+        "sourceUrl": "https://policy.nec.go.kr/policy_pdf/20240410/PDF/PBINFO_PUB/4402/003_100152004_20240402_2.pdf",
+        "fetchedAt": "2026-09-28T02:30:00Z",
+        "publisher": "중앙선거관리위원회"
+      }
+    },
+    {
+      "id": "22-chungnam-gongju-buyeo-cheongyang-05",
+      "title": "충청메가시티 대전~세종~공주 CTX-α 신관역 노선 신설 추진",
+      "category": "",
+      "status": "notJudged",
+      "source": {
+        "sourceUrl": "https://policy.nec.go.kr/policy_pdf/20240410/PDF/PBINFO_PUB/4402/003_100152004_20240402_2.pdf",
+        "fetchedAt": "2026-09-28T02:30:00Z",
+        "publisher": "중앙선거관리위원회"
+      }
+    },
+    {
+      "id": "22-chungnam-gongju-buyeo-cheongyang-06",
+      "title": "KTX 공주역 역세권 개발 추진(스마트광역복합환승센터, 철도산업단지)",
+      "category": "",
+      "status": "notJudged",
+      "source": {
+        "sourceUrl": "https://policy.nec.go.kr/policy_pdf/20240410/PDF/PBINFO_PUB/4402/003_100152004_20240402_2.pdf",
+        "fetchedAt": "2026-09-28T02:30:00Z",
+        "publisher": "중앙선거관리위원회"
+      }
+    },
+    {
+      "id": "22-chungnam-gongju-buyeo-cheongyang-07",
+      "title": "공주 신풍~유구(국도39호) 확포장 사업 최종 확정·고시",
+      "category": "",
+      "status": "notJudged",
+      "source": {
+        "sourceUrl": "https://policy.nec.go.kr/policy_pdf/20240410/PDF/PBINFO_PUB/4402/003_100152004_20240402_2.pdf",
+        "fetchedAt": "2026-09-28T02:30:00Z",
+        "publisher": "중앙선거관리위원회"
+      }
+    },
+    {
+      "id": "22-chungnam-gongju-buyeo-cheongyang-08",
+      "title": "송선 동현지구 도시개발사업 중단없는 추진",
+      "category": "",
+      "status": "notJudged",
+      "source": {
+        "sourceUrl": "https://policy.nec.go.kr/policy_pdf/20240410/PDF/PBINFO_PUB/4402/003_100152004_20240402_2.pdf",
+        "fetchedAt": "2026-09-28T02:30:00Z",
+        "publisher": "중앙선거관리위원회"
+      }
+    },
+    {
+      "id": "22-chungnam-gongju-buyeo-cheongyang-09",
+      "title": "유구읍 석남리 산업단지 조성",
+      "category": "",
+      "status": "notJudged",
+      "source": {
+        "sourceUrl": "https://policy.nec.go.kr/policy_pdf/20240410/PDF/PBINFO_PUB/4402/003_100152004_20240402_2.pdf",
+        "fetchedAt": "2026-09-28T02:30:00Z",
+        "publisher": "중앙선거관리위원회"
+      }
+    },
+    {
+      "id": "22-chungnam-gongju-buyeo-cheongyang-10",
+      "title": "공주~세종 BRT 1단계 종점 환승시설 구축 및 노선 확대",
+      "category": "",
+      "status": "notJudged",
+      "source": {
+        "sourceUrl": "https://policy.nec.go.kr/policy_pdf/20240410/PDF/PBINFO_PUB/4402/003_100152004_20240402_2.pdf",
+        "fetchedAt": "2026-09-28T02:30:00Z",
+        "publisher": "중앙선거관리위원회"
+      }
+    },
+    {
+      "id": "22-chungnam-gongju-buyeo-cheongyang-11",
+      "title": "행복도시~탄천 연결도로 개설",
+      "category": "",
+      "status": "notJudged",
+      "source": {
+        "sourceUrl": "https://policy.nec.go.kr/policy_pdf/20240410/PDF/PBINFO_PUB/4402/003_100152004_20240402_2.pdf",
+        "fetchedAt": "2026-09-28T02:30:00Z",
+        "publisher": "중앙선거관리위원회"
+      }
+    },
+    {
+      "id": "22-chungnam-gongju-buyeo-cheongyang-12",
+      "title": "사곡면 IC 추가 설치(당진방향 출구)",
+      "category": "",
+      "status": "notJudged",
+      "source": {
+        "sourceUrl": "https://policy.nec.go.kr/policy_pdf/20240410/PDF/PBINFO_PUB/4402/003_100152004_20240402_2.pdf",
+        "fetchedAt": "2026-09-28T02:30:00Z",
+        "publisher": "중앙선거관리위원회"
+      }
+    },
+    {
+      "id": "22-chungnam-gongju-buyeo-cheongyang-13",
+      "title": "금강국가정원 차질없는 조성 ‘천만 관광도시’",
+      "category": "",
+      "status": "notJudged",
+      "source": {
+        "sourceUrl": "https://policy.nec.go.kr/policy_pdf/20240410/PDF/PBINFO_PUB/4402/003_100152004_20240402_2.pdf",
+        "fetchedAt": "2026-09-28T02:30:00Z",
+        "publisher": "중앙선거관리위원회"
+      }
+    },
+    {
+      "id": "22-chungnam-gongju-buyeo-cheongyang-14",
+      "title": "백제문화 명품야간상설공연 추진 ‘하루 더 머무는 여행’",
+      "category": "",
+      "status": "notJudged",
+      "source": {
+        "sourceUrl": "https://policy.nec.go.kr/policy_pdf/20240410/PDF/PBINFO_PUB/4402/003_100152004_20240402_2.pdf",
+        "fetchedAt": "2026-09-28T02:30:00Z",
+        "publisher": "중앙선거관리위원회"
+      }
+    },
+    {
+      "id": "22-chungnam-gongju-buyeo-cheongyang-15",
+      "title": "갑사지구 종합개발 추진(케이블카, 트리탑로드, 생태연못 등)",
+      "category": "",
+      "status": "notJudged",
+      "source": {
+        "sourceUrl": "https://policy.nec.go.kr/policy_pdf/20240410/PDF/PBINFO_PUB/4402/003_100152004_20240402_2.pdf",
+        "fetchedAt": "2026-09-28T02:30:00Z",
+        "publisher": "중앙선거관리위원회"
+      }
+    },
+    {
+      "id": "22-chungnam-gongju-buyeo-cheongyang-16",
+      "title": "갑사 입구 폐호텔 정비사업",
+      "category": "",
+      "status": "notJudged",
+      "source": {
+        "sourceUrl": "https://policy.nec.go.kr/policy_pdf/20240410/PDF/PBINFO_PUB/4402/003_100152004_20240402_2.pdf",
+        "fetchedAt": "2026-09-28T02:30:00Z",
+        "publisher": "중앙선거관리위원회"
+      }
+    },
+    {
+      "id": "22-chungnam-gongju-buyeo-cheongyang-17",
+      "title": "마곡사 지역 119안전센터 신설",
+      "category": "",
+      "status": "notJudged",
+      "source": {
+        "sourceUrl": "https://policy.nec.go.kr/policy_pdf/20240410/PDF/PBINFO_PUB/4402/003_100152004_20240402_2.pdf",
+        "fetchedAt": "2026-09-28T02:30:00Z",
+        "publisher": "중앙선거관리위원회"
+      }
+    },
+    {
+      "id": "22-chungnam-gongju-buyeo-cheongyang-18",
+      "title": "옥룡동 다목적 광장(스포츠 시설)신축 추진",
+      "category": "",
+      "status": "notJudged",
+      "source": {
+        "sourceUrl": "https://policy.nec.go.kr/policy_pdf/20240410/PDF/PBINFO_PUB/4402/003_100152004_20240402_2.pdf",
+        "fetchedAt": "2026-09-28T02:30:00Z",
+        "publisher": "중앙선거관리위원회"
+      }
+    },
+    {
+      "id": "22-chungnam-gongju-buyeo-cheongyang-19",
+      "title": "금학동 한옥마을 신축 개량지원 확대",
+      "category": "",
+      "status": "notJudged",
+      "source": {
+        "sourceUrl": "https://policy.nec.go.kr/policy_pdf/20240410/PDF/PBINFO_PUB/4402/003_100152004_20240402_2.pdf",
+        "fetchedAt": "2026-09-28T02:30:00Z",
+        "publisher": "중앙선거관리위원회"
+      }
+    },
+    {
+      "id": "22-chungnam-gongju-buyeo-cheongyang-20",
+      "title": "마을별 상·하수도 중점관리 개선사업 조기 추진",
+      "category": "",
+      "status": "notJudged",
+      "source": {
+        "sourceUrl": "https://policy.nec.go.kr/policy_pdf/20240410/PDF/PBINFO_PUB/4402/003_100152004_20240402_2.pdf",
+        "fetchedAt": "2026-09-28T02:30:00Z",
+        "publisher": "중앙선거관리위원회"
+      }
+    },
+    {
+      "id": "22-chungnam-gongju-buyeo-cheongyang-21",
+      "title": "중학동 오거리 광장 조성",
+      "category": "",
+      "status": "notJudged",
+      "source": {
+        "sourceUrl": "https://policy.nec.go.kr/policy_pdf/20240410/PDF/PBINFO_PUB/4402/003_100152004_20240402_2.pdf",
+        "fetchedAt": "2026-09-28T02:30:00Z",
+        "publisher": "중앙선거관리위원회"
+      }
+    },
+    {
+      "id": "22-chungnam-gongju-buyeo-cheongyang-22",
+      "title": "교동 도시재생 사업 추진",
+      "category": "",
+      "status": "notJudged",
+      "source": {
+        "sourceUrl": "https://policy.nec.go.kr/policy_pdf/20240410/PDF/PBINFO_PUB/4402/003_100152004_20240402_2.pdf",
+        "fetchedAt": "2026-09-28T02:30:00Z",
+        "publisher": "중앙선거관리위원회"
+      }
+    },
+    {
+      "id": "22-chungnam-gongju-buyeo-cheongyang-23",
+      "title": "계룡산 유네스코 복합유산등재 추진(지리산, 오대산, 마니산과 연계추진)",
+      "category": "",
+      "status": "notJudged",
+      "source": {
+        "sourceUrl": "https://policy.nec.go.kr/policy_pdf/20240410/PDF/PBINFO_PUB/4402/003_100152004_20240402_2.pdf",
+        "fetchedAt": "2026-09-28T02:30:00Z",
+        "publisher": "중앙선거관리위원회"
+      }
+    },
+    {
+      "id": "22-chungnam-gongju-buyeo-cheongyang-24",
+      "title": "공주 서부권 유구천 100리 역사탐방길 조성(생태수변공원, 테마수목길, 문화공연시설 등)",
+      "category": "",
+      "status": "notJudged",
+      "source": {
+        "sourceUrl": "https://policy.nec.go.kr/policy_pdf/20240410/PDF/PBINFO_PUB/4402/003_100152004_20240402_2.pdf",
+        "fetchedAt": "2026-09-28T02:30:00Z",
+        "publisher": "중앙선거관리위원회"
+      }
+    },
+    {
+      "id": "22-chungnam-gongju-buyeo-cheongyang-25",
+      "title": "2026 세계알밤박람회 개최 및 공주밤농업 세계농업유산 등재",
+      "category": "",
+      "status": "notJudged",
+      "source": {
+        "sourceUrl": "https://policy.nec.go.kr/policy_pdf/20240410/PDF/PBINFO_PUB/4402/003_100152004_20240402_2.pdf",
+        "fetchedAt": "2026-09-28T02:30:00Z",
+        "publisher": "중앙선거관리위원회"
+      }
+    },
+    {
+      "id": "22-chungnam-gongju-buyeo-cheongyang-26",
+      "title": "반포면 명품 둘레길 조성(공암리~상하신리~학봉리 11.2km)",
+      "category": "",
+      "status": "notJudged",
+      "source": {
+        "sourceUrl": "https://policy.nec.go.kr/policy_pdf/20240410/PDF/PBINFO_PUB/4402/003_100152004_20240402_2.pdf",
+        "fetchedAt": "2026-09-28T02:30:00Z",
+        "publisher": "중앙선거관리위원회"
+      }
+    },
+    {
+      "id": "22-chungnam-gongju-buyeo-cheongyang-27",
+      "title": "금학생태공원 시설 확충(주미산 산림레포츠 시설 조성 등)",
+      "category": "",
+      "status": "notJudged",
+      "source": {
+        "sourceUrl": "https://policy.nec.go.kr/policy_pdf/20240410/PDF/PBINFO_PUB/4402/003_100152004_20240402_2.pdf",
+        "fetchedAt": "2026-09-28T02:30:00Z",
+        "publisher": "중앙선거관리위원회"
+      }
+    },
+    {
+      "id": "22-chungnam-gongju-buyeo-cheongyang-28",
+      "title": "의당면 수촌리 고분군 역사공원화 조성(왕의 산책길 등)",
+      "category": "",
+      "status": "notJudged",
+      "source": {
+        "sourceUrl": "https://policy.nec.go.kr/policy_pdf/20240410/PDF/PBINFO_PUB/4402/003_100152004_20240402_2.pdf",
+        "fetchedAt": "2026-09-28T02:30:00Z",
+        "publisher": "중앙선거관리위원회"
+      }
+    },
+    {
+      "id": "22-chungnam-gongju-buyeo-cheongyang-29",
+      "title": "유관순독립운동기념관 조성",
+      "category": "",
+      "status": "notJudged",
+      "source": {
+        "sourceUrl": "https://policy.nec.go.kr/policy_pdf/20240410/PDF/PBINFO_PUB/4402/003_100152004_20240402_2.pdf",
+        "fetchedAt": "2026-09-28T02:30:00Z",
+        "publisher": "중앙선거관리위원회"
+      }
+    },
+    {
+      "id": "22-chungnam-gongju-buyeo-cheongyang-30",
+      "title": "반포면 도자문화단지조성",
+      "category": "",
+      "status": "notJudged",
+      "source": {
+        "sourceUrl": "https://policy.nec.go.kr/policy_pdf/20240410/PDF/PBINFO_PUB/4402/003_100152004_20240402_2.pdf",
+        "fetchedAt": "2026-09-28T02:30:00Z",
+        "publisher": "중앙선거관리위원회"
+      }
+    },
+    {
+      "id": "22-chungnam-gongju-buyeo-cheongyang-31",
+      "title": "월송동 석장리 세계구석기공원 조성",
+      "category": "",
+      "status": "notJudged",
+      "source": {
+        "sourceUrl": "https://policy.nec.go.kr/policy_pdf/20240410/PDF/PBINFO_PUB/4402/003_100152004_20240402_2.pdf",
+        "fetchedAt": "2026-09-28T02:30:00Z",
+        "publisher": "중앙선거관리위원회"
+      }
+    },
+    {
+      "id": "22-chungnam-gongju-buyeo-cheongyang-32",
+      "title": "웅진백제문화촌 조성",
+      "category": "",
+      "status": "notJudged",
+      "source": {
+        "sourceUrl": "https://policy.nec.go.kr/policy_pdf/20240410/PDF/PBINFO_PUB/4402/003_100152004_20240402_2.pdf",
+        "fetchedAt": "2026-09-28T02:30:00Z",
+        "publisher": "중앙선거관리위원회"
+      }
+    },
+    {
+      "id": "22-chungnam-gongju-buyeo-cheongyang-33",
+      "title": "유구읍 관불산 생태환경체험관 조성",
+      "category": "",
+      "status": "notJudged",
+      "source": {
+        "sourceUrl": "https://policy.nec.go.kr/policy_pdf/20240410/PDF/PBINFO_PUB/4402/003_100152004_20240402_2.pdf",
+        "fetchedAt": "2026-09-28T02:30:00Z",
+        "publisher": "중앙선거관리위원회"
+      }
+    },
+    {
+      "id": "22-chungnam-gongju-buyeo-cheongyang-34",
+      "title": "신관동 음악공연장 신설",
+      "category": "",
+      "status": "notJudged",
+      "source": {
+        "sourceUrl": "https://policy.nec.go.kr/policy_pdf/20240410/PDF/PBINFO_PUB/4402/003_100152004_20240402_2.pdf",
+        "fetchedAt": "2026-09-28T02:30:00Z",
+        "publisher": "중앙선거관리위원회"
+      }
+    },
+    {
+      "id": "22-chungnam-gongju-buyeo-cheongyang-35",
+      "title": "충청산업문화철도 건설(보령~부여~청양~공주~세종~조치원, 82.1km)",
+      "category": "",
+      "status": "notJudged",
+      "source": {
+        "sourceUrl": "https://policy.nec.go.kr/policy_pdf/20240410/PDF/PBINFO_PUB/4402/003_100152004_20240402_2.pdf",
+        "fetchedAt": "2026-09-28T02:30:00Z",
+        "publisher": "중앙선거관리위원회"
+      }
+    },
+    {
+      "id": "22-chungnam-gongju-buyeo-cheongyang-36",
+      "title": "문화재보호법 개정 추진(규제개혁, 재산권 보상)",
+      "category": "",
+      "status": "notJudged",
+      "source": {
+        "sourceUrl": "https://policy.nec.go.kr/policy_pdf/20240410/PDF/PBINFO_PUB/4402/003_100152004_20240402_2.pdf",
+        "fetchedAt": "2026-09-28T02:30:00Z",
+        "publisher": "중앙선거관리위원회"
+      }
+    },
+    {
+      "id": "22-chungnam-gongju-buyeo-cheongyang-37",
+      "title": "국제 규격 종합체육관 신축",
+      "category": "",
+      "status": "notJudged",
+      "source": {
+        "sourceUrl": "https://policy.nec.go.kr/policy_pdf/20240410/PDF/PBINFO_PUB/4402/003_100152004_20240402_2.pdf",
+        "fetchedAt": "2026-09-28T02:30:00Z",
+        "publisher": "중앙선거관리위원회"
+      }
+    },
+    {
+      "id": "22-chungnam-gongju-buyeo-cheongyang-38",
+      "title": "김종필기념박물관 건립",
+      "category": "",
+      "status": "notJudged",
+      "source": {
+        "sourceUrl": "https://policy.nec.go.kr/policy_pdf/20240410/PDF/PBINFO_PUB/4402/003_100152004_20240402_2.pdf",
+        "fetchedAt": "2026-09-28T02:30:00Z",
+        "publisher": "중앙선거관리위원회"
+      }
+    },
+    {
+      "id": "22-chungnam-gongju-buyeo-cheongyang-39",
+      "title": "5성급 국제호텔 유치",
+      "category": "",
+      "status": "notJudged",
+      "source": {
+        "sourceUrl": "https://policy.nec.go.kr/policy_pdf/20240410/PDF/PBINFO_PUB/4402/003_100152004_20240402_2.pdf",
+        "fetchedAt": "2026-09-28T02:30:00Z",
+        "publisher": "중앙선거관리위원회"
+      }
+    },
+    {
+      "id": "22-chungnam-gongju-buyeo-cheongyang-40",
+      "title": "초촌면 송국리유적 관광명소화",
+      "category": "",
+      "status": "notJudged",
+      "source": {
+        "sourceUrl": "https://policy.nec.go.kr/policy_pdf/20240410/PDF/PBINFO_PUB/4402/003_100152004_20240402_2.pdf",
+        "fetchedAt": "2026-09-28T02:30:00Z",
+        "publisher": "중앙선거관리위원회"
+      }
+    },
+    {
+      "id": "22-chungnam-gongju-buyeo-cheongyang-41",
+      "title": "옥산저수지 수변 관광 명소화 추진",
+      "category": "",
+      "status": "notJudged",
+      "source": {
+        "sourceUrl": "https://policy.nec.go.kr/policy_pdf/20240410/PDF/PBINFO_PUB/4402/003_100152004_20240402_2.pdf",
+        "fetchedAt": "2026-09-28T02:30:00Z",
+        "publisher": "중앙선거관리위원회"
+      }
+    },
+    {
+      "id": "22-chungnam-gongju-buyeo-cheongyang-42",
+      "title": "구룡면 부두로 벚꽃길 관광 명소화 확대",
+      "category": "",
+      "status": "notJudged",
+      "source": {
+        "sourceUrl": "https://policy.nec.go.kr/policy_pdf/20240410/PDF/PBINFO_PUB/4402/003_100152004_20240402_2.pdf",
+        "fetchedAt": "2026-09-28T02:30:00Z",
+        "publisher": "중앙선거관리위원회"
+      }
+    },
+    {
+      "id": "22-chungnam-gongju-buyeo-cheongyang-43",
+      "title": "은산면 국립 치유의 숲 조성 조기착수",
+      "category": "",
+      "status": "notJudged",
+      "source": {
+        "sourceUrl": "https://policy.nec.go.kr/policy_pdf/20240410/PDF/PBINFO_PUB/4402/003_100152004_20240402_2.pdf",
+        "fetchedAt": "2026-09-28T02:30:00Z",
+        "publisher": "중앙선거관리위원회"
+      }
+    },
+    {
+      "id": "22-chungnam-gongju-buyeo-cheongyang-44",
+      "title": "석성면 체육관 신속 건립",
+      "category": "",
+      "status": "notJudged",
+      "source": {
+        "sourceUrl": "https://policy.nec.go.kr/policy_pdf/20240410/PDF/PBINFO_PUB/4402/003_100152004_20240402_2.pdf",
+        "fetchedAt": "2026-09-28T02:30:00Z",
+        "publisher": "중앙선거관리위원회"
+      }
+    },
+    {
+      "id": "22-chungnam-gongju-buyeo-cheongyang-45",
+      "title": "구룡천 종합발전계획 수립 추진(내산-구룡-장암 30km)",
+      "category": "",
+      "status": "notJudged",
+      "source": {
+        "sourceUrl": "https://policy.nec.go.kr/policy_pdf/20240410/PDF/PBINFO_PUB/4402/003_100152004_20240402_2.pdf",
+        "fetchedAt": "2026-09-28T02:30:00Z",
+        "publisher": "중앙선거관리위원회"
+      }
+    },
+    {
+      "id": "22-chungnam-gongju-buyeo-cheongyang-46",
+      "title": "백마강 국제항 조성",
+      "category": "",
+      "status": "notJudged",
+      "source": {
+        "sourceUrl": "https://policy.nec.go.kr/policy_pdf/20240410/PDF/PBINFO_PUB/4402/003_100152004_20240402_2.pdf",
+        "fetchedAt": "2026-09-28T02:30:00Z",
+        "publisher": "중앙선거관리위원회"
+      }
+    },
+    {
+      "id": "22-chungnam-gongju-buyeo-cheongyang-47",
+      "title": "양화면 금강수변공원 조성 및 입포리 갓개포구 복원",
+      "category": "",
+      "status": "notJudged",
+      "source": {
+        "sourceUrl": "https://policy.nec.go.kr/policy_pdf/20240410/PDF/PBINFO_PUB/4402/003_100152004_20240402_2.pdf",
+        "fetchedAt": "2026-09-28T02:30:00Z",
+        "publisher": "중앙선거관리위원회"
+      }
+    },
+    {
+      "id": "22-chungnam-gongju-buyeo-cheongyang-48",
+      "title": "세도 시가지 정비(도로확장)",
+      "category": "",
+      "status": "notJudged",
+      "source": {
+        "sourceUrl": "https://policy.nec.go.kr/policy_pdf/20240410/PDF/PBINFO_PUB/4402/003_100152004_20240402_2.pdf",
+        "fetchedAt": "2026-09-28T02:30:00Z",
+        "publisher": "중앙선거관리위원회"
+      }
+    },
+    {
+      "id": "22-chungnam-gongju-buyeo-cheongyang-49",
+      "title": "행정복지센터 신축 및 이전(초촌면, 임천면 등)",
+      "category": "",
+      "status": "notJudged",
+      "source": {
+        "sourceUrl": "https://policy.nec.go.kr/policy_pdf/20240410/PDF/PBINFO_PUB/4402/003_100152004_20240402_2.pdf",
+        "fetchedAt": "2026-09-28T02:30:00Z",
+        "publisher": "중앙선거관리위원회"
+      }
+    },
+    {
+      "id": "22-chungnam-gongju-buyeo-cheongyang-50",
+      "title": "충화면 다목적 체육센터 건립",
+      "category": "",
+      "status": "notJudged",
+      "source": {
+        "sourceUrl": "https://policy.nec.go.kr/policy_pdf/20240410/PDF/PBINFO_PUB/4402/003_100152004_20240402_2.pdf",
+        "fetchedAt": "2026-09-28T02:30:00Z",
+        "publisher": "중앙선거관리위원회"
+      }
+    },
+    {
+      "id": "22-chungnam-gongju-buyeo-cheongyang-51",
+      "title": "외산면 보령댐 도수로 연장설치",
+      "category": "",
+      "status": "notJudged",
+      "source": {
+        "sourceUrl": "https://policy.nec.go.kr/policy_pdf/20240410/PDF/PBINFO_PUB/4402/003_100152004_20240402_2.pdf",
+        "fetchedAt": "2026-09-28T02:30:00Z",
+        "publisher": "중앙선거관리위원회"
+      }
+    },
+    {
+      "id": "22-chungnam-gongju-buyeo-cheongyang-52",
+      "title": "내산면 백마강 물활용 가뭄해소 대책 추진",
+      "category": "",
+      "status": "notJudged",
+      "source": {
+        "sourceUrl": "https://policy.nec.go.kr/policy_pdf/20240410/PDF/PBINFO_PUB/4402/003_100152004_20240402_2.pdf",
+        "fetchedAt": "2026-09-28T02:30:00Z",
+        "publisher": "중앙선거관리위원회"
+      }
+    },
+    {
+      "id": "22-chungnam-gongju-buyeo-cheongyang-53",
+      "title": "장암면 장하 합곡지역 배수개선(제방보강+펌프장 증설)",
+      "category": "",
+      "status": "notJudged",
+      "source": {
+        "sourceUrl": "https://policy.nec.go.kr/policy_pdf/20240410/PDF/PBINFO_PUB/4402/003_100152004_20240402_2.pdf",
+        "fetchedAt": "2026-09-28T02:30:00Z",
+        "publisher": "중앙선거관리위원회"
+      }
+    },
+    {
+      "id": "22-chungnam-gongju-buyeo-cheongyang-54",
+      "title": "논 범용화 용수공급체계 확대(부여읍, 장암, 세도 등)",
+      "category": "",
+      "status": "notJudged",
+      "source": {
+        "sourceUrl": "https://policy.nec.go.kr/policy_pdf/20240410/PDF/PBINFO_PUB/4402/003_100152004_20240402_2.pdf",
+        "fetchedAt": "2026-09-28T02:30:00Z",
+        "publisher": "중앙선거관리위원회"
+      }
+    },
+    {
+      "id": "22-chungnam-gongju-buyeo-cheongyang-55",
+      "title": "상·하수도 정비·신설(은산, 외산·내산 전장지구, 내산 서운지구 등)",
+      "category": "",
+      "status": "notJudged",
+      "source": {
+        "sourceUrl": "https://policy.nec.go.kr/policy_pdf/20240410/PDF/PBINFO_PUB/4402/003_100152004_20240402_2.pdf",
+        "fetchedAt": "2026-09-28T02:30:00Z",
+        "publisher": "중앙선거관리위원회"
+      }
+    },
+    {
+      "id": "22-chungnam-gongju-buyeo-cheongyang-56",
+      "title": "세도면 최첨단 인공지능형 스마트팜 전문단지 조성",
+      "category": "",
+      "status": "notJudged",
+      "source": {
+        "sourceUrl": "https://policy.nec.go.kr/policy_pdf/20240410/PDF/PBINFO_PUB/4402/003_100152004_20240402_2.pdf",
+        "fetchedAt": "2026-09-28T02:30:00Z",
+        "publisher": "중앙선거관리위원회"
+      }
+    },
+    {
+      "id": "22-chungnam-gongju-buyeo-cheongyang-57",
+      "title": "석성면 친환경 제2일반산업단지 조성",
+      "category": "",
+      "status": "notJudged",
+      "source": {
+        "sourceUrl": "https://policy.nec.go.kr/policy_pdf/20240410/PDF/PBINFO_PUB/4402/003_100152004_20240402_2.pdf",
+        "fetchedAt": "2026-09-28T02:30:00Z",
+        "publisher": "중앙선거관리위원회"
+      }
+    },
+    {
+      "id": "22-chungnam-gongju-buyeo-cheongyang-58",
+      "title": "남면 유기농산업 복합서비스 단지 조속 추진",
+      "category": "",
+      "status": "notJudged",
+      "source": {
+        "sourceUrl": "https://policy.nec.go.kr/policy_pdf/20240410/PDF/PBINFO_PUB/4402/003_100152004_20240402_2.pdf",
+        "fetchedAt": "2026-09-28T02:30:00Z",
+        "publisher": "중앙선거관리위원회"
+      }
+    },
+    {
+      "id": "22-chungnam-gongju-buyeo-cheongyang-59",
+      "title": "홍산면 일반산업단지 내 첨단에너지기업 유치",
+      "category": "",
+      "status": "notJudged",
+      "source": {
+        "sourceUrl": "https://policy.nec.go.kr/policy_pdf/20240410/PDF/PBINFO_PUB/4402/003_100152004_20240402_2.pdf",
+        "fetchedAt": "2026-09-28T02:30:00Z",
+        "publisher": "중앙선거관리위원회"
+      }
+    },
+    {
+      "id": "22-chungnam-gongju-buyeo-cheongyang-60",
+      "title": "내산면 시설 과수·원예특작지구 조성",
+      "category": "",
+      "status": "notJudged",
+      "source": {
+        "sourceUrl": "https://policy.nec.go.kr/policy_pdf/20240410/PDF/PBINFO_PUB/4402/003_100152004_20240402_2.pdf",
+        "fetchedAt": "2026-09-28T02:30:00Z",
+        "publisher": "중앙선거관리위원회"
+      }
+    },
+    {
+      "id": "22-chungnam-gongju-buyeo-cheongyang-61",
+      "title": "부여밤 클러스터 구축 조기예산 확보",
+      "category": "",
+      "status": "notJudged",
+      "source": {
+        "sourceUrl": "https://policy.nec.go.kr/policy_pdf/20240410/PDF/PBINFO_PUB/4402/003_100152004_20240402_2.pdf",
+        "fetchedAt": "2026-09-28T02:30:00Z",
+        "publisher": "중앙선거관리위원회"
+      }
+    },
+    {
+      "id": "22-chungnam-gongju-buyeo-cheongyang-62",
+      "title": "시내버스 오지노선 확대 지원",
+      "category": "",
+      "status": "notJudged",
+      "source": {
+        "sourceUrl": "https://policy.nec.go.kr/policy_pdf/20240410/PDF/PBINFO_PUB/4402/003_100152004_20240402_2.pdf",
+        "fetchedAt": "2026-09-28T02:30:00Z",
+        "publisher": "중앙선거관리위원회"
+      }
+    },
+    {
+      "id": "22-chungnam-gongju-buyeo-cheongyang-63",
+      "title": "신금강대교(장암-석성) 조속추진",
+      "category": "",
+      "status": "notJudged",
+      "source": {
+        "sourceUrl": "https://policy.nec.go.kr/policy_pdf/20240410/PDF/PBINFO_PUB/4402/003_100152004_20240402_2.pdf",
+        "fetchedAt": "2026-09-28T02:30:00Z",
+        "publisher": "중앙선거관리위원회"
+      }
+    },
+    {
+      "id": "22-chungnam-gongju-buyeo-cheongyang-64",
+      "title": "국도 29호선(은산-청양)구간 4차선 추진",
+      "category": "",
+      "status": "notJudged",
+      "source": {
+        "sourceUrl": "https://policy.nec.go.kr/policy_pdf/20240410/PDF/PBINFO_PUB/4402/003_100152004_20240402_2.pdf",
+        "fetchedAt": "2026-09-28T02:30:00Z",
+        "publisher": "중앙선거관리위원회"
+      }
+    },
+    {
+      "id": "22-chungnam-gongju-buyeo-cheongyang-65",
+      "title": "국도 29호선(장암-임천)구간 확포장",
+      "category": "",
+      "status": "notJudged",
+      "source": {
+        "sourceUrl": "https://policy.nec.go.kr/policy_pdf/20240410/PDF/PBINFO_PUB/4402/003_100152004_20240402_2.pdf",
+        "fetchedAt": "2026-09-28T02:30:00Z",
+        "publisher": "중앙선거관리위원회"
+      }
+    },
+    {
+      "id": "22-chungnam-gongju-buyeo-cheongyang-66",
+      "title": "평택-부여-익산 고속도로 남부여 IC휴게소 설치",
+      "category": "",
+      "status": "notJudged",
+      "source": {
+        "sourceUrl": "https://policy.nec.go.kr/policy_pdf/20240410/PDF/PBINFO_PUB/4402/003_100152004_20240402_2.pdf",
+        "fetchedAt": "2026-09-28T02:30:00Z",
+        "publisher": "중앙선거관리위원회"
+      }
+    },
+    {
+      "id": "22-chungnam-gongju-buyeo-cheongyang-67",
+      "title": "농산물가격안정제 법제화(양곡관리법 등)",
+      "category": "",
+      "status": "notJudged",
+      "source": {
+        "sourceUrl": "https://policy.nec.go.kr/policy_pdf/20240410/PDF/PBINFO_PUB/4402/003_100152004_20240402_2.pdf",
+        "fetchedAt": "2026-09-28T02:30:00Z",
+        "publisher": "중앙선거관리위원회"
+      }
+    },
+    {
+      "id": "22-chungnam-gongju-buyeo-cheongyang-68",
+      "title": "농촌기본소득 도입",
+      "category": "",
+      "status": "notJudged",
+      "source": {
+        "sourceUrl": "https://policy.nec.go.kr/policy_pdf/20240410/PDF/PBINFO_PUB/4402/003_100152004_20240402_2.pdf",
+        "fetchedAt": "2026-09-28T02:30:00Z",
+        "publisher": "중앙선거관리위원회"
+      }
+    },
+    {
+      "id": "22-chungnam-gongju-buyeo-cheongyang-69",
+      "title": "농자재, 인건비 등의 보조를 통한 생산비 안정화 실현",
+      "category": "",
+      "status": "notJudged",
+      "source": {
+        "sourceUrl": "https://policy.nec.go.kr/policy_pdf/20240410/PDF/PBINFO_PUB/4402/003_100152004_20240402_2.pdf",
+        "fetchedAt": "2026-09-28T02:30:00Z",
+        "publisher": "중앙선거관리위원회"
+      }
+    },
+    {
+      "id": "22-chungnam-gongju-buyeo-cheongyang-70",
+      "title": "비봉면 일반산업단지 조성사업 적극 추진",
+      "category": "",
+      "status": "notJudged",
+      "source": {
+        "sourceUrl": "https://policy.nec.go.kr/policy_pdf/20240410/PDF/PBINFO_PUB/4402/003_100152004_20240402_2.pdf",
+        "fetchedAt": "2026-09-28T02:30:00Z",
+        "publisher": "중앙선거관리위원회"
+      }
+    },
+    {
+      "id": "22-chungnam-gongju-buyeo-cheongyang-71",
+      "title": "청년스마트팜 클러스터 조성",
+      "category": "",
+      "status": "notJudged",
+      "source": {
+        "sourceUrl": "https://policy.nec.go.kr/policy_pdf/20240410/PDF/PBINFO_PUB/4402/003_100152004_20240402_2.pdf",
+        "fetchedAt": "2026-09-28T02:30:00Z",
+        "publisher": "중앙선거관리위원회"
+      }
+    },
+    {
+      "id": "22-chungnam-gongju-buyeo-cheongyang-72",
+      "title": "고추 중심산지유통센터(APC)건립 조속 추진",
+      "category": "",
+      "status": "notJudged",
+      "source": {
+        "sourceUrl": "https://policy.nec.go.kr/policy_pdf/20240410/PDF/PBINFO_PUB/4402/003_100152004_20240402_2.pdf",
+        "fetchedAt": "2026-09-28T02:30:00Z",
+        "publisher": "중앙선거관리위원회"
+      }
+    },
+    {
+      "id": "22-chungnam-gongju-buyeo-cheongyang-73",
+      "title": "청양군 종합물류센터 조성",
+      "category": "",
+      "status": "notJudged",
+      "source": {
+        "sourceUrl": "https://policy.nec.go.kr/policy_pdf/20240410/PDF/PBINFO_PUB/4402/003_100152004_20240402_2.pdf",
+        "fetchedAt": "2026-09-28T02:30:00Z",
+        "publisher": "중앙선거관리위원회"
+      }
+    },
+    {
+      "id": "22-chungnam-gongju-buyeo-cheongyang-74",
+      "title": "청양문화원 이전·신축 적극 추진",
+      "category": "",
+      "status": "notJudged",
+      "source": {
+        "sourceUrl": "https://policy.nec.go.kr/policy_pdf/20240410/PDF/PBINFO_PUB/4402/003_100152004_20240402_2.pdf",
+        "fetchedAt": "2026-09-28T02:30:00Z",
+        "publisher": "중앙선거관리위원회"
+      }
+    },
+    {
+      "id": "22-chungnam-gongju-buyeo-cheongyang-75",
+      "title": "반려동물 놀이공원 조성",
+      "category": "",
+      "status": "notJudged",
+      "source": {
+        "sourceUrl": "https://policy.nec.go.kr/policy_pdf/20240410/PDF/PBINFO_PUB/4402/003_100152004_20240402_2.pdf",
+        "fetchedAt": "2026-09-28T02:30:00Z",
+        "publisher": "중앙선거관리위원회"
+      }
+    },
+    {
+      "id": "22-chungnam-gongju-buyeo-cheongyang-76",
+      "title": "우산어린이 테마파크 조성",
+      "category": "",
+      "status": "notJudged",
+      "source": {
+        "sourceUrl": "https://policy.nec.go.kr/policy_pdf/20240410/PDF/PBINFO_PUB/4402/003_100152004_20240402_2.pdf",
+        "fetchedAt": "2026-09-28T02:30:00Z",
+        "publisher": "중앙선거관리위원회"
+      }
+    },
+    {
+      "id": "22-chungnam-gongju-buyeo-cheongyang-77",
+      "title": "청양보훈공원 조성",
+      "category": "",
+      "status": "notJudged",
+      "source": {
+        "sourceUrl": "https://policy.nec.go.kr/policy_pdf/20240410/PDF/PBINFO_PUB/4402/003_100152004_20240402_2.pdf",
+        "fetchedAt": "2026-09-28T02:30:00Z",
+        "publisher": "중앙선거관리위원회"
+      }
+    },
+    {
+      "id": "22-chungnam-gongju-buyeo-cheongyang-78",
+      "title": "장애인 전용체육관(반다비) 건립 적극 지원",
+      "category": "",
+      "status": "notJudged",
+      "source": {
+        "sourceUrl": "https://policy.nec.go.kr/policy_pdf/20240410/PDF/PBINFO_PUB/4402/003_100152004_20240402_2.pdf",
+        "fetchedAt": "2026-09-28T02:30:00Z",
+        "publisher": "중앙선거관리위원회"
+      }
+    },
+    {
+      "id": "22-chungnam-gongju-buyeo-cheongyang-79",
+      "title": "청양군장애인종합돌봄센터 건립 적극 추진",
+      "category": "",
+      "status": "notJudged",
+      "source": {
+        "sourceUrl": "https://policy.nec.go.kr/policy_pdf/20240410/PDF/PBINFO_PUB/4402/003_100152004_20240402_2.pdf",
+        "fetchedAt": "2026-09-28T02:30:00Z",
+        "publisher": "중앙선거관리위원회"
+      }
+    },
+    {
+      "id": "22-chungnam-gongju-buyeo-cheongyang-80",
+      "title": "도림온천 부지 시니어타운 조성",
+      "category": "",
+      "status": "notJudged",
+      "source": {
+        "sourceUrl": "https://policy.nec.go.kr/policy_pdf/20240410/PDF/PBINFO_PUB/4402/003_100152004_20240402_2.pdf",
+        "fetchedAt": "2026-09-28T02:30:00Z",
+        "publisher": "중앙선거관리위원회"
+      }
+    },
+    {
+      "id": "22-chungnam-gongju-buyeo-cheongyang-81",
+      "title": "칠갑호 리조트 조성사업 추진",
+      "category": "",
+      "status": "notJudged",
+      "source": {
+        "sourceUrl": "https://policy.nec.go.kr/policy_pdf/20240410/PDF/PBINFO_PUB/4402/003_100152004_20240402_2.pdf",
+        "fetchedAt": "2026-09-28T02:30:00Z",
+        "publisher": "중앙선거관리위원회"
+      }
+    },
+    {
+      "id": "22-chungnam-gongju-buyeo-cheongyang-82",
+      "title": "청양을 ‘한궁’의 세계적인 메카로 육성(한궁육성지원법 발의)",
+      "category": "",
+      "status": "notJudged",
+      "source": {
+        "sourceUrl": "https://policy.nec.go.kr/policy_pdf/20240410/PDF/PBINFO_PUB/4402/003_100152004_20240402_2.pdf",
+        "fetchedAt": "2026-09-28T02:30:00Z",
+        "publisher": "중앙선거관리위원회"
+      }
+    },
+    {
+      "id": "22-chungnam-gongju-buyeo-cheongyang-83",
+      "title": "관내 산업단지 정주환경 개선을 위한 주택 조성",
+      "category": "",
+      "status": "notJudged",
+      "source": {
+        "sourceUrl": "https://policy.nec.go.kr/policy_pdf/20240410/PDF/PBINFO_PUB/4402/003_100152004_20240402_2.pdf",
+        "fetchedAt": "2026-09-28T02:30:00Z",
+        "publisher": "중앙선거관리위원회"
+      }
+    },
+    {
+      "id": "22-chungnam-gongju-buyeo-cheongyang-84",
+      "title": "마을형 공동퇴비 처리시설 설치 적극 추진",
+      "category": "",
+      "status": "notJudged",
+      "source": {
+        "sourceUrl": "https://policy.nec.go.kr/policy_pdf/20240410/PDF/PBINFO_PUB/4402/003_100152004_20240402_2.pdf",
+        "fetchedAt": "2026-09-28T02:30:00Z",
+        "publisher": "중앙선거관리위원회"
+      }
+    },
+    {
+      "id": "22-chungnam-gongju-buyeo-cheongyang-85",
+      "title": "남양지구 지하수 저류댐 개발사업 적극 지원",
+      "category": "",
+      "status": "notJudged",
+      "source": {
+        "sourceUrl": "https://policy.nec.go.kr/policy_pdf/20240410/PDF/PBINFO_PUB/4402/003_100152004_20240402_2.pdf",
+        "fetchedAt": "2026-09-28T02:30:00Z",
+        "publisher": "중앙선거관리위원회"
+      }
+    },
+    {
+      "id": "22-chungnam-gongju-buyeo-cheongyang-86",
+      "title": "청남지구 농어촌생활용수개발사업 적극 추진",
+      "category": "",
+      "status": "notJudged",
+      "source": {
+        "sourceUrl": "https://policy.nec.go.kr/policy_pdf/20240410/PDF/PBINFO_PUB/4402/003_100152004_20240402_2.pdf",
+        "fetchedAt": "2026-09-28T02:30:00Z",
+        "publisher": "중앙선거관리위원회"
+      }
+    },
+    {
+      "id": "22-chungnam-gongju-buyeo-cheongyang-87",
+      "title": "면단위 마을상수도 정비·신설 및 도시재생사업 적극 추진",
+      "category": "",
+      "status": "notJudged",
+      "source": {
+        "sourceUrl": "https://policy.nec.go.kr/policy_pdf/20240410/PDF/PBINFO_PUB/4402/003_100152004_20240402_2.pdf",
+        "fetchedAt": "2026-09-28T02:30:00Z",
+        "publisher": "중앙선거관리위원회"
+      }
+    },
+    {
+      "id": "22-chungnam-gongju-buyeo-cheongyang-88",
+      "title": "국도29호선(청양-은산)4차선 추진",
+      "category": "",
+      "status": "notJudged",
+      "source": {
+        "sourceUrl": "https://policy.nec.go.kr/policy_pdf/20240410/PDF/PBINFO_PUB/4402/003_100152004_20240402_2.pdf",
+        "fetchedAt": "2026-09-28T02:30:00Z",
+        "publisher": "중앙선거관리위원회"
+      }
+    },
+    {
+      "id": "22-chungnam-gongju-buyeo-cheongyang-89",
+      "title": "비봉면 일반산업단지 진입도로 개설사업",
+      "category": "",
+      "status": "notJudged",
+      "source": {
+        "sourceUrl": "https://policy.nec.go.kr/policy_pdf/20240410/PDF/PBINFO_PUB/4402/003_100152004_20240402_2.pdf",
+        "fetchedAt": "2026-09-28T02:30:00Z",
+        "publisher": "중앙선거관리위원회"
+      }
+    },
+    {
+      "id": "22-chungnam-gongju-buyeo-cheongyang-90",
+      "title": "도립파크골프장 진입도로 개량공사 적극 추진",
+      "category": "",
+      "status": "notJudged",
+      "source": {
+        "sourceUrl": "https://policy.nec.go.kr/policy_pdf/20240410/PDF/PBINFO_PUB/4402/003_100152004_20240402_2.pdf",
+        "fetchedAt": "2026-09-28T02:30:00Z",
+        "publisher": "중앙선거관리위원회"
+      }
+    },
+    {
+      "id": "22-chungnam-gongju-buyeo-cheongyang-91",
+      "title": "청양~광천 국지도(96호)확장 적극 추진",
+      "category": "",
+      "status": "notJudged",
+      "source": {
+        "sourceUrl": "https://policy.nec.go.kr/policy_pdf/20240410/PDF/PBINFO_PUB/4402/003_100152004_20240402_2.pdf",
+        "fetchedAt": "2026-09-28T02:30:00Z",
+        "publisher": "중앙선거관리위원회"
+      }
+    }
+  ]
+}

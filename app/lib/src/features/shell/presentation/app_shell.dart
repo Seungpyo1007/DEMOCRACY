@@ -1,37 +1,61 @@
 import 'package:democracy/src/core/adaptive/platform_adaptive.dart';
+import 'package:democracy/src/features/shell/application/tab_accessory.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 
 class AppShell extends StatefulWidget {
   const AppShell({required this.navigationShell, super.key});
 
+  // iOS 26 tab bars draw filled symbols in both states and mark selection
+  // with the tint and the glass bubble, so active and inactive share a glyph.
   static const _items = [
     AdaptiveTabItem(
       label: '지역구',
+      sfSymbol: 'mappin.circle.fill',
+      sfSymbolActive: 'mappin.circle.fill',
       icon: Icons.location_on_outlined,
       activeIcon: Icons.location_on,
     ),
     AdaptiveTabItem(
-      label: '트래커',
-      icon: Icons.donut_large_outlined,
-      activeIcon: Icons.donut_large,
+      label: '역사',
+      sfSymbol: 'book.fill',
+      sfSymbolActive: 'book.fill',
+      icon: Icons.menu_book_outlined,
+      activeIcon: Icons.menu_book,
     ),
     AdaptiveTabItem(
-      label: 'AI 분석',
+      label: '트래커',
+      sfSymbol: 'checkmark.circle.fill',
+      sfSymbolActive: 'checkmark.circle.fill',
+      icon: Icons.bar_chart_outlined,
+      activeIcon: Icons.bar_chart,
+    ),
+    AdaptiveTabItem(
+      label: 'AI',
+      sfSymbol: 'sparkles',
+      sfSymbolActive: 'sparkles',
       icon: Icons.auto_awesome_outlined,
       activeIcon: Icons.auto_awesome,
     ),
     AdaptiveTabItem(
       label: '커뮤니티',
-      icon: Icons.forum_outlined,
-      activeIcon: Icons.forum,
+      sfSymbol: 'bubble.left.fill',
+      sfSymbolActive: 'bubble.left.fill',
+      icon: Icons.chat_bubble_outline,
+      activeIcon: Icons.chat_bubble,
     ),
     AdaptiveTabItem(
       label: '개표',
+      sfSymbol: 'chart.bar.fill',
+      sfSymbolActive: 'chart.bar.fill',
       icon: Icons.map_outlined,
       activeIcon: Icons.map,
     ),
   ];
+
+  /// Which branch can lend the tab bar its accessory action, by index.
+  static const _slots = {2: TabSlot.tracker, 4: TabSlot.community};
 
   final StatefulNavigationShell navigationShell;
 
@@ -50,6 +74,21 @@ class _AppShellState extends State<AppShell> {
 
   bool _minimized = false;
   double _travel = 0;
+
+  /// A new branch is showing its own scroll position, which starts at the top
+  /// unless the reader left it somewhere else -- and either way it sends no
+  /// notification for arriving. Without this the bar stayed contracted after a
+  /// tab change, because the only thing that reopens it is a scroll to the top
+  /// and nobody scrolled.
+  @override
+  void didUpdateWidget(AppShell oldWidget) {
+    super.didUpdateWidget(oldWidget);
+    if (widget.navigationShell.currentIndex !=
+        oldWidget.navigationShell.currentIndex) {
+      _travel = 0;
+      _apply(minimized: false);
+    }
+  }
 
   /// Listening for notifications keeps the scroll coupling in the shell. The
   /// alternative, a ScrollController owned by every screen and threaded down
@@ -91,22 +130,41 @@ class _AppShellState extends State<AppShell> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      // Deliberately not extendBody. The bar is opaque, so letting content
-      // slide under it would only hide it, and every scrollable screen would
-      // then need its own bottom padding to compensate.
+      // The page runs under the bar. On iOS the bar is Liquid Glass and the
+      // content is meant to show through it; a fixed band behind it turned
+      // the glass into a grey strip. Every page already ends with room for
+      // the bar (EditorialScrollView.bottomPadding), so nothing is hidden at
+      // rest.
+      extendBody: true,
       body: NotificationListener<ScrollUpdateNotification>(
         onNotification: _handleScroll,
         child: widget.navigationShell,
       ),
-      bottomNavigationBar: PlatformAdaptiveTabBar(
-        currentIndex: widget.navigationShell.currentIndex,
-        items: AppShell._items,
-        minimized: _minimized,
-        onTap: (index) {
-          PlatformAdaptiveHaptics.selection();
-          widget.navigationShell.goBranch(
-            index,
-            initialLocation: index == widget.navigationShell.currentIndex,
+      bottomNavigationBar: Consumer(
+        builder: (context, ref, _) {
+          final index = widget.navigationShell.currentIndex;
+          final slot = AppShell._slots[index];
+          final lent = slot == null
+              ? null
+              : ref.watch(tabAccessoriesProvider)[slot];
+          return PlatformAdaptiveTabBar(
+            currentIndex: index,
+            items: AppShell._items,
+            minimized: _minimized,
+            accessory: lent == null
+                ? null
+                : AdaptiveTabAccessory(
+                    label: lent.label,
+                    sfSymbol: lent.icon.sfSymbol,
+                    onPressed: lent.onPressed,
+                  ),
+            onTap: (index) {
+              PlatformAdaptiveHaptics.selection();
+              widget.navigationShell.goBranch(
+                index,
+                initialLocation: index == widget.navigationShell.currentIndex,
+              );
+            },
           );
         },
       ),

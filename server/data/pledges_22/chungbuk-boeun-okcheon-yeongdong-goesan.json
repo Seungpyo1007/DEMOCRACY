@@ -1,0 +1,495 @@
+{
+  "_note": "제22대 국회의원선거 충북 보은군옥천군영동군괴산군 당선인 박덕흠 (국민의힘). 책자형 선거공보 PDF 5–6쪽 「동남4군을 위한 공통 공약」(살기 좋은 농업/농촌, 따뜻한 동행 분야별 • 항목과 정치개혁 공약)과 PDF 7–8쪽 「사통팔달 교통요충지 동남4군」 도로·철도 • 항목. 글자층 순서가 단 배치와 달라 쪽 이미지를 보고 순서를 잡았다. • 아래의 - 세부 설명은 넣지 않았고, 보훈요양원 항목 뒤의 괄호 사업비 설명도 덜어냈다. PDF 9–10쪽의 옥천·보은·괴산·영동 군별 공약과 3쪽의 대표 발의 법안(지난 성과)은 넣지 않았다. 제목은 원문 문구를 따랐고 바꾼 것은 앞 번호·끝의 !·장식 기호 덜어내기와 줄바꿈 이어 붙이기뿐이다. 분류(category)는 앱에 정해진 분류 체계가 없어 비워 두었다. 이행 여부는 판정하지 않았다(notJudged).",
+  "districtId": "nec-07210689",
+  "source": {
+    "sourceUrl": "https://policy.nec.go.kr/policy_pdf/20240410/PDF/PBINFO_PUB/4307/003_100153158_20240402_2.pdf",
+    "fetchedAt": "2026-09-28T02:30:00Z",
+    "publisher": "중앙선거관리위원회"
+  },
+  "pledges": [
+    {
+      "id": "22-chungbuk-boeun-okcheon-yeongdong-goesan-01",
+      "title": "농업인 기초연금제 실시 추진(年120만원 이상)",
+      "category": "",
+      "status": "notJudged",
+      "source": {
+        "sourceUrl": "https://policy.nec.go.kr/policy_pdf/20240410/PDF/PBINFO_PUB/4307/003_100153158_20240402_2.pdf",
+        "fetchedAt": "2026-09-28T02:30:00Z",
+        "publisher": "중앙선거관리위원회"
+      }
+    },
+    {
+      "id": "22-chungbuk-boeun-okcheon-yeongdong-goesan-02",
+      "title": "농업수입보장보험 확대 추진",
+      "category": "",
+      "status": "notJudged",
+      "source": {
+        "sourceUrl": "https://policy.nec.go.kr/policy_pdf/20240410/PDF/PBINFO_PUB/4307/003_100153158_20240402_2.pdf",
+        "fetchedAt": "2026-09-28T02:30:00Z",
+        "publisher": "중앙선거관리위원회"
+      }
+    },
+    {
+      "id": "22-chungbuk-boeun-okcheon-yeongdong-goesan-03",
+      "title": "쌀 가격 안정화 대책 추진",
+      "category": "",
+      "status": "notJudged",
+      "source": {
+        "sourceUrl": "https://policy.nec.go.kr/policy_pdf/20240410/PDF/PBINFO_PUB/4307/003_100153158_20240402_2.pdf",
+        "fetchedAt": "2026-09-28T02:30:00Z",
+        "publisher": "중앙선거관리위원회"
+      }
+    },
+    {
+      "id": "22-chungbuk-boeun-okcheon-yeongdong-goesan-04",
+      "title": "농산물 재해보험 품목/지역 확대 추진",
+      "category": "",
+      "status": "notJudged",
+      "source": {
+        "sourceUrl": "https://policy.nec.go.kr/policy_pdf/20240410/PDF/PBINFO_PUB/4307/003_100153158_20240402_2.pdf",
+        "fetchedAt": "2026-09-28T02:30:00Z",
+        "publisher": "중앙선거관리위원회"
+      }
+    },
+    {
+      "id": "22-chungbuk-boeun-okcheon-yeongdong-goesan-05",
+      "title": "농업진흥지역 해체 추진",
+      "category": "",
+      "status": "notJudged",
+      "source": {
+        "sourceUrl": "https://policy.nec.go.kr/policy_pdf/20240410/PDF/PBINFO_PUB/4307/003_100153158_20240402_2.pdf",
+        "fetchedAt": "2026-09-28T02:30:00Z",
+        "publisher": "중앙선거관리위원회"
+      }
+    },
+    {
+      "id": "22-chungbuk-boeun-okcheon-yeongdong-goesan-06",
+      "title": "공공형 계절근로자 도입 확대 추진",
+      "category": "",
+      "status": "notJudged",
+      "source": {
+        "sourceUrl": "https://policy.nec.go.kr/policy_pdf/20240410/PDF/PBINFO_PUB/4307/003_100153158_20240402_2.pdf",
+        "fetchedAt": "2026-09-28T02:30:00Z",
+        "publisher": "중앙선거관리위원회"
+      }
+    },
+    {
+      "id": "22-chungbuk-boeun-okcheon-yeongdong-goesan-07",
+      "title": "농업인회관(음식문화회관 등) 건립 추진",
+      "category": "",
+      "status": "notJudged",
+      "source": {
+        "sourceUrl": "https://policy.nec.go.kr/policy_pdf/20240410/PDF/PBINFO_PUB/4307/003_100153158_20240402_2.pdf",
+        "fetchedAt": "2026-09-28T02:30:00Z",
+        "publisher": "중앙선거관리위원회"
+      }
+    },
+    {
+      "id": "22-chungbuk-boeun-okcheon-yeongdong-goesan-08",
+      "title": "면단위 둘레길 조성 추진 (경관조명, 꽃길 조성 등)",
+      "category": "",
+      "status": "notJudged",
+      "source": {
+        "sourceUrl": "https://policy.nec.go.kr/policy_pdf/20240410/PDF/PBINFO_PUB/4307/003_100153158_20240402_2.pdf",
+        "fetchedAt": "2026-09-28T02:30:00Z",
+        "publisher": "중앙선거관리위원회"
+      }
+    },
+    {
+      "id": "22-chungbuk-boeun-okcheon-yeongdong-goesan-09",
+      "title": "농어촌 마을 하수도/하수관로 정비사업 확대 추진",
+      "category": "",
+      "status": "notJudged",
+      "source": {
+        "sourceUrl": "https://policy.nec.go.kr/policy_pdf/20240410/PDF/PBINFO_PUB/4307/003_100153158_20240402_2.pdf",
+        "fetchedAt": "2026-09-28T02:30:00Z",
+        "publisher": "중앙선거관리위원회"
+      }
+    },
+    {
+      "id": "22-chungbuk-boeun-okcheon-yeongdong-goesan-10",
+      "title": "농어촌 생활용수 개발사업 확대 추진",
+      "category": "",
+      "status": "notJudged",
+      "source": {
+        "sourceUrl": "https://policy.nec.go.kr/policy_pdf/20240410/PDF/PBINFO_PUB/4307/003_100153158_20240402_2.pdf",
+        "fetchedAt": "2026-09-28T02:30:00Z",
+        "publisher": "중앙선거관리위원회"
+      }
+    },
+    {
+      "id": "22-chungbuk-boeun-okcheon-yeongdong-goesan-11",
+      "title": "지역 의료격차 해소 특별법 제정 추진",
+      "category": "",
+      "status": "notJudged",
+      "source": {
+        "sourceUrl": "https://policy.nec.go.kr/policy_pdf/20240410/PDF/PBINFO_PUB/4307/003_100153158_20240402_2.pdf",
+        "fetchedAt": "2026-09-28T02:30:00Z",
+        "publisher": "중앙선거관리위원회"
+      }
+    },
+    {
+      "id": "22-chungbuk-boeun-okcheon-yeongdong-goesan-12",
+      "title": "지역 공공병원 육성 추진",
+      "category": "",
+      "status": "notJudged",
+      "source": {
+        "sourceUrl": "https://policy.nec.go.kr/policy_pdf/20240410/PDF/PBINFO_PUB/4307/003_100153158_20240402_2.pdf",
+        "fetchedAt": "2026-09-28T02:30:00Z",
+        "publisher": "중앙선거관리위원회"
+      }
+    },
+    {
+      "id": "22-chungbuk-boeun-okcheon-yeongdong-goesan-13",
+      "title": "이동식 스마트 병원 추진(읍/면 지역, 고령인구 많은 지역 우선 도입)",
+      "category": "",
+      "status": "notJudged",
+      "source": {
+        "sourceUrl": "https://policy.nec.go.kr/policy_pdf/20240410/PDF/PBINFO_PUB/4307/003_100153158_20240402_2.pdf",
+        "fetchedAt": "2026-09-28T02:30:00Z",
+        "publisher": "중앙선거관리위원회"
+      }
+    },
+    {
+      "id": "22-chungbuk-boeun-okcheon-yeongdong-goesan-14",
+      "title": "경로당 냉난방비-양곡비를 부식비로 사용 추진",
+      "category": "",
+      "status": "notJudged",
+      "source": {
+        "sourceUrl": "https://policy.nec.go.kr/policy_pdf/20240410/PDF/PBINFO_PUB/4307/003_100153158_20240402_2.pdf",
+        "fetchedAt": "2026-09-28T02:30:00Z",
+        "publisher": "중앙선거관리위원회"
+      }
+    },
+    {
+      "id": "22-chungbuk-boeun-okcheon-yeongdong-goesan-15",
+      "title": "경로당/노인복지관을 통한 점심제공 주7일까지 단계적 확대 추진",
+      "category": "",
+      "status": "notJudged",
+      "source": {
+        "sourceUrl": "https://policy.nec.go.kr/policy_pdf/20240410/PDF/PBINFO_PUB/4307/003_100153158_20240402_2.pdf",
+        "fetchedAt": "2026-09-28T02:30:00Z",
+        "publisher": "중앙선거관리위원회"
+      }
+    },
+    {
+      "id": "22-chungbuk-boeun-okcheon-yeongdong-goesan-16",
+      "title": "경로당 리모델링 사업 추진(내외부 및 물품 교체 등)",
+      "category": "",
+      "status": "notJudged",
+      "source": {
+        "sourceUrl": "https://policy.nec.go.kr/policy_pdf/20240410/PDF/PBINFO_PUB/4307/003_100153158_20240402_2.pdf",
+        "fetchedAt": "2026-09-28T02:30:00Z",
+        "publisher": "중앙선거관리위원회"
+      }
+    },
+    {
+      "id": "22-chungbuk-boeun-okcheon-yeongdong-goesan-17",
+      "title": "간병비 부담 국가책임 강화 추진",
+      "category": "",
+      "status": "notJudged",
+      "source": {
+        "sourceUrl": "https://policy.nec.go.kr/policy_pdf/20240410/PDF/PBINFO_PUB/4307/003_100153158_20240402_2.pdf",
+        "fetchedAt": "2026-09-28T02:30:00Z",
+        "publisher": "중앙선거관리위원회"
+      }
+    },
+    {
+      "id": "22-chungbuk-boeun-okcheon-yeongdong-goesan-18",
+      "title": "고령자복지주택 공급 4배 확대 추진(2027년까지, 5천 → 2만가구)",
+      "category": "",
+      "status": "notJudged",
+      "source": {
+        "sourceUrl": "https://policy.nec.go.kr/policy_pdf/20240410/PDF/PBINFO_PUB/4307/003_100153158_20240402_2.pdf",
+        "fetchedAt": "2026-09-28T02:30:00Z",
+        "publisher": "중앙선거관리위원회"
+      }
+    },
+    {
+      "id": "22-chungbuk-boeun-okcheon-yeongdong-goesan-19",
+      "title": "소상공인용 전기요금체계 신설 추진",
+      "category": "",
+      "status": "notJudged",
+      "source": {
+        "sourceUrl": "https://policy.nec.go.kr/policy_pdf/20240410/PDF/PBINFO_PUB/4307/003_100153158_20240402_2.pdf",
+        "fetchedAt": "2026-09-28T02:30:00Z",
+        "publisher": "중앙선거관리위원회"
+      }
+    },
+    {
+      "id": "22-chungbuk-boeun-okcheon-yeongdong-goesan-20",
+      "title": "중/저신용자 대출 확대 추진",
+      "category": "",
+      "status": "notJudged",
+      "source": {
+        "sourceUrl": "https://policy.nec.go.kr/policy_pdf/20240410/PDF/PBINFO_PUB/4307/003_100153158_20240402_2.pdf",
+        "fetchedAt": "2026-09-28T02:30:00Z",
+        "publisher": "중앙선거관리위원회"
+      }
+    },
+    {
+      "id": "22-chungbuk-boeun-okcheon-yeongdong-goesan-21",
+      "title": "소상공인 보증 및 정책자금 지원 2배 상향 추진",
+      "category": "",
+      "status": "notJudged",
+      "source": {
+        "sourceUrl": "https://policy.nec.go.kr/policy_pdf/20240410/PDF/PBINFO_PUB/4307/003_100153158_20240402_2.pdf",
+        "fetchedAt": "2026-09-28T02:30:00Z",
+        "publisher": "중앙선거관리위원회"
+      }
+    },
+    {
+      "id": "22-chungbuk-boeun-okcheon-yeongdong-goesan-22",
+      "title": "‘세컨드 홈 활성화 대책’을 비수도권 모든 비도심 지역으로 단계적 확대",
+      "category": "",
+      "status": "notJudged",
+      "source": {
+        "sourceUrl": "https://policy.nec.go.kr/policy_pdf/20240410/PDF/PBINFO_PUB/4307/003_100153158_20240402_2.pdf",
+        "fetchedAt": "2026-09-28T02:30:00Z",
+        "publisher": "중앙선거관리위원회"
+      }
+    },
+    {
+      "id": "22-chungbuk-boeun-okcheon-yeongdong-goesan-23",
+      "title": "그린벨트, 농지규제 등 토지이용과 관련된 규제 전반 재검토",
+      "category": "",
+      "status": "notJudged",
+      "source": {
+        "sourceUrl": "https://policy.nec.go.kr/policy_pdf/20240410/PDF/PBINFO_PUB/4307/003_100153158_20240402_2.pdf",
+        "fetchedAt": "2026-09-28T02:30:00Z",
+        "publisher": "중앙선거관리위원회"
+      }
+    },
+    {
+      "id": "22-chungbuk-boeun-okcheon-yeongdong-goesan-24",
+      "title": "한부모가정 아동양육비 지원 단계적 인상 추진",
+      "category": "",
+      "status": "notJudged",
+      "source": {
+        "sourceUrl": "https://policy.nec.go.kr/policy_pdf/20240410/PDF/PBINFO_PUB/4307/003_100153158_20240402_2.pdf",
+        "fetchedAt": "2026-09-28T02:30:00Z",
+        "publisher": "중앙선거관리위원회"
+      }
+    },
+    {
+      "id": "22-chungbuk-boeun-okcheon-yeongdong-goesan-25",
+      "title": "늘봄학교 전면 무상 및 모든 초등학교 시행 추진(24년 2학기부터)",
+      "category": "",
+      "status": "notJudged",
+      "source": {
+        "sourceUrl": "https://policy.nec.go.kr/policy_pdf/20240410/PDF/PBINFO_PUB/4307/003_100153158_20240402_2.pdf",
+        "fetchedAt": "2026-09-28T02:30:00Z",
+        "publisher": "중앙선거관리위원회"
+      }
+    },
+    {
+      "id": "22-chungbuk-boeun-okcheon-yeongdong-goesan-26",
+      "title": "새학기 도약 바우처 50만원 지급 추진(연100만원/ 초1부터 고3까지)",
+      "category": "",
+      "status": "notJudged",
+      "source": {
+        "sourceUrl": "https://policy.nec.go.kr/policy_pdf/20240410/PDF/PBINFO_PUB/4307/003_100153158_20240402_2.pdf",
+        "fetchedAt": "2026-09-28T02:30:00Z",
+        "publisher": "중앙선거관리위원회"
+      }
+    },
+    {
+      "id": "22-chungbuk-boeun-okcheon-yeongdong-goesan-27",
+      "title": "안심주소 도입 추진(스토킹 위험 방지 등)",
+      "category": "",
+      "status": "notJudged",
+      "source": {
+        "sourceUrl": "https://policy.nec.go.kr/policy_pdf/20240410/PDF/PBINFO_PUB/4307/003_100153158_20240402_2.pdf",
+        "fetchedAt": "2026-09-28T02:30:00Z",
+        "publisher": "중앙선거관리위원회"
+      }
+    },
+    {
+      "id": "22-chungbuk-boeun-okcheon-yeongdong-goesan-28",
+      "title": "디지털 성범죄 처벌 강화 추진",
+      "category": "",
+      "status": "notJudged",
+      "source": {
+        "sourceUrl": "https://policy.nec.go.kr/policy_pdf/20240410/PDF/PBINFO_PUB/4307/003_100153158_20240402_2.pdf",
+        "fetchedAt": "2026-09-28T02:30:00Z",
+        "publisher": "중앙선거관리위원회"
+      }
+    },
+    {
+      "id": "22-chungbuk-boeun-okcheon-yeongdong-goesan-29",
+      "title": "1인 가구 주거침입 동작 감지 센서 부착 지원 추진",
+      "category": "",
+      "status": "notJudged",
+      "source": {
+        "sourceUrl": "https://policy.nec.go.kr/policy_pdf/20240410/PDF/PBINFO_PUB/4307/003_100153158_20240402_2.pdf",
+        "fetchedAt": "2026-09-28T02:30:00Z",
+        "publisher": "중앙선거관리위원회"
+      }
+    },
+    {
+      "id": "22-chungbuk-boeun-okcheon-yeongdong-goesan-30",
+      "title": "장애인 연금 대상자 확대 추진",
+      "category": "",
+      "status": "notJudged",
+      "source": {
+        "sourceUrl": "https://policy.nec.go.kr/policy_pdf/20240410/PDF/PBINFO_PUB/4307/003_100153158_20240402_2.pdf",
+        "fetchedAt": "2026-09-28T02:30:00Z",
+        "publisher": "중앙선거관리위원회"
+      }
+    },
+    {
+      "id": "22-chungbuk-boeun-okcheon-yeongdong-goesan-31",
+      "title": "기초급여와 부가급여 인상 추진",
+      "category": "",
+      "status": "notJudged",
+      "source": {
+        "sourceUrl": "https://policy.nec.go.kr/policy_pdf/20240410/PDF/PBINFO_PUB/4307/003_100153158_20240402_2.pdf",
+        "fetchedAt": "2026-09-28T02:30:00Z",
+        "publisher": "중앙선거관리위원회"
+      }
+    },
+    {
+      "id": "22-chungbuk-boeun-okcheon-yeongdong-goesan-32",
+      "title": "영동 보훈요양원 조속한 준공 추진",
+      "category": "",
+      "status": "notJudged",
+      "source": {
+        "sourceUrl": "https://policy.nec.go.kr/policy_pdf/20240410/PDF/PBINFO_PUB/4307/003_100153158_20240402_2.pdf",
+        "fetchedAt": "2026-09-28T02:30:00Z",
+        "publisher": "중앙선거관리위원회"
+      }
+    },
+    {
+      "id": "22-chungbuk-boeun-okcheon-yeongdong-goesan-33",
+      "title": "보훈관련 수당 인상 추진",
+      "category": "",
+      "status": "notJudged",
+      "source": {
+        "sourceUrl": "https://policy.nec.go.kr/policy_pdf/20240410/PDF/PBINFO_PUB/4307/003_100153158_20240402_2.pdf",
+        "fetchedAt": "2026-09-28T02:30:00Z",
+        "publisher": "중앙선거관리위원회"
+      }
+    },
+    {
+      "id": "22-chungbuk-boeun-okcheon-yeongdong-goesan-34",
+      "title": "불체포특권 포기",
+      "category": "",
+      "status": "notJudged",
+      "source": {
+        "sourceUrl": "https://policy.nec.go.kr/policy_pdf/20240410/PDF/PBINFO_PUB/4307/003_100153158_20240402_2.pdf",
+        "fetchedAt": "2026-09-28T02:30:00Z",
+        "publisher": "중앙선거관리위원회"
+      }
+    },
+    {
+      "id": "22-chungbuk-boeun-okcheon-yeongdong-goesan-35",
+      "title": "금고형 이상 확정시 재판 기간 세비 반납",
+      "category": "",
+      "status": "notJudged",
+      "source": {
+        "sourceUrl": "https://policy.nec.go.kr/policy_pdf/20240410/PDF/PBINFO_PUB/4307/003_100153158_20240402_2.pdf",
+        "fetchedAt": "2026-09-28T02:30:00Z",
+        "publisher": "중앙선거관리위원회"
+      }
+    },
+    {
+      "id": "22-chungbuk-boeun-okcheon-yeongdong-goesan-36",
+      "title": "충청권 제2외곽순환고속도로 옥천 동이IC 건설 추진",
+      "category": "",
+      "status": "notJudged",
+      "source": {
+        "sourceUrl": "https://policy.nec.go.kr/policy_pdf/20240410/PDF/PBINFO_PUB/4307/003_100153158_20240402_2.pdf",
+        "fetchedAt": "2026-09-28T02:30:00Z",
+        "publisher": "중앙선거관리위원회"
+      }
+    },
+    {
+      "id": "22-chungbuk-boeun-okcheon-yeongdong-goesan-37",
+      "title": "영동~옥천~보은~진천 고속도로 건설 추진",
+      "category": "",
+      "status": "notJudged",
+      "source": {
+        "sourceUrl": "https://policy.nec.go.kr/policy_pdf/20240410/PDF/PBINFO_PUB/4307/003_100153158_20240402_2.pdf",
+        "fetchedAt": "2026-09-28T02:30:00Z",
+        "publisher": "중앙선거관리위원회"
+      }
+    },
+    {
+      "id": "22-chungbuk-boeun-okcheon-yeongdong-goesan-38",
+      "title": "보은~괴산 고속도로 건설 추진",
+      "category": "",
+      "status": "notJudged",
+      "source": {
+        "sourceUrl": "https://policy.nec.go.kr/policy_pdf/20240410/PDF/PBINFO_PUB/4307/003_100153158_20240402_2.pdf",
+        "fetchedAt": "2026-09-28T02:30:00Z",
+        "publisher": "중앙선거관리위원회"
+      }
+    },
+    {
+      "id": "22-chungbuk-boeun-okcheon-yeongdong-goesan-39",
+      "title": "보은~대전 고속도로 건설 추진",
+      "category": "",
+      "status": "notJudged",
+      "source": {
+        "sourceUrl": "https://policy.nec.go.kr/policy_pdf/20240410/PDF/PBINFO_PUB/4307/003_100153158_20240402_2.pdf",
+        "fetchedAt": "2026-09-28T02:30:00Z",
+        "publisher": "중앙선거관리위원회"
+      }
+    },
+    {
+      "id": "22-chungbuk-boeun-okcheon-yeongdong-goesan-40",
+      "title": "오창~괴산 고속도로 건설 추진",
+      "category": "",
+      "status": "notJudged",
+      "source": {
+        "sourceUrl": "https://policy.nec.go.kr/policy_pdf/20240410/PDF/PBINFO_PUB/4307/003_100153158_20240402_2.pdf",
+        "fetchedAt": "2026-09-28T02:30:00Z",
+        "publisher": "중앙선거관리위원회"
+      }
+    },
+    {
+      "id": "22-chungbuk-boeun-okcheon-yeongdong-goesan-41",
+      "title": "①안 청주공항~보은(역)~영덕 철도 노선 추진",
+      "category": "",
+      "status": "notJudged",
+      "source": {
+        "sourceUrl": "https://policy.nec.go.kr/policy_pdf/20240410/PDF/PBINFO_PUB/4307/003_100153158_20240402_2.pdf",
+        "fetchedAt": "2026-09-28T02:30:00Z",
+        "publisher": "중앙선거관리위원회"
+      }
+    },
+    {
+      "id": "22-chungbuk-boeun-okcheon-yeongdong-goesan-42",
+      "title": "②안 청주공항~보은(역)~옥천(청산)~김천 철도 노선 추진",
+      "category": "",
+      "status": "notJudged",
+      "source": {
+        "sourceUrl": "https://policy.nec.go.kr/policy_pdf/20240410/PDF/PBINFO_PUB/4307/003_100153158_20240402_2.pdf",
+        "fetchedAt": "2026-09-28T02:30:00Z",
+        "publisher": "중앙선거관리위원회"
+      }
+    },
+    {
+      "id": "22-chungbuk-boeun-okcheon-yeongdong-goesan-43",
+      "title": "대전~옥천~영동 광역철도 추진",
+      "category": "",
+      "status": "notJudged",
+      "source": {
+        "sourceUrl": "https://policy.nec.go.kr/policy_pdf/20240410/PDF/PBINFO_PUB/4307/003_100153158_20240402_2.pdf",
+        "fetchedAt": "2026-09-28T02:30:00Z",
+        "publisher": "중앙선거관리위원회"
+      }
+    },
+    {
+      "id": "22-chungbuk-boeun-okcheon-yeongdong-goesan-44",
+      "title": "동서횡단철도 (서산~괴산~울진)추진",
+      "category": "",
+      "status": "notJudged",
+      "source": {
+        "sourceUrl": "https://policy.nec.go.kr/policy_pdf/20240410/PDF/PBINFO_PUB/4307/003_100153158_20240402_2.pdf",
+        "fetchedAt": "2026-09-28T02:30:00Z",
+        "publisher": "중앙선거관리위원회"
+      }
+    }
+  ]
+}

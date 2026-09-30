@@ -1,0 +1,385 @@
+{
+  "_note": "제22대 국회의원선거 충북 청주시흥덕구 당선인 이연희 (더불어민주당). 책자형 선거공보 PDF 8쪽 「청와대 청주 이전!」 공약과 PDF 9–10쪽 「흥덕의 변화 발전! 이연희가 합니다!」 01–05 아래 ● 항목. 8쪽은 번호 목록 밖이지만 한 쪽을 통째로 쓴 후보 본인의 대표 공약이라 맨 앞에 넣었다. PDF 7쪽의 더불어민주당 공약은 넣지 않았다. 제목은 원문 문구를 따랐고 바꾼 것은 앞 번호·끝의 !·장식 기호 덜어내기와 줄바꿈 이어 붙이기뿐이다. 분류(category)는 앱에 정해진 분류 체계가 없어 비워 두었다. 이행 여부는 판정하지 않았다(notJudged).",
+  "districtId": "nec-44b65d6d",
+  "source": {
+    "sourceUrl": "https://policy.nec.go.kr/policy_pdf/20240410/PDF/PBINFO_PUB/4302/003_100152498_20240402_4.pdf",
+    "fetchedAt": "2026-09-28T02:30:00Z",
+    "publisher": "중앙선거관리위원회"
+  },
+  "pledges": [
+    {
+      "id": "22-chungbuk-cheongju-heungdeok-01",
+      "title": "청와대 청주 이전",
+      "category": "",
+      "status": "notJudged",
+      "source": {
+        "sourceUrl": "https://policy.nec.go.kr/policy_pdf/20240410/PDF/PBINFO_PUB/4302/003_100152498_20240402_4.pdf",
+        "fetchedAt": "2026-09-28T02:30:00Z",
+        "publisher": "중앙선거관리위원회"
+      }
+    },
+    {
+      "id": "22-chungbuk-cheongju-heungdeok-02",
+      "title": "우리아이 보듬주택 (2자녀 24평, 3자녀 이상 33평 공공임대)",
+      "category": "",
+      "status": "notJudged",
+      "source": {
+        "sourceUrl": "https://policy.nec.go.kr/policy_pdf/20240410/PDF/PBINFO_PUB/4302/003_100152498_20240402_4.pdf",
+        "fetchedAt": "2026-09-28T02:30:00Z",
+        "publisher": "중앙선거관리위원회"
+      }
+    },
+    {
+      "id": "22-chungbuk-cheongju-heungdeok-03",
+      "title": "신혼부부 안정적인 주거 제공 (10년까지 확대)",
+      "category": "",
+      "status": "notJudged",
+      "source": {
+        "sourceUrl": "https://policy.nec.go.kr/policy_pdf/20240410/PDF/PBINFO_PUB/4302/003_100152498_20240402_4.pdf",
+        "fetchedAt": "2026-09-28T02:30:00Z",
+        "publisher": "중앙선거관리위원회"
+      }
+    },
+    {
+      "id": "22-chungbuk-cheongju-heungdeok-04",
+      "title": "결혼출산양육 ‘드림패키지’ 신혼부부에 10년 만기 1억 대출",
+      "category": "",
+      "status": "notJudged",
+      "source": {
+        "sourceUrl": "https://policy.nec.go.kr/policy_pdf/20240410/PDF/PBINFO_PUB/4302/003_100152498_20240402_4.pdf",
+        "fetchedAt": "2026-09-28T02:30:00Z",
+        "publisher": "중앙선거관리위원회"
+      }
+    },
+    {
+      "id": "22-chungbuk-cheongju-heungdeok-05",
+      "title": "아이돌봄서비스 국가 무한책임 보장",
+      "category": "",
+      "status": "notJudged",
+      "source": {
+        "sourceUrl": "https://policy.nec.go.kr/policy_pdf/20240410/PDF/PBINFO_PUB/4302/003_100152498_20240402_4.pdf",
+        "fetchedAt": "2026-09-28T02:30:00Z",
+        "publisher": "중앙선거관리위원회"
+      }
+    },
+    {
+      "id": "22-chungbuk-cheongju-heungdeok-06",
+      "title": "양육비 국가 대지급제도",
+      "category": "",
+      "status": "notJudged",
+      "source": {
+        "sourceUrl": "https://policy.nec.go.kr/policy_pdf/20240410/PDF/PBINFO_PUB/4302/003_100152498_20240402_4.pdf",
+        "fetchedAt": "2026-09-28T02:30:00Z",
+        "publisher": "중앙선거관리위원회"
+      }
+    },
+    {
+      "id": "22-chungbuk-cheongju-heungdeok-07",
+      "title": "출산 전후 휴가급여, 육아휴직 급여 보장",
+      "category": "",
+      "status": "notJudged",
+      "source": {
+        "sourceUrl": "https://policy.nec.go.kr/policy_pdf/20240410/PDF/PBINFO_PUB/4302/003_100152498_20240402_4.pdf",
+        "fetchedAt": "2026-09-28T02:30:00Z",
+        "publisher": "중앙선거관리위원회"
+      }
+    },
+    {
+      "id": "22-chungbuk-cheongju-heungdeok-08",
+      "title": "남성육아휴직 강화",
+      "category": "",
+      "status": "notJudged",
+      "source": {
+        "sourceUrl": "https://policy.nec.go.kr/policy_pdf/20240410/PDF/PBINFO_PUB/4302/003_100152498_20240402_4.pdf",
+        "fetchedAt": "2026-09-28T02:30:00Z",
+        "publisher": "중앙선거관리위원회"
+      }
+    },
+    {
+      "id": "22-chungbuk-cheongju-heungdeok-09",
+      "title": "원클릭 육아휴직제도 도입",
+      "category": "",
+      "status": "notJudged",
+      "source": {
+        "sourceUrl": "https://policy.nec.go.kr/policy_pdf/20240410/PDF/PBINFO_PUB/4302/003_100152498_20240402_4.pdf",
+        "fetchedAt": "2026-09-28T02:30:00Z",
+        "publisher": "중앙선거관리위원회"
+      }
+    },
+    {
+      "id": "22-chungbuk-cheongju-heungdeok-10",
+      "title": "경로당 주5회 점심제공",
+      "category": "",
+      "status": "notJudged",
+      "source": {
+        "sourceUrl": "https://policy.nec.go.kr/policy_pdf/20240410/PDF/PBINFO_PUB/4302/003_100152498_20240402_4.pdf",
+        "fetchedAt": "2026-09-28T02:30:00Z",
+        "publisher": "중앙선거관리위원회"
+      }
+    },
+    {
+      "id": "22-chungbuk-cheongju-heungdeok-11",
+      "title": "간병비 건강보험 적용",
+      "category": "",
+      "status": "notJudged",
+      "source": {
+        "sourceUrl": "https://policy.nec.go.kr/policy_pdf/20240410/PDF/PBINFO_PUB/4302/003_100152498_20240402_4.pdf",
+        "fetchedAt": "2026-09-28T02:30:00Z",
+        "publisher": "중앙선거관리위원회"
+      }
+    },
+    {
+      "id": "22-chungbuk-cheongju-heungdeok-12",
+      "title": "어르신 패스 (무상 교통패스)",
+      "category": "",
+      "status": "notJudged",
+      "source": {
+        "sourceUrl": "https://policy.nec.go.kr/policy_pdf/20240410/PDF/PBINFO_PUB/4302/003_100152498_20240402_4.pdf",
+        "fetchedAt": "2026-09-28T02:30:00Z",
+        "publisher": "중앙선거관리위원회"
+      }
+    },
+    {
+      "id": "22-chungbuk-cheongju-heungdeok-13",
+      "title": "어르신 전용 안심주택 10만호 공급",
+      "category": "",
+      "status": "notJudged",
+      "source": {
+        "sourceUrl": "https://policy.nec.go.kr/policy_pdf/20240410/PDF/PBINFO_PUB/4302/003_100152498_20240402_4.pdf",
+        "fetchedAt": "2026-09-28T02:30:00Z",
+        "publisher": "중앙선거관리위원회"
+      }
+    },
+    {
+      "id": "22-chungbuk-cheongju-heungdeok-14",
+      "title": "청주시 기회발전특구 지정 추진",
+      "category": "",
+      "status": "notJudged",
+      "source": {
+        "sourceUrl": "https://policy.nec.go.kr/policy_pdf/20240410/PDF/PBINFO_PUB/4302/003_100152498_20240402_4.pdf",
+        "fetchedAt": "2026-09-28T02:30:00Z",
+        "publisher": "중앙선거관리위원회"
+      }
+    },
+    {
+      "id": "22-chungbuk-cheongju-heungdeok-15",
+      "title": "지역 상권 상점가로 업그레이드",
+      "category": "",
+      "status": "notJudged",
+      "source": {
+        "sourceUrl": "https://policy.nec.go.kr/policy_pdf/20240410/PDF/PBINFO_PUB/4302/003_100152498_20240402_4.pdf",
+        "fetchedAt": "2026-09-28T02:30:00Z",
+        "publisher": "중앙선거관리위원회"
+      }
+    },
+    {
+      "id": "22-chungbuk-cheongju-heungdeok-16",
+      "title": "주차난 해소를 위한 종합대책 마련",
+      "category": "",
+      "status": "notJudged",
+      "source": {
+        "sourceUrl": "https://policy.nec.go.kr/policy_pdf/20240410/PDF/PBINFO_PUB/4302/003_100152498_20240402_4.pdf",
+        "fetchedAt": "2026-09-28T02:30:00Z",
+        "publisher": "중앙선거관리위원회"
+      }
+    },
+    {
+      "id": "22-chungbuk-cheongju-heungdeok-17",
+      "title": "청년 1인가구 이사비 지원",
+      "category": "",
+      "status": "notJudged",
+      "source": {
+        "sourceUrl": "https://policy.nec.go.kr/policy_pdf/20240410/PDF/PBINFO_PUB/4302/003_100152498_20240402_4.pdf",
+        "fetchedAt": "2026-09-28T02:30:00Z",
+        "publisher": "중앙선거관리위원회"
+      }
+    },
+    {
+      "id": "22-chungbuk-cheongju-heungdeok-18",
+      "title": "청년 1인가구 전월세 안심계약 서비스 지원",
+      "category": "",
+      "status": "notJudged",
+      "source": {
+        "sourceUrl": "https://policy.nec.go.kr/policy_pdf/20240410/PDF/PBINFO_PUB/4302/003_100152498_20240402_4.pdf",
+        "fetchedAt": "2026-09-28T02:30:00Z",
+        "publisher": "중앙선거관리위원회"
+      }
+    },
+    {
+      "id": "22-chungbuk-cheongju-heungdeok-19",
+      "title": "청주자립준비청 건립 통한 자립준비청년 종합지원",
+      "category": "",
+      "status": "notJudged",
+      "source": {
+        "sourceUrl": "https://policy.nec.go.kr/policy_pdf/20240410/PDF/PBINFO_PUB/4302/003_100152498_20240402_4.pdf",
+        "fetchedAt": "2026-09-28T02:30:00Z",
+        "publisher": "중앙선거관리위원회"
+      }
+    },
+    {
+      "id": "22-chungbuk-cheongju-heungdeok-20",
+      "title": "월3만원 청년패스 대중교통 무제한",
+      "category": "",
+      "status": "notJudged",
+      "source": {
+        "sourceUrl": "https://policy.nec.go.kr/policy_pdf/20240410/PDF/PBINFO_PUB/4302/003_100152498_20240402_4.pdf",
+        "fetchedAt": "2026-09-28T02:30:00Z",
+        "publisher": "중앙선거관리위원회"
+      }
+    },
+    {
+      "id": "22-chungbuk-cheongju-heungdeok-21",
+      "title": "지방거점대학 경쟁력 강화 ‘서울대 10개 만들기’",
+      "category": "",
+      "status": "notJudged",
+      "source": {
+        "sourceUrl": "https://policy.nec.go.kr/policy_pdf/20240410/PDF/PBINFO_PUB/4302/003_100152498_20240402_4.pdf",
+        "fetchedAt": "2026-09-28T02:30:00Z",
+        "publisher": "중앙선거관리위원회"
+      }
+    },
+    {
+      "id": "22-chungbuk-cheongju-heungdeok-22",
+      "title": "월 20만원 대학기숙사 5만호 공급",
+      "category": "",
+      "status": "notJudged",
+      "source": {
+        "sourceUrl": "https://policy.nec.go.kr/policy_pdf/20240410/PDF/PBINFO_PUB/4302/003_100152498_20240402_4.pdf",
+        "fetchedAt": "2026-09-28T02:30:00Z",
+        "publisher": "중앙선거관리위원회"
+      }
+    },
+    {
+      "id": "22-chungbuk-cheongju-heungdeok-23",
+      "title": "오송참사 국회 국정조사 실시",
+      "category": "",
+      "status": "notJudged",
+      "source": {
+        "sourceUrl": "https://policy.nec.go.kr/policy_pdf/20240410/PDF/PBINFO_PUB/4302/003_100152498_20240402_4.pdf",
+        "fetchedAt": "2026-09-28T02:30:00Z",
+        "publisher": "중앙선거관리위원회"
+      }
+    },
+    {
+      "id": "22-chungbuk-cheongju-heungdeok-24",
+      "title": "지하차도침수예방을 위한 법·제도 정비",
+      "category": "",
+      "status": "notJudged",
+      "source": {
+        "sourceUrl": "https://policy.nec.go.kr/policy_pdf/20240410/PDF/PBINFO_PUB/4302/003_100152498_20240402_4.pdf",
+        "fetchedAt": "2026-09-28T02:30:00Z",
+        "publisher": "중앙선거관리위원회"
+      }
+    },
+    {
+      "id": "22-chungbuk-cheongju-heungdeok-25",
+      "title": "소방관 처우개선 (소방재정 강화, 안전시설첨단장비 도입, 화재설비 전수조사 및 보강)",
+      "category": "",
+      "status": "notJudged",
+      "source": {
+        "sourceUrl": "https://policy.nec.go.kr/policy_pdf/20240410/PDF/PBINFO_PUB/4302/003_100152498_20240402_4.pdf",
+        "fetchedAt": "2026-09-28T02:30:00Z",
+        "publisher": "중앙선거관리위원회"
+      }
+    },
+    {
+      "id": "22-chungbuk-cheongju-heungdeok-26",
+      "title": "지능형·이동형 CCTV 확충을 통해 범죄발생지역 적재적소 배치 및 사각지대 해소",
+      "category": "",
+      "status": "notJudged",
+      "source": {
+        "sourceUrl": "https://policy.nec.go.kr/policy_pdf/20240410/PDF/PBINFO_PUB/4302/003_100152498_20240402_4.pdf",
+        "fetchedAt": "2026-09-28T02:30:00Z",
+        "publisher": "중앙선거관리위원회"
+      }
+    },
+    {
+      "id": "22-chungbuk-cheongju-heungdeok-27",
+      "title": "어린이 보행안전 위한 스마트 횡단보도 설치",
+      "category": "",
+      "status": "notJudged",
+      "source": {
+        "sourceUrl": "https://policy.nec.go.kr/policy_pdf/20240410/PDF/PBINFO_PUB/4302/003_100152498_20240402_4.pdf",
+        "fetchedAt": "2026-09-28T02:30:00Z",
+        "publisher": "중앙선거관리위원회"
+      }
+    },
+    {
+      "id": "22-chungbuk-cheongju-heungdeok-28",
+      "title": "1인가구 안전홈키트 제공 (스마트초인종·홈CCTV·디지털도어록·창문잠금장치 등)",
+      "category": "",
+      "status": "notJudged",
+      "source": {
+        "sourceUrl": "https://policy.nec.go.kr/policy_pdf/20240410/PDF/PBINFO_PUB/4302/003_100152498_20240402_4.pdf",
+        "fetchedAt": "2026-09-28T02:30:00Z",
+        "publisher": "중앙선거관리위원회"
+      }
+    },
+    {
+      "id": "22-chungbuk-cheongju-heungdeok-29",
+      "title": "등·하교길 공중전선 정비 및 전신주 철거",
+      "category": "",
+      "status": "notJudged",
+      "source": {
+        "sourceUrl": "https://policy.nec.go.kr/policy_pdf/20240410/PDF/PBINFO_PUB/4302/003_100152498_20240402_4.pdf",
+        "fetchedAt": "2026-09-28T02:30:00Z",
+        "publisher": "중앙선거관리위원회"
+      }
+    },
+    {
+      "id": "22-chungbuk-cheongju-heungdeok-30",
+      "title": "전통시장 안전 점검 및 노후 시설 정비",
+      "category": "",
+      "status": "notJudged",
+      "source": {
+        "sourceUrl": "https://policy.nec.go.kr/policy_pdf/20240410/PDF/PBINFO_PUB/4302/003_100152498_20240402_4.pdf",
+        "fetchedAt": "2026-09-28T02:30:00Z",
+        "publisher": "중앙선거관리위원회"
+      }
+    },
+    {
+      "id": "22-chungbuk-cheongju-heungdeok-31",
+      "title": "청주산업단지 주변 완충녹지 내 미세먼지 차단 숲 조성",
+      "category": "",
+      "status": "notJudged",
+      "source": {
+        "sourceUrl": "https://policy.nec.go.kr/policy_pdf/20240410/PDF/PBINFO_PUB/4302/003_100152498_20240402_4.pdf",
+        "fetchedAt": "2026-09-28T02:30:00Z",
+        "publisher": "중앙선거관리위원회"
+      }
+    },
+    {
+      "id": "22-chungbuk-cheongju-heungdeok-32",
+      "title": "복합문화예술창업공간 조성",
+      "category": "",
+      "status": "notJudged",
+      "source": {
+        "sourceUrl": "https://policy.nec.go.kr/policy_pdf/20240410/PDF/PBINFO_PUB/4302/003_100152498_20240402_4.pdf",
+        "fetchedAt": "2026-09-28T02:30:00Z",
+        "publisher": "중앙선거관리위원회"
+      }
+    },
+    {
+      "id": "22-chungbuk-cheongju-heungdeok-33",
+      "title": "미호강 친수공간 조성, 체육 및 여가공간 확충",
+      "category": "",
+      "status": "notJudged",
+      "source": {
+        "sourceUrl": "https://policy.nec.go.kr/policy_pdf/20240410/PDF/PBINFO_PUB/4302/003_100152498_20240402_4.pdf",
+        "fetchedAt": "2026-09-28T02:30:00Z",
+        "publisher": "중앙선거관리위원회"
+      }
+    },
+    {
+      "id": "22-chungbuk-cheongju-heungdeok-34",
+      "title": "저소득층 대상 문화누리카드 지원 확대(20만원)",
+      "category": "",
+      "status": "notJudged",
+      "source": {
+        "sourceUrl": "https://policy.nec.go.kr/policy_pdf/20240410/PDF/PBINFO_PUB/4302/003_100152498_20240402_4.pdf",
+        "fetchedAt": "2026-09-28T02:30:00Z",
+        "publisher": "중앙선거관리위원회"
+      }
+    }
+  ]
+}

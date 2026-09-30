@@ -1,0 +1,77 @@
+{
+  "_note": "제22대 국회의원선거 충북 청주시서원구 당선인 이광희 (더불어민주당). 책자형 선거공보 PDF 7–8쪽 「청주의 새로운 발전축! 서원이 달라집니다」의 분야별(기업·관광·행정·첨단산업·교육·주거) 대표 사업 6개. 앞의 분야 딱지와 아래 • 세부 항목은 넣지 않았다. PDF 9쪽 「서원 전문가 이광희의 행복 공약」 1–4는 분야별로 풀어 쓴 긴 목록이라, 6쪽 「대한민국을 바로 세우겠습니다!」는 입법 공약이라, 10쪽은 동·면별 공약이라 넣지 않았다. 제목은 원문 문구를 따랐고 바꾼 것은 위에 적은 구호·수식어 덜어내기뿐이다. 분류(category)는 앱에 정해진 분류 체계가 없어 비워 두었다. 이행 여부는 판정하지 않았다(notJudged).",
+  "districtId": "nec-8d4ec5bc",
+  "source": {
+    "sourceUrl": "https://policy.nec.go.kr/policy_pdf/20240410/PDF/PBINFO_PUB/4314/003_100152150_20240402_2.pdf",
+    "fetchedAt": "2026-09-28T02:00:00Z",
+    "publisher": "중앙선거관리위원회"
+  },
+  "pledges": [
+    {
+      "id": "22-chungbuk-cheongju-seowon-01",
+      "title": "현도 RE100 워케이션 단지 조성",
+      "category": "",
+      "status": "notJudged",
+      "source": {
+        "sourceUrl": "https://policy.nec.go.kr/policy_pdf/20240410/PDF/PBINFO_PUB/4314/003_100152150_20240402_2.pdf",
+        "fetchedAt": "2026-09-28T02:00:00Z",
+        "publisher": "중앙선거관리위원회"
+      }
+    },
+    {
+      "id": "22-chungbuk-cheongju-seowon-02",
+      "title": "최초의 내륙 국가정원 : 현도국가정원",
+      "category": "",
+      "status": "notJudged",
+      "source": {
+        "sourceUrl": "https://policy.nec.go.kr/policy_pdf/20240410/PDF/PBINFO_PUB/4314/003_100152150_20240402_2.pdf",
+        "fetchedAt": "2026-09-28T02:00:00Z",
+        "publisher": "중앙선거관리위원회"
+      }
+    },
+    {
+      "id": "22-chungbuk-cheongju-seowon-03",
+      "title": "서원행정타운 조성",
+      "category": "",
+      "status": "notJudged",
+      "source": {
+        "sourceUrl": "https://policy.nec.go.kr/policy_pdf/20240410/PDF/PBINFO_PUB/4314/003_100152150_20240402_2.pdf",
+        "fetchedAt": "2026-09-28T02:00:00Z",
+        "publisher": "중앙선거관리위원회"
+      }
+    },
+    {
+      "id": "22-chungbuk-cheongju-seowon-04",
+      "title": "서남권 탄소중립 사업연계형 연구단지 조성",
+      "category": "",
+      "status": "notJudged",
+      "source": {
+        "sourceUrl": "https://policy.nec.go.kr/policy_pdf/20240410/PDF/PBINFO_PUB/4314/003_100152150_20240402_2.pdf",
+        "fetchedAt": "2026-09-28T02:00:00Z",
+        "publisher": "중앙선거관리위원회"
+      }
+    },
+    {
+      "id": "22-chungbuk-cheongju-seowon-05",
+      "title": "청주교도소 이전 – 첨단교육특구 서원",
+      "category": "",
+      "status": "notJudged",
+      "source": {
+        "sourceUrl": "https://policy.nec.go.kr/policy_pdf/20240410/PDF/PBINFO_PUB/4314/003_100152150_20240402_2.pdf",
+        "fetchedAt": "2026-09-28T02:00:00Z",
+        "publisher": "중앙선거관리위원회"
+      }
+    },
+    {
+      "id": "22-chungbuk-cheongju-seowon-06",
+      "title": "정원도시 – 사람중심도시 서원 구축",
+      "category": "",
+      "status": "notJudged",
+      "source": {
+        "sourceUrl": "https://policy.nec.go.kr/policy_pdf/20240410/PDF/PBINFO_PUB/4314/003_100152150_20240402_2.pdf",
+        "fetchedAt": "2026-09-28T02:00:00Z",
+        "publisher": "중앙선거관리위원회"
+      }
+    }
+  ]
+}

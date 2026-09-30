@@ -1,0 +1,121 @@
+{
+  "_note": "제22대 국회의원선거 전북 전주시 을 당선인 이성윤 (더불어민주당). 책자형 선거공보에 번호 목록이 없어 PDF 5–9쪽에 굵은 제목으로 실린 약속 문장 10개를 쪽 순서대로 넣었다(끝의 마침표만 덜어냄). 제목 아래 • 세부 설명(김건희 종합 특검, 전주가정법원 설치 등)은 넣지 않았다. PDF 10쪽의 동별 공약과 3–4쪽의 이력 소개는 넣지 않았다. 제목은 원문 문구를 따랐고 바꾼 것은 앞 번호·끝의 !·장식 기호 덜어내기와 줄바꿈 이어 붙이기뿐이다. 분류(category)는 앱에 정해진 분류 체계가 없어 비워 두었다. 이행 여부는 판정하지 않았다(notJudged).",
+  "districtId": "nec-12e66607",
+  "source": {
+    "sourceUrl": "https://policy.nec.go.kr/policy_pdf/20240410/PDF/PBINFO_PUB/5301/003_100152861_20240402_2.pdf",
+    "fetchedAt": "2026-09-28T02:30:00Z",
+    "publisher": "중앙선거관리위원회"
+  },
+  "pledges": [
+    {
+      "id": "22-jeonbuk-jeonju-b-01",
+      "title": "윤석열정권, 심판하겠습니다",
+      "category": "",
+      "status": "notJudged",
+      "source": {
+        "sourceUrl": "https://policy.nec.go.kr/policy_pdf/20240410/PDF/PBINFO_PUB/5301/003_100152861_20240402_2.pdf",
+        "fetchedAt": "2026-09-28T02:30:00Z",
+        "publisher": "중앙선거관리위원회"
+      }
+    },
+    {
+      "id": "22-jeonbuk-jeonju-b-02",
+      "title": "국민의 편에서 검찰개혁을 완수하겠습니다",
+      "category": "",
+      "status": "notJudged",
+      "source": {
+        "sourceUrl": "https://policy.nec.go.kr/policy_pdf/20240410/PDF/PBINFO_PUB/5301/003_100152861_20240402_2.pdf",
+        "fetchedAt": "2026-09-28T02:30:00Z",
+        "publisher": "중앙선거관리위원회"
+      }
+    },
+    {
+      "id": "22-jeonbuk-jeonju-b-03",
+      "title": "국가예산, 전북 ‘몫’을 제대로 찾겠습니다",
+      "category": "",
+      "status": "notJudged",
+      "source": {
+        "sourceUrl": "https://policy.nec.go.kr/policy_pdf/20240410/PDF/PBINFO_PUB/5301/003_100152861_20240402_2.pdf",
+        "fetchedAt": "2026-09-28T02:30:00Z",
+        "publisher": "중앙선거관리위원회"
+      }
+    },
+    {
+      "id": "22-jeonbuk-jeonju-b-04",
+      "title": "헌법재판소 전주 이전을 추진하겠습니다",
+      "category": "",
+      "status": "notJudged",
+      "source": {
+        "sourceUrl": "https://policy.nec.go.kr/policy_pdf/20240410/PDF/PBINFO_PUB/5301/003_100152861_20240402_2.pdf",
+        "fetchedAt": "2026-09-28T02:30:00Z",
+        "publisher": "중앙선거관리위원회"
+      }
+    },
+    {
+      "id": "22-jeonbuk-jeonju-b-05",
+      "title": "전주 서부권 주차난 해결에 ‘박차’를 가하겠습니다",
+      "category": "",
+      "status": "notJudged",
+      "source": {
+        "sourceUrl": "https://policy.nec.go.kr/policy_pdf/20240410/PDF/PBINFO_PUB/5301/003_100152861_20240402_2.pdf",
+        "fetchedAt": "2026-09-28T02:30:00Z",
+        "publisher": "중앙선거관리위원회"
+      }
+    },
+    {
+      "id": "22-jeonbuk-jeonju-b-06",
+      "title": "전북관광벨트로 전주의 두 번째 관광 도약을 이뤄내겠습니다",
+      "category": "",
+      "status": "notJudged",
+      "source": {
+        "sourceUrl": "https://policy.nec.go.kr/policy_pdf/20240410/PDF/PBINFO_PUB/5301/003_100152861_20240402_2.pdf",
+        "fetchedAt": "2026-09-28T02:30:00Z",
+        "publisher": "중앙선거관리위원회"
+      }
+    },
+    {
+      "id": "22-jeonbuk-jeonju-b-07",
+      "title": "영화 클러스터 ‘영상숲(映像林) 상림’을 조성하여 전주의 문화적 위상을 높이겠습니다",
+      "category": "",
+      "status": "notJudged",
+      "source": {
+        "sourceUrl": "https://policy.nec.go.kr/policy_pdf/20240410/PDF/PBINFO_PUB/5301/003_100152861_20240402_2.pdf",
+        "fetchedAt": "2026-09-28T02:30:00Z",
+        "publisher": "중앙선거관리위원회"
+      }
+    },
+    {
+      "id": "22-jeonbuk-jeonju-b-08",
+      "title": "‘파크골프장’ 증설로 어르신의 건강과 여가를 챙기겠습니다",
+      "category": "",
+      "status": "notJudged",
+      "source": {
+        "sourceUrl": "https://policy.nec.go.kr/policy_pdf/20240410/PDF/PBINFO_PUB/5301/003_100152861_20240402_2.pdf",
+        "fetchedAt": "2026-09-28T02:30:00Z",
+        "publisher": "중앙선거관리위원회"
+      }
+    },
+    {
+      "id": "22-jeonbuk-jeonju-b-09",
+      "title": "소상공인을 위한 맞춤형 금융지원을 강화하겠습니다",
+      "category": "",
+      "status": "notJudged",
+      "source": {
+        "sourceUrl": "https://policy.nec.go.kr/policy_pdf/20240410/PDF/PBINFO_PUB/5301/003_100152861_20240402_2.pdf",
+        "fetchedAt": "2026-09-28T02:30:00Z",
+        "publisher": "중앙선거관리위원회"
+      }
+    },
+    {
+      "id": "22-jeonbuk-jeonju-b-10",
+      "title": "공공기관 지역인재 채용비율을 확대하겠습니다",
+      "category": "",
+      "status": "notJudged",
+      "source": {
+        "sourceUrl": "https://policy.nec.go.kr/policy_pdf/20240410/PDF/PBINFO_PUB/5301/003_100152861_20240402_2.pdf",
+        "fetchedAt": "2026-09-28T02:30:00Z",
+        "publisher": "중앙선거관리위원회"
+      }
+    }
+  ]
+}

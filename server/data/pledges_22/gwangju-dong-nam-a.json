@@ -1,0 +1,176 @@
+{
+  "_note": "제22대 국회의원선거 광주 동구남구 갑 당선인 정진욱 (더불어민주당). 책자형 선거공보 PDF 5–8쪽의 번호 붙은 공약 문장 15개: 5쪽 교통 ①–④, 6쪽 경제 ①–④, 7쪽 민생 2·4, 8쪽 교육 1–5. 7쪽의 1·3은 '(민주당 공약 연계)'로 표시된 당 공통 공약이라 넣지 않았다. 문장 아래 • 세부 항목, 4쪽의 입법 과제, 9–10쪽의 동별 공약은 넣지 않았다. 글자층 순서가 섞여 있어 쪽 이미지를 보고 옮겼고, 끝의 마침표만 덜어냈다. 제목은 원문 문구를 따랐고 바꾼 것은 위에 적은 구호·수식어 덜어내기뿐이다. 분류(category)는 앱에 정해진 분류 체계가 없어 비워 두었다. 이행 여부는 판정하지 않았다(notJudged).",
+  "districtId": "nec-edded54a",
+  "source": {
+    "sourceUrl": "https://policy.nec.go.kr/policy_pdf/20240410/PDF/PBINFO_PUB/2903/003_100151143_20240402_3.pdf",
+    "fetchedAt": "2026-09-27T17:14:30Z",
+    "publisher": "중앙선거관리위원회"
+  },
+  "pledges": [
+    {
+      "id": "22-gwangju-dong-nam-a-01",
+      "title": "상습 교통정체지역인 백운교차로부터 효천지구 입구까지 체계적이고 고도화된 ‘지능형 교통체계(ITS)시스템’ 도입을 통해 시민 불편을 최소화 하겠습니다",
+      "category": "",
+      "status": "notJudged",
+      "source": {
+        "sourceUrl": "https://policy.nec.go.kr/policy_pdf/20240410/PDF/PBINFO_PUB/2903/003_100151143_20240402_3.pdf",
+        "fetchedAt": "2026-09-27T17:14:30Z",
+        "publisher": "중앙선거관리위원회"
+      }
+    },
+    {
+      "id": "22-gwangju-dong-nam-a-02",
+      "title": "봉선2동~진월동 구간 도로 개설 통해 백운동~효천지구간 우회도로 기능을 수행하도록 하겠습니다",
+      "category": "",
+      "status": "notJudged",
+      "source": {
+        "sourceUrl": "https://policy.nec.go.kr/policy_pdf/20240410/PDF/PBINFO_PUB/2903/003_100151143_20240402_3.pdf",
+        "fetchedAt": "2026-09-27T17:14:30Z",
+        "publisher": "중앙선거관리위원회"
+      }
+    },
+    {
+      "id": "22-gwangju-dong-nam-a-03",
+      "title": "인구 30,000여명의 효천지구 주민들의 대중교통 불편 해소를 위해 버스 노선 조정 및 증차 문제, 학군 조정 등 지역 현안 해결을 위해 적극 뛰겠습니다",
+      "category": "",
+      "status": "notJudged",
+      "source": {
+        "sourceUrl": "https://policy.nec.go.kr/policy_pdf/20240410/PDF/PBINFO_PUB/2903/003_100151143_20240402_3.pdf",
+        "fetchedAt": "2026-09-27T17:14:30Z",
+        "publisher": "중앙선거관리위원회"
+      }
+    },
+    {
+      "id": "22-gwangju-dong-nam-a-04",
+      "title": "광주~나주 광역철도 효천지구(효천역) 경유 노선 반드시 이뤄내겠습니다",
+      "category": "",
+      "status": "notJudged",
+      "source": {
+        "sourceUrl": "https://policy.nec.go.kr/policy_pdf/20240410/PDF/PBINFO_PUB/2903/003_100151143_20240402_3.pdf",
+        "fetchedAt": "2026-09-27T17:14:30Z",
+        "publisher": "중앙선거관리위원회"
+      }
+    },
+    {
+      "id": "22-gwangju-dong-nam-a-05",
+      "title": "대촌 에너지밸리와 도시첨단산단에 첨단 기술 보유(소재·부품·장비 등) 강소기업을 적극 유치해 남구의 새로운 성장동력을 확보하겠습니다",
+      "category": "",
+      "status": "notJudged",
+      "source": {
+        "sourceUrl": "https://policy.nec.go.kr/policy_pdf/20240410/PDF/PBINFO_PUB/2903/003_100151143_20240402_3.pdf",
+        "fetchedAt": "2026-09-27T17:14:30Z",
+        "publisher": "중앙선거관리위원회"
+      }
+    },
+    {
+      "id": "22-gwangju-dong-nam-a-06",
+      "title": "대촌 에너지밸리에 광주와 남구의 미래를 내다보고 에너지, 인공지능 등 연관기업을 유치해 혁신형 메가시티 및 글로벌 에너지 허브도시로 만들겠습니다",
+      "category": "",
+      "status": "notJudged",
+      "source": {
+        "sourceUrl": "https://policy.nec.go.kr/policy_pdf/20240410/PDF/PBINFO_PUB/2903/003_100151143_20240402_3.pdf",
+        "fetchedAt": "2026-09-27T17:14:30Z",
+        "publisher": "중앙선거관리위원회"
+      }
+    },
+    {
+      "id": "22-gwangju-dong-nam-a-07",
+      "title": "송암산단 혁신지구(총사업비 1,560억원)는 기존의 모빌리티 정비 자원과 광주시의 미래차 관련 시설 등 인프라를 활용한 관련 애프터마켓(After Market) 산업과 인력 육성 등 복합 산업 지구로 조성하겠습니다",
+      "category": "",
+      "status": "notJudged",
+      "source": {
+        "sourceUrl": "https://policy.nec.go.kr/policy_pdf/20240410/PDF/PBINFO_PUB/2903/003_100151143_20240402_3.pdf",
+        "fetchedAt": "2026-09-27T17:14:30Z",
+        "publisher": "중앙선거관리위원회"
+      }
+    },
+    {
+      "id": "22-gwangju-dong-nam-a-08",
+      "title": "개발 잠재력이 풍부한 대촌지역의 발전을 위한 다양한 미래 비전을 준비하겠습니다",
+      "category": "",
+      "status": "notJudged",
+      "source": {
+        "sourceUrl": "https://policy.nec.go.kr/policy_pdf/20240410/PDF/PBINFO_PUB/2903/003_100151143_20240402_3.pdf",
+        "fetchedAt": "2026-09-27T17:14:30Z",
+        "publisher": "중앙선거관리위원회"
+      }
+    },
+    {
+      "id": "22-gwangju-dong-nam-a-09",
+      "title": "우리 경제의 뿌리인 소상공인과 자영업자의 고충 해결을 위해 최선 다해 뛰겠습니다",
+      "category": "",
+      "status": "notJudged",
+      "source": {
+        "sourceUrl": "https://policy.nec.go.kr/policy_pdf/20240410/PDF/PBINFO_PUB/2903/003_100151143_20240402_3.pdf",
+        "fetchedAt": "2026-09-27T17:14:30Z",
+        "publisher": "중앙선거관리위원회"
+      }
+    },
+    {
+      "id": "22-gwangju-dong-nam-a-10",
+      "title": "소외된 이웃 없는 따뜻한 남구! 함께 만드는 복지 도시를 만들겠습니다",
+      "category": "",
+      "status": "notJudged",
+      "source": {
+        "sourceUrl": "https://policy.nec.go.kr/policy_pdf/20240410/PDF/PBINFO_PUB/2903/003_100151143_20240402_3.pdf",
+        "fetchedAt": "2026-09-27T17:14:30Z",
+        "publisher": "중앙선거관리위원회"
+      }
+    },
+    {
+      "id": "22-gwangju-dong-nam-a-11",
+      "title": "교육부 주관, ‘지역 중심 돌봄·교육형 교육발전특구 시범지역’에 광주시 지정(‘24.2.28.)을 계기로 아이키우기 좋은 명품 교육도시 기반이 마련될 수 있도록 최선을 다하겠습니다",
+      "category": "",
+      "status": "notJudged",
+      "source": {
+        "sourceUrl": "https://policy.nec.go.kr/policy_pdf/20240410/PDF/PBINFO_PUB/2903/003_100151143_20240402_3.pdf",
+        "fetchedAt": "2026-09-27T17:14:30Z",
+        "publisher": "중앙선거관리위원회"
+      }
+    },
+    {
+      "id": "22-gwangju-dong-nam-a-12",
+      "title": "‘찾아가는 남구 교육포럼’ 운영으로 남구 학생들의 입시경쟁력을 높이겠습니다",
+      "category": "",
+      "status": "notJudged",
+      "source": {
+        "sourceUrl": "https://policy.nec.go.kr/policy_pdf/20240410/PDF/PBINFO_PUB/2903/003_100151143_20240402_3.pdf",
+        "fetchedAt": "2026-09-27T17:14:30Z",
+        "publisher": "중앙선거관리위원회"
+      }
+    },
+    {
+      "id": "22-gwangju-dong-nam-a-13",
+      "title": "교육특구 남구에 특별함을 더할 국회도서관 분원 유치를 추진하겠습니다",
+      "category": "",
+      "status": "notJudged",
+      "source": {
+        "sourceUrl": "https://policy.nec.go.kr/policy_pdf/20240410/PDF/PBINFO_PUB/2903/003_100151143_20240402_3.pdf",
+        "fetchedAt": "2026-09-27T17:14:30Z",
+        "publisher": "중앙선거관리위원회"
+      }
+    },
+    {
+      "id": "22-gwangju-dong-nam-a-14",
+      "title": "‘AI(인공지능) 기반 학생맞춤형학습센터’를 구축하겠습니다",
+      "category": "",
+      "status": "notJudged",
+      "source": {
+        "sourceUrl": "https://policy.nec.go.kr/policy_pdf/20240410/PDF/PBINFO_PUB/2903/003_100151143_20240402_3.pdf",
+        "fetchedAt": "2026-09-27T17:14:30Z",
+        "publisher": "중앙선거관리위원회"
+      }
+    },
+    {
+      "id": "22-gwangju-dong-nam-a-15",
+      "title": "‘아동수당 연령을 초등졸업까지 확대 통해 ‘아동국가책임제’를 구현하겠습니다",
+      "category": "",
+      "status": "notJudged",
+      "source": {
+        "sourceUrl": "https://policy.nec.go.kr/policy_pdf/20240410/PDF/PBINFO_PUB/2903/003_100151143_20240402_3.pdf",
+        "fetchedAt": "2026-09-27T17:14:30Z",
+        "publisher": "중앙선거관리위원회"
+      }
+    }
+  ]
+}

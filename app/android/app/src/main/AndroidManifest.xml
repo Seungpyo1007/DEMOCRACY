@@ -1,6 +1,15 @@
-<manifest xmlns:android="http://schemas.android.com/apk/res/android">
+<manifest xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools">
+    <!-- ML Kit GenAI (Gemini Nano) declares minSdk 26. The app keeps 24 and
+         only touches it on 26+ (OnDeviceAiPlugin / GeminiNanoBridge). -->
+    <uses-sdk tools:overrideLibrary="com.google.mlkit.genai.prompt,com.google.mlkit.genai.common,com.google.mlkit.genai.schema" />
+    <uses-permission android:name="android.permission.INTERNET" />
+    <!-- Coarse only: a district is kilometres wide. -->
+    <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
+    <!-- Face unlock / fingerprint before an account is deleted. -->
+    <uses-permission android:name="android.permission.USE_BIOMETRIC" />
     <application
-        android:label="democracy"
+        android:label="DEMOCRACY"
         android:name="${applicationName}"
         android:icon="@mipmap/ic_launcher">
         <activity
@@ -23,6 +32,17 @@
             <intent-filter>
                 <action android:name="android.intent.action.MAIN"/>
                 <category android:name="android.intent.category.LAUNCHER"/>
+            </intent-filter>
+        </activity>
+        <!-- Kakao sign-in returns here when KakaoTalk is not installed. -->
+        <activity
+            android:name="com.kakao.sdk.flutter.auth.AuthCodeHandlerActivity"
+            android:exported="true">
+            <intent-filter>
+                <action android:name="android.intent.action.VIEW" />
+                <category android:name="android.intent.category.DEFAULT" />
+                <category android:name="android.intent.category.BROWSABLE" />
+                <data android:scheme="kakao${kakaoNativeKey}" android:host="oauth" />
             </intent-filter>
         </activity>
         <!-- Don't delete the meta-data below.

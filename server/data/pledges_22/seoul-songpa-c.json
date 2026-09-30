@@ -1,0 +1,88 @@
+{
+  "_note": "제22대 국회의원선거 서울 송파구 병 당선인 남인순 (더불어민주당). 책자형 선거공보 PDF 7쪽(인쇄 10–11쪽) 「'더 큰 송파' 남인순의 실천 공약」 7개. 같은 쪽의 동별(오금·가락, 문정·장지, 거여·마천, 위례동) 약속, PDF 5–6쪽의 성과·공약이 섞인 분야별 설명, PDF 4쪽의 전국 입법·복지 약속은 넣지 않았다. 제목은 원문 문구를 따랐고 바꾼 것은 위에 적은 구호·수식어 덜어내기뿐이다. 분류(category)는 앱에 정해진 분류 체계가 없어 비워 두었다. 이행 여부는 판정하지 않았다(notJudged).",
+  "districtId": "nec-e37435de",
+  "source": {
+    "sourceUrl": "https://policy.nec.go.kr/policy_pdf/20240410/PDF/PBINFO_PUB/1124/003_100152240_20240402_3.pdf",
+    "fetchedAt": "2026-09-28T02:20:00Z",
+    "publisher": "중앙선거관리위원회"
+  },
+  "pledges": [
+    {
+      "id": "22-seoul-songpa-c-01",
+      "title": "투기과열지구 해제 추진",
+      "category": "",
+      "status": "notJudged",
+      "source": {
+        "sourceUrl": "https://policy.nec.go.kr/policy_pdf/20240410/PDF/PBINFO_PUB/1124/003_100152240_20240402_3.pdf",
+        "fetchedAt": "2026-09-28T02:20:00Z",
+        "publisher": "중앙선거관리위원회"
+      }
+    },
+    {
+      "id": "22-seoul-songpa-c-02",
+      "title": "재건축·재개발·리모델링 지원 및 안심주거환경(CCTV 확대 등) 조성",
+      "category": "",
+      "status": "notJudged",
+      "source": {
+        "sourceUrl": "https://policy.nec.go.kr/policy_pdf/20240410/PDF/PBINFO_PUB/1124/003_100152240_20240402_3.pdf",
+        "fetchedAt": "2026-09-28T02:20:00Z",
+        "publisher": "중앙선거관리위원회"
+      }
+    },
+    {
+      "id": "22-seoul-songpa-c-03",
+      "title": "안전한 통학로 조성 및 교육환경 개선(친환경 잔디 운동장)",
+      "category": "",
+      "status": "notJudged",
+      "source": {
+        "sourceUrl": "https://policy.nec.go.kr/policy_pdf/20240410/PDF/PBINFO_PUB/1124/003_100152240_20240402_3.pdf",
+        "fetchedAt": "2026-09-28T02:20:00Z",
+        "publisher": "중앙선거관리위원회"
+      }
+    },
+    {
+      "id": "22-seoul-songpa-c-04",
+      "title": "어린이공원 등 노후 공원시설 정비 및 맨발걷기길 조성 지원",
+      "category": "",
+      "status": "notJudged",
+      "source": {
+        "sourceUrl": "https://policy.nec.go.kr/policy_pdf/20240410/PDF/PBINFO_PUB/1124/003_100152240_20240402_3.pdf",
+        "fetchedAt": "2026-09-28T02:20:00Z",
+        "publisher": "중앙선거관리위원회"
+      }
+    },
+    {
+      "id": "22-seoul-songpa-c-05",
+      "title": "기후위기시대 저탄소 녹색도시 송파 실현",
+      "category": "",
+      "status": "notJudged",
+      "source": {
+        "sourceUrl": "https://policy.nec.go.kr/policy_pdf/20240410/PDF/PBINFO_PUB/1124/003_100152240_20240402_3.pdf",
+        "fetchedAt": "2026-09-28T02:20:00Z",
+        "publisher": "중앙선거관리위원회"
+      }
+    },
+    {
+      "id": "22-seoul-songpa-c-06",
+      "title": "마천·중앙시장, 문정 로데오거리, 위례트랜짓몰 등 상권 활성화",
+      "category": "",
+      "status": "notJudged",
+      "source": {
+        "sourceUrl": "https://policy.nec.go.kr/policy_pdf/20240410/PDF/PBINFO_PUB/1124/003_100152240_20240402_3.pdf",
+        "fetchedAt": "2026-09-28T02:20:00Z",
+        "publisher": "중앙선거관리위원회"
+      }
+    },
+    {
+      "id": "22-seoul-songpa-c-07",
+      "title": "종목별 생활체육 인프라 확충 및 활성화 지원",
+      "category": "",
+      "status": "notJudged",
+      "source": {
+        "sourceUrl": "https://policy.nec.go.kr/policy_pdf/20240410/PDF/PBINFO_PUB/1124/003_100152240_20240402_3.pdf",
+        "fetchedAt": "2026-09-28T02:20:00Z",
+        "publisher": "중앙선거관리위원회"
+      }
+    }
+  ]
+}

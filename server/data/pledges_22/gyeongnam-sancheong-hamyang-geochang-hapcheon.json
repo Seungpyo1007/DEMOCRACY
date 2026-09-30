@@ -1,0 +1,286 @@
+{
+  "_note": "제22대 국회의원선거 경남 산청군함양군거창군합천군 당선인 신성범 (국민의힘). 책자형 선거공보 PDF 5–6쪽 「지역을 바꾸겠습니다 경제를 살리겠습니다」 4개군 공통 공약 제목 5개와 PDF 7–10쪽 산청·함양·거창·합천 군별 공약 ☑ 제목 5개씩 20개. 제목 아래 - 세부 항목과 이행기간·재원 줄, 군별 쪽 아래 띠의 ● 항목(농축임업·교육복지·경제산업·체육문화), 3–4쪽 다짐과 실적은 넣지 않았다. 원문 끝의 마침표(만대산 터널 항목)는 그대로 두었다. 제목은 원문 문구를 따랐고 바꾼 것은 위에 적은 구호·수식어 덜어내기뿐이다. 분류(category)는 앱에 정해진 분류 체계가 없어 비워 두었다. 이행 여부는 판정하지 않았다(notJudged).",
+  "districtId": "nec-6e8074c6",
+  "source": {
+    "sourceUrl": "https://policy.nec.go.kr/policy_pdf/20240410/PDF/PBINFO_PUB/4819/003_100152030_20240402_3.pdf",
+    "fetchedAt": "2026-09-28T03:00:00Z",
+    "publisher": "중앙선거관리위원회"
+  },
+  "pledges": [
+    {
+      "id": "22-gyeongnam-sancheong-hamyang-geochang-hapcheon-01",
+      "title": "서북부경남 교통네트워크망을 완성하겠습니다",
+      "category": "",
+      "status": "notJudged",
+      "source": {
+        "sourceUrl": "https://policy.nec.go.kr/policy_pdf/20240410/PDF/PBINFO_PUB/4819/003_100152030_20240402_3.pdf",
+        "fetchedAt": "2026-09-28T03:00:00Z",
+        "publisher": "중앙선거관리위원회"
+      }
+    },
+    {
+      "id": "22-gyeongnam-sancheong-hamyang-geochang-hapcheon-02",
+      "title": "인구소멸·지방소멸 위기에 공동 대응하겠습니다",
+      "category": "",
+      "status": "notJudged",
+      "source": {
+        "sourceUrl": "https://policy.nec.go.kr/policy_pdf/20240410/PDF/PBINFO_PUB/4819/003_100152030_20240402_3.pdf",
+        "fetchedAt": "2026-09-28T03:00:00Z",
+        "publisher": "중앙선거관리위원회"
+      }
+    },
+    {
+      "id": "22-gyeongnam-sancheong-hamyang-geochang-hapcheon-03",
+      "title": "지역경제에 활력을 불어넣겠습니다",
+      "category": "",
+      "status": "notJudged",
+      "source": {
+        "sourceUrl": "https://policy.nec.go.kr/policy_pdf/20240410/PDF/PBINFO_PUB/4819/003_100152030_20240402_3.pdf",
+        "fetchedAt": "2026-09-28T03:00:00Z",
+        "publisher": "중앙선거관리위원회"
+      }
+    },
+    {
+      "id": "22-gyeongnam-sancheong-hamyang-geochang-hapcheon-04",
+      "title": "육아·교육·어르신 돌봄의 성공모델을 만들겠습니다",
+      "category": "",
+      "status": "notJudged",
+      "source": {
+        "sourceUrl": "https://policy.nec.go.kr/policy_pdf/20240410/PDF/PBINFO_PUB/4819/003_100152030_20240402_3.pdf",
+        "fetchedAt": "2026-09-28T03:00:00Z",
+        "publisher": "중앙선거관리위원회"
+      }
+    },
+    {
+      "id": "22-gyeongnam-sancheong-hamyang-geochang-hapcheon-05",
+      "title": "지역특화 청년·농업정책을 만들겠습니다",
+      "category": "",
+      "status": "notJudged",
+      "source": {
+        "sourceUrl": "https://policy.nec.go.kr/policy_pdf/20240410/PDF/PBINFO_PUB/4819/003_100152030_20240402_3.pdf",
+        "fetchedAt": "2026-09-28T03:00:00Z",
+        "publisher": "중앙선거관리위원회"
+      }
+    },
+    {
+      "id": "22-gyeongnam-sancheong-hamyang-geochang-hapcheon-06",
+      "title": "한방항노화일반산업단지 투자 유치를 활성화하겠습니다",
+      "category": "",
+      "status": "notJudged",
+      "source": {
+        "sourceUrl": "https://policy.nec.go.kr/policy_pdf/20240410/PDF/PBINFO_PUB/4819/003_100152030_20240402_3.pdf",
+        "fetchedAt": "2026-09-28T03:00:00Z",
+        "publisher": "중앙선거관리위원회"
+      }
+    },
+    {
+      "id": "22-gyeongnam-sancheong-hamyang-geochang-hapcheon-07",
+      "title": "한국한의약진흥원 산청 분원을 유치하겠습니다",
+      "category": "",
+      "status": "notJudged",
+      "source": {
+        "sourceUrl": "https://policy.nec.go.kr/policy_pdf/20240410/PDF/PBINFO_PUB/4819/003_100152030_20240402_3.pdf",
+        "fetchedAt": "2026-09-28T03:00:00Z",
+        "publisher": "중앙선거관리위원회"
+      }
+    },
+    {
+      "id": "22-gyeongnam-sancheong-hamyang-geochang-hapcheon-08",
+      "title": "지방상수도 급수구역 사업을 확대하겠습니다",
+      "category": "",
+      "status": "notJudged",
+      "source": {
+        "sourceUrl": "https://policy.nec.go.kr/policy_pdf/20240410/PDF/PBINFO_PUB/4819/003_100152030_20240402_3.pdf",
+        "fetchedAt": "2026-09-28T03:00:00Z",
+        "publisher": "중앙선거관리위원회"
+      }
+    },
+    {
+      "id": "22-gyeongnam-sancheong-hamyang-geochang-hapcheon-09",
+      "title": "공공하수도 수혜지역을 확장하겠습니다",
+      "category": "",
+      "status": "notJudged",
+      "source": {
+        "sourceUrl": "https://policy.nec.go.kr/policy_pdf/20240410/PDF/PBINFO_PUB/4819/003_100152030_20240402_3.pdf",
+        "fetchedAt": "2026-09-28T03:00:00Z",
+        "publisher": "중앙선거관리위원회"
+      }
+    },
+    {
+      "id": "22-gyeongnam-sancheong-hamyang-geochang-hapcheon-10",
+      "title": "소각시설 및 생활자원회수센터를 확충하겠습니다",
+      "category": "",
+      "status": "notJudged",
+      "source": {
+        "sourceUrl": "https://policy.nec.go.kr/policy_pdf/20240410/PDF/PBINFO_PUB/4819/003_100152030_20240402_3.pdf",
+        "fetchedAt": "2026-09-28T03:00:00Z",
+        "publisher": "중앙선거관리위원회"
+      }
+    },
+    {
+      "id": "22-gyeongnam-sancheong-hamyang-geochang-hapcheon-11",
+      "title": "노인복지회관, 장애인복지회관을 건립하겠습니다",
+      "category": "",
+      "status": "notJudged",
+      "source": {
+        "sourceUrl": "https://policy.nec.go.kr/policy_pdf/20240410/PDF/PBINFO_PUB/4819/003_100152030_20240402_3.pdf",
+        "fetchedAt": "2026-09-28T03:00:00Z",
+        "publisher": "중앙선거관리위원회"
+      }
+    },
+    {
+      "id": "22-gyeongnam-sancheong-hamyang-geochang-hapcheon-12",
+      "title": "함양농산물산지유통센터(APC)를 건립하겠습니다",
+      "category": "",
+      "status": "notJudged",
+      "source": {
+        "sourceUrl": "https://policy.nec.go.kr/policy_pdf/20240410/PDF/PBINFO_PUB/4819/003_100152030_20240402_3.pdf",
+        "fetchedAt": "2026-09-28T03:00:00Z",
+        "publisher": "중앙선거관리위원회"
+      }
+    },
+    {
+      "id": "22-gyeongnam-sancheong-hamyang-geochang-hapcheon-13",
+      "title": "남부권 거점 목재자원화센터를 만들겠습니다",
+      "category": "",
+      "status": "notJudged",
+      "source": {
+        "sourceUrl": "https://policy.nec.go.kr/policy_pdf/20240410/PDF/PBINFO_PUB/4819/003_100152030_20240402_3.pdf",
+        "fetchedAt": "2026-09-28T03:00:00Z",
+        "publisher": "중앙선거관리위원회"
+      }
+    },
+    {
+      "id": "22-gyeongnam-sancheong-hamyang-geochang-hapcheon-14",
+      "title": "함양 곡물(밀) 전용비축시설을 유치하겠습니다",
+      "category": "",
+      "status": "notJudged",
+      "source": {
+        "sourceUrl": "https://policy.nec.go.kr/policy_pdf/20240410/PDF/PBINFO_PUB/4819/003_100152030_20240402_3.pdf",
+        "fetchedAt": "2026-09-28T03:00:00Z",
+        "publisher": "중앙선거관리위원회"
+      }
+    },
+    {
+      "id": "22-gyeongnam-sancheong-hamyang-geochang-hapcheon-15",
+      "title": "청년창업지원센터(함양누이센터)를 지원하겠습니다",
+      "category": "",
+      "status": "notJudged",
+      "source": {
+        "sourceUrl": "https://policy.nec.go.kr/policy_pdf/20240410/PDF/PBINFO_PUB/4819/003_100152030_20240402_3.pdf",
+        "fetchedAt": "2026-09-28T03:00:00Z",
+        "publisher": "중앙선거관리위원회"
+      }
+    },
+    {
+      "id": "22-gyeongnam-sancheong-hamyang-geochang-hapcheon-16",
+      "title": "서북부농산물유통공사 건립, 책임지고 판매하겠습니다",
+      "category": "",
+      "status": "notJudged",
+      "source": {
+        "sourceUrl": "https://policy.nec.go.kr/policy_pdf/20240410/PDF/PBINFO_PUB/4819/003_100152030_20240402_3.pdf",
+        "fetchedAt": "2026-09-28T03:00:00Z",
+        "publisher": "중앙선거관리위원회"
+      }
+    },
+    {
+      "id": "22-gyeongnam-sancheong-hamyang-geochang-hapcheon-17",
+      "title": "창포원에 국제원예박람회 유치하겠습니다",
+      "category": "",
+      "status": "notJudged",
+      "source": {
+        "sourceUrl": "https://policy.nec.go.kr/policy_pdf/20240410/PDF/PBINFO_PUB/4819/003_100152030_20240402_3.pdf",
+        "fetchedAt": "2026-09-28T03:00:00Z",
+        "publisher": "중앙선거관리위원회"
+      }
+    },
+    {
+      "id": "22-gyeongnam-sancheong-hamyang-geochang-hapcheon-18",
+      "title": "가조온천지구를 국제온천휴양타운으로 조성하겠습니다",
+      "category": "",
+      "status": "notJudged",
+      "source": {
+        "sourceUrl": "https://policy.nec.go.kr/policy_pdf/20240410/PDF/PBINFO_PUB/4819/003_100152030_20240402_3.pdf",
+        "fetchedAt": "2026-09-28T03:00:00Z",
+        "publisher": "중앙선거관리위원회"
+      }
+    },
+    {
+      "id": "22-gyeongnam-sancheong-hamyang-geochang-hapcheon-19",
+      "title": "공교육 농촌교육지원센터를 유치하겠습니다",
+      "category": "",
+      "status": "notJudged",
+      "source": {
+        "sourceUrl": "https://policy.nec.go.kr/policy_pdf/20240410/PDF/PBINFO_PUB/4819/003_100152030_20240402_3.pdf",
+        "fetchedAt": "2026-09-28T03:00:00Z",
+        "publisher": "중앙선거관리위원회"
+      }
+    },
+    {
+      "id": "22-gyeongnam-sancheong-hamyang-geochang-hapcheon-20",
+      "title": "지역거점병원을 조기 완공하겠습니다",
+      "category": "",
+      "status": "notJudged",
+      "source": {
+        "sourceUrl": "https://policy.nec.go.kr/policy_pdf/20240410/PDF/PBINFO_PUB/4819/003_100152030_20240402_3.pdf",
+        "fetchedAt": "2026-09-28T03:00:00Z",
+        "publisher": "중앙선거관리위원회"
+      }
+    },
+    {
+      "id": "22-gyeongnam-sancheong-hamyang-geochang-hapcheon-21",
+      "title": "친환경 청정에너지의 중심지로 만들겠습니다",
+      "category": "",
+      "status": "notJudged",
+      "source": {
+        "sourceUrl": "https://policy.nec.go.kr/policy_pdf/20240410/PDF/PBINFO_PUB/4819/003_100152030_20240402_3.pdf",
+        "fetchedAt": "2026-09-28T03:00:00Z",
+        "publisher": "중앙선거관리위원회"
+      }
+    },
+    {
+      "id": "22-gyeongnam-sancheong-hamyang-geochang-hapcheon-22",
+      "title": "대구~광주 달빛철도 해인사 환승역을 설치하겠습니다",
+      "category": "",
+      "status": "notJudged",
+      "source": {
+        "sourceUrl": "https://policy.nec.go.kr/policy_pdf/20240410/PDF/PBINFO_PUB/4819/003_100152030_20240402_3.pdf",
+        "fetchedAt": "2026-09-28T03:00:00Z",
+        "publisher": "중앙선거관리위원회"
+      }
+    },
+    {
+      "id": "22-gyeongnam-sancheong-hamyang-geochang-hapcheon-23",
+      "title": "해인사~합천호~황매산~영상테마파크 관광벨트를 구축하겠습니다",
+      "category": "",
+      "status": "notJudged",
+      "source": {
+        "sourceUrl": "https://policy.nec.go.kr/policy_pdf/20240410/PDF/PBINFO_PUB/4819/003_100152030_20240402_3.pdf",
+        "fetchedAt": "2026-09-28T03:00:00Z",
+        "publisher": "중앙선거관리위원회"
+      }
+    },
+    {
+      "id": "22-gyeongnam-sancheong-hamyang-geochang-hapcheon-24",
+      "title": "만대산 터널 개설로 합천 남북소통을 완성하겠습니다.",
+      "category": "",
+      "status": "notJudged",
+      "source": {
+        "sourceUrl": "https://policy.nec.go.kr/policy_pdf/20240410/PDF/PBINFO_PUB/4819/003_100152030_20240402_3.pdf",
+        "fetchedAt": "2026-09-28T03:00:00Z",
+        "publisher": "중앙선거관리위원회"
+      }
+    },
+    {
+      "id": "22-gyeongnam-sancheong-hamyang-geochang-hapcheon-25",
+      "title": "합천영상테마파크에 제2촬영장을 추진하겠습니다",
+      "category": "",
+      "status": "notJudged",
+      "source": {
+        "sourceUrl": "https://policy.nec.go.kr/policy_pdf/20240410/PDF/PBINFO_PUB/4819/003_100152030_20240402_3.pdf",
+        "fetchedAt": "2026-09-28T03:00:00Z",
+        "publisher": "중앙선거관리위원회"
+      }
+    }
+  ]
+}

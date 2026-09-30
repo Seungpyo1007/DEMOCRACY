@@ -1,0 +1,1089 @@
+{
+  "_note": "제22대 국회의원선거 충남 당진시 당선인 어기구 (더불어민주당). 책자형 선거공보 PDF 7–10쪽 「당진발전 10대 분야 90개 공약」의 10개 분야 • 항목. 제목은 90개라고 했지만 쪽에 실린 • 항목은 98개라 모두 옮겼다. PDF의 글자층이 깨져 있어 쪽 이미지를 보고 옮겼고, 두 단으로 놓인 항목은 글자층과 같이 줄 단위(왼쪽→오른쪽)로 읽었다. PDF 5–6쪽의 지난 성과는 넣지 않았다. 제목은 원문 문구를 따랐고 바꾼 것은 앞 번호·끝의 !·장식 기호 덜어내기와 줄바꿈 이어 붙이기뿐이다. 분류(category)는 앱에 정해진 분류 체계가 없어 비워 두었다. 이행 여부는 판정하지 않았다(notJudged).",
+  "districtId": "nec-ef604253",
+  "source": {
+    "sourceUrl": "https://policy.nec.go.kr/policy_pdf/20240410/PDF/PBINFO_PUB/4416/003_100152484_20240402_3.pdf",
+    "fetchedAt": "2026-09-28T02:30:00Z",
+    "publisher": "중앙선거관리위원회"
+  },
+  "pledges": [
+    {
+      "id": "22-chungnam-dangjin-01",
+      "title": "국도 32호선 대체우회도로 건설",
+      "category": "",
+      "status": "notJudged",
+      "source": {
+        "sourceUrl": "https://policy.nec.go.kr/policy_pdf/20240410/PDF/PBINFO_PUB/4416/003_100152484_20240402_3.pdf",
+        "fetchedAt": "2026-09-28T02:30:00Z",
+        "publisher": "중앙선거관리위원회"
+      }
+    },
+    {
+      "id": "22-chungnam-dangjin-02",
+      "title": "당진IC(신평·합덕 방향) 입체교차로 건설 추진",
+      "category": "",
+      "status": "notJudged",
+      "source": {
+        "sourceUrl": "https://policy.nec.go.kr/policy_pdf/20240410/PDF/PBINFO_PUB/4416/003_100152484_20240402_3.pdf",
+        "fetchedAt": "2026-09-28T02:30:00Z",
+        "publisher": "중앙선거관리위원회"
+      }
+    },
+    {
+      "id": "22-chungnam-dangjin-03",
+      "title": "중부권 동서횡단철도 건설 추진",
+      "category": "",
+      "status": "notJudged",
+      "source": {
+        "sourceUrl": "https://policy.nec.go.kr/policy_pdf/20240410/PDF/PBINFO_PUB/4416/003_100152484_20240402_3.pdf",
+        "fetchedAt": "2026-09-28T02:30:00Z",
+        "publisher": "중앙선거관리위원회"
+      }
+    },
+    {
+      "id": "22-chungnam-dangjin-04",
+      "title": "석문산단인입철도 조속완공 및 여객병용 추진",
+      "category": "",
+      "status": "notJudged",
+      "source": {
+        "sourceUrl": "https://policy.nec.go.kr/policy_pdf/20240410/PDF/PBINFO_PUB/4416/003_100152484_20240402_3.pdf",
+        "fetchedAt": "2026-09-28T02:30:00Z",
+        "publisher": "중앙선거관리위원회"
+      }
+    },
+    {
+      "id": "22-chungnam-dangjin-05",
+      "title": "제2서해대교(해저터널) 독자 국비사업 추진",
+      "category": "",
+      "status": "notJudged",
+      "source": {
+        "sourceUrl": "https://policy.nec.go.kr/policy_pdf/20240410/PDF/PBINFO_PUB/4416/003_100152484_20240402_3.pdf",
+        "fetchedAt": "2026-09-28T02:30:00Z",
+        "publisher": "중앙선거관리위원회"
+      }
+    },
+    {
+      "id": "22-chungnam-dangjin-06",
+      "title": "지방도 615호(당진~순성~합덕구간) 4차선 확포장 추진",
+      "category": "",
+      "status": "notJudged",
+      "source": {
+        "sourceUrl": "https://policy.nec.go.kr/policy_pdf/20240410/PDF/PBINFO_PUB/4416/003_100152484_20240402_3.pdf",
+        "fetchedAt": "2026-09-28T02:30:00Z",
+        "publisher": "중앙선거관리위원회"
+      }
+    },
+    {
+      "id": "22-chungnam-dangjin-07",
+      "title": "시도1호선(면천IC~시내) 지방도 승격에 따른 확포장 조기추진",
+      "category": "",
+      "status": "notJudged",
+      "source": {
+        "sourceUrl": "https://policy.nec.go.kr/policy_pdf/20240410/PDF/PBINFO_PUB/4416/003_100152484_20240402_3.pdf",
+        "fetchedAt": "2026-09-28T02:30:00Z",
+        "publisher": "중앙선거관리위원회"
+      }
+    },
+    {
+      "id": "22-chungnam-dangjin-08",
+      "title": "신평~내항 간 연륙교, 당진~아산 고속도로, 당진~대산 고속도로, 당진~서산 국지도 70호선, 합덕~고덕IC 국도 40호선 등 조속완공",
+      "category": "",
+      "status": "notJudged",
+      "source": {
+        "sourceUrl": "https://policy.nec.go.kr/policy_pdf/20240410/PDF/PBINFO_PUB/4416/003_100152484_20240402_3.pdf",
+        "fetchedAt": "2026-09-28T02:30:00Z",
+        "publisher": "중앙선거관리위원회"
+      }
+    },
+    {
+      "id": "22-chungnam-dangjin-09",
+      "title": "쌀값 포함 주요 농산물 가격안정제 도입",
+      "category": "",
+      "status": "notJudged",
+      "source": {
+        "sourceUrl": "https://policy.nec.go.kr/policy_pdf/20240410/PDF/PBINFO_PUB/4416/003_100152484_20240402_3.pdf",
+        "fetchedAt": "2026-09-28T02:30:00Z",
+        "publisher": "중앙선거관리위원회"
+      }
+    },
+    {
+      "id": "22-chungnam-dangjin-10",
+      "title": "한우산업 활성화를 위한 한우법 제정",
+      "category": "",
+      "status": "notJudged",
+      "source": {
+        "sourceUrl": "https://policy.nec.go.kr/policy_pdf/20240410/PDF/PBINFO_PUB/4416/003_100152484_20240402_3.pdf",
+        "fetchedAt": "2026-09-28T02:30:00Z",
+        "publisher": "중앙선거관리위원회"
+      }
+    },
+    {
+      "id": "22-chungnam-dangjin-11",
+      "title": "양봉직불제 도입 및 밀원수 조성",
+      "category": "",
+      "status": "notJudged",
+      "source": {
+        "sourceUrl": "https://policy.nec.go.kr/policy_pdf/20240410/PDF/PBINFO_PUB/4416/003_100152484_20240402_3.pdf",
+        "fetchedAt": "2026-09-28T02:30:00Z",
+        "publisher": "중앙선거관리위원회"
+      }
+    },
+    {
+      "id": "22-chungnam-dangjin-12",
+      "title": "시골전답 매매활성화 위한 농지법 개정",
+      "category": "",
+      "status": "notJudged",
+      "source": {
+        "sourceUrl": "https://policy.nec.go.kr/policy_pdf/20240410/PDF/PBINFO_PUB/4416/003_100152484_20240402_3.pdf",
+        "fetchedAt": "2026-09-28T02:30:00Z",
+        "publisher": "중앙선거관리위원회"
+      }
+    },
+    {
+      "id": "22-chungnam-dangjin-13",
+      "title": "가뭄·홍수 등 재난대비 농업기반시설 확충",
+      "category": "",
+      "status": "notJudged",
+      "source": {
+        "sourceUrl": "https://policy.nec.go.kr/policy_pdf/20240410/PDF/PBINFO_PUB/4416/003_100152484_20240402_3.pdf",
+        "fetchedAt": "2026-09-28T02:30:00Z",
+        "publisher": "중앙선거관리위원회"
+      }
+    },
+    {
+      "id": "22-chungnam-dangjin-14",
+      "title": "인력난 해소를 위한 농촌인력중개센터 건립",
+      "category": "",
+      "status": "notJudged",
+      "source": {
+        "sourceUrl": "https://policy.nec.go.kr/policy_pdf/20240410/PDF/PBINFO_PUB/4416/003_100152484_20240402_3.pdf",
+        "fetchedAt": "2026-09-28T02:30:00Z",
+        "publisher": "중앙선거관리위원회"
+      }
+    },
+    {
+      "id": "22-chungnam-dangjin-15",
+      "title": "석문간척지 활용 주민수익사업 지원",
+      "category": "",
+      "status": "notJudged",
+      "source": {
+        "sourceUrl": "https://policy.nec.go.kr/policy_pdf/20240410/PDF/PBINFO_PUB/4416/003_100152484_20240402_3.pdf",
+        "fetchedAt": "2026-09-28T02:30:00Z",
+        "publisher": "중앙선거관리위원회"
+      }
+    },
+    {
+      "id": "22-chungnam-dangjin-16",
+      "title": "농업인회관 건립 추진",
+      "category": "",
+      "status": "notJudged",
+      "source": {
+        "sourceUrl": "https://policy.nec.go.kr/policy_pdf/20240410/PDF/PBINFO_PUB/4416/003_100152484_20240402_3.pdf",
+        "fetchedAt": "2026-09-28T02:30:00Z",
+        "publisher": "중앙선거관리위원회"
+      }
+    },
+    {
+      "id": "22-chungnam-dangjin-17",
+      "title": "수산공익직불금 예산규모 확대",
+      "category": "",
+      "status": "notJudged",
+      "source": {
+        "sourceUrl": "https://policy.nec.go.kr/policy_pdf/20240410/PDF/PBINFO_PUB/4416/003_100152484_20240402_3.pdf",
+        "fetchedAt": "2026-09-28T02:30:00Z",
+        "publisher": "중앙선거관리위원회"
+      }
+    },
+    {
+      "id": "22-chungnam-dangjin-18",
+      "title": "어촌어항재생사업 확대",
+      "category": "",
+      "status": "notJudged",
+      "source": {
+        "sourceUrl": "https://policy.nec.go.kr/policy_pdf/20240410/PDF/PBINFO_PUB/4416/003_100152484_20240402_3.pdf",
+        "fetchedAt": "2026-09-28T02:30:00Z",
+        "publisher": "중앙선거관리위원회"
+      }
+    },
+    {
+      "id": "22-chungnam-dangjin-19",
+      "title": "영농비용 절감을 위한 필수농자재 국가지원제 도입",
+      "category": "",
+      "status": "notJudged",
+      "source": {
+        "sourceUrl": "https://policy.nec.go.kr/policy_pdf/20240410/PDF/PBINFO_PUB/4416/003_100152484_20240402_3.pdf",
+        "fetchedAt": "2026-09-28T02:30:00Z",
+        "publisher": "중앙선거관리위원회"
+      }
+    },
+    {
+      "id": "22-chungnam-dangjin-20",
+      "title": "농어민의 정책참여를 위한 농어업회의소법 제정",
+      "category": "",
+      "status": "notJudged",
+      "source": {
+        "sourceUrl": "https://policy.nec.go.kr/policy_pdf/20240410/PDF/PBINFO_PUB/4416/003_100152484_20240402_3.pdf",
+        "fetchedAt": "2026-09-28T02:30:00Z",
+        "publisher": "중앙선거관리위원회"
+      }
+    },
+    {
+      "id": "22-chungnam-dangjin-21",
+      "title": "어린이 체험형 테마파크 건립",
+      "category": "",
+      "status": "notJudged",
+      "source": {
+        "sourceUrl": "https://policy.nec.go.kr/policy_pdf/20240410/PDF/PBINFO_PUB/4416/003_100152484_20240402_3.pdf",
+        "fetchedAt": "2026-09-28T02:30:00Z",
+        "publisher": "중앙선거관리위원회"
+      }
+    },
+    {
+      "id": "22-chungnam-dangjin-22",
+      "title": "보육교사 1인당 아동비율 축소 추진",
+      "category": "",
+      "status": "notJudged",
+      "source": {
+        "sourceUrl": "https://policy.nec.go.kr/policy_pdf/20240410/PDF/PBINFO_PUB/4416/003_100152484_20240402_3.pdf",
+        "fetchedAt": "2026-09-28T02:30:00Z",
+        "publisher": "중앙선거관리위원회"
+      }
+    },
+    {
+      "id": "22-chungnam-dangjin-23",
+      "title": "드론·코딩 등 미래산업교육 강화",
+      "category": "",
+      "status": "notJudged",
+      "source": {
+        "sourceUrl": "https://policy.nec.go.kr/policy_pdf/20240410/PDF/PBINFO_PUB/4416/003_100152484_20240402_3.pdf",
+        "fetchedAt": "2026-09-28T02:30:00Z",
+        "publisher": "중앙선거관리위원회"
+      }
+    },
+    {
+      "id": "22-chungnam-dangjin-24",
+      "title": "고교학점제 시행에 따른 온라인고 신설",
+      "category": "",
+      "status": "notJudged",
+      "source": {
+        "sourceUrl": "https://policy.nec.go.kr/policy_pdf/20240410/PDF/PBINFO_PUB/4416/003_100152484_20240402_3.pdf",
+        "fetchedAt": "2026-09-28T02:30:00Z",
+        "publisher": "중앙선거관리위원회"
+      }
+    },
+    {
+      "id": "22-chungnam-dangjin-25",
+      "title": "교사역량 강화를 위한 연수프로그램 확대",
+      "category": "",
+      "status": "notJudged",
+      "source": {
+        "sourceUrl": "https://policy.nec.go.kr/policy_pdf/20240410/PDF/PBINFO_PUB/4416/003_100152484_20240402_3.pdf",
+        "fetchedAt": "2026-09-28T02:30:00Z",
+        "publisher": "중앙선거관리위원회"
+      }
+    },
+    {
+      "id": "22-chungnam-dangjin-26",
+      "title": "충남 교직원 휴양시설 정상 추진",
+      "category": "",
+      "status": "notJudged",
+      "source": {
+        "sourceUrl": "https://policy.nec.go.kr/policy_pdf/20240410/PDF/PBINFO_PUB/4416/003_100152484_20240402_3.pdf",
+        "fetchedAt": "2026-09-28T02:30:00Z",
+        "publisher": "중앙선거관리위원회"
+      }
+    },
+    {
+      "id": "22-chungnam-dangjin-27",
+      "title": "농어촌 소규모학교 특성화 교육지원 강화",
+      "category": "",
+      "status": "notJudged",
+      "source": {
+        "sourceUrl": "https://policy.nec.go.kr/policy_pdf/20240410/PDF/PBINFO_PUB/4416/003_100152484_20240402_3.pdf",
+        "fetchedAt": "2026-09-28T02:30:00Z",
+        "publisher": "중앙선거관리위원회"
+      }
+    },
+    {
+      "id": "22-chungnam-dangjin-28",
+      "title": "공공도서관 확충",
+      "category": "",
+      "status": "notJudged",
+      "source": {
+        "sourceUrl": "https://policy.nec.go.kr/policy_pdf/20240410/PDF/PBINFO_PUB/4416/003_100152484_20240402_3.pdf",
+        "fetchedAt": "2026-09-28T02:30:00Z",
+        "publisher": "중앙선거관리위원회"
+      }
+    },
+    {
+      "id": "22-chungnam-dangjin-29",
+      "title": "과밀학급 해소를 위한 관내 학급(유·초·중) 증설",
+      "category": "",
+      "status": "notJudged",
+      "source": {
+        "sourceUrl": "https://policy.nec.go.kr/policy_pdf/20240410/PDF/PBINFO_PUB/4416/003_100152484_20240402_3.pdf",
+        "fetchedAt": "2026-09-28T02:30:00Z",
+        "publisher": "중앙선거관리위원회"
+      }
+    },
+    {
+      "id": "22-chungnam-dangjin-30",
+      "title": "고등학교 신설 추진",
+      "category": "",
+      "status": "notJudged",
+      "source": {
+        "sourceUrl": "https://policy.nec.go.kr/policy_pdf/20240410/PDF/PBINFO_PUB/4416/003_100152484_20240402_3.pdf",
+        "fetchedAt": "2026-09-28T02:30:00Z",
+        "publisher": "중앙선거관리위원회"
+      }
+    },
+    {
+      "id": "22-chungnam-dangjin-31",
+      "title": "교육국제화특구 지정에 따른 학생외국어연수 기회 확대",
+      "category": "",
+      "status": "notJudged",
+      "source": {
+        "sourceUrl": "https://policy.nec.go.kr/policy_pdf/20240410/PDF/PBINFO_PUB/4416/003_100152484_20240402_3.pdf",
+        "fetchedAt": "2026-09-28T02:30:00Z",
+        "publisher": "중앙선거관리위원회"
+      }
+    },
+    {
+      "id": "22-chungnam-dangjin-32",
+      "title": "직업교육혁신지구 지정에 따른 산학연계 취업지원 강화",
+      "category": "",
+      "status": "notJudged",
+      "source": {
+        "sourceUrl": "https://policy.nec.go.kr/policy_pdf/20240410/PDF/PBINFO_PUB/4416/003_100152484_20240402_3.pdf",
+        "fetchedAt": "2026-09-28T02:30:00Z",
+        "publisher": "중앙선거관리위원회"
+      }
+    },
+    {
+      "id": "22-chungnam-dangjin-33",
+      "title": "당진천 재정비 및 테마거리 조성",
+      "category": "",
+      "status": "notJudged",
+      "source": {
+        "sourceUrl": "https://policy.nec.go.kr/policy_pdf/20240410/PDF/PBINFO_PUB/4416/003_100152484_20240402_3.pdf",
+        "fetchedAt": "2026-09-28T02:30:00Z",
+        "publisher": "중앙선거관리위원회"
+      }
+    },
+    {
+      "id": "22-chungnam-dangjin-34",
+      "title": "호수공원 조기추진 및 공원 내 식물원 조성",
+      "category": "",
+      "status": "notJudged",
+      "source": {
+        "sourceUrl": "https://policy.nec.go.kr/policy_pdf/20240410/PDF/PBINFO_PUB/4416/003_100152484_20240402_3.pdf",
+        "fetchedAt": "2026-09-28T02:30:00Z",
+        "publisher": "중앙선거관리위원회"
+      }
+    },
+    {
+      "id": "22-chungnam-dangjin-35",
+      "title": "당진터미널 확장 및 복합문화센터 유치",
+      "category": "",
+      "status": "notJudged",
+      "source": {
+        "sourceUrl": "https://policy.nec.go.kr/policy_pdf/20240410/PDF/PBINFO_PUB/4416/003_100152484_20240402_3.pdf",
+        "fetchedAt": "2026-09-28T02:30:00Z",
+        "publisher": "중앙선거관리위원회"
+      }
+    },
+    {
+      "id": "22-chungnam-dangjin-36",
+      "title": "수변공원 내 가족형 워터파크 건립 추진",
+      "category": "",
+      "status": "notJudged",
+      "source": {
+        "sourceUrl": "https://policy.nec.go.kr/policy_pdf/20240410/PDF/PBINFO_PUB/4416/003_100152484_20240402_3.pdf",
+        "fetchedAt": "2026-09-28T02:30:00Z",
+        "publisher": "중앙선거관리위원회"
+      }
+    },
+    {
+      "id": "22-chungnam-dangjin-37",
+      "title": "담수호(저수지) 활용 수변공원 조성",
+      "category": "",
+      "status": "notJudged",
+      "source": {
+        "sourceUrl": "https://policy.nec.go.kr/policy_pdf/20240410/PDF/PBINFO_PUB/4416/003_100152484_20240402_3.pdf",
+        "fetchedAt": "2026-09-28T02:30:00Z",
+        "publisher": "중앙선거관리위원회"
+      }
+    },
+    {
+      "id": "22-chungnam-dangjin-38",
+      "title": "군부대(예비군훈련장) 이전 추진",
+      "category": "",
+      "status": "notJudged",
+      "source": {
+        "sourceUrl": "https://policy.nec.go.kr/policy_pdf/20240410/PDF/PBINFO_PUB/4416/003_100152484_20240402_3.pdf",
+        "fetchedAt": "2026-09-28T02:30:00Z",
+        "publisher": "중앙선거관리위원회"
+      }
+    },
+    {
+      "id": "22-chungnam-dangjin-39",
+      "title": "봉화산·송악산·팔아산 등 공원 조성",
+      "category": "",
+      "status": "notJudged",
+      "source": {
+        "sourceUrl": "https://policy.nec.go.kr/policy_pdf/20240410/PDF/PBINFO_PUB/4416/003_100152484_20240402_3.pdf",
+        "fetchedAt": "2026-09-28T02:30:00Z",
+        "publisher": "중앙선거관리위원회"
+      }
+    },
+    {
+      "id": "22-chungnam-dangjin-40",
+      "title": "대호만 수변개발 인프라 구축",
+      "category": "",
+      "status": "notJudged",
+      "source": {
+        "sourceUrl": "https://policy.nec.go.kr/policy_pdf/20240410/PDF/PBINFO_PUB/4416/003_100152484_20240402_3.pdf",
+        "fetchedAt": "2026-09-28T02:30:00Z",
+        "publisher": "중앙선거관리위원회"
+      }
+    },
+    {
+      "id": "22-chungnam-dangjin-41",
+      "title": "안심 등하굣길을 위한 안전시설 확충",
+      "category": "",
+      "status": "notJudged",
+      "source": {
+        "sourceUrl": "https://policy.nec.go.kr/policy_pdf/20240410/PDF/PBINFO_PUB/4416/003_100152484_20240402_3.pdf",
+        "fetchedAt": "2026-09-28T02:30:00Z",
+        "publisher": "중앙선거관리위원회"
+      }
+    },
+    {
+      "id": "22-chungnam-dangjin-42",
+      "title": "농로활용 친환경 자전거도로 확충",
+      "category": "",
+      "status": "notJudged",
+      "source": {
+        "sourceUrl": "https://policy.nec.go.kr/policy_pdf/20240410/PDF/PBINFO_PUB/4416/003_100152484_20240402_3.pdf",
+        "fetchedAt": "2026-09-28T02:30:00Z",
+        "publisher": "중앙선거관리위원회"
+      }
+    },
+    {
+      "id": "22-chungnam-dangjin-43",
+      "title": "주차난 해소를 위한 주차공간 확보",
+      "category": "",
+      "status": "notJudged",
+      "source": {
+        "sourceUrl": "https://policy.nec.go.kr/policy_pdf/20240410/PDF/PBINFO_PUB/4416/003_100152484_20240402_3.pdf",
+        "fetchedAt": "2026-09-28T02:30:00Z",
+        "publisher": "중앙선거관리위원회"
+      }
+    },
+    {
+      "id": "22-chungnam-dangjin-44",
+      "title": "당진시 독자관할 관공서 유치",
+      "category": "",
+      "status": "notJudged",
+      "source": {
+        "sourceUrl": "https://policy.nec.go.kr/policy_pdf/20240410/PDF/PBINFO_PUB/4416/003_100152484_20240402_3.pdf",
+        "fetchedAt": "2026-09-28T02:30:00Z",
+        "publisher": "중앙선거관리위원회"
+      }
+    },
+    {
+      "id": "22-chungnam-dangjin-45",
+      "title": "전통시장 및 상가 활성화 지원",
+      "category": "",
+      "status": "notJudged",
+      "source": {
+        "sourceUrl": "https://policy.nec.go.kr/policy_pdf/20240410/PDF/PBINFO_PUB/4416/003_100152484_20240402_3.pdf",
+        "fetchedAt": "2026-09-28T02:30:00Z",
+        "publisher": "중앙선거관리위원회"
+      }
+    },
+    {
+      "id": "22-chungnam-dangjin-46",
+      "title": "소상공인회관 건립 추진",
+      "category": "",
+      "status": "notJudged",
+      "source": {
+        "sourceUrl": "https://policy.nec.go.kr/policy_pdf/20240410/PDF/PBINFO_PUB/4416/003_100152484_20240402_3.pdf",
+        "fetchedAt": "2026-09-28T02:30:00Z",
+        "publisher": "중앙선거관리위원회"
+      }
+    },
+    {
+      "id": "22-chungnam-dangjin-47",
+      "title": "방범 CCTV 확충",
+      "category": "",
+      "status": "notJudged",
+      "source": {
+        "sourceUrl": "https://policy.nec.go.kr/policy_pdf/20240410/PDF/PBINFO_PUB/4416/003_100152484_20240402_3.pdf",
+        "fetchedAt": "2026-09-28T02:30:00Z",
+        "publisher": "중앙선거관리위원회"
+      }
+    },
+    {
+      "id": "22-chungnam-dangjin-48",
+      "title": "삽교천~맷돌포 출렁다리 설치 및 물빛쇼 유치",
+      "category": "",
+      "status": "notJudged",
+      "source": {
+        "sourceUrl": "https://policy.nec.go.kr/policy_pdf/20240410/PDF/PBINFO_PUB/4416/003_100152484_20240402_3.pdf",
+        "fetchedAt": "2026-09-28T02:30:00Z",
+        "publisher": "중앙선거관리위원회"
+      }
+    },
+    {
+      "id": "22-chungnam-dangjin-49",
+      "title": "4·4독립만세운동 역사공원 성역화사업 완성",
+      "category": "",
+      "status": "notJudged",
+      "source": {
+        "sourceUrl": "https://policy.nec.go.kr/policy_pdf/20240410/PDF/PBINFO_PUB/4416/003_100152484_20240402_3.pdf",
+        "fetchedAt": "2026-09-28T02:30:00Z",
+        "publisher": "중앙선거관리위원회"
+      }
+    },
+    {
+      "id": "22-chungnam-dangjin-50",
+      "title": "도비도 관광휴양단지 공영개발 추진",
+      "category": "",
+      "status": "notJudged",
+      "source": {
+        "sourceUrl": "https://policy.nec.go.kr/policy_pdf/20240410/PDF/PBINFO_PUB/4416/003_100152484_20240402_3.pdf",
+        "fetchedAt": "2026-09-28T02:30:00Z",
+        "publisher": "중앙선거관리위원회"
+      }
+    },
+    {
+      "id": "22-chungnam-dangjin-51",
+      "title": "도비도~소난지도 연륙교 건설 추진",
+      "category": "",
+      "status": "notJudged",
+      "source": {
+        "sourceUrl": "https://policy.nec.go.kr/policy_pdf/20240410/PDF/PBINFO_PUB/4416/003_100152484_20240402_3.pdf",
+        "fetchedAt": "2026-09-28T02:30:00Z",
+        "publisher": "중앙선거관리위원회"
+      }
+    },
+    {
+      "id": "22-chungnam-dangjin-52",
+      "title": "마섬~장고항 해안도로 드라이브코스 조성",
+      "category": "",
+      "status": "notJudged",
+      "source": {
+        "sourceUrl": "https://policy.nec.go.kr/policy_pdf/20240410/PDF/PBINFO_PUB/4416/003_100152484_20240402_3.pdf",
+        "fetchedAt": "2026-09-28T02:30:00Z",
+        "publisher": "중앙선거관리위원회"
+      }
+    },
+    {
+      "id": "22-chungnam-dangjin-53",
+      "title": "지역 대표문화축제 보존 및 발전지원",
+      "category": "",
+      "status": "notJudged",
+      "source": {
+        "sourceUrl": "https://policy.nec.go.kr/policy_pdf/20240410/PDF/PBINFO_PUB/4416/003_100152484_20240402_3.pdf",
+        "fetchedAt": "2026-09-28T02:30:00Z",
+        "publisher": "중앙선거관리위원회"
+      }
+    },
+    {
+      "id": "22-chungnam-dangjin-54",
+      "title": "왜목마을 해변 자갈 및 모래 지원사업",
+      "category": "",
+      "status": "notJudged",
+      "source": {
+        "sourceUrl": "https://policy.nec.go.kr/policy_pdf/20240410/PDF/PBINFO_PUB/4416/003_100152484_20240402_3.pdf",
+        "fetchedAt": "2026-09-28T02:30:00Z",
+        "publisher": "중앙선거관리위원회"
+      }
+    },
+    {
+      "id": "22-chungnam-dangjin-55",
+      "title": "면천읍성 복원사업 조속 추진",
+      "category": "",
+      "status": "notJudged",
+      "source": {
+        "sourceUrl": "https://policy.nec.go.kr/policy_pdf/20240410/PDF/PBINFO_PUB/4416/003_100152484_20240402_3.pdf",
+        "fetchedAt": "2026-09-28T02:30:00Z",
+        "publisher": "중앙선거관리위원회"
+      }
+    },
+    {
+      "id": "22-chungnam-dangjin-56",
+      "title": "버그내순례길(솔뫼성지~신리성지) 세계적 명소 육성",
+      "category": "",
+      "status": "notJudged",
+      "source": {
+        "sourceUrl": "https://policy.nec.go.kr/policy_pdf/20240410/PDF/PBINFO_PUB/4416/003_100152484_20240402_3.pdf",
+        "fetchedAt": "2026-09-28T02:30:00Z",
+        "publisher": "중앙선거관리위원회"
+      }
+    },
+    {
+      "id": "22-chungnam-dangjin-57",
+      "title": "석탄화력발전 폐쇄지역 지원을 위한 특별법 제정",
+      "category": "",
+      "status": "notJudged",
+      "source": {
+        "sourceUrl": "https://policy.nec.go.kr/policy_pdf/20240410/PDF/PBINFO_PUB/4416/003_100152484_20240402_3.pdf",
+        "fetchedAt": "2026-09-28T02:30:00Z",
+        "publisher": "중앙선거관리위원회"
+      }
+    },
+    {
+      "id": "22-chungnam-dangjin-58",
+      "title": "철강산업 수소환원제철 등 기술개발 지원",
+      "category": "",
+      "status": "notJudged",
+      "source": {
+        "sourceUrl": "https://policy.nec.go.kr/policy_pdf/20240410/PDF/PBINFO_PUB/4416/003_100152484_20240402_3.pdf",
+        "fetchedAt": "2026-09-28T02:30:00Z",
+        "publisher": "중앙선거관리위원회"
+      }
+    },
+    {
+      "id": "22-chungnam-dangjin-59",
+      "title": "제3기 국회철강포럼 발족 및 국내 철강산업 보호",
+      "category": "",
+      "status": "notJudged",
+      "source": {
+        "sourceUrl": "https://policy.nec.go.kr/policy_pdf/20240410/PDF/PBINFO_PUB/4416/003_100152484_20240402_3.pdf",
+        "fetchedAt": "2026-09-28T02:30:00Z",
+        "publisher": "중앙선거관리위원회"
+      }
+    },
+    {
+      "id": "22-chungnam-dangjin-60",
+      "title": "석문산단 조속 분양완료 및 우량기업 유치",
+      "category": "",
+      "status": "notJudged",
+      "source": {
+        "sourceUrl": "https://policy.nec.go.kr/policy_pdf/20240410/PDF/PBINFO_PUB/4416/003_100152484_20240402_3.pdf",
+        "fetchedAt": "2026-09-28T02:30:00Z",
+        "publisher": "중앙선거관리위원회"
+      }
+    },
+    {
+      "id": "22-chungnam-dangjin-61",
+      "title": "경제자유구역 지정 추진",
+      "category": "",
+      "status": "notJudged",
+      "source": {
+        "sourceUrl": "https://policy.nec.go.kr/policy_pdf/20240410/PDF/PBINFO_PUB/4416/003_100152484_20240402_3.pdf",
+        "fetchedAt": "2026-09-28T02:30:00Z",
+        "publisher": "중앙선거관리위원회"
+      }
+    },
+    {
+      "id": "22-chungnam-dangjin-62",
+      "title": "화력발전 폐쇄에 따른 정의로운 전환특구 지정 추진",
+      "category": "",
+      "status": "notJudged",
+      "source": {
+        "sourceUrl": "https://policy.nec.go.kr/policy_pdf/20240410/PDF/PBINFO_PUB/4416/003_100152484_20240402_3.pdf",
+        "fetchedAt": "2026-09-28T02:30:00Z",
+        "publisher": "중앙선거관리위원회"
+      }
+    },
+    {
+      "id": "22-chungnam-dangjin-63",
+      "title": "일자리창출을 위한 신규 산업단지 추가 조성",
+      "category": "",
+      "status": "notJudged",
+      "source": {
+        "sourceUrl": "https://policy.nec.go.kr/policy_pdf/20240410/PDF/PBINFO_PUB/4416/003_100152484_20240402_3.pdf",
+        "fetchedAt": "2026-09-28T02:30:00Z",
+        "publisher": "중앙선거관리위원회"
+      }
+    },
+    {
+      "id": "22-chungnam-dangjin-64",
+      "title": "당진항의 독자적인 국가무역항 지정 추진",
+      "category": "",
+      "status": "notJudged",
+      "source": {
+        "sourceUrl": "https://policy.nec.go.kr/policy_pdf/20240410/PDF/PBINFO_PUB/4416/003_100152484_20240402_3.pdf",
+        "fetchedAt": "2026-09-28T02:30:00Z",
+        "publisher": "중앙선거관리위원회"
+      }
+    },
+    {
+      "id": "22-chungnam-dangjin-65",
+      "title": "당진지방해양수산청(항만청) 신설 추진",
+      "category": "",
+      "status": "notJudged",
+      "source": {
+        "sourceUrl": "https://policy.nec.go.kr/policy_pdf/20240410/PDF/PBINFO_PUB/4416/003_100152484_20240402_3.pdf",
+        "fetchedAt": "2026-09-28T02:30:00Z",
+        "publisher": "중앙선거관리위원회"
+      }
+    },
+    {
+      "id": "22-chungnam-dangjin-66",
+      "title": "당진항 수소(암모니아)·잡화·양곡 부두 등 신규개발",
+      "category": "",
+      "status": "notJudged",
+      "source": {
+        "sourceUrl": "https://policy.nec.go.kr/policy_pdf/20240410/PDF/PBINFO_PUB/4416/003_100152484_20240402_3.pdf",
+        "fetchedAt": "2026-09-28T02:30:00Z",
+        "publisher": "중앙선거관리위원회"
+      }
+    },
+    {
+      "id": "22-chungnam-dangjin-67",
+      "title": "항만 배후단지 및 첨단 배후신도시 조성",
+      "category": "",
+      "status": "notJudged",
+      "source": {
+        "sourceUrl": "https://policy.nec.go.kr/policy_pdf/20240410/PDF/PBINFO_PUB/4416/003_100152484_20240402_3.pdf",
+        "fetchedAt": "2026-09-28T02:30:00Z",
+        "publisher": "중앙선거관리위원회"
+      }
+    },
+    {
+      "id": "22-chungnam-dangjin-68",
+      "title": "해경인재개발원 조속 건립 및 해양수산 공공기관 유치",
+      "category": "",
+      "status": "notJudged",
+      "source": {
+        "sourceUrl": "https://policy.nec.go.kr/policy_pdf/20240410/PDF/PBINFO_PUB/4416/003_100152484_20240402_3.pdf",
+        "fetchedAt": "2026-09-28T02:30:00Z",
+        "publisher": "중앙선거관리위원회"
+      }
+    },
+    {
+      "id": "22-chungnam-dangjin-69",
+      "title": "노동자 및 시민을 위한 산재종합병원 유치",
+      "category": "",
+      "status": "notJudged",
+      "source": {
+        "sourceUrl": "https://policy.nec.go.kr/policy_pdf/20240410/PDF/PBINFO_PUB/4416/003_100152484_20240402_3.pdf",
+        "fetchedAt": "2026-09-28T02:30:00Z",
+        "publisher": "중앙선거관리위원회"
+      }
+    },
+    {
+      "id": "22-chungnam-dangjin-70",
+      "title": "노동자를 위한 문화복지센터 건립 추진",
+      "category": "",
+      "status": "notJudged",
+      "source": {
+        "sourceUrl": "https://policy.nec.go.kr/policy_pdf/20240410/PDF/PBINFO_PUB/4416/003_100152484_20240402_3.pdf",
+        "fetchedAt": "2026-09-28T02:30:00Z",
+        "publisher": "중앙선거관리위원회"
+      }
+    },
+    {
+      "id": "22-chungnam-dangjin-71",
+      "title": "사회복지시설·요양시설 종사자 처우개선",
+      "category": "",
+      "status": "notJudged",
+      "source": {
+        "sourceUrl": "https://policy.nec.go.kr/policy_pdf/20240410/PDF/PBINFO_PUB/4416/003_100152484_20240402_3.pdf",
+        "fetchedAt": "2026-09-28T02:30:00Z",
+        "publisher": "중앙선거관리위원회"
+      }
+    },
+    {
+      "id": "22-chungnam-dangjin-72",
+      "title": "18세까지 월 20만원 아동수당 지급",
+      "category": "",
+      "status": "notJudged",
+      "source": {
+        "sourceUrl": "https://policy.nec.go.kr/policy_pdf/20240410/PDF/PBINFO_PUB/4416/003_100152484_20240402_3.pdf",
+        "fetchedAt": "2026-09-28T02:30:00Z",
+        "publisher": "중앙선거관리위원회"
+      }
+    },
+    {
+      "id": "22-chungnam-dangjin-73",
+      "title": "다중이용시설 응급처치(First aid) 장비 확대",
+      "category": "",
+      "status": "notJudged",
+      "source": {
+        "sourceUrl": "https://policy.nec.go.kr/policy_pdf/20240410/PDF/PBINFO_PUB/4416/003_100152484_20240402_3.pdf",
+        "fetchedAt": "2026-09-28T02:30:00Z",
+        "publisher": "중앙선거관리위원회"
+      }
+    },
+    {
+      "id": "22-chungnam-dangjin-74",
+      "title": "당진시가족문화센터 건립",
+      "category": "",
+      "status": "notJudged",
+      "source": {
+        "sourceUrl": "https://policy.nec.go.kr/policy_pdf/20240410/PDF/PBINFO_PUB/4416/003_100152484_20240402_3.pdf",
+        "fetchedAt": "2026-09-28T02:30:00Z",
+        "publisher": "중앙선거관리위원회"
+      }
+    },
+    {
+      "id": "22-chungnam-dangjin-75",
+      "title": "공공산후조리원 건립",
+      "category": "",
+      "status": "notJudged",
+      "source": {
+        "sourceUrl": "https://policy.nec.go.kr/policy_pdf/20240410/PDF/PBINFO_PUB/4416/003_100152484_20240402_3.pdf",
+        "fetchedAt": "2026-09-28T02:30:00Z",
+        "publisher": "중앙선거관리위원회"
+      }
+    },
+    {
+      "id": "22-chungnam-dangjin-76",
+      "title": "1인가구 및 청년부부를 위한 복지주택 건립",
+      "category": "",
+      "status": "notJudged",
+      "source": {
+        "sourceUrl": "https://policy.nec.go.kr/policy_pdf/20240410/PDF/PBINFO_PUB/4416/003_100152484_20240402_3.pdf",
+        "fetchedAt": "2026-09-28T02:30:00Z",
+        "publisher": "중앙선거관리위원회"
+      }
+    },
+    {
+      "id": "22-chungnam-dangjin-77",
+      "title": "장애인 일자리사업 확대",
+      "category": "",
+      "status": "notJudged",
+      "source": {
+        "sourceUrl": "https://policy.nec.go.kr/policy_pdf/20240410/PDF/PBINFO_PUB/4416/003_100152484_20240402_3.pdf",
+        "fetchedAt": "2026-09-28T02:30:00Z",
+        "publisher": "중앙선거관리위원회"
+      }
+    },
+    {
+      "id": "22-chungnam-dangjin-78",
+      "title": "간병비 건강보험 적용",
+      "category": "",
+      "status": "notJudged",
+      "source": {
+        "sourceUrl": "https://policy.nec.go.kr/policy_pdf/20240410/PDF/PBINFO_PUB/4416/003_100152484_20240402_3.pdf",
+        "fetchedAt": "2026-09-28T02:30:00Z",
+        "publisher": "중앙선거관리위원회"
+      }
+    },
+    {
+      "id": "22-chungnam-dangjin-79",
+      "title": "경영난 처한 어린이집 기능전환 통한 복지인프라 확충",
+      "category": "",
+      "status": "notJudged",
+      "source": {
+        "sourceUrl": "https://policy.nec.go.kr/policy_pdf/20240410/PDF/PBINFO_PUB/4416/003_100152484_20240402_3.pdf",
+        "fetchedAt": "2026-09-28T02:30:00Z",
+        "publisher": "중앙선거관리위원회"
+      }
+    },
+    {
+      "id": "22-chungnam-dangjin-80",
+      "title": "장애인 보조기기 지원 및 장애인 통합돌봄체계 구축",
+      "category": "",
+      "status": "notJudged",
+      "source": {
+        "sourceUrl": "https://policy.nec.go.kr/policy_pdf/20240410/PDF/PBINFO_PUB/4416/003_100152484_20240402_3.pdf",
+        "fetchedAt": "2026-09-28T02:30:00Z",
+        "publisher": "중앙선거관리위원회"
+      }
+    },
+    {
+      "id": "22-chungnam-dangjin-81",
+      "title": "지역예술인 창작공간 마련 및 창작지원금 확대",
+      "category": "",
+      "status": "notJudged",
+      "source": {
+        "sourceUrl": "https://policy.nec.go.kr/policy_pdf/20240410/PDF/PBINFO_PUB/4416/003_100152484_20240402_3.pdf",
+        "fetchedAt": "2026-09-28T02:30:00Z",
+        "publisher": "중앙선거관리위원회"
+      }
+    },
+    {
+      "id": "22-chungnam-dangjin-82",
+      "title": "예술인 기회소득 추진",
+      "category": "",
+      "status": "notJudged",
+      "source": {
+        "sourceUrl": "https://policy.nec.go.kr/policy_pdf/20240410/PDF/PBINFO_PUB/4416/003_100152484_20240402_3.pdf",
+        "fetchedAt": "2026-09-28T02:30:00Z",
+        "publisher": "중앙선거관리위원회"
+      }
+    },
+    {
+      "id": "22-chungnam-dangjin-83",
+      "title": "생활체육동호회 지원을 위한 공공체육시설 확충",
+      "category": "",
+      "status": "notJudged",
+      "source": {
+        "sourceUrl": "https://policy.nec.go.kr/policy_pdf/20240410/PDF/PBINFO_PUB/4416/003_100152484_20240402_3.pdf",
+        "fetchedAt": "2026-09-28T02:30:00Z",
+        "publisher": "중앙선거관리위원회"
+      }
+    },
+    {
+      "id": "22-chungnam-dangjin-84",
+      "title": "예총회관 건립 추진",
+      "category": "",
+      "status": "notJudged",
+      "source": {
+        "sourceUrl": "https://policy.nec.go.kr/policy_pdf/20240410/PDF/PBINFO_PUB/4416/003_100152484_20240402_3.pdf",
+        "fetchedAt": "2026-09-28T02:30:00Z",
+        "publisher": "중앙선거관리위원회"
+      }
+    },
+    {
+      "id": "22-chungnam-dangjin-85",
+      "title": "고대 종합스포츠타운(수영장 포함) 조속 추진",
+      "category": "",
+      "status": "notJudged",
+      "source": {
+        "sourceUrl": "https://policy.nec.go.kr/policy_pdf/20240410/PDF/PBINFO_PUB/4416/003_100152484_20240402_3.pdf",
+        "fetchedAt": "2026-09-28T02:30:00Z",
+        "publisher": "중앙선거관리위원회"
+      }
+    },
+    {
+      "id": "22-chungnam-dangjin-86",
+      "title": "체육회관 건립 추진",
+      "category": "",
+      "status": "notJudged",
+      "source": {
+        "sourceUrl": "https://policy.nec.go.kr/policy_pdf/20240410/PDF/PBINFO_PUB/4416/003_100152484_20240402_3.pdf",
+        "fetchedAt": "2026-09-28T02:30:00Z",
+        "publisher": "중앙선거관리위원회"
+      }
+    },
+    {
+      "id": "22-chungnam-dangjin-87",
+      "title": "종목별 경기장 시설개선 및 신규 경기장 건립",
+      "category": "",
+      "status": "notJudged",
+      "source": {
+        "sourceUrl": "https://policy.nec.go.kr/policy_pdf/20240410/PDF/PBINFO_PUB/4416/003_100152484_20240402_3.pdf",
+        "fetchedAt": "2026-09-28T02:30:00Z",
+        "publisher": "중앙선거관리위원회"
+      }
+    },
+    {
+      "id": "22-chungnam-dangjin-88",
+      "title": "삽교천 상류 체육공원 및 파크골프장 조성",
+      "category": "",
+      "status": "notJudged",
+      "source": {
+        "sourceUrl": "https://policy.nec.go.kr/policy_pdf/20240410/PDF/PBINFO_PUB/4416/003_100152484_20240402_3.pdf",
+        "fetchedAt": "2026-09-28T02:30:00Z",
+        "publisher": "중앙선거관리위원회"
+      }
+    },
+    {
+      "id": "22-chungnam-dangjin-89",
+      "title": "당진문예의전당 야외공연장 확대 및 지하주차장 조성",
+      "category": "",
+      "status": "notJudged",
+      "source": {
+        "sourceUrl": "https://policy.nec.go.kr/policy_pdf/20240410/PDF/PBINFO_PUB/4416/003_100152484_20240402_3.pdf",
+        "fetchedAt": "2026-09-28T02:30:00Z",
+        "publisher": "중앙선거관리위원회"
+      }
+    },
+    {
+      "id": "22-chungnam-dangjin-90",
+      "title": "전국대회 유치 및 선수단을 위한 유스호스텔 건립",
+      "category": "",
+      "status": "notJudged",
+      "source": {
+        "sourceUrl": "https://policy.nec.go.kr/policy_pdf/20240410/PDF/PBINFO_PUB/4416/003_100152484_20240402_3.pdf",
+        "fetchedAt": "2026-09-28T02:30:00Z",
+        "publisher": "중앙선거관리위원회"
+      }
+    },
+    {
+      "id": "22-chungnam-dangjin-91",
+      "title": "화력발전소·제철소·산폐장 환경감시 강화",
+      "category": "",
+      "status": "notJudged",
+      "source": {
+        "sourceUrl": "https://policy.nec.go.kr/policy_pdf/20240410/PDF/PBINFO_PUB/4416/003_100152484_20240402_3.pdf",
+        "fetchedAt": "2026-09-28T02:30:00Z",
+        "publisher": "중앙선거관리위원회"
+      }
+    },
+    {
+      "id": "22-chungnam-dangjin-92",
+      "title": "탄소중립도시 선정 추진",
+      "category": "",
+      "status": "notJudged",
+      "source": {
+        "sourceUrl": "https://policy.nec.go.kr/policy_pdf/20240410/PDF/PBINFO_PUB/4416/003_100152484_20240402_3.pdf",
+        "fetchedAt": "2026-09-28T02:30:00Z",
+        "publisher": "중앙선거관리위원회"
+      }
+    },
+    {
+      "id": "22-chungnam-dangjin-93",
+      "title": "석문간척지 대규모 축산단지 조성 저지",
+      "category": "",
+      "status": "notJudged",
+      "source": {
+        "sourceUrl": "https://policy.nec.go.kr/policy_pdf/20240410/PDF/PBINFO_PUB/4416/003_100152484_20240402_3.pdf",
+        "fetchedAt": "2026-09-28T02:30:00Z",
+        "publisher": "중앙선거관리위원회"
+      }
+    },
+    {
+      "id": "22-chungnam-dangjin-94",
+      "title": "미세먼지 차단숲 등 녹지공간 확충",
+      "category": "",
+      "status": "notJudged",
+      "source": {
+        "sourceUrl": "https://policy.nec.go.kr/policy_pdf/20240410/PDF/PBINFO_PUB/4416/003_100152484_20240402_3.pdf",
+        "fetchedAt": "2026-09-28T02:30:00Z",
+        "publisher": "중앙선거관리위원회"
+      }
+    },
+    {
+      "id": "22-chungnam-dangjin-95",
+      "title": "남원천 생태하천복원사업 조속 완료",
+      "category": "",
+      "status": "notJudged",
+      "source": {
+        "sourceUrl": "https://policy.nec.go.kr/policy_pdf/20240410/PDF/PBINFO_PUB/4416/003_100152484_20240402_3.pdf",
+        "fetchedAt": "2026-09-28T02:30:00Z",
+        "publisher": "중앙선거관리위원회"
+      }
+    },
+    {
+      "id": "22-chungnam-dangjin-96",
+      "title": "산업폐기물 발생지처리 원칙 도입",
+      "category": "",
+      "status": "notJudged",
+      "source": {
+        "sourceUrl": "https://policy.nec.go.kr/policy_pdf/20240410/PDF/PBINFO_PUB/4416/003_100152484_20240402_3.pdf",
+        "fetchedAt": "2026-09-28T02:30:00Z",
+        "publisher": "중앙선거관리위원회"
+      }
+    },
+    {
+      "id": "22-chungnam-dangjin-97",
+      "title": "소형핵발전소(SMR) 원천봉쇄",
+      "category": "",
+      "status": "notJudged",
+      "source": {
+        "sourceUrl": "https://policy.nec.go.kr/policy_pdf/20240410/PDF/PBINFO_PUB/4416/003_100152484_20240402_3.pdf",
+        "fetchedAt": "2026-09-28T02:30:00Z",
+        "publisher": "중앙선거관리위원회"
+      }
+    },
+    {
+      "id": "22-chungnam-dangjin-98",
+      "title": "송전선로 단계적 지중화",
+      "category": "",
+      "status": "notJudged",
+      "source": {
+        "sourceUrl": "https://policy.nec.go.kr/policy_pdf/20240410/PDF/PBINFO_PUB/4416/003_100152484_20240402_3.pdf",
+        "fetchedAt": "2026-09-28T02:30:00Z",
+        "publisher": "중앙선거관리위원회"
+      }
+    }
+  ]
+}

@@ -1,0 +1,407 @@
+{
+  "_note": "제22대 국회의원선거 경남 창원시성산구 당선인 허성무 (더불어민주당). 책자형 선거공보 PDF 9쪽 「창원특례시 미래 허성무가 직접 챙기겠습니다」의 분야별 • 항목 36개(왼쪽 단 먼저). 이 목록에는 당 공통 공약과 겹치는 입법 공약도 섞여 있으나 후보가 올린 그대로 두었고, 「1호 법안」·「2호 법안」 표시는 제목에 넣지 않았다. 분야 제목과 항목 없는 「방사능 ZERO 안전한 도시」, PDF 10쪽 성산구 지도 위 동네 공약, 2–8쪽 정권 심판·실적 글은 넣지 않았다. 제목은 원문 문구를 따랐고 바꾼 것은 위에 적은 구호·수식어 덜어내기뿐이다. 분류(category)는 앱에 정해진 분류 체계가 없어 비워 두었다. 이행 여부는 판정하지 않았다(notJudged).",
+  "districtId": "nec-4d8c3b58",
+  "source": {
+    "sourceUrl": "https://policy.nec.go.kr/policy_pdf/20240410/PDF/PBINFO_PUB/4822/003_100151066_20240402_2.pdf",
+    "fetchedAt": "2026-09-28T03:00:00Z",
+    "publisher": "중앙선거관리위원회"
+  },
+  "pledges": [
+    {
+      "id": "22-gyeongnam-changwon-seongsan-01",
+      "title": "창원국가산단 구조고도화로 디지털전환산단 추진",
+      "category": "",
+      "status": "notJudged",
+      "source": {
+        "sourceUrl": "https://policy.nec.go.kr/policy_pdf/20240410/PDF/PBINFO_PUB/4822/003_100151066_20240402_2.pdf",
+        "fetchedAt": "2026-09-28T03:00:00Z",
+        "publisher": "중앙선거관리위원회"
+      }
+    },
+    {
+      "id": "22-gyeongnam-changwon-seongsan-02",
+      "title": "국가산단 내 청년혁신지구 조성",
+      "category": "",
+      "status": "notJudged",
+      "source": {
+        "sourceUrl": "https://policy.nec.go.kr/policy_pdf/20240410/PDF/PBINFO_PUB/4822/003_100151066_20240402_2.pdf",
+        "fetchedAt": "2026-09-28T03:00:00Z",
+        "publisher": "중앙선거관리위원회"
+      }
+    },
+    {
+      "id": "22-gyeongnam-changwon-seongsan-03",
+      "title": "방위산업 재도약을 위한 방산특구 지정 추진",
+      "category": "",
+      "status": "notJudged",
+      "source": {
+        "sourceUrl": "https://policy.nec.go.kr/policy_pdf/20240410/PDF/PBINFO_PUB/4822/003_100151066_20240402_2.pdf",
+        "fetchedAt": "2026-09-28T03:00:00Z",
+        "publisher": "중앙선거관리위원회"
+      }
+    },
+    {
+      "id": "22-gyeongnam-changwon-seongsan-04",
+      "title": "미래자동차·수소산업 지원정책 추진",
+      "category": "",
+      "status": "notJudged",
+      "source": {
+        "sourceUrl": "https://policy.nec.go.kr/policy_pdf/20240410/PDF/PBINFO_PUB/4822/003_100151066_20240402_2.pdf",
+        "fetchedAt": "2026-09-28T03:00:00Z",
+        "publisher": "중앙선거관리위원회"
+      }
+    },
+    {
+      "id": "22-gyeongnam-changwon-seongsan-05",
+      "title": "청년고용국가산단특별법 신설",
+      "category": "",
+      "status": "notJudged",
+      "source": {
+        "sourceUrl": "https://policy.nec.go.kr/policy_pdf/20240410/PDF/PBINFO_PUB/4822/003_100151066_20240402_2.pdf",
+        "fetchedAt": "2026-09-28T03:00:00Z",
+        "publisher": "중앙선거관리위원회"
+      }
+    },
+    {
+      "id": "22-gyeongnam-changwon-seongsan-06",
+      "title": "R&D예산 원상복구 및 증액 추진",
+      "category": "",
+      "status": "notJudged",
+      "source": {
+        "sourceUrl": "https://policy.nec.go.kr/policy_pdf/20240410/PDF/PBINFO_PUB/4822/003_100151066_20240402_2.pdf",
+        "fetchedAt": "2026-09-28T03:00:00Z",
+        "publisher": "중앙선거관리위원회"
+      }
+    },
+    {
+      "id": "22-gyeongnam-changwon-seongsan-07",
+      "title": "수소핵융합발전 실증로(K-DEMO) 유치",
+      "category": "",
+      "status": "notJudged",
+      "source": {
+        "sourceUrl": "https://policy.nec.go.kr/policy_pdf/20240410/PDF/PBINFO_PUB/4822/003_100151066_20240402_2.pdf",
+        "fetchedAt": "2026-09-28T03:00:00Z",
+        "publisher": "중앙선거관리위원회"
+      }
+    },
+    {
+      "id": "22-gyeongnam-changwon-seongsan-08",
+      "title": "재생에너지청 신설 및 유치",
+      "category": "",
+      "status": "notJudged",
+      "source": {
+        "sourceUrl": "https://policy.nec.go.kr/policy_pdf/20240410/PDF/PBINFO_PUB/4822/003_100151066_20240402_2.pdf",
+        "fetchedAt": "2026-09-28T03:00:00Z",
+        "publisher": "중앙선거관리위원회"
+      }
+    },
+    {
+      "id": "22-gyeongnam-changwon-seongsan-09",
+      "title": "유엔기후변화협약 당사국총회 유치",
+      "category": "",
+      "status": "notJudged",
+      "source": {
+        "sourceUrl": "https://policy.nec.go.kr/policy_pdf/20240410/PDF/PBINFO_PUB/4822/003_100151066_20240402_2.pdf",
+        "fetchedAt": "2026-09-28T03:00:00Z",
+        "publisher": "중앙선거관리위원회"
+      }
+    },
+    {
+      "id": "22-gyeongnam-changwon-seongsan-10",
+      "title": "고속철도 증편·신설 및 동대구~창원간 직선고속화",
+      "category": "",
+      "status": "notJudged",
+      "source": {
+        "sourceUrl": "https://policy.nec.go.kr/policy_pdf/20240410/PDF/PBINFO_PUB/4822/003_100151066_20240402_2.pdf",
+        "fetchedAt": "2026-09-28T03:00:00Z",
+        "publisher": "중앙선거관리위원회"
+      }
+    },
+    {
+      "id": "22-gyeongnam-changwon-seongsan-11",
+      "title": "창원중앙역 스마트복합환승센터 개발",
+      "category": "",
+      "status": "notJudged",
+      "source": {
+        "sourceUrl": "https://policy.nec.go.kr/policy_pdf/20240410/PDF/PBINFO_PUB/4822/003_100151066_20240402_2.pdf",
+        "fetchedAt": "2026-09-28T03:00:00Z",
+        "publisher": "중앙선거관리위원회"
+      }
+    },
+    {
+      "id": "22-gyeongnam-changwon-seongsan-12",
+      "title": "마창대교 국도무료화 추진",
+      "category": "",
+      "status": "notJudged",
+      "source": {
+        "sourceUrl": "https://policy.nec.go.kr/policy_pdf/20240410/PDF/PBINFO_PUB/4822/003_100151066_20240402_2.pdf",
+        "fetchedAt": "2026-09-28T03:00:00Z",
+        "publisher": "중앙선거관리위원회"
+      }
+    },
+    {
+      "id": "22-gyeongnam-changwon-seongsan-13",
+      "title": "도시공원 연결로 도심둘레길 조성",
+      "category": "",
+      "status": "notJudged",
+      "source": {
+        "sourceUrl": "https://policy.nec.go.kr/policy_pdf/20240410/PDF/PBINFO_PUB/4822/003_100151066_20240402_2.pdf",
+        "fetchedAt": "2026-09-28T03:00:00Z",
+        "publisher": "중앙선거관리위원회"
+      }
+    },
+    {
+      "id": "22-gyeongnam-changwon-seongsan-14",
+      "title": "맨발 황토길 조성 및 확대",
+      "category": "",
+      "status": "notJudged",
+      "source": {
+        "sourceUrl": "https://policy.nec.go.kr/policy_pdf/20240410/PDF/PBINFO_PUB/4822/003_100151066_20240402_2.pdf",
+        "fetchedAt": "2026-09-28T03:00:00Z",
+        "publisher": "중앙선거관리위원회"
+      }
+    },
+    {
+      "id": "22-gyeongnam-changwon-seongsan-15",
+      "title": "창원지역 의과대학 유치 추진",
+      "category": "",
+      "status": "notJudged",
+      "source": {
+        "sourceUrl": "https://policy.nec.go.kr/policy_pdf/20240410/PDF/PBINFO_PUB/4822/003_100151066_20240402_2.pdf",
+        "fetchedAt": "2026-09-28T03:00:00Z",
+        "publisher": "중앙선거관리위원회"
+      }
+    },
+    {
+      "id": "22-gyeongnam-changwon-seongsan-16",
+      "title": "성산구 내 파크골프장 확대",
+      "category": "",
+      "status": "notJudged",
+      "source": {
+        "sourceUrl": "https://policy.nec.go.kr/policy_pdf/20240410/PDF/PBINFO_PUB/4822/003_100151066_20240402_2.pdf",
+        "fetchedAt": "2026-09-28T03:00:00Z",
+        "publisher": "중앙선거관리위원회"
+      }
+    },
+    {
+      "id": "22-gyeongnam-changwon-seongsan-17",
+      "title": "실내 및 야외 체육시설 정비",
+      "category": "",
+      "status": "notJudged",
+      "source": {
+        "sourceUrl": "https://policy.nec.go.kr/policy_pdf/20240410/PDF/PBINFO_PUB/4822/003_100151066_20240402_2.pdf",
+        "fetchedAt": "2026-09-28T03:00:00Z",
+        "publisher": "중앙선거관리위원회"
+      }
+    },
+    {
+      "id": "22-gyeongnam-changwon-seongsan-18",
+      "title": "원전산업생태계 유지 및 지역산업보호",
+      "category": "",
+      "status": "notJudged",
+      "source": {
+        "sourceUrl": "https://policy.nec.go.kr/policy_pdf/20240410/PDF/PBINFO_PUB/4822/003_100151066_20240402_2.pdf",
+        "fetchedAt": "2026-09-28T03:00:00Z",
+        "publisher": "중앙선거관리위원회"
+      }
+    },
+    {
+      "id": "22-gyeongnam-changwon-seongsan-19",
+      "title": "그린벨트 해제 추진",
+      "category": "",
+      "status": "notJudged",
+      "source": {
+        "sourceUrl": "https://policy.nec.go.kr/policy_pdf/20240410/PDF/PBINFO_PUB/4822/003_100151066_20240402_2.pdf",
+        "fetchedAt": "2026-09-28T03:00:00Z",
+        "publisher": "중앙선거관리위원회"
+      }
+    },
+    {
+      "id": "22-gyeongnam-changwon-seongsan-20",
+      "title": "노란봉투법 제정 및 중대재해처벌법 개정",
+      "category": "",
+      "status": "notJudged",
+      "source": {
+        "sourceUrl": "https://policy.nec.go.kr/policy_pdf/20240410/PDF/PBINFO_PUB/4822/003_100151066_20240402_2.pdf",
+        "fetchedAt": "2026-09-28T03:00:00Z",
+        "publisher": "중앙선거관리위원회"
+      }
+    },
+    {
+      "id": "22-gyeongnam-changwon-seongsan-21",
+      "title": "노조할 권리 보장",
+      "category": "",
+      "status": "notJudged",
+      "source": {
+        "sourceUrl": "https://policy.nec.go.kr/policy_pdf/20240410/PDF/PBINFO_PUB/4822/003_100151066_20240402_2.pdf",
+        "fetchedAt": "2026-09-28T03:00:00Z",
+        "publisher": "중앙선거관리위원회"
+      }
+    },
+    {
+      "id": "22-gyeongnam-changwon-seongsan-22",
+      "title": "주4일제 도입지원",
+      "category": "",
+      "status": "notJudged",
+      "source": {
+        "sourceUrl": "https://policy.nec.go.kr/policy_pdf/20240410/PDF/PBINFO_PUB/4822/003_100151066_20240402_2.pdf",
+        "fetchedAt": "2026-09-28T03:00:00Z",
+        "publisher": "중앙선거관리위원회"
+      }
+    },
+    {
+      "id": "22-gyeongnam-changwon-seongsan-23",
+      "title": "노동자종합지원센터 건립",
+      "category": "",
+      "status": "notJudged",
+      "source": {
+        "sourceUrl": "https://policy.nec.go.kr/policy_pdf/20240410/PDF/PBINFO_PUB/4822/003_100151066_20240402_2.pdf",
+        "fetchedAt": "2026-09-28T03:00:00Z",
+        "publisher": "중앙선거관리위원회"
+      }
+    },
+    {
+      "id": "22-gyeongnam-changwon-seongsan-24",
+      "title": "노정정책협의회 상설화",
+      "category": "",
+      "status": "notJudged",
+      "source": {
+        "sourceUrl": "https://policy.nec.go.kr/policy_pdf/20240410/PDF/PBINFO_PUB/4822/003_100151066_20240402_2.pdf",
+        "fetchedAt": "2026-09-28T03:00:00Z",
+        "publisher": "중앙선거관리위원회"
+      }
+    },
+    {
+      "id": "22-gyeongnam-changwon-seongsan-25",
+      "title": "간호법 제정 추진",
+      "category": "",
+      "status": "notJudged",
+      "source": {
+        "sourceUrl": "https://policy.nec.go.kr/policy_pdf/20240410/PDF/PBINFO_PUB/4822/003_100151066_20240402_2.pdf",
+        "fetchedAt": "2026-09-28T03:00:00Z",
+        "publisher": "중앙선거관리위원회"
+      }
+    },
+    {
+      "id": "22-gyeongnam-changwon-seongsan-26",
+      "title": "지역공공은행 설립",
+      "category": "",
+      "status": "notJudged",
+      "source": {
+        "sourceUrl": "https://policy.nec.go.kr/policy_pdf/20240410/PDF/PBINFO_PUB/4822/003_100151066_20240402_2.pdf",
+        "fetchedAt": "2026-09-28T03:00:00Z",
+        "publisher": "중앙선거관리위원회"
+      }
+    },
+    {
+      "id": "22-gyeongnam-changwon-seongsan-27",
+      "title": "지역재투자법 신설",
+      "category": "",
+      "status": "notJudged",
+      "source": {
+        "sourceUrl": "https://policy.nec.go.kr/policy_pdf/20240410/PDF/PBINFO_PUB/4822/003_100151066_20240402_2.pdf",
+        "fetchedAt": "2026-09-28T03:00:00Z",
+        "publisher": "중앙선거관리위원회"
+      }
+    },
+    {
+      "id": "22-gyeongnam-changwon-seongsan-28",
+      "title": "지역상품권 증액 발행 추진",
+      "category": "",
+      "status": "notJudged",
+      "source": {
+        "sourceUrl": "https://policy.nec.go.kr/policy_pdf/20240410/PDF/PBINFO_PUB/4822/003_100151066_20240402_2.pdf",
+        "fetchedAt": "2026-09-28T03:00:00Z",
+        "publisher": "중앙선거관리위원회"
+      }
+    },
+    {
+      "id": "22-gyeongnam-changwon-seongsan-29",
+      "title": "김건희명품백방지법 추진",
+      "category": "",
+      "status": "notJudged",
+      "source": {
+        "sourceUrl": "https://policy.nec.go.kr/policy_pdf/20240410/PDF/PBINFO_PUB/4822/003_100151066_20240402_2.pdf",
+        "fetchedAt": "2026-09-28T03:00:00Z",
+        "publisher": "중앙선거관리위원회"
+      }
+    },
+    {
+      "id": "22-gyeongnam-changwon-seongsan-30",
+      "title": "어르신 임플란트 정부지원 3개 이상 확대 추진",
+      "category": "",
+      "status": "notJudged",
+      "source": {
+        "sourceUrl": "https://policy.nec.go.kr/policy_pdf/20240410/PDF/PBINFO_PUB/4822/003_100151066_20240402_2.pdf",
+        "fetchedAt": "2026-09-28T03:00:00Z",
+        "publisher": "중앙선거관리위원회"
+      }
+    },
+    {
+      "id": "22-gyeongnam-changwon-seongsan-31",
+      "title": "장애인권리보장법 제정 및 장애인활동보조 서비스 확대",
+      "category": "",
+      "status": "notJudged",
+      "source": {
+        "sourceUrl": "https://policy.nec.go.kr/policy_pdf/20240410/PDF/PBINFO_PUB/4822/003_100151066_20240402_2.pdf",
+        "fetchedAt": "2026-09-28T03:00:00Z",
+        "publisher": "중앙선거관리위원회"
+      }
+    },
+    {
+      "id": "22-gyeongnam-changwon-seongsan-32",
+      "title": "경력단절여성 일자리 확대 추진",
+      "category": "",
+      "status": "notJudged",
+      "source": {
+        "sourceUrl": "https://policy.nec.go.kr/policy_pdf/20240410/PDF/PBINFO_PUB/4822/003_100151066_20240402_2.pdf",
+        "fetchedAt": "2026-09-28T03:00:00Z",
+        "publisher": "중앙선거관리위원회"
+      }
+    },
+    {
+      "id": "22-gyeongnam-changwon-seongsan-33",
+      "title": "창원어린이EXPO 추진",
+      "category": "",
+      "status": "notJudged",
+      "source": {
+        "sourceUrl": "https://policy.nec.go.kr/policy_pdf/20240410/PDF/PBINFO_PUB/4822/003_100151066_20240402_2.pdf",
+        "fetchedAt": "2026-09-28T03:00:00Z",
+        "publisher": "중앙선거관리위원회"
+      }
+    },
+    {
+      "id": "22-gyeongnam-changwon-seongsan-34",
+      "title": "간병비 건강보험 적용",
+      "category": "",
+      "status": "notJudged",
+      "source": {
+        "sourceUrl": "https://policy.nec.go.kr/policy_pdf/20240410/PDF/PBINFO_PUB/4822/003_100151066_20240402_2.pdf",
+        "fetchedAt": "2026-09-28T03:00:00Z",
+        "publisher": "중앙선거관리위원회"
+      }
+    },
+    {
+      "id": "22-gyeongnam-changwon-seongsan-35",
+      "title": "주5일 경로당 점심 제공",
+      "category": "",
+      "status": "notJudged",
+      "source": {
+        "sourceUrl": "https://policy.nec.go.kr/policy_pdf/20240410/PDF/PBINFO_PUB/4822/003_100151066_20240402_2.pdf",
+        "fetchedAt": "2026-09-28T03:00:00Z",
+        "publisher": "중앙선거관리위원회"
+      }
+    },
+    {
+      "id": "22-gyeongnam-changwon-seongsan-36",
+      "title": "온동네 초등돌봄",
+      "category": "",
+      "status": "notJudged",
+      "source": {
+        "sourceUrl": "https://policy.nec.go.kr/policy_pdf/20240410/PDF/PBINFO_PUB/4822/003_100151066_20240402_2.pdf",
+        "fetchedAt": "2026-09-28T03:00:00Z",
+        "publisher": "중앙선거관리위원회"
+      }
+    }
+  ]
+}

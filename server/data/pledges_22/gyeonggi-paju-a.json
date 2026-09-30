@@ -1,0 +1,66 @@
+{
+  "_note": "제22대 국회의원선거 경기 파주시 갑 당선인 윤후덕 (더불어민주당). 책자형 선거공보 PDF 5쪽 「윤후덕이 약속하는 더 큰 파주 5대 공약」 1–5. 3번은 앞의 구호 「파주경제 게임체인저」와 따옴표를 덜어냈다. 각 번호 아래 세부 설명은 넣지 않았다. PDF 6쪽 「윤후덕의 할 일」(운정신도시·교하동 세부 목록)은 5대 공약보다 긴 분야별 목록이라, PDF 3쪽 「민주당과 윤후덕이 함께 하는 정책공약」 1–20은 전국 공약이라 넣지 않았다. 제목은 원문 문구를 따랐고 바꾼 것은 위에 적은 구호·수식어 덜어내기뿐이다. 분류(category)는 앱에 정해진 분류 체계가 없어 비워 두었다. 이행 여부는 판정하지 않았다(notJudged).",
+  "districtId": "nec-92cc38ae",
+  "source": {
+    "sourceUrl": "https://policy.nec.go.kr/policy_pdf/20240410/PDF/PBINFO_PUB/4132/003_100152280_20240401_2.pdf",
+    "fetchedAt": "2026-09-28T02:00:00Z",
+    "publisher": "중앙선거관리위원회"
+  },
+  "pledges": [
+    {
+      "id": "22-gyeonggi-paju-a-01",
+      "title": "GTX 교통혁명! 현실이 됩니다",
+      "category": "",
+      "status": "notJudged",
+      "source": {
+        "sourceUrl": "https://policy.nec.go.kr/policy_pdf/20240410/PDF/PBINFO_PUB/4132/003_100152280_20240401_2.pdf",
+        "fetchedAt": "2026-09-28T02:00:00Z",
+        "publisher": "중앙선거관리위원회"
+      }
+    },
+    {
+      "id": "22-gyeonggi-paju-a-02",
+      "title": "지하철 3호선 파주연장, 조속히 확정짓겠습니다",
+      "category": "",
+      "status": "notJudged",
+      "source": {
+        "sourceUrl": "https://policy.nec.go.kr/policy_pdf/20240410/PDF/PBINFO_PUB/4132/003_100152280_20240401_2.pdf",
+        "fetchedAt": "2026-09-28T02:00:00Z",
+        "publisher": "중앙선거관리위원회"
+      }
+    },
+    {
+      "id": "22-gyeonggi-paju-a-03",
+      "title": "파주 평화경제특구 유치하겠습니다",
+      "category": "",
+      "status": "notJudged",
+      "source": {
+        "sourceUrl": "https://policy.nec.go.kr/policy_pdf/20240410/PDF/PBINFO_PUB/4132/003_100152280_20240401_2.pdf",
+        "fetchedAt": "2026-09-28T02:00:00Z",
+        "publisher": "중앙선거관리위원회"
+      }
+    },
+    {
+      "id": "22-gyeonggi-paju-a-04",
+      "title": "종합병원 품은 메디컬클러스터, 지속 추진하겠습니다",
+      "category": "",
+      "status": "notJudged",
+      "source": {
+        "sourceUrl": "https://policy.nec.go.kr/policy_pdf/20240410/PDF/PBINFO_PUB/4132/003_100152280_20240401_2.pdf",
+        "fetchedAt": "2026-09-28T02:00:00Z",
+        "publisher": "중앙선거관리위원회"
+      }
+    },
+    {
+      "id": "22-gyeonggi-paju-a-05",
+      "title": "대형문화공연장 조성! 문화도시 품격이 달라집니다",
+      "category": "",
+      "status": "notJudged",
+      "source": {
+        "sourceUrl": "https://policy.nec.go.kr/policy_pdf/20240410/PDF/PBINFO_PUB/4132/003_100152280_20240401_2.pdf",
+        "fetchedAt": "2026-09-28T02:00:00Z",
+        "publisher": "중앙선거관리위원회"
+      }
+    }
+  ]
+}

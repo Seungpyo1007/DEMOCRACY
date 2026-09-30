@@ -1,0 +1,231 @@
+{
+  "_note": "제22대 국회의원선거 경남 김해시 갑 당선인 민홍철 (더불어민주당). 책자형 선거공보 PDF 4쪽 「큰 일꾼, 민홍철의 김해발전 7대 약속」 7개 분야 아래 ⊘ 공약 20개(분야 제목 「더 강한 미래경제도시 김해!」 등은 구호라 넣지 않았다). ⊘ 아래 · 세부 항목, PDF 3쪽 실적, PDF 5쪽 권역별(우리동네) 공약, PDF 6쪽 더불어민주당 공약은 넣지 않았다. 두 줄로 나뉜 제목은 한 줄로 이었다. 제목은 원문 문구를 따랐고 바꾼 것은 위에 적은 구호·수식어 덜어내기뿐이다. 분류(category)는 앱에 정해진 분류 체계가 없어 비워 두었다. 이행 여부는 판정하지 않았다(notJudged).",
+  "districtId": "nec-088332ce",
+  "source": {
+    "sourceUrl": "https://policy.nec.go.kr/policy_pdf/20240410/PDF/PBINFO_PUB/4808/003_100152622_20240401_2.pdf",
+    "fetchedAt": "2026-09-28T03:00:00Z",
+    "publisher": "중앙선거관리위원회"
+  },
+  "pledges": [
+    {
+      "id": "22-gyeongnam-gimhae-a-01",
+      "title": "국가 스마트 물류 플랫폼 유치",
+      "category": "",
+      "status": "notJudged",
+      "source": {
+        "sourceUrl": "https://policy.nec.go.kr/policy_pdf/20240410/PDF/PBINFO_PUB/4808/003_100152622_20240401_2.pdf",
+        "fetchedAt": "2026-09-28T03:00:00Z",
+        "publisher": "중앙선거관리위원회"
+      }
+    },
+    {
+      "id": "22-gyeongnam-gimhae-a-02",
+      "title": "김해컨벤션센터 건립 추진",
+      "category": "",
+      "status": "notJudged",
+      "source": {
+        "sourceUrl": "https://policy.nec.go.kr/policy_pdf/20240410/PDF/PBINFO_PUB/4808/003_100152622_20240401_2.pdf",
+        "fetchedAt": "2026-09-28T03:00:00Z",
+        "publisher": "중앙선거관리위원회"
+      }
+    },
+    {
+      "id": "22-gyeongnam-gimhae-a-03",
+      "title": "동남권 순환 광역철도(진영~김해~양산~울산) 조기 착공",
+      "category": "",
+      "status": "notJudged",
+      "source": {
+        "sourceUrl": "https://policy.nec.go.kr/policy_pdf/20240410/PDF/PBINFO_PUB/4808/003_100152622_20240401_2.pdf",
+        "fetchedAt": "2026-09-28T03:00:00Z",
+        "publisher": "중앙선거관리위원회"
+      }
+    },
+    {
+      "id": "22-gyeongnam-gimhae-a-04",
+      "title": "「정규 삼계역사」 계속 추진 및 김해 경전철 운영 적자 해소",
+      "category": "",
+      "status": "notJudged",
+      "source": {
+        "sourceUrl": "https://policy.nec.go.kr/policy_pdf/20240410/PDF/PBINFO_PUB/4808/003_100152622_20240401_2.pdf",
+        "fetchedAt": "2026-09-28T03:00:00Z",
+        "publisher": "중앙선거관리위원회"
+      }
+    },
+    {
+      "id": "22-gyeongnam-gimhae-a-05",
+      "title": "김해~밀양 고속도로 건설 추진, 초정~화명 광역도로 조기 완공",
+      "category": "",
+      "status": "notJudged",
+      "source": {
+        "sourceUrl": "https://policy.nec.go.kr/policy_pdf/20240410/PDF/PBINFO_PUB/4808/003_100152622_20240401_2.pdf",
+        "fetchedAt": "2026-09-28T03:00:00Z",
+        "publisher": "중앙선거관리위원회"
+      }
+    },
+    {
+      "id": "22-gyeongnam-gimhae-a-06",
+      "title": "창원법원 김해 지원, 검찰지청 유치",
+      "category": "",
+      "status": "notJudged",
+      "source": {
+        "sourceUrl": "https://policy.nec.go.kr/policy_pdf/20240410/PDF/PBINFO_PUB/4808/003_100152622_20240401_2.pdf",
+        "fetchedAt": "2026-09-28T03:00:00Z",
+        "publisher": "중앙선거관리위원회"
+      }
+    },
+    {
+      "id": "22-gyeongnam-gimhae-a-07",
+      "title": "대학병원급 공공의료기관 유치",
+      "category": "",
+      "status": "notJudged",
+      "source": {
+        "sourceUrl": "https://policy.nec.go.kr/policy_pdf/20240410/PDF/PBINFO_PUB/4808/003_100152622_20240401_2.pdf",
+        "fetchedAt": "2026-09-28T03:00:00Z",
+        "publisher": "중앙선거관리위원회"
+      }
+    },
+    {
+      "id": "22-gyeongnam-gimhae-a-08",
+      "title": "공공기관 유치",
+      "category": "",
+      "status": "notJudged",
+      "source": {
+        "sourceUrl": "https://policy.nec.go.kr/policy_pdf/20240410/PDF/PBINFO_PUB/4808/003_100152622_20240401_2.pdf",
+        "fetchedAt": "2026-09-28T03:00:00Z",
+        "publisher": "중앙선거관리위원회"
+      }
+    },
+    {
+      "id": "22-gyeongnam-gimhae-a-09",
+      "title": "그린벨트 규제 완화를 통한 지역 균형 발전 도모 및 개인 재산권 보호",
+      "category": "",
+      "status": "notJudged",
+      "source": {
+        "sourceUrl": "https://policy.nec.go.kr/policy_pdf/20240410/PDF/PBINFO_PUB/4808/003_100152622_20240401_2.pdf",
+        "fetchedAt": "2026-09-28T03:00:00Z",
+        "publisher": "중앙선거관리위원회"
+      }
+    },
+    {
+      "id": "22-gyeongnam-gimhae-a-10",
+      "title": "농지거래 규제 해소",
+      "category": "",
+      "status": "notJudged",
+      "source": {
+        "sourceUrl": "https://policy.nec.go.kr/policy_pdf/20240410/PDF/PBINFO_PUB/4808/003_100152622_20240401_2.pdf",
+        "fetchedAt": "2026-09-28T03:00:00Z",
+        "publisher": "중앙선거관리위원회"
+      }
+    },
+    {
+      "id": "22-gyeongnam-gimhae-a-11",
+      "title": "전국체전 성공적 개최 및 체육시설 확충",
+      "category": "",
+      "status": "notJudged",
+      "source": {
+        "sourceUrl": "https://policy.nec.go.kr/policy_pdf/20240410/PDF/PBINFO_PUB/4808/003_100152622_20240401_2.pdf",
+        "fetchedAt": "2026-09-28T03:00:00Z",
+        "publisher": "중앙선거관리위원회"
+      }
+    },
+    {
+      "id": "22-gyeongnam-gimhae-a-12",
+      "title": "장애인의 편익 및 복지강화",
+      "category": "",
+      "status": "notJudged",
+      "source": {
+        "sourceUrl": "https://policy.nec.go.kr/policy_pdf/20240410/PDF/PBINFO_PUB/4808/003_100152622_20240401_2.pdf",
+        "fetchedAt": "2026-09-28T03:00:00Z",
+        "publisher": "중앙선거관리위원회"
+      }
+    },
+    {
+      "id": "22-gyeongnam-gimhae-a-13",
+      "title": "도심지 생활형 주차시설 확충",
+      "category": "",
+      "status": "notJudged",
+      "source": {
+        "sourceUrl": "https://policy.nec.go.kr/policy_pdf/20240410/PDF/PBINFO_PUB/4808/003_100152622_20240401_2.pdf",
+        "fetchedAt": "2026-09-28T03:00:00Z",
+        "publisher": "중앙선거관리위원회"
+      }
+    },
+    {
+      "id": "22-gyeongnam-gimhae-a-14",
+      "title": "반려동물 친화도시 조성",
+      "category": "",
+      "status": "notJudged",
+      "source": {
+        "sourceUrl": "https://policy.nec.go.kr/policy_pdf/20240410/PDF/PBINFO_PUB/4808/003_100152622_20240401_2.pdf",
+        "fetchedAt": "2026-09-28T03:00:00Z",
+        "publisher": "중앙선거관리위원회"
+      }
+    },
+    {
+      "id": "22-gyeongnam-gimhae-a-15",
+      "title": "e-스포츠 산업 육성 및 활성화",
+      "category": "",
+      "status": "notJudged",
+      "source": {
+        "sourceUrl": "https://policy.nec.go.kr/policy_pdf/20240410/PDF/PBINFO_PUB/4808/003_100152622_20240401_2.pdf",
+        "fetchedAt": "2026-09-28T03:00:00Z",
+        "publisher": "중앙선거관리위원회"
+      }
+    },
+    {
+      "id": "22-gyeongnam-gimhae-a-16",
+      "title": "교육발전 특구 유치",
+      "category": "",
+      "status": "notJudged",
+      "source": {
+        "sourceUrl": "https://policy.nec.go.kr/policy_pdf/20240410/PDF/PBINFO_PUB/4808/003_100152622_20240401_2.pdf",
+        "fetchedAt": "2026-09-28T03:00:00Z",
+        "publisher": "중앙선거관리위원회"
+      }
+    },
+    {
+      "id": "22-gyeongnam-gimhae-a-17",
+      "title": "국공립 어린이집 확충, 공동육아 나눔터 확대, 공립 과학관 및 어린이 수영장 조성",
+      "category": "",
+      "status": "notJudged",
+      "source": {
+        "sourceUrl": "https://policy.nec.go.kr/policy_pdf/20240410/PDF/PBINFO_PUB/4808/003_100152622_20240401_2.pdf",
+        "fetchedAt": "2026-09-28T03:00:00Z",
+        "publisher": "중앙선거관리위원회"
+      }
+    },
+    {
+      "id": "22-gyeongnam-gimhae-a-18",
+      "title": "가야역사 복원사업 지원 및 관광자원 개발",
+      "category": "",
+      "status": "notJudged",
+      "source": {
+        "sourceUrl": "https://policy.nec.go.kr/policy_pdf/20240410/PDF/PBINFO_PUB/4808/003_100152622_20240401_2.pdf",
+        "fetchedAt": "2026-09-28T03:00:00Z",
+        "publisher": "중앙선거관리위원회"
+      }
+    },
+    {
+      "id": "22-gyeongnam-gimhae-a-19",
+      "title": "화포천을 활용한 대한민국 습지 대회 및 세계습지대회 개최 기반 조성",
+      "category": "",
+      "status": "notJudged",
+      "source": {
+        "sourceUrl": "https://policy.nec.go.kr/policy_pdf/20240410/PDF/PBINFO_PUB/4808/003_100152622_20240401_2.pdf",
+        "fetchedAt": "2026-09-28T03:00:00Z",
+        "publisher": "중앙선거관리위원회"
+      }
+    },
+    {
+      "id": "22-gyeongnam-gimhae-a-20",
+      "title": "미세먼지 없는 도시 숲 조성, 친환경 자동차(전기·수소) 보조금 및 충전소 확대",
+      "category": "",
+      "status": "notJudged",
+      "source": {
+        "sourceUrl": "https://policy.nec.go.kr/policy_pdf/20240410/PDF/PBINFO_PUB/4808/003_100152622_20240401_2.pdf",
+        "fetchedAt": "2026-09-28T03:00:00Z",
+        "publisher": "중앙선거관리위원회"
+      }
+    }
+  ]
+}

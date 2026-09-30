@@ -1,0 +1,31 @@
+{
+  "districtId": "nec-c37de3d3",
+  "displayName": "인천 연수구 을",
+  "source": {
+    "sourceUrl": "https://www.law.go.kr/LSW/lsInfoP.do?lsiSeq=261101",
+    "fetchedAt": "2026-09-27T15:00:00.000Z",
+    "publisher": "국가법령정보센터"
+  },
+  "events": [
+    {
+      "year": 2020,
+      "title": "선거구 구역 변동 없음",
+      "detail": "제20대 총선과 같은 구역",
+      "source": {
+        "sourceUrl": "https://www.law.go.kr/LSW/lsInfoP.do?lsiSeq=215523",
+        "fetchedAt": "2026-09-27T15:00:00.000Z",
+        "publisher": "국가법령정보센터"
+      }
+    },
+    {
+      "year": 2024,
+      "title": "선거구 구역 변경",
+      "detail": "옥련1동, 동춘1동, 동춘2동은 연수구 갑으로 옮겨감",
+      "source": {
+        "sourceUrl": "https://www.law.go.kr/LSW/lsInfoP.do?lsiSeq=261101",
+        "fetchedAt": "2026-09-27T15:00:00.000Z",
+        "publisher": "국가법령정보센터"
+      }
+    }
+  ]
+}

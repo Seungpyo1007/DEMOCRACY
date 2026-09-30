@@ -41,7 +41,101 @@
           "fetchedAt": "2026-07-30T09:00:00Z"
         }
       }
-    ]
+    ],
+    "record": {
+      "bills": {
+        "source": {
+          "sourceUrl": "https://open.assembly.go.kr/portal/openapi/fixture-bills",
+          "fetchedAt": "2026-07-30T09:00:00Z"
+        },
+        "items": [
+          {
+            "id": "fixture-bill-1",
+            "title": "역세권 청년주택 공급 촉진법 일부개정안",
+            "stage": "본회의 통과",
+            "stamp": "5월 12일"
+          },
+          {
+            "id": "fixture-bill-2",
+            "title": "소상공인 임대료 부담 완화 특별법안",
+            "stage": "소위 심사",
+            "stamp": "6월 3일"
+          },
+          {
+            "id": "fixture-bill-3",
+            "title": "도시공원 보전 및 이용에 관한 법률 개정안",
+            "stage": "발의",
+            "stamp": "7월 9일"
+          }
+        ]
+      },
+      "attendance": {
+        "unit": "%",
+        "source": {
+          "sourceUrl": "https://open.assembly.go.kr/portal/openapi/fixture-attendance",
+          "fetchedAt": "2026-07-30T09:00:00Z"
+        },
+        "points": [
+          {
+            "label": "2월",
+            "value": 88
+          },
+          {
+            "label": "3월",
+            "value": 91
+          },
+          {
+            "label": "4월",
+            "value": 86
+          },
+          {
+            "label": "5월",
+            "value": 94
+          },
+          {
+            "label": "6월",
+            "value": 92
+          },
+          {
+            "label": "7월",
+            "value": 95
+          }
+        ]
+      },
+      "votes": {
+        "unit": "%",
+        "source": {
+          "sourceUrl": "https://open.assembly.go.kr/portal/openapi/fixture-votes",
+          "fetchedAt": "2026-07-30T09:00:00Z"
+        },
+        "points": [
+          {
+            "label": "2월",
+            "value": 79
+          },
+          {
+            "label": "3월",
+            "value": 84
+          },
+          {
+            "label": "4월",
+            "value": 81
+          },
+          {
+            "label": "5월",
+            "value": 90
+          },
+          {
+            "label": "6월",
+            "value": 87
+          },
+          {
+            "label": "7월",
+            "value": 88
+          }
+        ]
+      }
+    }
   },
   "candidates": [
     {

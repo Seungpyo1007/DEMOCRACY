@@ -1,0 +1,88 @@
+{
+  "_note": "제22대 국회의원선거 서울 동대문구 을 당선인 장경태 (더불어민주당). 책자형 선거공보 PDF 7–8쪽(인쇄 8–9쪽) 「더 빠르고 안전한 동대문」·「한다면 합니다!」의 큰 제목 공약 7개(쪽에 실린 차례대로). 같은 쪽 아래의 분야별(안전·교통·교육문화·복지·지역경제) 세부 목록과 지도 위 표기(GTX-B,C 조기개통 등), PDF 6쪽의 대상별 공약(어르신·청년·소상공인 등, 민주당 총선 공약과 같은 내용), 9–10쪽의 지난 성과는 넣지 않았다. 제목은 원문 문구를 따랐고 바꾼 것은 위에 적은 구호·수식어 덜어내기뿐이다. 분류(category)는 앱에 정해진 분류 체계가 없어 비워 두었다. 이행 여부는 판정하지 않았다(notJudged).",
+  "districtId": "nec-b8346ad9",
+  "source": {
+    "sourceUrl": "https://policy.nec.go.kr/policy_pdf/20240410/PDF/PBINFO_PUB/1106/003_100152721_20240402_2.pdf",
+    "fetchedAt": "2026-09-27T17:33:02Z",
+    "publisher": "중앙선거관리위원회"
+  },
+  "pledges": [
+    {
+      "id": "22-seoul-dongdaemun-b-01",
+      "title": "1호선·경의중앙선 숲길 조성",
+      "category": "",
+      "status": "notJudged",
+      "source": {
+        "sourceUrl": "https://policy.nec.go.kr/policy_pdf/20240410/PDF/PBINFO_PUB/1106/003_100152721_20240402_2.pdf",
+        "fetchedAt": "2026-09-27T17:33:02Z",
+        "publisher": "중앙선거관리위원회"
+      }
+    },
+    {
+      "id": "22-seoul-dongdaemun-b-02",
+      "title": "답십리 카페거리 조성",
+      "category": "",
+      "status": "notJudged",
+      "source": {
+        "sourceUrl": "https://policy.nec.go.kr/policy_pdf/20240410/PDF/PBINFO_PUB/1106/003_100152721_20240402_2.pdf",
+        "fetchedAt": "2026-09-27T17:33:02Z",
+        "publisher": "중앙선거관리위원회"
+      }
+    },
+    {
+      "id": "22-seoul-dongdaemun-b-03",
+      "title": "장안 모빌리티 엑스포 개최",
+      "category": "",
+      "status": "notJudged",
+      "source": {
+        "sourceUrl": "https://policy.nec.go.kr/policy_pdf/20240410/PDF/PBINFO_PUB/1106/003_100152721_20240402_2.pdf",
+        "fetchedAt": "2026-09-27T17:33:02Z",
+        "publisher": "중앙선거관리위원회"
+      }
+    },
+    {
+      "id": "22-seoul-dongdaemun-b-04",
+      "title": "면목선 전농역·장안역 역세권 개발",
+      "category": "",
+      "status": "notJudged",
+      "source": {
+        "sourceUrl": "https://policy.nec.go.kr/policy_pdf/20240410/PDF/PBINFO_PUB/1106/003_100152721_20240402_2.pdf",
+        "fetchedAt": "2026-09-27T17:33:02Z",
+        "publisher": "중앙선거관리위원회"
+      }
+    },
+    {
+      "id": "22-seoul-dongdaemun-b-05",
+      "title": "중랑천 세느강 프로젝트",
+      "category": "",
+      "status": "notJudged",
+      "source": {
+        "sourceUrl": "https://policy.nec.go.kr/policy_pdf/20240410/PDF/PBINFO_PUB/1106/003_100152721_20240402_2.pdf",
+        "fetchedAt": "2026-09-27T17:33:02Z",
+        "publisher": "중앙선거관리위원회"
+      }
+    },
+    {
+      "id": "22-seoul-dongdaemun-b-06",
+      "title": "자율주행 순환버스 도입",
+      "category": "",
+      "status": "notJudged",
+      "source": {
+        "sourceUrl": "https://policy.nec.go.kr/policy_pdf/20240410/PDF/PBINFO_PUB/1106/003_100152721_20240402_2.pdf",
+        "fetchedAt": "2026-09-27T17:33:02Z",
+        "publisher": "중앙선거관리위원회"
+      }
+    },
+    {
+      "id": "22-seoul-dongdaemun-b-07",
+      "title": "어린이병원 유치",
+      "category": "",
+      "status": "notJudged",
+      "source": {
+        "sourceUrl": "https://policy.nec.go.kr/policy_pdf/20240410/PDF/PBINFO_PUB/1106/003_100152721_20240402_2.pdf",
+        "fetchedAt": "2026-09-27T17:33:02Z",
+        "publisher": "중앙선거관리위원회"
+      }
+    }
+  ]
+}

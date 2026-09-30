@@ -1,0 +1,312 @@
+{
+  "_note": "Sample count. Not a real election, not real candidates, not real numbers. 앱 자체 여론조사는 담지 않는다: 공직선거법 제108조제5항은 앱 조사를 면제하지 않고, 클라이언트는 중앙선거여론조사심의위원회에 조사를 등록할 수 없다.",
+  "electionName": "제23대 총선",
+  "electionSchedule": {
+    "electionName": "제23대 국회의원선거",
+    "pollsClose": "2026-04-15T18:00:00+09:00",
+    "source": {
+      "sourceUrl": "https://info.nec.go.kr/fixture/schedule",
+      "fetchedAt": "2026-07-30T09:00:00Z"
+    }
+  },
+  "overallCountedShare": 67.2,
+  "live": true,
+  "districts": [
+    {
+      "districtId": "fixture-seoul-mapo-b",
+      "districtName": "서울 마포구 을",
+      "countedShare": 71,
+      "source": {
+        "sourceUrl": "https://info.nec.go.kr/fixture/count",
+        "fetchedAt": "2026-07-30T09:00:00Z"
+      },
+      "tallies": [
+        {
+          "name": "박서연",
+          "party": "나다당",
+          "share": 48.2
+        },
+        {
+          "name": "김민준",
+          "party": "가나당",
+          "share": 44.7
+        },
+        {
+          "name": "이도현",
+          "party": "무소속",
+          "share": 7.1
+        }
+      ]
+    },
+    {
+      "districtId": "fixture-seoul-mapo-a",
+      "districtName": "서울 마포구 갑",
+      "countedShare": 64,
+      "source": {
+        "sourceUrl": "https://info.nec.go.kr/fixture/count",
+        "fetchedAt": "2026-07-30T09:00:00Z"
+      },
+      "tallies": [
+        {
+          "name": "정하윤",
+          "party": "다라당",
+          "share": 51.3
+        },
+        {
+          "name": "최우진",
+          "party": "가나당",
+          "share": 41.0
+        },
+        {
+          "name": "한지호",
+          "party": "무소속",
+          "share": 7.7
+        }
+      ]
+    },
+    {
+      "districtId": "fixture-seoul-seodaemun-a",
+      "districtName": "서울 서대문구 갑",
+      "countedShare": 82,
+      "source": {
+        "sourceUrl": "https://info.nec.go.kr/fixture/count",
+        "fetchedAt": "2026-07-30T09:00:00Z"
+      },
+      "tallies": [
+        {
+          "name": "오세림",
+          "party": "가나당",
+          "share": 46.9
+        },
+        {
+          "name": "배준영",
+          "party": "나다당",
+          "share": 45.5
+        },
+        {
+          "name": "윤태경",
+          "party": "무소속",
+          "share": 7.6
+        }
+      ]
+    },
+    {
+      "districtId": "fixture-seoul-seodaemun-b",
+      "districtName": "서울 서대문구 을",
+      "countedShare": 39,
+      "source": {
+        "sourceUrl": "https://info.nec.go.kr/fixture/count",
+        "fetchedAt": "2026-07-30T09:00:00Z"
+      },
+      "tallies": [
+        {
+          "name": "문가온",
+          "party": "나다당",
+          "share": 49.8
+        },
+        {
+          "name": "서다인",
+          "party": "다라당",
+          "share": 42.2
+        },
+        {
+          "name": "장현우",
+          "party": "무소속",
+          "share": 8.0
+        }
+      ]
+    },
+    {
+      "districtId": "fixture-seoul-eunpyeong-a",
+      "districtName": "서울 은평구 갑",
+      "countedShare": 55,
+      "source": {
+        "sourceUrl": "https://info.nec.go.kr/fixture/count",
+        "fetchedAt": "2026-07-30T09:00:00Z"
+      },
+      "tallies": [
+        {
+          "name": "남시우",
+          "party": "가나당",
+          "share": 47.4
+        },
+        {
+          "name": "도예린",
+          "party": "나다당",
+          "share": 44.1
+        },
+        {
+          "name": "류지환",
+          "party": "무소속",
+          "share": 8.5
+        }
+      ]
+    },
+    {
+      "districtId": "fixture-seoul-yongsan",
+      "districtName": "서울 용산구",
+      "countedShare": 91,
+      "source": {
+        "sourceUrl": "https://info.nec.go.kr/fixture/count",
+        "fetchedAt": "2026-07-30T09:00:00Z"
+      },
+      "tallies": [
+        {
+          "name": "백가람",
+          "party": "다라당",
+          "share": 50.6
+        },
+        {
+          "name": "신유나",
+          "party": "가나당",
+          "share": 42.9
+        },
+        {
+          "name": "조민석",
+          "party": "무소속",
+          "share": 6.5
+        }
+      ]
+    }
+  ],
+  "historical": [
+    {
+      "year": 2016,
+      "share": 44.1
+    },
+    {
+      "year": 2020,
+      "share": 46.8
+    },
+    {
+      "year": 2024,
+      "share": 45.2
+    },
+    {
+      "year": 2026,
+      "share": 48.2
+    }
+  ],
+  "polls": [
+    {
+      "label": "한국갤럽",
+      "accredited": true,
+      "points": [
+        {
+          "year": 1,
+          "share": 43.0
+        },
+        {
+          "year": 2,
+          "share": 45.5
+        },
+        {
+          "year": 3,
+          "share": 46.9
+        },
+        {
+          "year": 4,
+          "share": 47.8
+        }
+      ],
+      "disclosure": {
+        "client": "가상일보",
+        "pollster": "한국갤럽",
+        "fieldStart": "2026-07-27T10:00:00+09:00",
+        "fieldEnd": "2026-07-29T18:00:00+09:00",
+        "sampleSize": 1004,
+        "samplingMethod": "무선 가상번호 무작위추출",
+        "surveyMethod": "전화면접(무선 100%)",
+        "marginOfError": 3.1,
+        "confidenceLevel": 95.0,
+        "responseRate": 14.2,
+        "questionnaire": "https://www.nesdc.go.kr/fixture/gallup-2607/questionnaire",
+        "nesdcRegistration": "https://www.nesdc.go.kr/fixture/gallup-2607",
+        "source": {
+          "sourceUrl": "https://www.nesdc.go.kr/fixture/gallup-2607",
+          "fetchedAt": "2026-07-30T09:00:00Z"
+        }
+      }
+    },
+    {
+      "label": "리얼미터",
+      "accredited": true,
+      "points": [
+        {
+          "year": 1,
+          "share": 41.8
+        },
+        {
+          "year": 2,
+          "share": 44.2
+        },
+        {
+          "year": 3,
+          "share": 46.1
+        },
+        {
+          "year": 4,
+          "share": 47.0
+        }
+      ],
+      "disclosure": {
+        "client": "가상방송",
+        "pollster": "리얼미터",
+        "fieldStart": "2026-07-26T09:00:00+09:00",
+        "fieldEnd": "2026-07-28T17:00:00+09:00",
+        "sampleSize": 1010,
+        "samplingMethod": "무선 가상번호 무작위추출",
+        "surveyMethod": "자동응답(무선 90%·유선 10%)",
+        "marginOfError": 3.1,
+        "confidenceLevel": 95.0,
+        "responseRate": 4.7,
+        "questionnaire": "https://www.nesdc.go.kr/fixture/realmeter-2607/questionnaire",
+        "nesdcRegistration": "https://www.nesdc.go.kr/fixture/realmeter-2607",
+        "source": {
+          "sourceUrl": "https://www.nesdc.go.kr/fixture/realmeter-2607",
+          "fetchedAt": "2026-07-30T09:00:00Z"
+        }
+      }
+    },
+    {
+      "label": "가상리서치",
+      "accredited": true,
+      "points": [
+        {
+          "year": 1,
+          "share": 47.5
+        },
+        {
+          "year": 2,
+          "share": 49.0
+        },
+        {
+          "year": 3,
+          "share": 50.2
+        },
+        {
+          "year": 4,
+          "share": 51.4
+        }
+      ],
+      "disclosure": {
+        "client": "마포구민연합회",
+        "pollster": "가상리서치",
+        "fieldStart": "2026-07-24T10:00:00+09:00",
+        "fieldEnd": "2026-07-25T18:00:00+09:00",
+        "sampleSize": 803,
+        "samplingMethod": "무선 가상번호 무작위추출",
+        "surveyMethod": "전화면접(무선 100%)",
+        "marginOfError": 3.5,
+        "confidenceLevel": 95.0,
+        "responseRate": 11.8,
+        "questionnaire": "https://www.nesdc.go.kr/fixture/garesearch-2607/questionnaire",
+        "nesdcRegistration": "https://www.nesdc.go.kr/fixture/garesearch-2607",
+        "source": {
+          "sourceUrl": "https://www.nesdc.go.kr/fixture/garesearch-2607",
+          "fetchedAt": "2026-07-30T09:00:00Z"
+        }
+      }
+    }
+  ]
+}

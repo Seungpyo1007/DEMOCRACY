@@ -8,9 +8,10 @@ import 'package:flutter_test/flutter_test.dart';
 void main() {
   const items = [
     AdaptiveTabItem(label: '지역구', icon: Icons.location_on_outlined),
-    AdaptiveTabItem(label: '트래커', icon: Icons.donut_large_outlined),
-    AdaptiveTabItem(label: 'AI 분석', icon: Icons.auto_awesome_outlined),
-    AdaptiveTabItem(label: '커뮤니티', icon: Icons.forum_outlined),
+    AdaptiveTabItem(label: '역사', icon: Icons.menu_book_outlined),
+    AdaptiveTabItem(label: '트래커', icon: Icons.bar_chart_outlined),
+    AdaptiveTabItem(label: 'AI', icon: Icons.auto_awesome_outlined),
+    AdaptiveTabItem(label: '커뮤니티', icon: Icons.chat_bubble_outline),
     AdaptiveTabItem(label: '개표', icon: Icons.map_outlined),
   ];
 
@@ -33,32 +34,50 @@ void main() {
     );
   }
 
-  // The bar takes only the width its items need instead of stretching edge to
-  // edge. This is the property that distinguishes the intended shape from a
-  // full-width bar with rounded ends, so it is worth asserting directly.
+  // iOS: a capsule only as wide as its items, clear of every edge -- the
+  // property that distinguishes the iOS 26 shape from a full-width bar with
+  // rounded ends. Six items still have to fit a 390dp phone.
+  testWidgets('iOS hugs its content and clears every edge', (tester) async {
+    tester.view.physicalSize = const Size(390, 844);
+    tester.view.devicePixelRatio = 1;
+    addTearDown(tester.view.reset);
+    await tester.pumpWidget(harness(TargetPlatform.iOS));
+
+    final screen = tester.getRect(find.byType(MaterialApp));
+    final capsule = tester.getRect(find.byType(PlatformAdaptiveTabBar));
+    final surface = tester.getRect(
+      find.byKey(PlatformAdaptiveTabBar.surfaceKey),
+    );
+
+    expect(surface.width, lessThan(capsule.width));
+    expect(surface.bottom, lessThan(screen.bottom));
+    expect(surface.left, greaterThan(screen.left));
+    expect(surface.right, lessThan(screen.right));
+  });
+
+  testWidgets('Android is the Material 3 navigation bar itself', (
+    tester,
+  ) async {
+    await tester.pumpWidget(harness(TargetPlatform.android));
+    expect(find.byType(NavigationBar), findsOneWidget);
+    expect(find.byType(NavigationDestination), findsNWidgets(items.length));
+  });
+
+  // Android: Material 3's own bar -- edge to edge, 80dp, on the tonal step.
+  testWidgets('Android spans the width at the Material height', (tester) async {
+    await tester.pumpWidget(harness(TargetPlatform.android));
+
+    final screen = tester.getRect(find.byType(MaterialApp));
+    final surface = tester.getRect(
+      find.byKey(PlatformAdaptiveTabBar.surfaceKey),
+    );
+
+    expect(surface.width, screen.width);
+    expect(surface.bottom, screen.bottom);
+    expect(surface.height, greaterThanOrEqualTo(80));
+  });
+
   for (final platform in [TargetPlatform.iOS, TargetPlatform.android]) {
-    testWidgets('$platform hugs its content and clears every edge', (
-      tester,
-    ) async {
-      await tester.pumpWidget(harness(platform));
-
-      final screen = tester.getRect(find.byType(MaterialApp));
-      final capsule = tester.getRect(find.byType(PlatformAdaptiveTabBar));
-      final surface = tester.getRect(
-        find
-            .descendant(
-              of: find.byType(PlatformAdaptiveTabBar),
-              matching: find.byType(Material),
-            )
-            .first,
-      );
-
-      expect(surface.width, lessThan(capsule.width));
-      expect(surface.bottom, lessThan(screen.bottom));
-      expect(surface.left, greaterThan(screen.left));
-      expect(surface.right, lessThan(screen.right));
-    });
-
     testWidgets('$platform reports the tapped destination', (tester) async {
       final tapped = <int>[];
       await tester.pumpWidget(harness(platform, onTap: tapped.add));
@@ -66,7 +85,7 @@ void main() {
       await tester.tap(find.text('커뮤니티'));
       await tester.pump();
 
-      expect(tapped, [3]);
+      expect(tapped, [4]);
     });
   }
 
@@ -80,22 +99,15 @@ void main() {
 
   group('minimized', () {
     Rect surfaceOf(WidgetTester tester) {
-      return tester.getRect(
-        find
-            .descendant(
-              of: find.byType(PlatformAdaptiveTabBar),
-              matching: find.byType(Material),
-            )
-            .first,
-      );
+      return tester.getRect(find.byKey(PlatformAdaptiveTabBar.surfaceKey));
     }
 
     testWidgets('contracts the capsule and drops the labels', (tester) async {
-      await tester.pumpWidget(harness(TargetPlatform.android));
+      await tester.pumpWidget(harness(TargetPlatform.iOS));
       final expanded = surfaceOf(tester);
       expect(find.text('지역구'), findsOneWidget);
 
-      await tester.pumpWidget(harness(TargetPlatform.android, minimized: true));
+      await tester.pumpWidget(harness(TargetPlatform.iOS, minimized: true));
       await tester.pumpAndSettle();
       final contracted = surfaceOf(tester);
 
@@ -105,11 +117,11 @@ void main() {
     });
 
     testWidgets('expands again when restored', (tester) async {
-      await tester.pumpWidget(harness(TargetPlatform.android, minimized: true));
+      await tester.pumpWidget(harness(TargetPlatform.iOS, minimized: true));
       await tester.pumpAndSettle();
       final contracted = surfaceOf(tester);
 
-      await tester.pumpWidget(harness(TargetPlatform.android));
+      await tester.pumpWidget(harness(TargetPlatform.iOS));
       await tester.pumpAndSettle();
 
       expect(surfaceOf(tester).height, greaterThan(contracted.height));
@@ -119,14 +131,26 @@ void main() {
     testWidgets('stays tappable while contracted', (tester) async {
       final tapped = <int>[];
       await tester.pumpWidget(
-        harness(TargetPlatform.android, minimized: true, onTap: tapped.add),
+        harness(TargetPlatform.iOS, minimized: true, onTap: tapped.add),
       );
       await tester.pumpAndSettle();
 
       await tester.tap(find.byIcon(Icons.map_outlined));
       await tester.pump();
 
-      expect(tapped, [4]);
+      expect(tapped, [5]);
+    });
+
+    // Material's bar does not contract on scroll, so Android ignores it.
+    testWidgets('leaves the Android bar as it is', (tester) async {
+      await tester.pumpWidget(harness(TargetPlatform.android));
+      final expanded = surfaceOf(tester);
+
+      await tester.pumpWidget(harness(TargetPlatform.android, minimized: true));
+      await tester.pumpAndSettle();
+
+      expect(surfaceOf(tester), expanded);
+      expect(find.text('지역구'), findsOneWidget);
     });
   });
 }

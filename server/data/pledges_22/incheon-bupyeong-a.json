@@ -1,0 +1,99 @@
+{
+  "_note": "제22대 국회의원선거 인천 부평구 갑 당선인 노종면 (더불어민주당). 책자형 선거공보 PDF 5쪽 「미래도시 부평 품격도시 부평」 네 상자(철도지하화·재개발·캠프마켓·물길)의 소제목 8개. PDF에 글자층이 없어(이미지) 쪽 이미지를 보고 옮겼고, 네 상자는 위 줄 왼쪽→오른쪽, 아래 줄 왼쪽→오른쪽 순서로 두었다. 상자 제목(구호)과 소제목 아래 ◆ 세부 항목, 손글씨 구호는 넣지 않았다. PDF 6쪽 「구석구석 살피겠습니다」 01–06(당 공통 공약과 섞임)과 「빠짐없이 챙기겠습니다」 동별 공약은 넣지 않았다. 끝의 !만 덜어냈다. 제목은 원문 문구를 따랐고 바꾼 것은 위에 적은 구호·수식어 덜어내기뿐이다. 분류(category)는 앱에 정해진 분류 체계가 없어 비워 두었다. 이행 여부는 판정하지 않았다(notJudged).",
+  "districtId": "nec-49ebbb40",
+  "source": {
+    "sourceUrl": "https://policy.nec.go.kr/policy_pdf/20240410/PDF/PBINFO_PUB/2806/003_100152881_20240402_2.pdf",
+    "fetchedAt": "2026-09-27T17:14:30Z",
+    "publisher": "중앙선거관리위원회"
+  },
+  "pledges": [
+    {
+      "id": "22-incheon-bupyeong-a-01",
+      "title": "철로를 묻고 타운형 ‘레일벨트’ 조성 캠프마켓과 함께 미래 성장 기지로",
+      "category": "",
+      "status": "notJudged",
+      "source": {
+        "sourceUrl": "https://policy.nec.go.kr/policy_pdf/20240410/PDF/PBINFO_PUB/2806/003_100152881_20240402_2.pdf",
+        "fetchedAt": "2026-09-27T17:14:30Z",
+        "publisher": "중앙선거관리위원회"
+      }
+    },
+    {
+      "id": "22-incheon-bupyeong-a-02",
+      "title": "부평역 남부 상권을 키우겠습니다",
+      "category": "",
+      "status": "notJudged",
+      "source": {
+        "sourceUrl": "https://policy.nec.go.kr/policy_pdf/20240410/PDF/PBINFO_PUB/2806/003_100152881_20240402_2.pdf",
+        "fetchedAt": "2026-09-27T17:14:30Z",
+        "publisher": "중앙선거관리위원회"
+      }
+    },
+    {
+      "id": "22-incheon-bupyeong-a-03",
+      "title": "캠프마켓 지하에 대형 주차 허브",
+      "category": "",
+      "status": "notJudged",
+      "source": {
+        "sourceUrl": "https://policy.nec.go.kr/policy_pdf/20240410/PDF/PBINFO_PUB/2806/003_100152881_20240402_2.pdf",
+        "fetchedAt": "2026-09-27T17:14:30Z",
+        "publisher": "중앙선거관리위원회"
+      }
+    },
+    {
+      "id": "22-incheon-bupyeong-a-04",
+      "title": "캠프마켓 주인은 여러분입니다",
+      "category": "",
+      "status": "notJudged",
+      "source": {
+        "sourceUrl": "https://policy.nec.go.kr/policy_pdf/20240410/PDF/PBINFO_PUB/2806/003_100152881_20240402_2.pdf",
+        "fetchedAt": "2026-09-27T17:14:30Z",
+        "publisher": "중앙선거관리위원회"
+      }
+    },
+    {
+      "id": "22-incheon-bupyeong-a-05",
+      "title": "노후계획도시 특별법을 부평에 적용 가능한 법으로",
+      "category": "",
+      "status": "notJudged",
+      "source": {
+        "sourceUrl": "https://policy.nec.go.kr/policy_pdf/20240410/PDF/PBINFO_PUB/2806/003_100152881_20240402_2.pdf",
+        "fetchedAt": "2026-09-27T17:14:30Z",
+        "publisher": "중앙선거관리위원회"
+      }
+    },
+    {
+      "id": "22-incheon-bupyeong-a-06",
+      "title": "장기 방치건물 공공수용을 위한 특별법 제정",
+      "category": "",
+      "status": "notJudged",
+      "source": {
+        "sourceUrl": "https://policy.nec.go.kr/policy_pdf/20240410/PDF/PBINFO_PUB/2806/003_100152881_20240402_2.pdf",
+        "fetchedAt": "2026-09-27T17:14:30Z",
+        "publisher": "중앙선거관리위원회"
+      }
+    },
+    {
+      "id": "22-incheon-bupyeong-a-07",
+      "title": "2단계 굴포천 복원으로 걷고 싶은 부평 완성",
+      "category": "",
+      "status": "notJudged",
+      "source": {
+        "sourceUrl": "https://policy.nec.go.kr/policy_pdf/20240410/PDF/PBINFO_PUB/2806/003_100152881_20240402_2.pdf",
+        "fetchedAt": "2026-09-27T17:14:30Z",
+        "publisher": "중앙선거관리위원회"
+      }
+    },
+    {
+      "id": "22-incheon-bupyeong-a-08",
+      "title": "산곡천 복원의 닻을 올리겠습니다",
+      "category": "",
+      "status": "notJudged",
+      "source": {
+        "sourceUrl": "https://policy.nec.go.kr/policy_pdf/20240410/PDF/PBINFO_PUB/2806/003_100152881_20240402_2.pdf",
+        "fetchedAt": "2026-09-27T17:14:30Z",
+        "publisher": "중앙선거관리위원회"
+      }
+    }
+  ]
+}

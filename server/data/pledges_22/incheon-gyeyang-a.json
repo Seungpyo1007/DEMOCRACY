@@ -1,0 +1,77 @@
+{
+  "_note": "제22대 국회의원선거 인천 계양구 갑 당선인 유동수 (더불어민주당). 책자형 선거공보 PDF 3쪽(인쇄 4쪽) 「계양과의 약속 – 교통」 굵은 공약 3개와 PDF 4쪽(인쇄 5쪽) 「주거환경 – 계양을 더 새롭게, 확 바뀔 계산1·3동」 공약 제목 3개. 제목 아래 • 세부 항목은 넣지 않았다. PDF 5쪽 「생활·복지」의 동별(효성동·계산1·3동·작전동) 공약, 6–7쪽의 성과·법안, 9쪽의 '유동수와 더불어민주당' 공통 공약은 넣지 않았다. 끝의 !만 덜어냈다. 제목은 원문 문구를 따랐고 바꾼 것은 위에 적은 구호·수식어 덜어내기뿐이다. 분류(category)는 앱에 정해진 분류 체계가 없어 비워 두었다. 이행 여부는 판정하지 않았다(notJudged).",
+  "districtId": "nec-f97a2eb0",
+  "source": {
+    "sourceUrl": "https://policy.nec.go.kr/policy_pdf/20240410/PDF/PBINFO_PUB/2807/003_100152713_20240402_4.pdf",
+    "fetchedAt": "2026-09-27T17:14:30Z",
+    "publisher": "중앙선거관리위원회"
+  },
+  "pledges": [
+    {
+      "id": "22-incheon-gyeyang-a-01",
+      "title": "GTX-D•E노선 제5차 국가철도망 구축계획 반영, 조기착공 위한 신속예타 추진",
+      "category": "",
+      "status": "notJudged",
+      "source": {
+        "sourceUrl": "https://policy.nec.go.kr/policy_pdf/20240410/PDF/PBINFO_PUB/2807/003_100152713_20240402_4.pdf",
+        "fetchedAt": "2026-09-27T17:14:30Z",
+        "publisher": "중앙선거관리위원회"
+      }
+    },
+    {
+      "id": "22-incheon-gyeyang-a-02",
+      "title": "지하철 2호선 청라연장 사업 제5차 국가철도망 구축계획 반영 및 조기착공 추진",
+      "category": "",
+      "status": "notJudged",
+      "source": {
+        "sourceUrl": "https://policy.nec.go.kr/policy_pdf/20240410/PDF/PBINFO_PUB/2807/003_100152713_20240402_4.pdf",
+        "fetchedAt": "2026-09-27T17:14:30Z",
+        "publisher": "중앙선거관리위원회"
+      }
+    },
+    {
+      "id": "22-incheon-gyeyang-a-03",
+      "title": "경인고속도로 지하화 사업 조기 추진",
+      "category": "",
+      "status": "notJudged",
+      "source": {
+        "sourceUrl": "https://policy.nec.go.kr/policy_pdf/20240410/PDF/PBINFO_PUB/2807/003_100152713_20240402_4.pdf",
+        "fetchedAt": "2026-09-27T17:14:30Z",
+        "publisher": "중앙선거관리위원회"
+      }
+    },
+    {
+      "id": "22-incheon-gyeyang-a-04",
+      "title": "계산동 일원 도시재생사업 추진",
+      "category": "",
+      "status": "notJudged",
+      "source": {
+        "sourceUrl": "https://policy.nec.go.kr/policy_pdf/20240410/PDF/PBINFO_PUB/2807/003_100152713_20240402_4.pdf",
+        "fetchedAt": "2026-09-27T17:14:30Z",
+        "publisher": "중앙선거관리위원회"
+      }
+    },
+    {
+      "id": "22-incheon-gyeyang-a-05",
+      "title": "경인교대구역 도시관리계획 재정비",
+      "category": "",
+      "status": "notJudged",
+      "source": {
+        "sourceUrl": "https://policy.nec.go.kr/policy_pdf/20240410/PDF/PBINFO_PUB/2807/003_100152713_20240402_4.pdf",
+        "fetchedAt": "2026-09-27T17:14:30Z",
+        "publisher": "중앙선거관리위원회"
+      }
+    },
+    {
+      "id": "22-incheon-gyeyang-a-06",
+      "title": "노후계획도시 정비선도지구 추진",
+      "category": "",
+      "status": "notJudged",
+      "source": {
+        "sourceUrl": "https://policy.nec.go.kr/policy_pdf/20240410/PDF/PBINFO_PUB/2807/003_100152713_20240402_4.pdf",
+        "fetchedAt": "2026-09-27T17:14:30Z",
+        "publisher": "중앙선거관리위원회"
+      }
+    }
+  ]
+}

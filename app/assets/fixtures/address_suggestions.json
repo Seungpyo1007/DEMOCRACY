@@ -1,0 +1,21 @@
+{
+  "_note": "Sample address lookup results. Not a real address service, and not real addresses. Every entry resolves to the one district the other fixtures carry data for -- offering a district with no profile behind it would hand the user an error screen instead of a home.",
+  "suggestions": [
+    {
+      "address": "서울 마포구 월드컵북로 400",
+      "district": { "id": "fixture-seoul-mapo-b", "displayName": "서울 마포구 을" }
+    },
+    {
+      "address": "서울 마포구 성미산로 120",
+      "district": { "id": "fixture-seoul-mapo-b", "displayName": "서울 마포구 을" }
+    },
+    {
+      "address": "서울 마포구 독막로 33",
+      "district": { "id": "fixture-seoul-mapo-b", "displayName": "서울 마포구 을" }
+    },
+    {
+      "address": "서울 마포구 양화로 45",
+      "district": { "id": "fixture-seoul-mapo-b", "displayName": "서울 마포구 을" }
+    }
+  ]
+}

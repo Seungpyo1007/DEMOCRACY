@@ -12,7 +12,37 @@ Git Flow를 따른다.
 | `release/*` | 출시 준비. 버전 확정과 마무리 수정만 한다 | `develop` | `main` + `develop` |
 | `hotfix/*` | 출시본 긴급 수정 | `main` | `main` + `develop` |
 
-`main`에 직접 push하지 않는다. `develop`도 PR을 거친다.
+`main`에 직접 push하지 않는다. `develop`도 PR을 거친다. 기본 브랜치는 `develop`이므로 PR은 별도 지정 없이 `develop`을 향한다.
+
+### 브랜치 보호 설정
+
+`main`과 `develop` 모두 다음이 걸려 있다.
+
+- PR 없이는 병합할 수 없다 (승인 필요 수는 0. 1인 작업을 막지 않으면서 흐름은 강제한다)
+- `analyze and test` 체크를 통과해야 한다
+- base 브랜치가 최신이어야 한다 (strict)
+- force push와 브랜치 삭제 금지
+
+`enforce_admins`가 **켜져 있다.** 저장소 소유자에게도 예외가 없다. `main`과 `develop`에 직접 push하면 거부된다.
+
+```
+! [remote rejected] develop -> develop (protected branch hook declined)
+remote: - Changes must be made through a pull request.
+```
+
+이 문서를 포함해 모든 변경은 브랜치를 따고 PR로 들어와야 한다.
+
+### 막혔을 때
+
+CI 자체가 고장 나서 아무것도 병합할 수 없는 상황이라면, 고치는 변경도 PR로 올려야 하지만 그 PR 역시 같은 CI에 막힌다. 이때만 일시적으로 해제한다.
+
+```bash
+gh api -X DELETE repos/Seungpyo1007/DEMOCRACY/branches/main/protection/enforce_admins
+# 수습 후 곧바로 되돌린다
+gh api -X POST repos/Seungpyo1007/DEMOCRACY/branches/main/protection/enforce_admins
+```
+
+해제한 채로 두지 않는다. 켜 두는 이유는 규율이 아니라, 검증되지 않은 커밋이 `main`에 닿는 경로를 없애기 위해서다.
 
 ### 이름 규칙
 
@@ -53,6 +83,12 @@ PR은 `.github/workflows/verify.yml`을 통과해야 한다. 로컬에서 같은
 cd app && flutter pub get && dart format lib test && flutter analyze && flutter test
 ```
 
+macOS·Linux에서는 다음이 같은 순서를 수행하며, macOS에서는 iOS 빌드까지 이어서 돈다.
+
+```bash
+./tool/bootstrap.sh
+```
+
 Windows에서는 다음이 같은 순서를 수행한다.
 
 ```powershell
@@ -61,7 +97,26 @@ Windows에서는 다음이 같은 순서를 수행한다.
 
 CI는 `dart format --set-exit-if-changed`를 쓴다. 로컬 bootstrap은 포맷을 고쳐 주지만 CI는 고쳐 주지 않고 실패시킨다. 커밋 전에 포맷을 맞춰 둔다.
 
-Flutter는 **3.44.8로 고정**돼 있다. bootstrap과 CI 모두 정확히 이 버전을 요구하므로, 올리려면 `app/.fvmrc`, `tool/bootstrap.ps1`, `.github/workflows/verify.yml` 세 곳을 함께 바꿔야 한다.
+Flutter는 **3.44.8로 고정**돼 있다. bootstrap과 CI 모두 정확히 이 버전을 요구하므로, 올리려면 `app/.fvmrc`, `tool/bootstrap.ps1`, `tool/bootstrap.sh`, `.github/workflows/verify.yml` **네 곳**을 함께 바꿔야 한다.
+
+### 골든 테스트
+
+`verify.yml`은 두 job으로 나뉜다.
+
+| job | 러너 | 하는 일 |
+|---|---|---|
+| `analyze and test` | ubuntu | 포맷·분석·`flutter test --exclude-tags golden` |
+| `golden (macOS)` | macOS | `TZ=UTC flutter test --tags golden` |
+
+골든이 macOS 전용인 이유는 래스터라이즈 결과가 리눅스와 다르기 때문이다. ubuntu job에서 골든을 돌리면 반드시 깨진다. **필수 상태 체크는 `analyze and test`이므로 이 job 이름을 바꾸면 브랜치 보호가 풀린다.**
+
+화면 레이아웃을 의도적으로 바꿨다면 macOS에서 재생성한다.
+
+```bash
+cd app && TZ=UTC flutter test --tags golden --update-goldens
+```
+
+`TZ`를 고정하는 이유는 출처 뱃지가 `○월 ○일 기준`을 로컬 시각으로 그리기 때문이다. 비교는 0.5% 허용 오차를 쓴다. macOS 버전이 다르면 안티에일리어싱만으로 0.04%가 어긋나는데, 실제 변경은 그보다 훨씬 크게 나온다. 근거는 `app/test/golden/flutter_test_config.dart`에 있다.
 
 ## 커밋 메시지
 

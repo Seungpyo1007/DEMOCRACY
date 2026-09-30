@@ -1,0 +1,66 @@
+{
+  "_note": "제22대 국회의원선거 경기 용인시 병 당선인 부승찬 (더불어민주당). 책자형 선거공보 PDF 9쪽 「부승찬이 약속하는 우리 동네 수지를 위한 [수지 비전 2050]」 1–5. 각 번호 아래 · 세부 항목은 1–5를 풀어 쓴 것이라 넣지 않았다. PDF 9–10쪽의 동별 공약(성복동·상현동·고기동·풍덕천2동 등)과 PDF 3–8쪽의 정권심판·민주당 전국 공약은 넣지 않았다. PDF의 글자층이 깨져 있어 쪽 이미지를 보고 옮겼다. 제목은 원문 문구를 따랐고 바꾼 것은 위에 적은 구호·수식어 덜어내기뿐이다. 분류(category)는 앱에 정해진 분류 체계가 없어 비워 두었다. 이행 여부는 판정하지 않았다(notJudged).",
+  "districtId": "nec-37754af6",
+  "source": {
+    "sourceUrl": "https://policy.nec.go.kr/policy_pdf/20240410/PDF/PBINFO_PUB/4136/003_100151812_20240402_2.pdf",
+    "fetchedAt": "2026-09-28T02:00:00Z",
+    "publisher": "중앙선거관리위원회"
+  },
+  "pledges": [
+    {
+      "id": "22-gyeonggi-yongin-c-01",
+      "title": "시민참여형 수지발전 플랫폼 구축",
+      "category": "",
+      "status": "notJudged",
+      "source": {
+        "sourceUrl": "https://policy.nec.go.kr/policy_pdf/20240410/PDF/PBINFO_PUB/4136/003_100151812_20240402_2.pdf",
+        "fetchedAt": "2026-09-28T02:00:00Z",
+        "publisher": "중앙선거관리위원회"
+      }
+    },
+    {
+      "id": "22-gyeonggi-yongin-c-02",
+      "title": "수지 교통기반 확대 및 체계 정비",
+      "category": "",
+      "status": "notJudged",
+      "source": {
+        "sourceUrl": "https://policy.nec.go.kr/policy_pdf/20240410/PDF/PBINFO_PUB/4136/003_100151812_20240402_2.pdf",
+        "fetchedAt": "2026-09-28T02:00:00Z",
+        "publisher": "중앙선거관리위원회"
+      }
+    },
+    {
+      "id": "22-gyeonggi-yongin-c-03",
+      "title": "주민·자영업자·소상공인을 위한 ‘수지형 상생경제 체계’ 구축",
+      "category": "",
+      "status": "notJudged",
+      "source": {
+        "sourceUrl": "https://policy.nec.go.kr/policy_pdf/20240410/PDF/PBINFO_PUB/4136/003_100151812_20240402_2.pdf",
+        "fetchedAt": "2026-09-28T02:00:00Z",
+        "publisher": "중앙선거관리위원회"
+      }
+    },
+    {
+      "id": "22-gyeonggi-yongin-c-04",
+      "title": "‘문화중심도시 수지’ 브랜드 기반 구축",
+      "category": "",
+      "status": "notJudged",
+      "source": {
+        "sourceUrl": "https://policy.nec.go.kr/policy_pdf/20240410/PDF/PBINFO_PUB/4136/003_100151812_20240402_2.pdf",
+        "fetchedAt": "2026-09-28T02:00:00Z",
+        "publisher": "중앙선거관리위원회"
+      }
+    },
+    {
+      "id": "22-gyeonggi-yongin-c-05",
+      "title": "수지 교육환경 및 기반 정비",
+      "category": "",
+      "status": "notJudged",
+      "source": {
+        "sourceUrl": "https://policy.nec.go.kr/policy_pdf/20240410/PDF/PBINFO_PUB/4136/003_100151812_20240402_2.pdf",
+        "fetchedAt": "2026-09-28T02:00:00Z",
+        "publisher": "중앙선거관리위원회"
+      }
+    }
+  ]
+}

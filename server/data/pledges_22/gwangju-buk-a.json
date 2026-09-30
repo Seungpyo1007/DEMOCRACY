@@ -1,0 +1,55 @@
+{
+  "_note": "제22대 국회의원선거 광주 북구 갑 당선인 정준호 (더불어민주당). 책자형 선거공보 PDF 7–8쪽 「북구가 뛴다! / 북구가 도약한다!」 대표 사업 4개의 굵은 이름. 이름 위 구호('서방천을 광주의 청계천으로!' 등)와 제안 배경·입지·사업 방식 설명은 넣지 않았다. PDF 5–6쪽의 '두배로' 가치 구호와 정치·경제·문화 혁신 제안, 9–10쪽의 동별 공약과 세대별 공약은 넣지 않았다. 제목은 원문 문구를 따랐고 바꾼 것은 위에 적은 구호·수식어 덜어내기뿐이다. 분류(category)는 앱에 정해진 분류 체계가 없어 비워 두었다. 이행 여부는 판정하지 않았다(notJudged).",
+  "districtId": "nec-c21ed3d5",
+  "source": {
+    "sourceUrl": "https://policy.nec.go.kr/policy_pdf/20240410/PDF/PBINFO_PUB/2904/003_100151135_20240402_2.pdf",
+    "fetchedAt": "2026-09-27T17:14:30Z",
+    "publisher": "중앙선거관리위원회"
+  },
+  "pledges": [
+    {
+      "id": "22-gwangju-buk-a-01",
+      "title": "서방천 생태하천 복원",
+      "category": "",
+      "status": "notJudged",
+      "source": {
+        "sourceUrl": "https://policy.nec.go.kr/policy_pdf/20240410/PDF/PBINFO_PUB/2904/003_100151135_20240402_2.pdf",
+        "fetchedAt": "2026-09-27T17:14:30Z",
+        "publisher": "중앙선거관리위원회"
+      }
+    },
+    {
+      "id": "22-gwangju-buk-a-02",
+      "title": "도심형 공동 캠퍼스 타운",
+      "category": "",
+      "status": "notJudged",
+      "source": {
+        "sourceUrl": "https://policy.nec.go.kr/policy_pdf/20240410/PDF/PBINFO_PUB/2904/003_100151135_20240402_2.pdf",
+        "fetchedAt": "2026-09-27T17:14:30Z",
+        "publisher": "중앙선거관리위원회"
+      }
+    },
+    {
+      "id": "22-gwangju-buk-a-03",
+      "title": "저심도 지하도로",
+      "category": "",
+      "status": "notJudged",
+      "source": {
+        "sourceUrl": "https://policy.nec.go.kr/policy_pdf/20240410/PDF/PBINFO_PUB/2904/003_100151135_20240402_2.pdf",
+        "fetchedAt": "2026-09-27T17:14:30Z",
+        "publisher": "중앙선거관리위원회"
+      }
+    },
+    {
+      "id": "22-gwangju-buk-a-04",
+      "title": "광주역 AI 청년 스타트업 창업밸리",
+      "category": "",
+      "status": "notJudged",
+      "source": {
+        "sourceUrl": "https://policy.nec.go.kr/policy_pdf/20240410/PDF/PBINFO_PUB/2904/003_100151135_20240402_2.pdf",
+        "fetchedAt": "2026-09-27T17:14:30Z",
+        "publisher": "중앙선거관리위원회"
+      }
+    }
+  ]
+}

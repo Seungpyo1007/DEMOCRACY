@@ -1,0 +1,385 @@
+{
+  "_note": "제22대 국회의원선거 서울 강서구 을 당선인 진성준 (더불어민주당). 책자형 선거공보 PDF 8쪽 지역 공약 ■ 분야(국제적 경제관문도시 도약·주거·도시환경 현대화·안심돌봄·미래교육·청년친화도시·어르신·장애인 포용복지·사통팔달 편리한 교통) 아래 · 항목 34개. PDF 7쪽의 국정·개헌·저출생 등 전국 공약, 3–6쪽의 서술형 소개(8쪽 항목과 겹침), 9–10쪽의 동별 공약은 넣지 않았다. 제목은 원문 문구를 따랐고 바꾼 것은 위에 적은 구호·수식어 덜어내기뿐이다. 분류(category)는 앱에 정해진 분류 체계가 없어 비워 두었다. 이행 여부는 판정하지 않았다(notJudged).",
+  "districtId": "nec-2d30466d",
+  "source": {
+    "sourceUrl": "https://policy.nec.go.kr/policy_pdf/20240410/PDF/PBINFO_PUB/1116/003_100152579_20240403_2.pdf",
+    "fetchedAt": "2026-09-27T17:33:02Z",
+    "publisher": "중앙선거관리위원회"
+  },
+  "pledges": [
+    {
+      "id": "22-seoul-gangseo-b-01",
+      "title": "김포공항 혁신개발 신속 추진 및 완수 (UAM 이착륙장 · 항공국제업무 · 모빌리티혁신클러스터)",
+      "category": "",
+      "status": "notJudged",
+      "source": {
+        "sourceUrl": "https://policy.nec.go.kr/policy_pdf/20240410/PDF/PBINFO_PUB/1116/003_100152579_20240403_2.pdf",
+        "fetchedAt": "2026-09-27T17:33:02Z",
+        "publisher": "중앙선거관리위원회"
+      }
+    },
+    {
+      "id": "22-seoul-gangseo-b-02",
+      "title": "김포공항 인근지역 미래항공전략산업단지 개발",
+      "category": "",
+      "status": "notJudged",
+      "source": {
+        "sourceUrl": "https://policy.nec.go.kr/policy_pdf/20240410/PDF/PBINFO_PUB/1116/003_100152579_20240403_2.pdf",
+        "fetchedAt": "2026-09-27T17:33:02Z",
+        "publisher": "중앙선거관리위원회"
+      }
+    },
+    {
+      "id": "22-seoul-gangseo-b-03",
+      "title": "김포공항-공항동 연결 스카이워크 조성",
+      "category": "",
+      "status": "notJudged",
+      "source": {
+        "sourceUrl": "https://policy.nec.go.kr/policy_pdf/20240410/PDF/PBINFO_PUB/1116/003_100152579_20240403_2.pdf",
+        "fetchedAt": "2026-09-27T17:33:02Z",
+        "publisher": "중앙선거관리위원회"
+      }
+    },
+    {
+      "id": "22-seoul-gangseo-b-04",
+      "title": "서울강서공항으로 김포공항 명칭 변경 및 국제선 활성화",
+      "category": "",
+      "status": "notJudged",
+      "source": {
+        "sourceUrl": "https://policy.nec.go.kr/policy_pdf/20240410/PDF/PBINFO_PUB/1116/003_100152579_20240403_2.pdf",
+        "fetchedAt": "2026-09-27T17:33:02Z",
+        "publisher": "중앙선거관리위원회"
+      }
+    },
+    {
+      "id": "22-seoul-gangseo-b-05",
+      "title": "항공고도제한 조기완화",
+      "category": "",
+      "status": "notJudged",
+      "source": {
+        "sourceUrl": "https://policy.nec.go.kr/policy_pdf/20240410/PDF/PBINFO_PUB/1116/003_100152579_20240403_2.pdf",
+        "fetchedAt": "2026-09-27T17:33:02Z",
+        "publisher": "중앙선거관리위원회"
+      }
+    },
+    {
+      "id": "22-seoul-gangseo-b-06",
+      "title": "신속한 재개발·재건축 추진",
+      "category": "",
+      "status": "notJudged",
+      "source": {
+        "sourceUrl": "https://policy.nec.go.kr/policy_pdf/20240410/PDF/PBINFO_PUB/1116/003_100152579_20240403_2.pdf",
+        "fetchedAt": "2026-09-27T17:33:02Z",
+        "publisher": "중앙선거관리위원회"
+      }
+    },
+    {
+      "id": "22-seoul-gangseo-b-07",
+      "title": "노후 공공아파트 시설개선 및 재정비",
+      "category": "",
+      "status": "notJudged",
+      "source": {
+        "sourceUrl": "https://policy.nec.go.kr/policy_pdf/20240410/PDF/PBINFO_PUB/1116/003_100152579_20240403_2.pdf",
+        "fetchedAt": "2026-09-27T17:33:02Z",
+        "publisher": "중앙선거관리위원회"
+      }
+    },
+    {
+      "id": "22-seoul-gangseo-b-08",
+      "title": "‘선보상·후환수’ 전세사기특별법 개정 및 전세사기 예방 강화",
+      "category": "",
+      "status": "notJudged",
+      "source": {
+        "sourceUrl": "https://policy.nec.go.kr/policy_pdf/20240410/PDF/PBINFO_PUB/1116/003_100152579_20240403_2.pdf",
+        "fetchedAt": "2026-09-27T17:33:02Z",
+        "publisher": "중앙선거관리위원회"
+      }
+    },
+    {
+      "id": "22-seoul-gangseo-b-09",
+      "title": "CCTV증설로 방범사각지대 해소",
+      "category": "",
+      "status": "notJudged",
+      "source": {
+        "sourceUrl": "https://policy.nec.go.kr/policy_pdf/20240410/PDF/PBINFO_PUB/1116/003_100152579_20240403_2.pdf",
+        "fetchedAt": "2026-09-27T17:33:02Z",
+        "publisher": "중앙선거관리위원회"
+      }
+    },
+    {
+      "id": "22-seoul-gangseo-b-10",
+      "title": "반려견 놀이터 조성",
+      "category": "",
+      "status": "notJudged",
+      "source": {
+        "sourceUrl": "https://policy.nec.go.kr/policy_pdf/20240410/PDF/PBINFO_PUB/1116/003_100152579_20240403_2.pdf",
+        "fetchedAt": "2026-09-27T17:33:02Z",
+        "publisher": "중앙선거관리위원회"
+      }
+    },
+    {
+      "id": "22-seoul-gangseo-b-11",
+      "title": "강서전역 연결 둘레길 및 가로수숲 조성",
+      "category": "",
+      "status": "notJudged",
+      "source": {
+        "sourceUrl": "https://policy.nec.go.kr/policy_pdf/20240410/PDF/PBINFO_PUB/1116/003_100152579_20240403_2.pdf",
+        "fetchedAt": "2026-09-27T17:33:02Z",
+        "publisher": "중앙선거관리위원회"
+      }
+    },
+    {
+      "id": "22-seoul-gangseo-b-12",
+      "title": "양육비 국가 대지급 제도 도입",
+      "category": "",
+      "status": "notJudged",
+      "source": {
+        "sourceUrl": "https://policy.nec.go.kr/policy_pdf/20240410/PDF/PBINFO_PUB/1116/003_100152579_20240403_2.pdf",
+        "fetchedAt": "2026-09-27T17:33:02Z",
+        "publisher": "중앙선거관리위원회"
+      }
+    },
+    {
+      "id": "22-seoul-gangseo-b-13",
+      "title": "전 연령층 환경체험교육관 ‘에코스쿨’ 건립",
+      "category": "",
+      "status": "notJudged",
+      "source": {
+        "sourceUrl": "https://policy.nec.go.kr/policy_pdf/20240410/PDF/PBINFO_PUB/1116/003_100152579_20240403_2.pdf",
+        "fetchedAt": "2026-09-27T17:33:02Z",
+        "publisher": "중앙선거관리위원회"
+      }
+    },
+    {
+      "id": "22-seoul-gangseo-b-14",
+      "title": "교사 · 학생 마음건강 돌봄지원 강화",
+      "category": "",
+      "status": "notJudged",
+      "source": {
+        "sourceUrl": "https://policy.nec.go.kr/policy_pdf/20240410/PDF/PBINFO_PUB/1116/003_100152579_20240403_2.pdf",
+        "fetchedAt": "2026-09-27T17:33:02Z",
+        "publisher": "중앙선거관리위원회"
+      }
+    },
+    {
+      "id": "22-seoul-gangseo-b-15",
+      "title": "우리동네키움센터 및 시간제보육지정 어린이집 확대",
+      "category": "",
+      "status": "notJudged",
+      "source": {
+        "sourceUrl": "https://policy.nec.go.kr/policy_pdf/20240410/PDF/PBINFO_PUB/1116/003_100152579_20240403_2.pdf",
+        "fetchedAt": "2026-09-27T17:33:02Z",
+        "publisher": "중앙선거관리위원회"
+      }
+    },
+    {
+      "id": "22-seoul-gangseo-b-16",
+      "title": "안전통학로 조성 및 안심등교 지원",
+      "category": "",
+      "status": "notJudged",
+      "source": {
+        "sourceUrl": "https://policy.nec.go.kr/policy_pdf/20240410/PDF/PBINFO_PUB/1116/003_100152579_20240403_2.pdf",
+        "fetchedAt": "2026-09-27T17:33:02Z",
+        "publisher": "중앙선거관리위원회"
+      }
+    },
+    {
+      "id": "22-seoul-gangseo-b-17",
+      "title": "강서미래교육 특구 지정 및 운영 (미래교육센터 · 에코스쿨 등)",
+      "category": "",
+      "status": "notJudged",
+      "source": {
+        "sourceUrl": "https://policy.nec.go.kr/policy_pdf/20240410/PDF/PBINFO_PUB/1116/003_100152579_20240403_2.pdf",
+        "fetchedAt": "2026-09-27T17:33:02Z",
+        "publisher": "중앙선거관리위원회"
+      }
+    },
+    {
+      "id": "22-seoul-gangseo-b-18",
+      "title": "수도권 전역 환승 가능한 월 3만원 청년패스 도입",
+      "category": "",
+      "status": "notJudged",
+      "source": {
+        "sourceUrl": "https://policy.nec.go.kr/policy_pdf/20240410/PDF/PBINFO_PUB/1116/003_100152579_20240403_2.pdf",
+        "fetchedAt": "2026-09-27T17:33:02Z",
+        "publisher": "중앙선거관리위원회"
+      }
+    },
+    {
+      "id": "22-seoul-gangseo-b-19",
+      "title": "4.5일제 도입 및 포괄임금제 폐지로 공짜야근 금지",
+      "category": "",
+      "status": "notJudged",
+      "source": {
+        "sourceUrl": "https://policy.nec.go.kr/policy_pdf/20240410/PDF/PBINFO_PUB/1116/003_100152579_20240403_2.pdf",
+        "fetchedAt": "2026-09-27T17:33:02Z",
+        "publisher": "중앙선거관리위원회"
+      }
+    },
+    {
+      "id": "22-seoul-gangseo-b-20",
+      "title": "통신비 세액공제로 부담 경감",
+      "category": "",
+      "status": "notJudged",
+      "source": {
+        "sourceUrl": "https://policy.nec.go.kr/policy_pdf/20240410/PDF/PBINFO_PUB/1116/003_100152579_20240403_2.pdf",
+        "fetchedAt": "2026-09-27T17:33:02Z",
+        "publisher": "중앙선거관리위원회"
+      }
+    },
+    {
+      "id": "22-seoul-gangseo-b-21",
+      "title": "윤석열 정부가 중단한 청년내일채움공제 재도입",
+      "category": "",
+      "status": "notJudged",
+      "source": {
+        "sourceUrl": "https://policy.nec.go.kr/policy_pdf/20240410/PDF/PBINFO_PUB/1116/003_100152579_20240403_2.pdf",
+        "fetchedAt": "2026-09-27T17:33:02Z",
+        "publisher": "중앙선거관리위원회"
+      }
+    },
+    {
+      "id": "22-seoul-gangseo-b-22",
+      "title": "1인 가구 지원사업 발굴 및 확대",
+      "category": "",
+      "status": "notJudged",
+      "source": {
+        "sourceUrl": "https://policy.nec.go.kr/policy_pdf/20240410/PDF/PBINFO_PUB/1116/003_100152579_20240403_2.pdf",
+        "fetchedAt": "2026-09-27T17:33:02Z",
+        "publisher": "중앙선거관리위원회"
+      }
+    },
+    {
+      "id": "22-seoul-gangseo-b-23",
+      "title": "마곡 입주 · 항공 관련 기업 연계 취업박람회 및 인턴십 운영",
+      "category": "",
+      "status": "notJudged",
+      "source": {
+        "sourceUrl": "https://policy.nec.go.kr/policy_pdf/20240410/PDF/PBINFO_PUB/1116/003_100152579_20240403_2.pdf",
+        "fetchedAt": "2026-09-27T17:33:02Z",
+        "publisher": "중앙선거관리위원회"
+      }
+    },
+    {
+      "id": "22-seoul-gangseo-b-24",
+      "title": "어르신·장애인 맞춤형 일자리 확대",
+      "category": "",
+      "status": "notJudged",
+      "source": {
+        "sourceUrl": "https://policy.nec.go.kr/policy_pdf/20240410/PDF/PBINFO_PUB/1116/003_100152579_20240403_2.pdf",
+        "fetchedAt": "2026-09-27T17:33:02Z",
+        "publisher": "중앙선거관리위원회"
+      }
+    },
+    {
+      "id": "22-seoul-gangseo-b-25",
+      "title": "보훈 대상자 예우 및 지원 강화",
+      "category": "",
+      "status": "notJudged",
+      "source": {
+        "sourceUrl": "https://policy.nec.go.kr/policy_pdf/20240410/PDF/PBINFO_PUB/1116/003_100152579_20240403_2.pdf",
+        "fetchedAt": "2026-09-27T17:33:02Z",
+        "publisher": "중앙선거관리위원회"
+      }
+    },
+    {
+      "id": "22-seoul-gangseo-b-26",
+      "title": "마곡 어르신복지관 건립",
+      "category": "",
+      "status": "notJudged",
+      "source": {
+        "sourceUrl": "https://policy.nec.go.kr/policy_pdf/20240410/PDF/PBINFO_PUB/1116/003_100152579_20240403_2.pdf",
+        "fetchedAt": "2026-09-27T17:33:02Z",
+        "publisher": "중앙선거관리위원회"
+      }
+    },
+    {
+      "id": "22-seoul-gangseo-b-27",
+      "title": "요양병원 간병비 급여화",
+      "category": "",
+      "status": "notJudged",
+      "source": {
+        "sourceUrl": "https://policy.nec.go.kr/policy_pdf/20240410/PDF/PBINFO_PUB/1116/003_100152579_20240403_2.pdf",
+        "fetchedAt": "2026-09-27T17:33:02Z",
+        "publisher": "중앙선거관리위원회"
+      }
+    },
+    {
+      "id": "22-seoul-gangseo-b-28",
+      "title": "경로당 주 5회 점심 제공",
+      "category": "",
+      "status": "notJudged",
+      "source": {
+        "sourceUrl": "https://policy.nec.go.kr/policy_pdf/20240410/PDF/PBINFO_PUB/1116/003_100152579_20240403_2.pdf",
+        "fetchedAt": "2026-09-27T17:33:02Z",
+        "publisher": "중앙선거관리위원회"
+      }
+    },
+    {
+      "id": "22-seoul-gangseo-b-29",
+      "title": "장애인 종합사회복지관 및 장애체험관(인권교육 포함) 건립",
+      "category": "",
+      "status": "notJudged",
+      "source": {
+        "sourceUrl": "https://policy.nec.go.kr/policy_pdf/20240410/PDF/PBINFO_PUB/1116/003_100152579_20240403_2.pdf",
+        "fetchedAt": "2026-09-27T17:33:02Z",
+        "publisher": "중앙선거관리위원회"
+      }
+    },
+    {
+      "id": "22-seoul-gangseo-b-30",
+      "title": "장애인 시설 및 단체 지원 강화",
+      "category": "",
+      "status": "notJudged",
+      "source": {
+        "sourceUrl": "https://policy.nec.go.kr/policy_pdf/20240410/PDF/PBINFO_PUB/1116/003_100152579_20240403_2.pdf",
+        "fetchedAt": "2026-09-27T17:33:02Z",
+        "publisher": "중앙선거관리위원회"
+      }
+    },
+    {
+      "id": "22-seoul-gangseo-b-31",
+      "title": "지하철 9호선 전동차 증차 및 올림픽대로 추가차로 확대",
+      "category": "",
+      "status": "notJudged",
+      "source": {
+        "sourceUrl": "https://policy.nec.go.kr/policy_pdf/20240410/PDF/PBINFO_PUB/1116/003_100152579_20240403_2.pdf",
+        "fetchedAt": "2026-09-27T17:33:02Z",
+        "publisher": "중앙선거관리위원회"
+      }
+    },
+    {
+      "id": "22-seoul-gangseo-b-32",
+      "title": "대장 ~ 홍대선 조기 착공 및 적기 개통",
+      "category": "",
+      "status": "notJudged",
+      "source": {
+        "sourceUrl": "https://policy.nec.go.kr/policy_pdf/20240410/PDF/PBINFO_PUB/1116/003_100152579_20240403_2.pdf",
+        "fetchedAt": "2026-09-27T17:33:02Z",
+        "publisher": "중앙선거관리위원회"
+      }
+    },
+    {
+      "id": "22-seoul-gangseo-b-33",
+      "title": "방화대로 미개통 구간 완전 개통",
+      "category": "",
+      "status": "notJudged",
+      "source": {
+        "sourceUrl": "https://policy.nec.go.kr/policy_pdf/20240410/PDF/PBINFO_PUB/1116/003_100152579_20240403_2.pdf",
+        "fetchedAt": "2026-09-27T17:33:02Z",
+        "publisher": "중앙선거관리위원회"
+      }
+    },
+    {
+      "id": "22-seoul-gangseo-b-34",
+      "title": "마곡 중앙로와 올림픽대로 진출입로 연결",
+      "category": "",
+      "status": "notJudged",
+      "source": {
+        "sourceUrl": "https://policy.nec.go.kr/policy_pdf/20240410/PDF/PBINFO_PUB/1116/003_100152579_20240403_2.pdf",
+        "fetchedAt": "2026-09-27T17:33:02Z",
+        "publisher": "중앙선거관리위원회"
+      }
+    }
+  ]
+}

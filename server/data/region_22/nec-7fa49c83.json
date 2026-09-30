@@ -1,0 +1,21 @@
+{
+  "districtId": "nec-7fa49c83",
+  "displayName": "경기 화성시 정",
+  "source": {
+    "sourceUrl": "https://www.law.go.kr/LSW/lsInfoP.do?lsiSeq=261101",
+    "fetchedAt": "2026-09-27T15:00:00.000Z",
+    "publisher": "국가법령정보센터"
+  },
+  "events": [
+    {
+      "year": 2024,
+      "title": "선거구 구역 재편",
+      "detail": "구성: 화성시 을 일부(동탄1동, 동탄2동, 동탄5동), 화성시 병 일부(반월동, 동탄3동)",
+      "source": {
+        "sourceUrl": "https://www.law.go.kr/LSW/lsInfoP.do?lsiSeq=261101",
+        "fetchedAt": "2026-09-27T15:00:00.000Z",
+        "publisher": "국가법령정보센터"
+      }
+    }
+  ]
+}

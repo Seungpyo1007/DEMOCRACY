@@ -1,0 +1,8 @@
+# Declaring the tag keeps `flutter test` from warning about an unknown one, and
+# gives the two CI jobs a name to select on: the ubuntu job runs
+# --exclude-tags golden, the macOS job runs --tags golden.
+tags:
+  golden:
+    description: >-
+      390dp reference images. Rasterisation differs between macOS and Linux, so
+      these are generated and verified on macOS only.

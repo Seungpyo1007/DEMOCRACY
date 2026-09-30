@@ -1,0 +1,231 @@
+{
+  "_note": "제22대 국회의원선거 경북 의성군청송군영덕군울진군 당선인 박형수 (국민의힘). 책자형 선거공보에 번호 붙은 목록이 없어 PDF 4·6·8·10쪽 의성·청송·영덕·울진 군별 공약 쪽의 굵은 제목 20개를 쪽마다 왼쪽 위부터 옮겼다(글자층 순서가 섞여 있어 쪽 이미지를 보고 확인). 제목 아래 - 세부 항목, 홀수 쪽 군별 머리 문장(「의성 공항신도시 성공조성!」 등)은 넣지 않았다. 두 줄로 나뉜 제목은 한 줄로 이었다. 제목은 원문 문구를 따랐고 바꾼 것은 위에 적은 구호·수식어 덜어내기뿐이다. 분류(category)는 앱에 정해진 분류 체계가 없어 비워 두었다. 이행 여부는 판정하지 않았다(notJudged).",
+  "districtId": "nec-5af96d3d",
+  "source": {
+    "sourceUrl": "https://policy.nec.go.kr/policy_pdf/20240410/PDF/PBINFO_PUB/4719/003_100152784_20240402_2.pdf",
+    "fetchedAt": "2026-09-28T03:00:00Z",
+    "publisher": "중앙선거관리위원회"
+  },
+  "pledges": [
+    {
+      "id": "22-gyeongbuk-uiseong-cheongsong-yeongdeok-uljin-01",
+      "title": "성공적인 공항신도시 건설",
+      "category": "",
+      "status": "notJudged",
+      "source": {
+        "sourceUrl": "https://policy.nec.go.kr/policy_pdf/20240410/PDF/PBINFO_PUB/4719/003_100152784_20240402_2.pdf",
+        "fetchedAt": "2026-09-28T03:00:00Z",
+        "publisher": "중앙선거관리위원회"
+      }
+    },
+    {
+      "id": "22-gyeongbuk-uiseong-cheongsong-yeongdeok-uljin-02",
+      "title": "미래 신성장산업 육성",
+      "category": "",
+      "status": "notJudged",
+      "source": {
+        "sourceUrl": "https://policy.nec.go.kr/policy_pdf/20240410/PDF/PBINFO_PUB/4719/003_100152784_20240402_2.pdf",
+        "fetchedAt": "2026-09-28T03:00:00Z",
+        "publisher": "중앙선거관리위원회"
+      }
+    },
+    {
+      "id": "22-gyeongbuk-uiseong-cheongsong-yeongdeok-uljin-03",
+      "title": "청년성공정책 추진 지원",
+      "category": "",
+      "status": "notJudged",
+      "source": {
+        "sourceUrl": "https://policy.nec.go.kr/policy_pdf/20240410/PDF/PBINFO_PUB/4719/003_100152784_20240402_2.pdf",
+        "fetchedAt": "2026-09-28T03:00:00Z",
+        "publisher": "중앙선거관리위원회"
+      }
+    },
+    {
+      "id": "22-gyeongbuk-uiseong-cheongsong-yeongdeok-uljin-04",
+      "title": "미래 농업경쟁력 확보",
+      "category": "",
+      "status": "notJudged",
+      "source": {
+        "sourceUrl": "https://policy.nec.go.kr/policy_pdf/20240410/PDF/PBINFO_PUB/4719/003_100152784_20240402_2.pdf",
+        "fetchedAt": "2026-09-28T03:00:00Z",
+        "publisher": "중앙선거관리위원회"
+      }
+    },
+    {
+      "id": "22-gyeongbuk-uiseong-cheongsong-yeongdeok-uljin-05",
+      "title": "지방소멸위기대응 종합정책 적극 지원",
+      "category": "",
+      "status": "notJudged",
+      "source": {
+        "sourceUrl": "https://policy.nec.go.kr/policy_pdf/20240410/PDF/PBINFO_PUB/4719/003_100152784_20240402_2.pdf",
+        "fetchedAt": "2026-09-28T03:00:00Z",
+        "publisher": "중앙선거관리위원회"
+      }
+    },
+    {
+      "id": "22-gyeongbuk-uiseong-cheongsong-yeongdeok-uljin-06",
+      "title": "청송농업기반 조성 확대와 소득증대사업 추진",
+      "category": "",
+      "status": "notJudged",
+      "source": {
+        "sourceUrl": "https://policy.nec.go.kr/policy_pdf/20240410/PDF/PBINFO_PUB/4719/003_100152784_20240402_2.pdf",
+        "fetchedAt": "2026-09-28T03:00:00Z",
+        "publisher": "중앙선거관리위원회"
+      }
+    },
+    {
+      "id": "22-gyeongbuk-uiseong-cheongsong-yeongdeok-uljin-07",
+      "title": "길이 열리는 청송 교통접근성 확대",
+      "category": "",
+      "status": "notJudged",
+      "source": {
+        "sourceUrl": "https://policy.nec.go.kr/policy_pdf/20240410/PDF/PBINFO_PUB/4719/003_100152784_20240402_2.pdf",
+        "fetchedAt": "2026-09-28T03:00:00Z",
+        "publisher": "중앙선거관리위원회"
+      }
+    },
+    {
+      "id": "22-gyeongbuk-uiseong-cheongsong-yeongdeok-uljin-08",
+      "title": "소비 촉진 체류형 관광인프라 구축",
+      "category": "",
+      "status": "notJudged",
+      "source": {
+        "sourceUrl": "https://policy.nec.go.kr/policy_pdf/20240410/PDF/PBINFO_PUB/4719/003_100152784_20240402_2.pdf",
+        "fetchedAt": "2026-09-28T03:00:00Z",
+        "publisher": "중앙선거관리위원회"
+      }
+    },
+    {
+      "id": "22-gyeongbuk-uiseong-cheongsong-yeongdeok-uljin-09",
+      "title": "청송군민 생활환경시설 확충",
+      "category": "",
+      "status": "notJudged",
+      "source": {
+        "sourceUrl": "https://policy.nec.go.kr/policy_pdf/20240410/PDF/PBINFO_PUB/4719/003_100152784_20240402_2.pdf",
+        "fetchedAt": "2026-09-28T03:00:00Z",
+        "publisher": "중앙선거관리위원회"
+      }
+    },
+    {
+      "id": "22-gyeongbuk-uiseong-cheongsong-yeongdeok-uljin-10",
+      "title": "재해 없는 안전한 청송 만들기 지원",
+      "category": "",
+      "status": "notJudged",
+      "source": {
+        "sourceUrl": "https://policy.nec.go.kr/policy_pdf/20240410/PDF/PBINFO_PUB/4719/003_100152784_20240402_2.pdf",
+        "fetchedAt": "2026-09-28T03:00:00Z",
+        "publisher": "중앙선거관리위원회"
+      }
+    },
+    {
+      "id": "22-gyeongbuk-uiseong-cheongsong-yeongdeok-uljin-11",
+      "title": "미래성장동력 확보",
+      "category": "",
+      "status": "notJudged",
+      "source": {
+        "sourceUrl": "https://policy.nec.go.kr/policy_pdf/20240410/PDF/PBINFO_PUB/4719/003_100152784_20240402_2.pdf",
+        "fetchedAt": "2026-09-28T03:00:00Z",
+        "publisher": "중앙선거관리위원회"
+      }
+    },
+    {
+      "id": "22-gyeongbuk-uiseong-cheongsong-yeongdeok-uljin-12",
+      "title": "길이 열리는 영덕 교통 접근성 확대",
+      "category": "",
+      "status": "notJudged",
+      "source": {
+        "sourceUrl": "https://policy.nec.go.kr/policy_pdf/20240410/PDF/PBINFO_PUB/4719/003_100152784_20240402_2.pdf",
+        "fetchedAt": "2026-09-28T03:00:00Z",
+        "publisher": "중앙선거관리위원회"
+      }
+    },
+    {
+      "id": "22-gyeongbuk-uiseong-cheongsong-yeongdeok-uljin-13",
+      "title": "해양·관광산업과 어업기반정비",
+      "category": "",
+      "status": "notJudged",
+      "source": {
+        "sourceUrl": "https://policy.nec.go.kr/policy_pdf/20240410/PDF/PBINFO_PUB/4719/003_100152784_20240402_2.pdf",
+        "fetchedAt": "2026-09-28T03:00:00Z",
+        "publisher": "중앙선거관리위원회"
+      }
+    },
+    {
+      "id": "22-gyeongbuk-uiseong-cheongsong-yeongdeok-uljin-14",
+      "title": "국립해양생물종복원센터 설립 추진",
+      "category": "",
+      "status": "notJudged",
+      "source": {
+        "sourceUrl": "https://policy.nec.go.kr/policy_pdf/20240410/PDF/PBINFO_PUB/4719/003_100152784_20240402_2.pdf",
+        "fetchedAt": "2026-09-28T03:00:00Z",
+        "publisher": "중앙선거관리위원회"
+      }
+    },
+    {
+      "id": "22-gyeongbuk-uiseong-cheongsong-yeongdeok-uljin-15",
+      "title": "주민불편 규제 완화 추진",
+      "category": "",
+      "status": "notJudged",
+      "source": {
+        "sourceUrl": "https://policy.nec.go.kr/policy_pdf/20240410/PDF/PBINFO_PUB/4719/003_100152784_20240402_2.pdf",
+        "fetchedAt": "2026-09-28T03:00:00Z",
+        "publisher": "중앙선거관리위원회"
+      }
+    },
+    {
+      "id": "22-gyeongbuk-uiseong-cheongsong-yeongdeok-uljin-16",
+      "title": "에너지산업 중심도시 울진",
+      "category": "",
+      "status": "notJudged",
+      "source": {
+        "sourceUrl": "https://policy.nec.go.kr/policy_pdf/20240410/PDF/PBINFO_PUB/4719/003_100152784_20240402_2.pdf",
+        "fetchedAt": "2026-09-28T03:00:00Z",
+        "publisher": "중앙선거관리위원회"
+      }
+    },
+    {
+      "id": "22-gyeongbuk-uiseong-cheongsong-yeongdeok-uljin-17",
+      "title": "해양산업 전진도시 울진",
+      "category": "",
+      "status": "notJudged",
+      "source": {
+        "sourceUrl": "https://policy.nec.go.kr/policy_pdf/20240410/PDF/PBINFO_PUB/4719/003_100152784_20240402_2.pdf",
+        "fetchedAt": "2026-09-28T03:00:00Z",
+        "publisher": "중앙선거관리위원회"
+      }
+    },
+    {
+      "id": "22-gyeongbuk-uiseong-cheongsong-yeongdeok-uljin-18",
+      "title": "4대 국·공립기관 설립 완료",
+      "category": "",
+      "status": "notJudged",
+      "source": {
+        "sourceUrl": "https://policy.nec.go.kr/policy_pdf/20240410/PDF/PBINFO_PUB/4719/003_100152784_20240402_2.pdf",
+        "fetchedAt": "2026-09-28T03:00:00Z",
+        "publisher": "중앙선거관리위원회"
+      }
+    },
+    {
+      "id": "22-gyeongbuk-uiseong-cheongsong-yeongdeok-uljin-19",
+      "title": "길이 열리는 울진 교통 접근성 확대",
+      "category": "",
+      "status": "notJudged",
+      "source": {
+        "sourceUrl": "https://policy.nec.go.kr/policy_pdf/20240410/PDF/PBINFO_PUB/4719/003_100152784_20240402_2.pdf",
+        "fetchedAt": "2026-09-28T03:00:00Z",
+        "publisher": "중앙선거관리위원회"
+      }
+    },
+    {
+      "id": "22-gyeongbuk-uiseong-cheongsong-yeongdeok-uljin-20",
+      "title": "해양레저사업 유치와 항만·연안정비",
+      "category": "",
+      "status": "notJudged",
+      "source": {
+        "sourceUrl": "https://policy.nec.go.kr/policy_pdf/20240410/PDF/PBINFO_PUB/4719/003_100152784_20240402_2.pdf",
+        "fetchedAt": "2026-09-28T03:00:00Z",
+        "publisher": "중앙선거관리위원회"
+      }
+    }
+  ]
+}

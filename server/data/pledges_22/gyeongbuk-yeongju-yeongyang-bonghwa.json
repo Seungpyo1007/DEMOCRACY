@@ -1,0 +1,154 @@
+{
+  "_note": "제22대 국회의원선거 경북 영주시영양군봉화군 당선인 임종득 (국민의힘). 책자형 선거공보 PDF 5–6쪽 「13대 전략사업」 1–13(글자층에 일부가 빠져 있어 쪽 이미지를 보고 옮겼다). PDF 3–4쪽 분야별(일자리·교통·관광문화·복지교육·농업) • 공약과 PDF 7–10쪽 「행복지도 40대 핵심과제」 시군별 공약은 넣지 않았다. 괄호는 원문대로 두었다. 제목은 원문 문구를 따랐고 바꾼 것은 위에 적은 구호·수식어 덜어내기뿐이다. 분류(category)는 앱에 정해진 분류 체계가 없어 비워 두었다. 이행 여부는 판정하지 않았다(notJudged).",
+  "districtId": "nec-958a0a8d",
+  "source": {
+    "sourceUrl": "https://policy.nec.go.kr/policy_pdf/20240410/PDF/PBINFO_PUB/4708/003_100151085_20240402_2.pdf",
+    "fetchedAt": "2026-09-28T03:00:00Z",
+    "publisher": "중앙선거관리위원회"
+  },
+  "pledges": [
+    {
+      "id": "22-gyeongbuk-yeongju-yeongyang-bonghwa-01",
+      "title": "원도심 상권 활성화 추진",
+      "category": "",
+      "status": "notJudged",
+      "source": {
+        "sourceUrl": "https://policy.nec.go.kr/policy_pdf/20240410/PDF/PBINFO_PUB/4708/003_100151085_20240402_2.pdf",
+        "fetchedAt": "2026-09-28T03:00:00Z",
+        "publisher": "중앙선거관리위원회"
+      }
+    },
+    {
+      "id": "22-gyeongbuk-yeongju-yeongyang-bonghwa-02",
+      "title": "제2차 공공기관 이전 추진",
+      "category": "",
+      "status": "notJudged",
+      "source": {
+        "sourceUrl": "https://policy.nec.go.kr/policy_pdf/20240410/PDF/PBINFO_PUB/4708/003_100151085_20240402_2.pdf",
+        "fetchedAt": "2026-09-28T03:00:00Z",
+        "publisher": "중앙선거관리위원회"
+      }
+    },
+    {
+      "id": "22-gyeongbuk-yeongju-yeongyang-bonghwa-03",
+      "title": "지역축제 활성화를 위한 국가 예산 확충(인삼 축제, 은어·송이 축제, 산나물 축제 등)",
+      "category": "",
+      "status": "notJudged",
+      "source": {
+        "sourceUrl": "https://policy.nec.go.kr/policy_pdf/20240410/PDF/PBINFO_PUB/4708/003_100151085_20240402_2.pdf",
+        "fetchedAt": "2026-09-28T03:00:00Z",
+        "publisher": "중앙선거관리위원회"
+      }
+    },
+    {
+      "id": "22-gyeongbuk-yeongju-yeongyang-bonghwa-04",
+      "title": "농특산물 유통판로 확대 지원",
+      "category": "",
+      "status": "notJudged",
+      "source": {
+        "sourceUrl": "https://policy.nec.go.kr/policy_pdf/20240410/PDF/PBINFO_PUB/4708/003_100151085_20240402_2.pdf",
+        "fetchedAt": "2026-09-28T03:00:00Z",
+        "publisher": "중앙선거관리위원회"
+      }
+    },
+    {
+      "id": "22-gyeongbuk-yeongju-yeongyang-bonghwa-05",
+      "title": "농업인 수당제도화·필수농기계 구입 지원 입법 추진",
+      "category": "",
+      "status": "notJudged",
+      "source": {
+        "sourceUrl": "https://policy.nec.go.kr/policy_pdf/20240410/PDF/PBINFO_PUB/4708/003_100151085_20240402_2.pdf",
+        "fetchedAt": "2026-09-28T03:00:00Z",
+        "publisher": "중앙선거관리위원회"
+      }
+    },
+    {
+      "id": "22-gyeongbuk-yeongju-yeongyang-bonghwa-06",
+      "title": "여성농업인 특수건강 검진 전면 시행",
+      "category": "",
+      "status": "notJudged",
+      "source": {
+        "sourceUrl": "https://policy.nec.go.kr/policy_pdf/20240410/PDF/PBINFO_PUB/4708/003_100151085_20240402_2.pdf",
+        "fetchedAt": "2026-09-28T03:00:00Z",
+        "publisher": "중앙선거관리위원회"
+      }
+    },
+    {
+      "id": "22-gyeongbuk-yeongju-yeongyang-bonghwa-07",
+      "title": "공익형 직불금 인상 확대",
+      "category": "",
+      "status": "notJudged",
+      "source": {
+        "sourceUrl": "https://policy.nec.go.kr/policy_pdf/20240410/PDF/PBINFO_PUB/4708/003_100151085_20240402_2.pdf",
+        "fetchedAt": "2026-09-28T03:00:00Z",
+        "publisher": "중앙선거관리위원회"
+      }
+    },
+    {
+      "id": "22-gyeongbuk-yeongju-yeongyang-bonghwa-08",
+      "title": "농작물 재해보험 품목 및 보험적용 확대",
+      "category": "",
+      "status": "notJudged",
+      "source": {
+        "sourceUrl": "https://policy.nec.go.kr/policy_pdf/20240410/PDF/PBINFO_PUB/4708/003_100151085_20240402_2.pdf",
+        "fetchedAt": "2026-09-28T03:00:00Z",
+        "publisher": "중앙선거관리위원회"
+      }
+    },
+    {
+      "id": "22-gyeongbuk-yeongju-yeongyang-bonghwa-09",
+      "title": "스마트 팜 및 기후변화 대체 작물 발굴사업 추진",
+      "category": "",
+      "status": "notJudged",
+      "source": {
+        "sourceUrl": "https://policy.nec.go.kr/policy_pdf/20240410/PDF/PBINFO_PUB/4708/003_100151085_20240402_2.pdf",
+        "fetchedAt": "2026-09-28T03:00:00Z",
+        "publisher": "중앙선거관리위원회"
+      }
+    },
+    {
+      "id": "22-gyeongbuk-yeongju-yeongyang-bonghwa-10",
+      "title": "귀농/귀촌 지원(법률·제도·예산) 활성화",
+      "category": "",
+      "status": "notJudged",
+      "source": {
+        "sourceUrl": "https://policy.nec.go.kr/policy_pdf/20240410/PDF/PBINFO_PUB/4708/003_100151085_20240402_2.pdf",
+        "fetchedAt": "2026-09-28T03:00:00Z",
+        "publisher": "중앙선거관리위원회"
+      }
+    },
+    {
+      "id": "22-gyeongbuk-yeongju-yeongyang-bonghwa-11",
+      "title": "어르신 생활스포츠(파크골프장, 게이트볼장 등) 시설 확충",
+      "category": "",
+      "status": "notJudged",
+      "source": {
+        "sourceUrl": "https://policy.nec.go.kr/policy_pdf/20240410/PDF/PBINFO_PUB/4708/003_100151085_20240402_2.pdf",
+        "fetchedAt": "2026-09-28T03:00:00Z",
+        "publisher": "중앙선거관리위원회"
+      }
+    },
+    {
+      "id": "22-gyeongbuk-yeongju-yeongyang-bonghwa-12",
+      "title": "낙후지역 의료격차 해소",
+      "category": "",
+      "status": "notJudged",
+      "source": {
+        "sourceUrl": "https://policy.nec.go.kr/policy_pdf/20240410/PDF/PBINFO_PUB/4708/003_100151085_20240402_2.pdf",
+        "fetchedAt": "2026-09-28T03:00:00Z",
+        "publisher": "중앙선거관리위원회"
+      }
+    },
+    {
+      "id": "22-gyeongbuk-yeongju-yeongyang-bonghwa-13",
+      "title": "공공보건 의료수행기관 운영(간병인 지원) 지원 입법 추진",
+      "category": "",
+      "status": "notJudged",
+      "source": {
+        "sourceUrl": "https://policy.nec.go.kr/policy_pdf/20240410/PDF/PBINFO_PUB/4708/003_100151085_20240402_2.pdf",
+        "fetchedAt": "2026-09-28T03:00:00Z",
+        "publisher": "중앙선거관리위원회"
+      }
+    }
+  ]
+}

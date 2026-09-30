@@ -1,0 +1,66 @@
+{
+  "_note": "제22대 국회의원선거 인천 동구미추홀구 을 당선인 윤상현 (국민의힘). 책자형 선거공보 PDF 5쪽 「중점공약 – 상상을 현실로 만드는 윤상현의 미추홀 신성장 플랜」 1–5 제목. 글자층의 순서가 섞여 있어 쪽 이미지를 보고 옮겼다. 각 제목 아래 • 세부 항목, PDF 1쪽의 청년 플랜·국군장병 공약, 6쪽의 분야별(신생활 플랜)·동별 공약, 3–4쪽의 법안·성과는 넣지 않았다. 끝의 !만 덜어냈다. 제목은 원문 문구를 따랐고 바꾼 것은 위에 적은 구호·수식어 덜어내기뿐이다. 분류(category)는 앱에 정해진 분류 체계가 없어 비워 두었다. 이행 여부는 판정하지 않았다(notJudged).",
+  "districtId": "nec-24f36ef8",
+  "source": {
+    "sourceUrl": "https://policy.nec.go.kr/policy_pdf/20240410/PDF/PBINFO_PUB/2803/003_100151516_20240402_3.pdf",
+    "fetchedAt": "2026-09-27T17:14:30Z",
+    "publisher": "중앙선거관리위원회"
+  },
+  "pledges": [
+    {
+      "id": "22-incheon-dong-michuhol-b-01",
+      "title": "경인선 지하화 / 가)도시철도 4호선 / 제2경인선 추진",
+      "category": "",
+      "status": "notJudged",
+      "source": {
+        "sourceUrl": "https://policy.nec.go.kr/policy_pdf/20240410/PDF/PBINFO_PUB/2803/003_100151516_20240402_3.pdf",
+        "fetchedAt": "2026-09-27T17:14:30Z",
+        "publisher": "중앙선거관리위원회"
+      }
+    },
+    {
+      "id": "22-incheon-dong-michuhol-b-02",
+      "title": "인천대로 일반화 및 주요 도로 지하화 추진",
+      "category": "",
+      "status": "notJudged",
+      "source": {
+        "sourceUrl": "https://policy.nec.go.kr/policy_pdf/20240410/PDF/PBINFO_PUB/2803/003_100151516_20240402_3.pdf",
+        "fetchedAt": "2026-09-27T17:14:30Z",
+        "publisher": "중앙선거관리위원회"
+      }
+    },
+    {
+      "id": "22-incheon-dong-michuhol-b-03",
+      "title": "국(시)립 문학산 산림복지단지 + 문화공간 조성",
+      "category": "",
+      "status": "notJudged",
+      "source": {
+        "sourceUrl": "https://policy.nec.go.kr/policy_pdf/20240410/PDF/PBINFO_PUB/2803/003_100151516_20240402_3.pdf",
+        "fetchedAt": "2026-09-27T17:14:30Z",
+        "publisher": "중앙선거관리위원회"
+      }
+    },
+    {
+      "id": "22-incheon-dong-michuhol-b-04",
+      "title": "수봉공원 고도제한 대폭 완화",
+      "category": "",
+      "status": "notJudged",
+      "source": {
+        "sourceUrl": "https://policy.nec.go.kr/policy_pdf/20240410/PDF/PBINFO_PUB/2803/003_100151516_20240402_3.pdf",
+        "fetchedAt": "2026-09-27T17:14:30Z",
+        "publisher": "중앙선거관리위원회"
+      }
+    },
+    {
+      "id": "22-incheon-dong-michuhol-b-05",
+      "title": "관교동 도심속 휴식처 가)'도담뜰 가족공원' 조성",
+      "category": "",
+      "status": "notJudged",
+      "source": {
+        "sourceUrl": "https://policy.nec.go.kr/policy_pdf/20240410/PDF/PBINFO_PUB/2803/003_100151516_20240402_3.pdf",
+        "fetchedAt": "2026-09-27T17:14:30Z",
+        "publisher": "중앙선거관리위원회"
+      }
+    }
+  ]
+}

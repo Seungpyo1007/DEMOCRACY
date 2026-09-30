@@ -1,0 +1,96 @@
+{
+  "nwvrqwxyaytdsfvhu": [
+    {
+      "head": [
+        {
+          "list_total_count": 3
+        },
+        {
+          "RESULT": {
+            "CODE": "INFO-000",
+            "MESSAGE": "정상 처리되었습니다."
+          }
+        }
+      ]
+    },
+    {
+      "row": [
+        {
+          "HG_NM": "가상 의원",
+          "HJ_NM": "假想議員",
+          "ENG_NM": "GASANG UIWON",
+          "BTH_GBN_NM": "양",
+          "BTH_DATE": "1970-01-01",
+          "JOB_RES_NM": "위원",
+          "POLY_NM": "가나당",
+          "ORIG_NM": "서울 마포구을",
+          "ELECT_GBN_NM": "지역구",
+          "CMIT_NM": "국토교통위원회",
+          "CMITS": "국토교통위원회",
+          "REELE_GBN_NM": "재선",
+          "UNITS": "제21대, 제22대",
+          "SEX_GBN_NM": "남",
+          "TEL_NO": "02-000-0000",
+          "E_MAIL": "x@example.invalid",
+          "HOMEPAGE": null,
+          "STAFF": "가상 보좌관",
+          "SECRETARY": "가상 비서관",
+          "SECRETARY2": "가상 비서",
+          "MONA_CD": "FAKE0001",
+          "MEM_TITLE": "가상 경력",
+          "ASSEM_ADDR": "의원회관 000호"
+        },
+        {
+          "HG_NM": "가상 의원 둘",
+          "HJ_NM": null,
+          "ENG_NM": null,
+          "BTH_GBN_NM": "양",
+          "BTH_DATE": "1971-01-01",
+          "JOB_RES_NM": "위원",
+          "POLY_NM": "다라당",
+          "ORIG_NM": "비례대표",
+          "ELECT_GBN_NM": "비례대표",
+          "CMIT_NM": "교육위원회",
+          "CMITS": "교육위원회",
+          "REELE_GBN_NM": "초선",
+          "UNITS": "제22대",
+          "SEX_GBN_NM": "여",
+          "TEL_NO": null,
+          "E_MAIL": null,
+          "HOMEPAGE": null,
+          "STAFF": null,
+          "SECRETARY": null,
+          "SECRETARY2": null,
+          "MONA_CD": "FAKE0002",
+          "MEM_TITLE": null,
+          "ASSEM_ADDR": null
+        },
+        {
+          "HG_NM": "가상 의원 셋",
+          "HJ_NM": null,
+          "ENG_NM": null,
+          "BTH_GBN_NM": "양",
+          "BTH_DATE": "1972-01-01",
+          "JOB_RES_NM": "위원",
+          "POLY_NM": "가나당",
+          "ORIG_NM": "서울 마포구갑",
+          "ELECT_GBN_NM": "지역구",
+          "CMIT_NM": null,
+          "CMITS": null,
+          "REELE_GBN_NM": "초선",
+          "UNITS": "제22대",
+          "SEX_GBN_NM": "여",
+          "TEL_NO": null,
+          "E_MAIL": null,
+          "HOMEPAGE": null,
+          "STAFF": null,
+          "SECRETARY": null,
+          "SECRETARY2": null,
+          "MONA_CD": "FAKE0003",
+          "MEM_TITLE": null,
+          "ASSEM_ADDR": null
+        }
+      ]
+    }
+  ]
+}

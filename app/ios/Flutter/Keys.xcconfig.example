@@ -1,0 +1,7 @@
+// Copy to Keys.xcconfig (gitignored) and fill in. These are not secrets --
+// they ship in every build -- but they differ per environment.
+//
+// Kakao Developers → 앱 → 네이티브 앱 키
+KAKAO_NATIVE_KEY =
+// Google Cloud → iOS OAuth client → "iOS URL scheme" (com.googleusercontent.apps.…)
+GOOGLE_REVERSED_CLIENT_ID =

@@ -1,0 +1,182 @@
+import 'package:democracy/src/core/account/account_repository.dart';
+import 'package:democracy/src/core/account/auth_config.dart';
+import 'package:democracy/src/core/account/auth_controller.dart';
+import 'package:democracy/src/core/account/gotrue_auth_repository.dart';
+import 'package:democracy/src/core/auth/address_state.dart';
+import 'package:democracy/src/core/auth/address_store.dart';
+import 'package:democracy/src/core/lifecycle/app_foreground.dart';
+import 'package:democracy/src/core/network/bff_client.dart';
+import 'package:democracy/src/core/network/bff_config.dart';
+import 'package:democracy/src/core/network/response_cache.dart';
+import 'package:democracy/src/core/on_device_ai/on_device_cache.dart';
+import 'package:democracy/src/core/on_device_ai/on_device_providers.dart';
+import 'package:democracy/src/core/on_device_ai/on_device_runner.dart';
+import 'package:democracy/src/core/on_device_ai/platform_on_device_model.dart';
+import 'package:democracy/src/core/time/clock_providers.dart';
+import 'package:democracy/src/features/ai_match/application/direction_providers.dart';
+import 'package:democracy/src/features/ai_match/application/match_providers.dart';
+import 'package:democracy/src/features/ai_match/data/on_device/on_device_direction_source.dart';
+import 'package:democracy/src/features/ai_match/data/on_device/on_device_match_repository.dart';
+import 'package:democracy/src/features/ai_match/data/remote_direction_repository.dart';
+import 'package:democracy/src/features/ai_match/data/remote_member_bills_repository.dart';
+import 'package:democracy/src/features/ai_match/domain/candidate_match.dart';
+import 'package:democracy/src/features/district/application/district_providers.dart';
+import 'package:democracy/src/features/district/data/remote_district_repository.dart';
+import 'package:democracy/src/features/history/application/history_providers.dart';
+import 'package:democracy/src/features/history/data/remote_history_repository.dart';
+import 'package:democracy/src/features/onboarding/application/onboarding_providers.dart';
+import 'package:democracy/src/features/onboarding/data/remote_address_repositories.dart';
+import 'package:democracy/src/features/pledges/application/pledge_providers.dart';
+import 'package:democracy/src/features/pledges/data/remote_pledge_repository.dart';
+import 'package:democracy/src/features/results/application/results_providers.dart';
+import 'package:democracy/src/features/results/data/remote_results_repository.dart';
+import 'package:democracy/src/features/reviews/application/review_providers.dart';
+import 'package:democracy/src/features/reviews/data/realtime_channel_transport.dart';
+import 'package:democracy/src/features/reviews/data/remote_review_repository.dart';
+import 'package:flutter/foundation.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:flutter_riverpod/misc.dart';
+
+/// Every override a build with a BFF needs, or none without one.
+///
+/// Features with a live source read it.
+///
+/// The AI features run on the reader's own device (Apple Foundation Models /
+/// Gemini Nano through the platform bridge): the BFF serves only public
+/// record -- pledges, bills, threads -- and the model reads it here. With no
+/// election on, the match compares the sitting member's pledges and bills
+/// with the reader's interests. The direction view takes its bill trend from
+/// the BFF (a count, no model) and computes the stance plot and issue flow on
+/// the device. Where the model cannot run, the screens say so and why; they
+/// never fall back to the sample fixtures.
+List<Override> liveDataOverrides(BffConfig? config) {
+  if (config == null) {
+    return const [];
+  }
+
+  final authConfig = AuthConfig.fromEnvironment();
+  final auth = GoTrueAuthRepository(
+    // The BFF lives at <project>/functions/v1/bff; auth at <project>/auth/v1.
+    projectUrl: config.baseUrl.replace(path: '/'),
+    anonKey: config.anonKey,
+    config: authConfig,
+  );
+  final client = BffClient.fromConfig(
+    config,
+    cache: SharedPreferencesResponseCache(),
+    userToken: auth.accessToken,
+  );
+  final districts = RemoteDistrictRepository(client);
+  final pledges = RemotePledgeRepository(client);
+  final bills = RemoteMemberBillsRepository(client);
+  // One instance for the community tab and the direction view's thread
+  // titles, so both read the same channel.
+  final community = RemoteCommunityRepository(
+    client,
+    // Realtime lives beside the BFF at <project>/realtime/v1 and takes the
+    // same anon key; the channel's topics are public.
+    transport: RealtimeChannelTransport(
+      projectUrl: config.baseUrl.replace(path: '/'),
+      anonKey: config.anonKey,
+    ),
+    foreground: appForegroundChanges,
+  );
+  const model = PlatformOnDeviceModel();
+  final aiCache = SharedPreferencesOnDeviceResultCache();
+  // One runner for both views, so their runs queue instead of colliding.
+  final runner = Provider<OnDeviceRunner>(
+    (ref) => OnDeviceRunner(
+      model: model,
+      cache: aiCache,
+      clock: ref.watch(clockProvider),
+    ),
+  );
+  return [
+    authRepositoryProvider.overrideWithValue(auth),
+    accountRepositoryProvider.overrideWithValue(
+      RemoteAccountRepository(client),
+    ),
+    signInProvidersProvider.overrideWith(
+      (ref) => authConfig.available(defaultTargetPlatform),
+    ),
+    districtRepositoryProvider.overrideWithValue(districts),
+    historyRepositoryProvider.overrideWithValue(
+      RemoteHistoryRepository(client),
+    ),
+    pledgeRepositoryProvider.overrideWithValue(pledges),
+    addressSearchRepositoryProvider.overrideWithValue(
+      RemoteAddressSearchRepository(client),
+    ),
+    locationRepositoryProvider.overrideWithValue(
+      RemoteLocationRepository(client),
+    ),
+    onDeviceModelProvider.overrideWithValue(model),
+    matchSubjectProvider.overrideWithValue(MatchSubject.incumbent),
+    matchRepositoryProvider.overrideWith(
+      (ref) => OnDeviceMatchRepository(
+        runner: ref.watch(runner),
+        districts: districts,
+        pledges: pledges,
+        bills: bills,
+      ),
+    ),
+    directionRepositoryProvider.overrideWithValue(
+      RemoteDirectionRepository(client),
+    ),
+    directionAiSourceProvider.overrideWith(
+      (ref) => OnDeviceDirectionSource(
+        runner: ref.watch(runner),
+        districts: districts,
+        pledges: pledges,
+        bills: bills,
+        community: community,
+      ),
+    ),
+    resultsRepositoryProvider.overrideWithValue(
+      RemoteResultsRepository(client),
+    ),
+    reviewRepositoryProvider.overrideWithValue(RemoteReviewRepository(client)),
+    communityRepositoryProvider.overrideWithValue(community),
+    addressStoreProvider.overrideWith(
+      (ref) => LiveAddressStore(const SecureAddressStore()),
+    ),
+  ];
+}
+
+/// Forgets a district saved while the app ran on fixtures, and a residency
+/// that no account stands behind.
+///
+/// A fixture id means nothing to the BFF, so restoring one would open on an
+/// empty home. Sending the resident back to onboarding once is the honest
+/// outcome.
+class LiveAddressStore implements AddressStore {
+  const LiveAddressStore(this.inner);
+
+  final AddressStore inner;
+
+  @override
+  Future<AddressState?> read() async {
+    final stored = await inner.read();
+    final id = stored?.district?.id;
+    if (id != null && id.startsWith('fixture-')) {
+      await inner.clear();
+      return null;
+    }
+    // A residency with no account behind it was made by a build without
+    // accounts; here residency belongs to an account, so it is read-only.
+    if (stored != null &&
+        stored.isVerified &&
+        stored.verification?.userId == null) {
+      final downgraded = AddressState.readOnly(district: stored.district);
+      await inner.write(downgraded);
+      return downgraded;
+    }
+    return stored;
+  }
+
+  @override
+  Future<void> write(AddressState state) => inner.write(state);
+
+  @override
+  Future<void> clear() => inner.clear();
+}

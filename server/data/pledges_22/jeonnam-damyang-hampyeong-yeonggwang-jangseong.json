@@ -1,0 +1,88 @@
+{
+  "_note": "제22대 국회의원선거 전남 담양군함평군영광군장성군 당선인 이개호 (더불어민주당). 책자형 선거공보 PDF 10쪽의 공약 쪽에서 굵은 제목 2개(국립기관 활성화·설립, 융합 산업 육성)와 「삶의 질 향상을 위한 담양·함평·영광·장성 공약」 ㆍ 항목 5개. 굵은 제목 아래 담양·함평·영광·장성 군별 세부 항목은 넣지 않았다. PDF 8쪽의 「삶의 질 수직상승」 공약(더불어민주당 총선 공약과 같은 문구)과 3–7쪽의 지난 성과는 넣지 않았다. 제목은 원문 문구를 따랐고 바꾼 것은 앞 번호·끝의 !·장식 기호 덜어내기와 줄바꿈 이어 붙이기뿐이다. 분류(category)는 앱에 정해진 분류 체계가 없어 비워 두었다. 이행 여부는 판정하지 않았다(notJudged).",
+  "districtId": "nec-e8900bae",
+  "source": {
+    "sourceUrl": "https://policy.nec.go.kr/policy_pdf/20240410/PDF/PBINFO_PUB/4622/003_100152994_20240402_2.pdf",
+    "fetchedAt": "2026-09-28T02:30:00Z",
+    "publisher": "중앙선거관리위원회"
+  },
+  "pledges": [
+    {
+      "id": "22-jeonnam-damyang-hampyeong-yeonggwang-jangseong-01",
+      "title": "유치된 국립기관 및 기업 활성화, 추진중인 국립기관 확실한 설립",
+      "category": "",
+      "status": "notJudged",
+      "source": {
+        "sourceUrl": "https://policy.nec.go.kr/policy_pdf/20240410/PDF/PBINFO_PUB/4622/003_100152994_20240402_2.pdf",
+        "fetchedAt": "2026-09-28T02:30:00Z",
+        "publisher": "중앙선거관리위원회"
+      }
+    },
+    {
+      "id": "22-jeonnam-damyang-hampyeong-yeonggwang-jangseong-02",
+      "title": "지역 신성장 동력 발굴 및 유치된 국립기관들을 활용한 융합 산업 육성",
+      "category": "",
+      "status": "notJudged",
+      "source": {
+        "sourceUrl": "https://policy.nec.go.kr/policy_pdf/20240410/PDF/PBINFO_PUB/4622/003_100152994_20240402_2.pdf",
+        "fetchedAt": "2026-09-28T02:30:00Z",
+        "publisher": "중앙선거관리위원회"
+      }
+    },
+    {
+      "id": "22-jeonnam-damyang-hampyeong-yeonggwang-jangseong-03",
+      "title": "경로당 주5일 어르신 점심밥상 제공(부식비 등 경로당 운영비 지원을 통하여 조리와 배식을 담당하는 인력 배치)",
+      "category": "",
+      "status": "notJudged",
+      "source": {
+        "sourceUrl": "https://policy.nec.go.kr/policy_pdf/20240410/PDF/PBINFO_PUB/4622/003_100152994_20240402_2.pdf",
+        "fetchedAt": "2026-09-28T02:30:00Z",
+        "publisher": "중앙선거관리위원회"
+      }
+    },
+    {
+      "id": "22-jeonnam-damyang-hampyeong-yeonggwang-jangseong-04",
+      "title": "요양병원 간병비 건강보험 적용(요양병원 간병비 급여화로 어르신 간병 부담 경감 및 간병 서비스 질 개선)",
+      "category": "",
+      "status": "notJudged",
+      "source": {
+        "sourceUrl": "https://policy.nec.go.kr/policy_pdf/20240410/PDF/PBINFO_PUB/4622/003_100152994_20240402_2.pdf",
+        "fetchedAt": "2026-09-28T02:30:00Z",
+        "publisher": "중앙선거관리위원회"
+      }
+    },
+    {
+      "id": "22-jeonnam-damyang-hampyeong-yeonggwang-jangseong-05",
+      "title": "농산물 가격안정제도 도입으로 가격 폭락시 농가손실보전",
+      "category": "",
+      "status": "notJudged",
+      "source": {
+        "sourceUrl": "https://policy.nec.go.kr/policy_pdf/20240410/PDF/PBINFO_PUB/4622/003_100152994_20240402_2.pdf",
+        "fetchedAt": "2026-09-28T02:30:00Z",
+        "publisher": "중앙선거관리위원회"
+      }
+    },
+    {
+      "id": "22-jeonnam-damyang-hampyeong-yeonggwang-jangseong-06",
+      "title": "생산비가 급등한 필수 농자재 국가지원제도 도입",
+      "category": "",
+      "status": "notJudged",
+      "source": {
+        "sourceUrl": "https://policy.nec.go.kr/policy_pdf/20240410/PDF/PBINFO_PUB/4622/003_100152994_20240402_2.pdf",
+        "fetchedAt": "2026-09-28T02:30:00Z",
+        "publisher": "중앙선거관리위원회"
+      }
+    },
+    {
+      "id": "22-jeonnam-damyang-hampyeong-yeonggwang-jangseong-07",
+      "title": "딸기, 곶감 등 이상 기후에 따른 농어업재해 발생시 국가책임제 도입",
+      "category": "",
+      "status": "notJudged",
+      "source": {
+        "sourceUrl": "https://policy.nec.go.kr/policy_pdf/20240410/PDF/PBINFO_PUB/4622/003_100152994_20240402_2.pdf",
+        "fetchedAt": "2026-09-28T02:30:00Z",
+        "publisher": "중앙선거관리위원회"
+      }
+    }
+  ]
+}

@@ -1,5 +1,6 @@
 import 'package:democracy/src/core/auth/address_state.dart';
 import 'package:democracy/src/core/provenance/source_metadata.dart';
+import 'package:democracy/src/features/district/domain/legislator_record.dart';
 
 /// A party as the product is allowed to show it: a name only.
 ///
@@ -55,6 +56,7 @@ class Politician {
     required this.summary,
     required this.stats,
     this.portraitUrl,
+    this.record,
   });
 
   factory Politician.fromJson(Map<String, Object?> json) {
@@ -74,6 +76,12 @@ class Politician {
       party: PartyRef(name: json['party'] as String? ?? '무소속'),
       summary: json['summary'] as String? ?? '',
       portraitUrl: json['portraitUrl'] as String?,
+      // Only an incumbent has one, and even then only once the feed behind it
+      // is wired -- so its absence is a shape, not a failure.
+      record: LegislatorRecord.fromJson(
+        json['record'],
+        field: 'politician.$id',
+      ),
       stats: [
         if (rawStats is List)
           for (final stat in rawStats)
@@ -88,6 +96,9 @@ class Politician {
   final String summary;
   final List<DistrictStat> stats;
   final String? portraitUrl;
+
+  /// Bills, attendance and votes. Null for a candidate.
+  final LegislatorRecord? record;
 }
 
 /// The district home payload.
@@ -115,14 +126,19 @@ class DistrictProfile {
           Politician.fromJson(candidate as Map<String, Object?>),
     ];
 
+    // A vacant seat has no incumbent and says so; anything else must name
+    // one, so a payload that merely lost its incumbent is still refused.
+    final vacant = json['vacant'] == true;
     return DistrictProfile(
       district: DistrictRef(
         id: districtJson['id'] as String? ?? '',
         displayName: districtJson['displayName'] as String? ?? '',
       ),
-      incumbent: Politician.fromJson(
-        json['incumbent'] as Map<String, Object?>? ?? const {},
-      ),
+      incumbent: vacant
+          ? null
+          : Politician.fromJson(
+              json['incumbent'] as Map<String, Object?>? ?? const {},
+            ),
       candidates: sortedByName(candidates),
       source: SourceMetadata.fromJson(json['source'], field: 'district'),
     );
@@ -138,7 +154,12 @@ class DistrictProfile {
   static const sortLabel = '가나다순';
 
   final DistrictRef district;
-  final Politician incumbent;
+
+  /// Null when the seat is vacant: the assembly's member list names nobody
+  /// for this district, and [source] is that list.
+  final Politician? incumbent;
   final List<Politician> candidates;
   final SourceMetadata source;
+
+  bool get isVacant => incumbent == null;
 }

@@ -1,0 +1,165 @@
+{
+  "_note": "제22대 국회의원선거 울산 남구 을 당선인 김기현 (국민의힘). 책자형 선거공보 PDF 7쪽 「KTX-산천 태화강역 유치!」와 PDF 8쪽 「교육·의료·문화 일번지 남구!」 분야별(교육·의료·교통·관광·성장) • 항목 13개. 8쪽 항목은 문장 끝의 '~하겠습니다.'까지 원문 그대로 두고 마침표만 덜어냈다. PDF 3–4쪽 01–09(원내대표·당대표 시절 성과와 진행 사업), 9–10쪽의 동별 '행복 남구 공약'은 넣지 않았다. 제목은 원문 문구를 따랐고 바꾼 것은 위에 적은 구호·수식어 덜어내기뿐이다. 분류(category)는 앱에 정해진 분류 체계가 없어 비워 두었다. 이행 여부는 판정하지 않았다(notJudged).",
+  "districtId": "nec-f32195ce",
+  "source": {
+    "sourceUrl": "https://policy.nec.go.kr/policy_pdf/20240410/PDF/PBINFO_PUB/3102/003_100152691_20240402_2.pdf",
+    "fetchedAt": "2026-09-27T17:14:30Z",
+    "publisher": "중앙선거관리위원회"
+  },
+  "pledges": [
+    {
+      "id": "22-ulsan-nam-b-01",
+      "title": "KTX-산천 태화강역 유치",
+      "category": "",
+      "status": "notJudged",
+      "source": {
+        "sourceUrl": "https://policy.nec.go.kr/policy_pdf/20240410/PDF/PBINFO_PUB/3102/003_100152691_20240402_2.pdf",
+        "fetchedAt": "2026-09-27T17:14:30Z",
+        "publisher": "중앙선거관리위원회"
+      }
+    },
+    {
+      "id": "22-ulsan-nam-b-02",
+      "title": "국내 외 우수인재 및 과학영재 유입을 위해 UNIST 부설 울산과학영재학교를 남구에 건립해 울산 출신 학생들이 울산에서 계속 성장할 수 있는 환경을 만들겠습니다",
+      "category": "",
+      "status": "notJudged",
+      "source": {
+        "sourceUrl": "https://policy.nec.go.kr/policy_pdf/20240410/PDF/PBINFO_PUB/3102/003_100152691_20240402_2.pdf",
+        "fetchedAt": "2026-09-27T17:14:30Z",
+        "publisher": "중앙선거관리위원회"
+      }
+    },
+    {
+      "id": "22-ulsan-nam-b-03",
+      "title": "학생들의 소질과 적성에 맞는 맞춤 교육을 실시하기 위해 남구에 전무한 특목고와 자사고 유치를 추진하겠습니다",
+      "category": "",
+      "status": "notJudged",
+      "source": {
+        "sourceUrl": "https://policy.nec.go.kr/policy_pdf/20240410/PDF/PBINFO_PUB/3102/003_100152691_20240402_2.pdf",
+        "fetchedAt": "2026-09-27T17:14:30Z",
+        "publisher": "중앙선거관리위원회"
+      }
+    },
+    {
+      "id": "22-ulsan-nam-b-04",
+      "title": "전국 17개 시도 중 공공의료원 · 국립병원이 모두 없는 유일한 지자체, 울산에 국립중앙의료원 분원 유치를 추진하겠습니다",
+      "category": "",
+      "status": "notJudged",
+      "source": {
+        "sourceUrl": "https://policy.nec.go.kr/policy_pdf/20240410/PDF/PBINFO_PUB/3102/003_100152691_20240402_2.pdf",
+        "fetchedAt": "2026-09-27T17:14:30Z",
+        "publisher": "중앙선거관리위원회"
+      }
+    },
+    {
+      "id": "22-ulsan-nam-b-05",
+      "title": "지방 의료 수급 불균형 해소를 위하여 울산대 의대 정원 증원을 실현하고, UNIST 과기의전원 설립에 필요한 의대 정원 신설을 건의하겠습니다",
+      "category": "",
+      "status": "notJudged",
+      "source": {
+        "sourceUrl": "https://policy.nec.go.kr/policy_pdf/20240410/PDF/PBINFO_PUB/3102/003_100152691_20240402_2.pdf",
+        "fetchedAt": "2026-09-27T17:14:30Z",
+        "publisher": "중앙선거관리위원회"
+      }
+    },
+    {
+      "id": "22-ulsan-nam-b-06",
+      "title": "한밤 중에 아이가 아파도 걱정 없도록 남구에 24시간 달빛 어린이병원을 조성하겠습니다",
+      "category": "",
+      "status": "notJudged",
+      "source": {
+        "sourceUrl": "https://policy.nec.go.kr/policy_pdf/20240410/PDF/PBINFO_PUB/3102/003_100152691_20240402_2.pdf",
+        "fetchedAt": "2026-09-27T17:14:30Z",
+        "publisher": "중앙선거관리위원회"
+      }
+    },
+    {
+      "id": "22-ulsan-nam-b-07",
+      "title": "교통 혼잡 완화와 물류비용 절감을 위해 울산고속도로 지하화 사업을 추진하겠습니다",
+      "category": "",
+      "status": "notJudged",
+      "source": {
+        "sourceUrl": "https://policy.nec.go.kr/policy_pdf/20240410/PDF/PBINFO_PUB/3102/003_100152691_20240402_2.pdf",
+        "fetchedAt": "2026-09-27T17:14:30Z",
+        "publisher": "중앙선거관리위원회"
+      }
+    },
+    {
+      "id": "22-ulsan-nam-b-08",
+      "title": "차질 없는 국비 확보를 통해 세계 최초 수소 트램, 제2명촌교를 조기에 착공하겠습니다",
+      "category": "",
+      "status": "notJudged",
+      "source": {
+        "sourceUrl": "https://policy.nec.go.kr/policy_pdf/20240410/PDF/PBINFO_PUB/3102/003_100152691_20240402_2.pdf",
+        "fetchedAt": "2026-09-27T17:14:30Z",
+        "publisher": "중앙선거관리위원회"
+      }
+    },
+    {
+      "id": "22-ulsan-nam-b-09",
+      "title": "특별교부세를 확보하여 추진 중인 동평공원 하부 공영주차장을 비롯해 공영주차장을 대폭 확대 추진하겠습니다",
+      "category": "",
+      "status": "notJudged",
+      "source": {
+        "sourceUrl": "https://policy.nec.go.kr/policy_pdf/20240410/PDF/PBINFO_PUB/3102/003_100152691_20240402_2.pdf",
+        "fetchedAt": "2026-09-27T17:14:30Z",
+        "publisher": "중앙선거관리위원회"
+      }
+    },
+    {
+      "id": "22-ulsan-nam-b-10",
+      "title": "타 시도에 비해 부족한 가족형 체류시설을 대폭 확대하겠습니다. 청소년, 단체, 가족 단위 등을 위한 양질의 숙박시설을 장생포고래문화특구와 연계해 유치하겠습니다",
+      "category": "",
+      "status": "notJudged",
+      "source": {
+        "sourceUrl": "https://policy.nec.go.kr/policy_pdf/20240410/PDF/PBINFO_PUB/3102/003_100152691_20240402_2.pdf",
+        "fetchedAt": "2026-09-27T17:14:30Z",
+        "publisher": "중앙선거관리위원회"
+      }
+    },
+    {
+      "id": "22-ulsan-nam-b-11",
+      "title": "도심에서 청년들이 누릴 문화예술 인프라를 대폭 확대하기 위해 기업형 미래복합문화공간(울산형 컨텐츠 상상마당)을 조성하겠습니다",
+      "category": "",
+      "status": "notJudged",
+      "source": {
+        "sourceUrl": "https://policy.nec.go.kr/policy_pdf/20240410/PDF/PBINFO_PUB/3102/003_100152691_20240402_2.pdf",
+        "fetchedAt": "2026-09-27T17:14:30Z",
+        "publisher": "중앙선거관리위원회"
+      }
+    },
+    {
+      "id": "22-ulsan-nam-b-12",
+      "title": "규제를 확 풀어 30년 이상 노후 공동주택 단지의 재개발 재건축을 적극 추진하겠습니다",
+      "category": "",
+      "status": "notJudged",
+      "source": {
+        "sourceUrl": "https://policy.nec.go.kr/policy_pdf/20240410/PDF/PBINFO_PUB/3102/003_100152691_20240402_2.pdf",
+        "fetchedAt": "2026-09-27T17:14:30Z",
+        "publisher": "중앙선거관리위원회"
+      }
+    },
+    {
+      "id": "22-ulsan-nam-b-13",
+      "title": "개발제한구역 규제를 대폭 완화하여 신성장 거점을 조성하겠습니다",
+      "category": "",
+      "status": "notJudged",
+      "source": {
+        "sourceUrl": "https://policy.nec.go.kr/policy_pdf/20240410/PDF/PBINFO_PUB/3102/003_100152691_20240402_2.pdf",
+        "fetchedAt": "2026-09-27T17:14:30Z",
+        "publisher": "중앙선거관리위원회"
+      }
+    },
+    {
+      "id": "22-ulsan-nam-b-14",
+      "title": "외국인 근로자 취업 관련 복잡한 절차를 간소화하고, 외국인력 쿼터 배정 시 울산에 우선 배정되도록 추진하겠습니다",
+      "category": "",
+      "status": "notJudged",
+      "source": {
+        "sourceUrl": "https://policy.nec.go.kr/policy_pdf/20240410/PDF/PBINFO_PUB/3102/003_100152691_20240402_2.pdf",
+        "fetchedAt": "2026-09-27T17:14:30Z",
+        "publisher": "중앙선거관리위원회"
+      }
+    }
+  ]
+}

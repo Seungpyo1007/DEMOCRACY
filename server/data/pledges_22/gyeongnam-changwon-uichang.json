@@ -1,0 +1,88 @@
+{
+  "_note": "제22대 국회의원선거 경남 창원시의창구 당선인 김종양 (국민의힘). 책자형 선거공보 PDF 7–8쪽 「의창구 통합공약」 1–7의 제목. 각 공약 아래 세부 항목과 PDF 9–10쪽 「읍·면·동 지역공약」은 넣지 않았다. 두 줄로 나뉜 제목은 한 줄로 이었다. 제목은 원문 문구를 따랐고 바꾼 것은 위에 적은 구호·수식어 덜어내기뿐이다. 분류(category)는 앱에 정해진 분류 체계가 없어 비워 두었다. 이행 여부는 판정하지 않았다(notJudged).",
+  "districtId": "nec-b7082095",
+  "source": {
+    "sourceUrl": "https://policy.nec.go.kr/policy_pdf/20240410/PDF/PBINFO_PUB/4821/003_100151215_20240402_2.pdf",
+    "fetchedAt": "2026-09-28T03:00:00Z",
+    "publisher": "중앙선거관리위원회"
+  },
+  "pledges": [
+    {
+      "id": "22-gyeongnam-changwon-uichang-01",
+      "title": "의창구를 대한민국 재도약의 뉴-핵심축으로 만들겠습니다",
+      "category": "",
+      "status": "notJudged",
+      "source": {
+        "sourceUrl": "https://policy.nec.go.kr/policy_pdf/20240410/PDF/PBINFO_PUB/4821/003_100151215_20240402_2.pdf",
+        "fetchedAt": "2026-09-28T03:00:00Z",
+        "publisher": "중앙선거관리위원회"
+      }
+    },
+    {
+      "id": "22-gyeongnam-changwon-uichang-02",
+      "title": "자영업자, 소상공인, 농민 등 경제적 약자에 대한 지원을 대폭 강화 하겠습니다",
+      "category": "",
+      "status": "notJudged",
+      "source": {
+        "sourceUrl": "https://policy.nec.go.kr/policy_pdf/20240410/PDF/PBINFO_PUB/4821/003_100151215_20240402_2.pdf",
+        "fetchedAt": "2026-09-28T03:00:00Z",
+        "publisher": "중앙선거관리위원회"
+      }
+    },
+    {
+      "id": "22-gyeongnam-changwon-uichang-03",
+      "title": "교통 여건 획기적 개선, 사통팔달의 교통인프라를 구축하겠습니다",
+      "category": "",
+      "status": "notJudged",
+      "source": {
+        "sourceUrl": "https://policy.nec.go.kr/policy_pdf/20240410/PDF/PBINFO_PUB/4821/003_100151215_20240402_2.pdf",
+        "fetchedAt": "2026-09-28T03:00:00Z",
+        "publisher": "중앙선거관리위원회"
+      }
+    },
+    {
+      "id": "22-gyeongnam-changwon-uichang-04",
+      "title": "교육에 강한 의창구로 만들겠습니다",
+      "category": "",
+      "status": "notJudged",
+      "source": {
+        "sourceUrl": "https://policy.nec.go.kr/policy_pdf/20240410/PDF/PBINFO_PUB/4821/003_100151215_20240402_2.pdf",
+        "fetchedAt": "2026-09-28T03:00:00Z",
+        "publisher": "중앙선거관리위원회"
+      }
+    },
+    {
+      "id": "22-gyeongnam-changwon-uichang-05",
+      "title": "권역별 맞춤형 공간구조 개편, 활력있는 의창으로 나아가겠습니다",
+      "category": "",
+      "status": "notJudged",
+      "source": {
+        "sourceUrl": "https://policy.nec.go.kr/policy_pdf/20240410/PDF/PBINFO_PUB/4821/003_100151215_20240402_2.pdf",
+        "fetchedAt": "2026-09-28T03:00:00Z",
+        "publisher": "중앙선거관리위원회"
+      }
+    },
+    {
+      "id": "22-gyeongnam-changwon-uichang-06",
+      "title": "낙동강변을 글로벌 명품 관광 및 친수 공간으로 만들겠습니다",
+      "category": "",
+      "status": "notJudged",
+      "source": {
+        "sourceUrl": "https://policy.nec.go.kr/policy_pdf/20240410/PDF/PBINFO_PUB/4821/003_100151215_20240402_2.pdf",
+        "fetchedAt": "2026-09-28T03:00:00Z",
+        "publisher": "중앙선거관리위원회"
+      }
+    },
+    {
+      "id": "22-gyeongnam-changwon-uichang-07",
+      "title": "옛 창원 원도심을 부흥시키겠습니다",
+      "category": "",
+      "status": "notJudged",
+      "source": {
+        "sourceUrl": "https://policy.nec.go.kr/policy_pdf/20240410/PDF/PBINFO_PUB/4821/003_100151215_20240402_2.pdf",
+        "fetchedAt": "2026-09-28T03:00:00Z",
+        "publisher": "중앙선거관리위원회"
+      }
+    }
+  ]
+}

@@ -13,12 +13,35 @@
       "source": {
         "sourceUrl": "https://open.assembly.go.kr/portal/openapi/fixture-pledge-1",
         "fetchedAt": "2026-07-30T09:00:00Z"
+      },
+      "judgement": {
+        "steps": [
+          {
+            "actor": "AI 1차 판단",
+            "detail": "착공 보도·예산 집행 데이터 감지",
+            "stamp": "3월 2일"
+          },
+          {
+            "actor": "시민 제보 12건",
+            "detail": "현장 사진·입주 공고 첨부",
+            "stamp": "4월"
+          },
+          {
+            "actor": "전문가 위원회 최종 판정",
+            "detail": "위원 7인 중 6인 합의",
+            "stamp": "5월 10일"
+          }
+        ],
+        "source": {
+          "sourceUrl": "https://open.assembly.go.kr/portal/openapi/fixture-judgement",
+          "fetchedAt": "2026-07-30T09:00:00Z"
+        }
       }
     },
     {
       "id": "fixture-pledge-2",
-      "title": "청년 임대주택 공급",
-      "category": "주거",
+      "title": "심야버스 노선 확대",
+      "category": "교통",
       "status": "fulfilled",
       "source": {
         "sourceUrl": "https://open.assembly.go.kr/portal/openapi/fixture-pledge-2",
@@ -27,10 +50,9 @@
     },
     {
       "id": "fixture-pledge-3",
-      "title": "숲길 확장",
-      "category": "환경",
-      "status": "reversed",
-      "evidenceUrl": "https://open.assembly.go.kr/portal/openapi/fixture-pledge-3-diff",
+      "title": "보행자 우선도로 지정",
+      "category": "교통",
+      "status": "fulfilled",
       "source": {
         "sourceUrl": "https://open.assembly.go.kr/portal/openapi/fixture-pledge-3",
         "fetchedAt": "2026-07-30T09:00:00Z"
@@ -38,11 +60,259 @@
     },
     {
       "id": "fixture-pledge-4",
+      "title": "공영주차장 증설",
+      "category": "교통",
+      "status": "inProgress",
+      "source": {
+        "sourceUrl": "https://open.assembly.go.kr/portal/openapi/fixture-pledge-4",
+        "fetchedAt": "2026-07-30T09:00:00Z"
+      }
+    },
+    {
+      "id": "fixture-pledge-5",
+      "title": "자전거 도로 연결",
+      "category": "교통",
+      "status": "fulfilled",
+      "source": {
+        "sourceUrl": "https://open.assembly.go.kr/portal/openapi/fixture-pledge-5",
+        "fetchedAt": "2026-07-30T09:00:00Z"
+      }
+    },
+    {
+      "id": "fixture-pledge-6",
+      "title": "역사 승강기 설치",
+      "category": "교통",
+      "status": "unfulfilled",
+      "source": {
+        "sourceUrl": "https://open.assembly.go.kr/portal/openapi/fixture-pledge-6",
+        "fetchedAt": "2026-07-30T09:00:00Z"
+      }
+    },
+    {
+      "id": "fixture-pledge-7",
+      "title": "청년 임대주택 공급",
+      "category": "주거",
+      "status": "fulfilled",
+      "source": {
+        "sourceUrl": "https://open.assembly.go.kr/portal/openapi/fixture-pledge-7",
+        "fetchedAt": "2026-07-30T09:00:00Z"
+      },
+      "judgement": {
+        "steps": [
+          {
+            "actor": "AI 1차 판단",
+            "detail": "착공 보도·예산 집행 데이터 감지",
+            "stamp": "3월 2일"
+          },
+          {
+            "actor": "시민 제보 12건",
+            "detail": "현장 사진·입주 공고 첨부",
+            "stamp": "4월"
+          },
+          {
+            "actor": "전문가 위원회 최종 판정",
+            "detail": "위원 7인 중 6인 합의",
+            "stamp": "5월 10일"
+          }
+        ],
+        "source": {
+          "sourceUrl": "https://open.assembly.go.kr/portal/openapi/fixture-judgement",
+          "fetchedAt": "2026-07-30T09:00:00Z"
+        }
+      }
+    },
+    {
+      "id": "fixture-pledge-8",
+      "title": "노후 주택 단열 지원",
+      "category": "주거",
+      "status": "inProgress",
+      "source": {
+        "sourceUrl": "https://open.assembly.go.kr/portal/openapi/fixture-pledge-8",
+        "fetchedAt": "2026-07-30T09:00:00Z"
+      }
+    },
+    {
+      "id": "fixture-pledge-9",
+      "title": "전세 사기 예방 상담소",
+      "category": "주거",
+      "status": "fulfilled",
+      "source": {
+        "sourceUrl": "https://open.assembly.go.kr/portal/openapi/fixture-pledge-9",
+        "fetchedAt": "2026-07-30T09:00:00Z"
+      }
+    },
+    {
+      "id": "fixture-pledge-10",
+      "title": "재개발 이주 대책",
+      "category": "주거",
+      "status": "unfulfilled",
+      "source": {
+        "sourceUrl": "https://open.assembly.go.kr/portal/openapi/fixture-pledge-10",
+        "fetchedAt": "2026-07-30T09:00:00Z"
+      }
+    },
+    {
+      "id": "fixture-pledge-11",
+      "title": "돌봄 센터 확충",
+      "category": "복지",
+      "status": "inProgress",
+      "source": {
+        "sourceUrl": "https://open.assembly.go.kr/portal/openapi/fixture-pledge-11",
+        "fetchedAt": "2026-07-30T09:00:00Z"
+      }
+    },
+    {
+      "id": "fixture-pledge-12",
+      "title": "어르신 급식 지원",
+      "category": "복지",
+      "status": "fulfilled",
+      "source": {
+        "sourceUrl": "https://open.assembly.go.kr/portal/openapi/fixture-pledge-12",
+        "fetchedAt": "2026-07-30T09:00:00Z"
+      }
+    },
+    {
+      "id": "fixture-pledge-13",
+      "title": "장애인 이동 지원 확대",
+      "category": "복지",
+      "status": "unfulfilled",
+      "source": {
+        "sourceUrl": "https://open.assembly.go.kr/portal/openapi/fixture-pledge-13",
+        "fetchedAt": "2026-07-30T09:00:00Z"
+      }
+    },
+    {
+      "id": "fixture-pledge-14",
+      "title": "청년 마음건강 바우처",
+      "category": "복지",
+      "status": "inProgress",
+      "source": {
+        "sourceUrl": "https://open.assembly.go.kr/portal/openapi/fixture-pledge-14",
+        "fetchedAt": "2026-07-30T09:00:00Z"
+      }
+    },
+    {
+      "id": "fixture-pledge-15",
+      "title": "한부모 가정 주거비",
+      "category": "복지",
+      "status": "unfulfilled",
+      "source": {
+        "sourceUrl": "https://open.assembly.go.kr/portal/openapi/fixture-pledge-15",
+        "fetchedAt": "2026-07-30T09:00:00Z"
+      }
+    },
+    {
+      "id": "fixture-pledge-16",
+      "title": "돌봄교실 운영 시간 연장",
+      "category": "교육",
+      "status": "fulfilled",
+      "source": {
+        "sourceUrl": "https://open.assembly.go.kr/portal/openapi/fixture-pledge-16",
+        "fetchedAt": "2026-07-30T09:00:00Z"
+      }
+    },
+    {
+      "id": "fixture-pledge-17",
+      "title": "통학로 안전 개선",
+      "category": "교육",
+      "status": "inProgress",
+      "source": {
+        "sourceUrl": "https://open.assembly.go.kr/portal/openapi/fixture-pledge-17",
+        "fetchedAt": "2026-07-30T09:00:00Z"
+      }
+    },
+    {
+      "id": "fixture-pledge-18",
+      "title": "학교 급식 식자재 지원",
+      "category": "교육",
+      "status": "fulfilled",
+      "source": {
+        "sourceUrl": "https://open.assembly.go.kr/portal/openapi/fixture-pledge-18",
+        "fetchedAt": "2026-07-30T09:00:00Z"
+      }
+    },
+    {
+      "id": "fixture-pledge-19",
+      "title": "숲길 확장",
+      "category": "환경",
+      "status": "reversed",
+      "source": {
+        "sourceUrl": "https://open.assembly.go.kr/portal/openapi/fixture-pledge-19",
+        "fetchedAt": "2026-07-30T09:00:00Z"
+      },
+      "evidenceUrl": "https://open.assembly.go.kr/portal/openapi/fixture-pledge-19-diff",
+      "judgement": {
+        "steps": [
+          {
+            "actor": "AI 1차 판단",
+            "detail": "착공 보도·예산 집행 데이터 감지",
+            "stamp": "3월 2일"
+          },
+          {
+            "actor": "시민 제보 12건",
+            "detail": "현장 사진·입주 공고 첨부",
+            "stamp": "4월"
+          },
+          {
+            "actor": "전문가 위원회 최종 판정",
+            "detail": "위원 7인 중 6인 합의",
+            "stamp": "5월 10일"
+          }
+        ],
+        "source": {
+          "sourceUrl": "https://open.assembly.go.kr/portal/openapi/fixture-judgement",
+          "fetchedAt": "2026-07-30T09:00:00Z"
+        }
+      }
+    },
+    {
+      "id": "fixture-pledge-20",
+      "title": "생활 쓰레기 감량 사업",
+      "category": "환경",
+      "status": "inProgress",
+      "source": {
+        "sourceUrl": "https://open.assembly.go.kr/portal/openapi/fixture-pledge-20",
+        "fetchedAt": "2026-07-30T09:00:00Z"
+      }
+    },
+    {
+      "id": "fixture-pledge-21",
+      "title": "미세먼지 저감 숲 조성",
+      "category": "환경",
+      "status": "reversed",
+      "source": {
+        "sourceUrl": "https://open.assembly.go.kr/portal/openapi/fixture-pledge-21",
+        "fetchedAt": "2026-07-30T09:00:00Z"
+      },
+      "evidenceUrl": "https://open.assembly.go.kr/portal/openapi/fixture-pledge-21-diff"
+    },
+    {
+      "id": "fixture-pledge-22",
       "title": "노후 상가 정비",
       "category": "지역경제",
       "status": "unfulfilled",
       "source": {
-        "sourceUrl": "https://open.assembly.go.kr/portal/openapi/fixture-pledge-4",
+        "sourceUrl": "https://open.assembly.go.kr/portal/openapi/fixture-pledge-22",
+        "fetchedAt": "2026-07-30T09:00:00Z"
+      }
+    },
+    {
+      "id": "fixture-pledge-23",
+      "title": "전통시장 시설 현대화",
+      "category": "지역경제",
+      "status": "fulfilled",
+      "source": {
+        "sourceUrl": "https://open.assembly.go.kr/portal/openapi/fixture-pledge-23",
+        "fetchedAt": "2026-07-30T09:00:00Z"
+      }
+    },
+    {
+      "id": "fixture-pledge-24",
+      "title": "소상공인 임대료 지원",
+      "category": "지역경제",
+      "status": "inProgress",
+      "source": {
+        "sourceUrl": "https://open.assembly.go.kr/portal/openapi/fixture-pledge-24",
         "fetchedAt": "2026-07-30T09:00:00Z"
       }
     }
