@@ -55,48 +55,44 @@ void main() {
     expect(surface.right, lessThan(screen.right));
   });
 
-  // Android: the iOS 26 shape in Material 3 -- a capsule sized to five tabs,
-  // the sixth as a round button beside it, both lifted off every edge.
-  testWidgets(
-    'Android floats five tabs and a round sixth, clear of the edges',
-    (tester) async {
-      tester.view.physicalSize = const Size(390, 844);
-      tester.view.devicePixelRatio = 1;
-      addTearDown(tester.view.reset);
-      await tester.pumpWidget(harness(TargetPlatform.android));
-
-      expect(find.byType(NavigationBar), findsNothing);
-      final screen = tester.getRect(find.byType(MaterialApp));
-      final capsule = tester.getRect(
-        find.byKey(PlatformAdaptiveTabBar.surfaceKey),
-      );
-      final extra = tester.getRect(find.byKey(const ValueKey('tab-extra-5')));
-
-      expect(capsule.left, greaterThan(screen.left));
-      expect(extra.right, lessThan(screen.right));
-      expect(capsule.bottom, lessThan(screen.bottom));
-      expect(extra.left, greaterThan(capsule.right));
-      expect(extra.width, extra.height);
-      expect(extra.height, capsule.height);
-    },
-  );
-
-  testWidgets('Android marks the current tab with the M3 indicator', (
+  // Android: edge to edge on the bottom, one pill that travels to the tab.
+  testWidgets('Android spans the bottom edge with every destination', (
     tester,
   ) async {
+    tester.view.physicalSize = const Size(390, 844);
+    tester.view.devicePixelRatio = 1;
+    addTearDown(tester.view.reset);
     await tester.pumpWidget(harness(TargetPlatform.android));
+
+    final screen = tester.getRect(find.byType(MaterialApp));
+    final surface = tester.getRect(
+      find.byKey(PlatformAdaptiveTabBar.surfaceKey),
+    );
+    expect(surface.width, screen.width);
+    expect(surface.bottom, screen.bottom);
+    expect(surface.height, greaterThanOrEqualTo(72));
+    expect(find.byKey(const ValueKey('tab-indicator')), findsOneWidget);
+  });
+
+  testWidgets('Android slides the pill to the new tab and settles on it', (
+    tester,
+  ) async {
+    tester.view.physicalSize = const Size(390, 844);
+    tester.view.devicePixelRatio = 1;
+    addTearDown(tester.view.reset);
+    await tester.pumpWidget(harness(TargetPlatform.android));
+    Rect pill() => tester.getRect(find.byKey(const ValueKey('tab-indicator')));
+    final start = pill();
+
+    await tester.pumpWidget(harness(TargetPlatform.android, currentIndex: 4));
+    await tester.pump(const Duration(milliseconds: 120));
+    // Mid-travel the leading edge has run ahead: the pill is stretched.
+    expect(pill().width, greaterThan(start.width));
+
     await tester.pumpAndSettle();
-    final colors = Theme.of(
-      tester.element(find.byType(PlatformAdaptiveTabBar)),
-    ).colorScheme;
-    final indicators = tester
-        .widgetList<AnimatedContainer>(find.byType(AnimatedContainer))
-        .where(
-          (c) =>
-              (c.decoration as ShapeDecoration?)?.color ==
-              colors.secondaryContainer,
-        );
-    expect(indicators, hasLength(1));
+    final end = pill();
+    expect(end.width, start.width);
+    expect(end.center.dx, greaterThan(start.center.dx));
   });
 
   for (final platform in [TargetPlatform.iOS, TargetPlatform.android]) {
@@ -114,13 +110,9 @@ void main() {
   testWidgets('every destination is labelled', (tester) async {
     await tester.pumpWidget(harness(TargetPlatform.android));
 
-    // The five in the capsule show their label; the round sixth carries it
-    // as its semantics label and tooltip.
-    for (final item in items.take(5)) {
+    for (final item in items) {
       expect(find.text(item.label), findsOneWidget);
     }
-    expect(find.bySemanticsLabel(items.last.label), findsOneWidget);
-    expect(find.byTooltip(items.last.label), findsOneWidget);
   });
 
   group('minimized', () {
