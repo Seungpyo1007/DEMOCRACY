@@ -1,4 +1,5 @@
 import 'package:democracy/src/app/app_routes.dart';
+import 'package:democracy/src/app/app_version.dart';
 import 'package:democracy/src/core/account/account.dart';
 import 'package:democracy/src/core/account/account_repository.dart';
 import 'package:democracy/src/core/account/auth_controller.dart';
@@ -190,6 +191,17 @@ class AccountScreen extends ConsumerWidget {
                     .setNotify(notify: value),
               ),
             ],
+          ),
+        ),
+        const SizedBox(height: AppSpacing.x8),
+        const SectionHeader(number: '05', label: '앱 정보'),
+        const _ValueRow(label: '버전', value: '$appVersion ($appBuild)'),
+        _LinkRow(
+          label: '오픈소스 라이선스',
+          onTap: () => showLicensePage(
+            context: context,
+            applicationName: 'DEMOCRACY',
+            applicationVersion: '$appVersion ($appBuild)',
           ),
         ),
       ],
