@@ -55,26 +55,48 @@ void main() {
     expect(surface.right, lessThan(screen.right));
   });
 
-  testWidgets('Android is the Material 3 navigation bar itself', (
+  // Android: the iOS 26 shape in Material 3 -- a capsule sized to five tabs,
+  // the sixth as a round button beside it, both lifted off every edge.
+  testWidgets(
+    'Android floats five tabs and a round sixth, clear of the edges',
+    (tester) async {
+      tester.view.physicalSize = const Size(390, 844);
+      tester.view.devicePixelRatio = 1;
+      addTearDown(tester.view.reset);
+      await tester.pumpWidget(harness(TargetPlatform.android));
+
+      expect(find.byType(NavigationBar), findsNothing);
+      final screen = tester.getRect(find.byType(MaterialApp));
+      final capsule = tester.getRect(
+        find.byKey(PlatformAdaptiveTabBar.surfaceKey),
+      );
+      final extra = tester.getRect(find.byKey(const ValueKey('tab-extra-5')));
+
+      expect(capsule.left, greaterThan(screen.left));
+      expect(extra.right, lessThan(screen.right));
+      expect(capsule.bottom, lessThan(screen.bottom));
+      expect(extra.left, greaterThan(capsule.right));
+      expect(extra.width, extra.height);
+      expect(extra.height, capsule.height);
+    },
+  );
+
+  testWidgets('Android marks the current tab with the M3 indicator', (
     tester,
   ) async {
     await tester.pumpWidget(harness(TargetPlatform.android));
-    expect(find.byType(NavigationBar), findsOneWidget);
-    expect(find.byType(NavigationDestination), findsNWidgets(items.length));
-  });
-
-  // Android: Material 3's own bar -- edge to edge, 80dp, on the tonal step.
-  testWidgets('Android spans the width at the Material height', (tester) async {
-    await tester.pumpWidget(harness(TargetPlatform.android));
-
-    final screen = tester.getRect(find.byType(MaterialApp));
-    final surface = tester.getRect(
-      find.byKey(PlatformAdaptiveTabBar.surfaceKey),
-    );
-
-    expect(surface.width, screen.width);
-    expect(surface.bottom, screen.bottom);
-    expect(surface.height, greaterThanOrEqualTo(80));
+    await tester.pumpAndSettle();
+    final colors = Theme.of(
+      tester.element(find.byType(PlatformAdaptiveTabBar)),
+    ).colorScheme;
+    final indicators = tester
+        .widgetList<AnimatedContainer>(find.byType(AnimatedContainer))
+        .where(
+          (c) =>
+              (c.decoration as ShapeDecoration?)?.color ==
+              colors.secondaryContainer,
+        );
+    expect(indicators, hasLength(1));
   });
 
   for (final platform in [TargetPlatform.iOS, TargetPlatform.android]) {
@@ -92,9 +114,13 @@ void main() {
   testWidgets('every destination is labelled', (tester) async {
     await tester.pumpWidget(harness(TargetPlatform.android));
 
-    for (final item in items) {
+    // The five in the capsule show their label; the round sixth carries it
+    // as its semantics label and tooltip.
+    for (final item in items.take(5)) {
       expect(find.text(item.label), findsOneWidget);
     }
+    expect(find.bySemanticsLabel(items.last.label), findsOneWidget);
+    expect(find.byTooltip(items.last.label), findsOneWidget);
   });
 
   group('minimized', () {
