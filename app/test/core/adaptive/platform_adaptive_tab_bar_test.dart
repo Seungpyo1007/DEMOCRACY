@@ -55,24 +55,29 @@ void main() {
     expect(surface.right, lessThan(screen.right));
   });
 
-  // Android: edge to edge on the bottom, one pill that travels to the tab.
-  testWidgets('Android spans the bottom edge with every destination', (
-    tester,
-  ) async {
-    tester.view.physicalSize = const Size(390, 844);
-    tester.view.devicePixelRatio = 1;
-    addTearDown(tester.view.reset);
-    await tester.pumpWidget(harness(TargetPlatform.android));
+  // Android: the iOS 26 shape -- a capsule of five and a round sixth, both
+  // clear of every edge -- with one pill that travels to the selected tab.
+  testWidgets(
+    'Android floats five tabs and a round sixth, clear of the edges',
+    (tester) async {
+      tester.view.physicalSize = const Size(390, 844);
+      tester.view.devicePixelRatio = 1;
+      addTearDown(tester.view.reset);
+      await tester.pumpWidget(harness(TargetPlatform.android));
 
-    final screen = tester.getRect(find.byType(MaterialApp));
-    final surface = tester.getRect(
-      find.byKey(PlatformAdaptiveTabBar.surfaceKey),
-    );
-    expect(surface.width, screen.width);
-    expect(surface.bottom, screen.bottom);
-    expect(surface.height, greaterThanOrEqualTo(72));
-    expect(find.byKey(const ValueKey('tab-indicator')), findsOneWidget);
-  });
+      final screen = tester.getRect(find.byType(MaterialApp));
+      final capsule = tester.getRect(
+        find.byKey(PlatformAdaptiveTabBar.surfaceKey),
+      );
+      final extra = tester.getRect(find.byKey(const ValueKey('tab-extra-5')));
+      expect(capsule.left, greaterThan(screen.left));
+      expect(extra.right, lessThan(screen.right));
+      expect(capsule.bottom, lessThan(screen.bottom));
+      expect(extra.left, greaterThan(capsule.right));
+      expect(extra.height, capsule.height);
+      expect(find.byKey(const ValueKey('tab-indicator')), findsOneWidget);
+    },
+  );
 
   testWidgets('Android slides the pill to the new tab and settles on it', (
     tester,
@@ -95,6 +100,20 @@ void main() {
     expect(end.center.dx, greaterThan(start.center.dx));
   });
 
+  testWidgets('Android fades the pill while the round button is current', (
+    tester,
+  ) async {
+    await tester.pumpWidget(harness(TargetPlatform.android, currentIndex: 5));
+    await tester.pumpAndSettle();
+    final opacity = tester.widget<AnimatedOpacity>(
+      find.descendant(
+        of: find.byKey(const ValueKey('tab-indicator')),
+        matching: find.byType(AnimatedOpacity),
+      ),
+    );
+    expect(opacity.opacity, 0);
+  });
+
   for (final platform in [TargetPlatform.iOS, TargetPlatform.android]) {
     testWidgets('$platform reports the tapped destination', (tester) async {
       final tapped = <int>[];
@@ -110,9 +129,13 @@ void main() {
   testWidgets('every destination is labelled', (tester) async {
     await tester.pumpWidget(harness(TargetPlatform.android));
 
-    for (final item in items) {
+    // The five in the capsule show their label; the round sixth carries it
+    // as its semantics label and tooltip.
+    for (final item in items.take(5)) {
       expect(find.text(item.label), findsOneWidget);
     }
+    expect(find.bySemanticsLabel(items.last.label), findsOneWidget);
+    expect(find.byTooltip(items.last.label), findsOneWidget);
   });
 
   group('minimized', () {
