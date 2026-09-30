@@ -10,6 +10,7 @@ import 'package:democracy/src/design/app_motion.dart';
 import 'package:democracy/src/design/app_tokens.dart';
 import 'package:democracy/src/design/components/app_card.dart';
 import 'package:democracy/src/design/components/editorial.dart';
+import 'package:democracy/src/design/components/ink_loading.dart';
 import 'package:democracy/src/design/components/motion.dart';
 import 'package:democracy/src/features/account/presentation/account_page.dart';
 import 'package:flutter/material.dart';
@@ -286,13 +287,7 @@ class ProviderButton extends StatelessWidget {
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
                 if (busy)
-                  SizedBox.square(
-                    dimension: 18,
-                    child: CircularProgressIndicator(
-                      strokeWidth: 2,
-                      color: foreground,
-                    ),
-                  )
+                  InkRingIndicator(size: 18, color: foreground, delayed: false)
                 else
                   ExcludeSemantics(child: mark),
                 const SizedBox(width: AppSpacing.x2),

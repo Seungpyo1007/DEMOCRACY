@@ -12,6 +12,7 @@ import 'package:democracy/src/design/components/app_card.dart';
 import 'package:democracy/src/design/components/app_controls.dart';
 import 'package:democracy/src/design/components/app_labels.dart';
 import 'package:democracy/src/design/components/editorial.dart';
+import 'package:democracy/src/design/components/ink_loading.dart';
 import 'package:democracy/src/design/components/native_controls.dart';
 import 'package:democracy/src/features/account/presentation/account_page.dart';
 import 'package:democracy/src/features/account/presentation/residency_screens.dart';
@@ -347,7 +348,7 @@ class _HandleSheetState extends ConsumerState<HandleSheet> {
             if (options == null) {
               return const SizedBox(
                 height: 200,
-                child: Center(child: CircularProgressIndicator.adaptive()),
+                child: Center(child: InkRingIndicator(size: 24)),
               );
             }
             final picked = _picked ?? options.first;

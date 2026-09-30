@@ -82,4 +82,31 @@ void main() {
     final stamp = paintOf(tester, InkStampIndicator).painter! as StampStrokes;
     expect((stamp.ring, stamp.stem, stamp.branch), (1, 1, 1));
   });
+
+  testWidgets('pull to refresh shows the ring and runs the refresh', (
+    tester,
+  ) async {
+    var refreshed = 0;
+    await tester.pumpWidget(
+      MaterialApp(
+        home: Scaffold(
+          body: InkRefresh(
+            onRefresh: () async => refreshed++,
+            child: ListView(
+              children: [for (var i = 0; i < 30; i++) Text('줄 $i')],
+            ),
+          ),
+        ),
+      ),
+    );
+
+    expect(find.byType(InkRingIndicator), findsNothing);
+    await tester.fling(find.text('줄 0'), const Offset(0, 400), 1000);
+    await tester.pump();
+    expect(find.byType(InkRingIndicator), findsOneWidget);
+
+    await tester.pumpAndSettle();
+    expect(refreshed, 1);
+    expect(find.byType(InkRingIndicator), findsNothing);
+  });
 }

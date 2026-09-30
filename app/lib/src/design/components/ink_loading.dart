@@ -16,7 +16,7 @@ import 'dart:math' as math;
 
 import 'package:democracy/src/design/app_motion.dart';
 import 'package:democracy/src/design/app_tokens.dart';
-import 'package:flutter/widgets.dart';
+import 'package:flutter/material.dart';
 
 /// How long a load runs before any mark appears.
 const appearDelay = Duration(milliseconds: 250);
@@ -40,17 +40,28 @@ class InkRingIndicator extends StatelessWidget {
   const InkRingIndicator({
     this.size = 20,
     this.color = AppColors.ink,
+    this.delayed = true,
+    this.active = true,
     super.key,
   });
 
   final double size;
   final Color color;
 
+  /// False where the reader asked for the wait (a pull to refresh), so the
+  /// ring answers at once rather than after [appearDelay].
+  final bool delayed;
+
+  /// False draws the ring still and whole: a pull not yet let go.
+  final bool active;
+
   @override
   Widget build(BuildContext context) {
     return _Appear(
+      delay: delayed ? appearDelay : Duration.zero,
       child: _InkLoop(
         period: const Duration(milliseconds: 1400),
+        enabled: active,
         builder: (context, phase, moving) {
           double start;
           double end;
@@ -77,6 +88,86 @@ class InkRingIndicator extends StatelessWidget {
           );
         },
       ),
+    );
+  }
+}
+
+/// Pull to refresh, with the ring in place of the platform's spinner.
+///
+/// The ring shows still and faint while the page is pulled, whole once the
+/// pull would refresh, and turns while the refresh runs.
+class InkRefresh extends StatefulWidget {
+  const InkRefresh({required this.onRefresh, required this.child, super.key});
+
+  final RefreshCallback onRefresh;
+  final Widget child;
+
+  @override
+  State<InkRefresh> createState() => _InkRefreshState();
+}
+
+class _InkRefreshState extends State<InkRefresh> {
+  RefreshIndicatorStatus? _status;
+
+  @override
+  Widget build(BuildContext context) {
+    final status = _status;
+    final shown = switch (status) {
+      RefreshIndicatorStatus.drag ||
+      RefreshIndicatorStatus.armed ||
+      RefreshIndicatorStatus.snap ||
+      RefreshIndicatorStatus.refresh => true,
+      _ => false,
+    };
+    final pulled = status != RefreshIndicatorStatus.drag;
+    final reduced = AppMotion.reduced(context);
+
+    return Stack(
+      children: [
+        RefreshIndicator.noSpinner(
+          onRefresh: widget.onRefresh,
+          onStatusChange: (status) {
+            if (mounted) setState(() => _status = status);
+          },
+          child: widget.child,
+        ),
+        Positioned(
+          top: MediaQuery.paddingOf(context).top + AppSpacing.x12,
+          left: 0,
+          right: 0,
+          child: IgnorePointer(
+            child: AnimatedOpacity(
+              opacity: shown ? (pulled ? 1 : 0.6) : 0,
+              duration: reduced ? Duration.zero : AppMotion.fast,
+              child: Center(
+                child: DecoratedBox(
+                  decoration: BoxDecoration(
+                    color: AppColors.ground,
+                    shape: BoxShape.circle,
+                    boxShadow: [
+                      BoxShadow(
+                        color: AppColors.ink.withValues(alpha: 0.12),
+                        blurRadius: 8,
+                        offset: const Offset(0, 2),
+                      ),
+                    ],
+                  ),
+                  child: Padding(
+                    padding: const EdgeInsets.all(AppSpacing.x2),
+                    child: shown
+                        ? InkRingIndicator(
+                            size: 22,
+                            delayed: false,
+                            active: status == RefreshIndicatorStatus.refresh,
+                          )
+                        : const SizedBox.square(dimension: 22),
+                  ),
+                ),
+              ),
+            ),
+          ),
+        ),
+      ],
     );
   }
 }
@@ -225,16 +316,17 @@ class _RingPainter extends CustomPainter {
 /// A controller rather than a timer, so a test that ends mid-wait is not
 /// left with one pending.
 class _Appear extends StatefulWidget {
-  const _Appear({required this.child});
+  const _Appear({required this.child, this.delay = appearDelay});
 
   final Widget child;
+  final Duration delay;
 
   @override
   State<_Appear> createState() => _AppearState();
 }
 
 class _AppearState extends State<_Appear> with SingleTickerProviderStateMixin {
-  static final _total = appearDelay + AppMotion.fast;
+  late final Duration _total = widget.delay + AppMotion.fast;
 
   late final AnimationController _controller = AnimationController(
     vsync: this,
@@ -244,7 +336,7 @@ class _AppearState extends State<_Appear> with SingleTickerProviderStateMixin {
   late final Animation<double> _opacity = CurvedAnimation(
     parent: _controller,
     curve: Interval(
-      appearDelay.inMilliseconds / _total.inMilliseconds,
+      widget.delay.inMilliseconds / _total.inMilliseconds,
       1,
       curve: AppMotion.settle,
     ),
@@ -271,9 +363,14 @@ class _AppearState extends State<_Appear> with SingleTickerProviderStateMixin {
 /// Repeats [builder]'s phase over [period] while motion is allowed; stands
 /// still (moving false) with reduced motion and in tests.
 class _InkLoop extends StatefulWidget {
-  const _InkLoop({required this.period, required this.builder});
+  const _InkLoop({
+    required this.period,
+    required this.builder,
+    this.enabled = true,
+  });
 
   final Duration period;
+  final bool enabled;
   final Widget Function(BuildContext context, double phase, bool moving)
   builder;
 
@@ -292,7 +389,17 @@ class _InkLoopState extends State<_InkLoop>
   @override
   void didChangeDependencies() {
     super.didChangeDependencies();
-    _moving = AppMotion.loops(context);
+    _sync();
+  }
+
+  @override
+  void didUpdateWidget(_InkLoop oldWidget) {
+    super.didUpdateWidget(oldWidget);
+    if (oldWidget.enabled != widget.enabled) _sync();
+  }
+
+  void _sync() {
+    _moving = widget.enabled && AppMotion.loops(context);
     if (_moving) {
       if (!_controller.isAnimating) _controller.repeat();
     } else {
