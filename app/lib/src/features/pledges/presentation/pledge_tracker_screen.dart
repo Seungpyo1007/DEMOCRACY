@@ -7,7 +7,6 @@ import 'package:democracy/src/design/components/app_labels.dart';
 import 'package:democracy/src/design/components/editorial.dart';
 import 'package:democracy/src/design/components/labeled_bar.dart';
 import 'package:democracy/src/design/components/motion.dart';
-import 'package:democracy/src/design/components/native_controls.dart';
 import 'package:democracy/src/features/district/application/district_providers.dart';
 import 'package:democracy/src/features/pledges/application/pledge_providers.dart';
 import 'package:democracy/src/features/pledges/domain/pledge.dart';
@@ -69,16 +68,16 @@ class _PledgeTrackerScreenState extends ConsumerState<PledgeTrackerScreen> {
 
     return TabAccessoryScope(
       slot: TabSlot.tracker,
-      accessory: usesNativeIosControls(context)
+      accessory: tabBarTakesAction(context)
           ? PledgeReportAction.accessory(context, ref)
           : null,
       child: Scaffold(
         body: EditorialScrollView(
           kicker: kicker.isEmpty ? null : kicker,
           title: '공약이행률 트래커',
-          // On native iOS the action lives in the tab bar's accessory (lent
-          // by the tracker below); everywhere else it floats on the page.
-          floatingAction: usesNativeIosControls(context)
+          // Where the tab bar takes it (native iOS, Android) the action lives in
+          // its round button, lent below; elsewhere it floats on the page.
+          floatingAction: tabBarTakesAction(context)
               ? null
               : const PledgeReportAction(),
           slivers: [

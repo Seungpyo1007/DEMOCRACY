@@ -138,7 +138,8 @@ class _AppShellState extends State<AppShell> {
       extendBody: true,
       body: NotificationListener<ScrollUpdateNotification>(
         onNotification: _handleScroll,
-        child: widget.navigationShell,
+        // Tells the tabs' pages that a bar is here to take their action.
+        child: TabBarHost(child: widget.navigationShell),
       ),
       bottomNavigationBar: Consumer(
         builder: (context, ref, _) {
@@ -156,6 +157,7 @@ class _AppShellState extends State<AppShell> {
                 : AdaptiveTabAccessory(
                     label: lent.label,
                     sfSymbol: lent.icon.sfSymbol,
+                    icon: lent.icon.material,
                     onPressed: lent.onPressed,
                   ),
             onTap: (index) {

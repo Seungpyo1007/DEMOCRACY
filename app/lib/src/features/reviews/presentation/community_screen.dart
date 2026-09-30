@@ -233,7 +233,7 @@ class _CommunityScreenState extends ConsumerState<CommunityScreen> {
     return TabAccessoryScope(
       slot: TabSlot.community,
       // Only the reviews pane has a single primary action to lend.
-      accessory: _tab == 0 && usesNativeIosControls(context)
+      accessory: _tab == 0 && tabBarTakesAction(context)
           ? _ComposeAction.accessory(context, ref)
           : null,
       child: Scaffold(
@@ -244,7 +244,7 @@ class _CommunityScreenState extends ConsumerState<CommunityScreen> {
                 controller: _scroll,
                 title: '커뮤니티',
                 kicker: communityKicker(ref),
-                floatingAction: _tab == 0 && !usesNativeIosControls(context)
+                floatingAction: _tab == 0 && !tabBarTakesAction(context)
                     ? const _ComposeAction()
                     : null,
                 // The composer floats over the end of the channel.

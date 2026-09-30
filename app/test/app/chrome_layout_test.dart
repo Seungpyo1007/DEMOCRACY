@@ -172,9 +172,20 @@ void main() {
       await pumpApp(tester, platform, AppRoutes.tracker);
       await scrollToEnd(tester);
 
-      final action = platform == TargetPlatform.iOS
-          ? find.byType(AppPrimaryButton)
-          : find.byType(FloatingActionButton);
+      if (platform == TargetPlatform.android) {
+        // Android lends the action to the round button beside the bar, as
+        // native iOS does; the page floats nothing of its own.
+        await tester.pumpAndSettle();
+        expect(find.byType(FloatingActionButton), findsNothing);
+        expect(
+          find.byKey(const ValueKey('tab-accessory-이행 제보')),
+          findsOneWidget,
+        );
+        final bar = top(tester, find.byKey(PlatformAdaptiveTabBar.surfaceKey));
+        expect(lowestTextBottom(tester), lessThanOrEqualTo(bar));
+        return;
+      }
+      final action = find.byType(AppPrimaryButton);
       expect(lowestTextBottom(tester), lessThanOrEqualTo(top(tester, action)));
       // And the action itself sits above the bar, not on or under it.
       expect(
@@ -191,9 +202,18 @@ void main() {
       await pumpApp(tester, platform, AppRoutes.community);
       await scrollToEnd(tester);
 
-      final action = platform == TargetPlatform.iOS
-          ? find.byType(AppPrimaryButton)
-          : find.byType(FloatingActionButton);
+      if (platform == TargetPlatform.android) {
+        await tester.pumpAndSettle();
+        expect(find.byType(FloatingActionButton), findsNothing);
+        expect(
+          find.byKey(const ValueKey('tab-accessory-평가 작성')),
+          findsOneWidget,
+        );
+        final bar = top(tester, find.byKey(PlatformAdaptiveTabBar.surfaceKey));
+        expect(lowestTextBottom(tester), lessThanOrEqualTo(bar));
+        return;
+      }
+      final action = find.byType(AppPrimaryButton);
       expect(lowestTextBottom(tester), lessThanOrEqualTo(top(tester, action)));
     });
   }
