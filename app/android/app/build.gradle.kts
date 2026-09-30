@@ -6,6 +6,14 @@ fun localProperty(key: String): String? {
     return Properties().apply { file.inputStream().use(::load) }.getProperty(key)
 }
 
+// Upload key for Play, from android/key.properties (gitignored; the keystore
+// itself lives outside the repo). Without it, e.g. on CI, release builds fall
+// back to the debug key so `flutter build` still works; Play rejects those.
+val keyProperties = Properties().apply {
+    val file = rootProject.file("key.properties")
+    if (file.exists()) file.inputStream().use(::load)
+}
+
 plugins {
     id("com.android.application")
     // The Flutter Gradle Plugin must be applied after the Android and Kotlin Gradle plugins.
@@ -46,11 +54,22 @@ android {
                 ?: ""
     }
 
+    signingConfigs {
+        create("upload") {
+            keyAlias = keyProperties.getProperty("keyAlias")
+            keyPassword = keyProperties.getProperty("keyPassword")
+            storeFile = keyProperties.getProperty("storeFile")?.let(::file)
+            storePassword = keyProperties.getProperty("storePassword")
+        }
+    }
+
     buildTypes {
         release {
-            // TODO: Add your own signing config for the release build.
-            // Signing with the debug keys for now, so `flutter run --release` works.
-            signingConfig = signingConfigs.getByName("debug")
+            signingConfig = if (keyProperties.getProperty("storeFile") != null) {
+                signingConfigs.getByName("upload")
+            } else {
+                signingConfigs.getByName("debug")
+            }
         }
     }
 }
