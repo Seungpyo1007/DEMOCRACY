@@ -191,10 +191,10 @@ class PlatformAdaptiveTabBar extends StatelessWidget {
     // iOS 26 one: a capsule only as wide as its own items. The material
     // underneath does differ -- iOS gets real glass, Android an opaque
     // surface -- but that is [_FloatingBarFrame]'s business, not this one's.
-    // Android: the iOS 26 shape -- a floating capsule of five tabs and a
-    // round sixth beside it -- with a selection pill that travels and
-    // stretches between tabs, and a press that squeezes the icon rather than
-    // spreading a ripple.
+    // Android: Material 3 Expressive's floating toolbar and FAB -- five icon
+    // tabs in a vibrant capsule, the page's action (or 개표) in the FAB --
+    // with a selection pill that travels and stretches between tabs, and a
+    // press that squeezes the icon rather than spreading a ripple.
     if (!surfaceTokens.isGlass) {
       return _SlidingNavigationBar(
         currentIndex: currentIndex,
@@ -447,18 +447,18 @@ class _CapsuleTabItem extends StatelessWidget {
   }
 }
 
-/// Android's bar, in the iOS 26 shape: a floating capsule and a round button.
+/// Android's bar: Material 3 Expressive's floating toolbar paired with a FAB.
 ///
-/// Five destinations sit in a capsule sized to them and a sixth floats beside
-/// it as a round button, where iOS puts its separate tab. Both are one opaque
-/// surface at elevation 3, so the page shows around them but not through.
+/// Five destinations sit as icons in a vibrant capsule (primaryContainer)
+/// that floats above the page; their names are tooltips and semantics
+/// labels, as in an icon toolbar. Beside it sits a FAB: the current tab's
+/// primary action where one is lent (이행 제보, 평가 작성), the sixth
+/// destination (개표) elsewhere.
 ///
-/// The selection is a single pill behind the whole tab, as on iOS, and it
-/// travels: the edge on the side it is heading for leaves fast and the other
-/// follows, so it stretches across the distance and settles on arrival.
-/// Presses give no ink; the icon squeezes under the finger ([PressScale]) and
-/// the newly selected one springs back up. While the round button is current
-/// the pill fades out where it was and the button fills instead.
+/// The selection is one filled pill that travels: the edge on the side it is
+/// heading for leaves fast and the other follows, so it stretches across the
+/// distance and settles on arrival. Presses give no ink; the icon squeezes
+/// under the finger ([PressScale]) and the newly selected one springs up.
 class _SlidingNavigationBar extends StatefulWidget {
   const _SlidingNavigationBar({
     required this.currentIndex,
@@ -481,9 +481,9 @@ class _SlidingNavigationBar extends StatefulWidget {
 
   /// Five 54dp tabs, the capsule's padding, the gap and one 64dp button fit
   /// a 390dp screen inside the insets.
-  static const itemWidth = 54.0;
+  static const itemWidth = 52.0;
   static const height = 64.0;
-  static const padding = 4.0;
+  static const padding = 8.0;
   static const gap = 8.0;
 
   @override
@@ -535,10 +535,8 @@ class _SlidingNavigationBarState extends State<_SlidingNavigationBar>
   Widget build(BuildContext context) {
     final colors = Theme.of(context).colorScheme;
     final reduced = AppMotion.reduced(context);
-    // surfaceContainerLowest, not surfaceContainer: this scheme is seeded
-    // monochrome, so the mid container roles collapse onto the page and the
-    // capsule would stop reading as lifted.
-    final surface = colors.surfaceContainerLowest;
+    // The vibrant toolbar: primaryContainer, with the selection in primary.
+    final surface = colors.primaryContainer;
     final shadow = AppColors.ink.withValues(alpha: 0.22);
     const maxTabs = _SlidingNavigationBar.maxTabs;
     const itemWidth = _SlidingNavigationBar.itemWidth;
@@ -607,7 +605,7 @@ class _SlidingNavigationBarState extends State<_SlidingNavigationBar>
                                   : AppMotion.fast,
                               child: DecoratedBox(
                                 decoration: ShapeDecoration(
-                                  color: colors.secondaryContainer,
+                                  color: colors.primary,
                                   shape: const StadiumBorder(),
                                 ),
                               ),
@@ -668,48 +666,33 @@ class _SlidingDestination extends StatelessWidget {
     required this.onTap,
   });
 
-  /// The labels sit in a bar of fixed height; past this they would clip.
-  static const _maxLabelScale = 1.3;
-
   final AdaptiveTabItem item;
   final bool selected;
   final VoidCallback onTap;
 
   @override
   Widget build(BuildContext context) {
-    final theme = Theme.of(context);
-    final colors = theme.colorScheme;
+    final colors = Theme.of(context).colorScheme;
 
     return Semantics(
       button: true,
       selected: selected,
       label: item.label,
       excludeSemantics: true,
-      child: GestureDetector(
-        behavior: HitTestBehavior.opaque,
-        onTap: onTap,
-        child: PressScale(
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              _SpringIcon(item: item, selected: selected),
-              const SizedBox(height: 3),
-              MediaQuery.withClampedTextScaling(
-                maxScaleFactor: _maxLabelScale,
-                child: Text(
-                  item.label,
-                  maxLines: 1,
-                  overflow: TextOverflow.ellipsis,
-                  style: theme.textTheme.labelMedium?.copyWith(
-                    fontSize: 10.5,
-                    fontWeight: selected ? FontWeight.w700 : FontWeight.w500,
-                    color: selected
-                        ? colors.onSecondaryContainer
-                        : colors.onSurfaceVariant,
-                  ),
-                ),
+      // Icons only, as in a toolbar; the name is a long press away.
+      child: Tooltip(
+        message: item.label,
+        child: GestureDetector(
+          behavior: HitTestBehavior.opaque,
+          onTap: onTap,
+          child: PressScale(
+            child: Center(
+              child: _SpringIcon(
+                item: item,
+                selected: selected,
+                color: selected ? colors.onPrimary : colors.onPrimaryContainer,
               ),
-            ],
+            ),
           ),
         ),
       ),
@@ -717,8 +700,8 @@ class _SlidingDestination extends StatelessWidget {
   }
 }
 
-/// The destination past the fifth: a round button beside the capsule that
-/// fills with the selection colour while it is current.
+/// The destination past the fifth, in the FAB's place: a rounded square in
+/// the toolbar's colour that turns primary while it is current.
 class _RoundDestination extends StatelessWidget {
   const _RoundDestination({
     required this.item,
@@ -738,44 +721,73 @@ class _RoundDestination extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final colors = Theme.of(context).colorScheme;
-    final reduced = AppMotion.reduced(context);
+    return _Fab(
+      label: item.label,
+      selected: selected,
+      onTap: onTap,
+      color: selected ? colors.primary : surface,
+      shadow: shadow,
+      child: _SpringIcon(
+        item: item,
+        selected: selected,
+        color: selected ? colors.onPrimary : colors.onPrimaryContainer,
+      ),
+    );
+  }
+}
 
+/// M3's FAB shape: a 64dp square with 20dp corners, at elevation 3.
+class _Fab extends StatelessWidget {
+  const _Fab({
+    required this.label,
+    required this.onTap,
+    required this.color,
+    required this.shadow,
+    required this.child,
+    this.selected = false,
+  });
+
+  final String label;
+  final bool selected;
+  final VoidCallback onTap;
+  final Color color;
+  final Color shadow;
+  final Widget child;
+
+  @override
+  Widget build(BuildContext context) {
+    final reduced = AppMotion.reduced(context);
     return Semantics(
       button: true,
       selected: selected,
-      label: item.label,
+      label: label,
       excludeSemantics: true,
       child: Tooltip(
-        message: item.label,
+        message: label,
         child: GestureDetector(
           behavior: HitTestBehavior.opaque,
           onTap: onTap,
           child: PressScale(
-            child: Material(
-              color: surface,
-              surfaceTintColor: Colors.transparent,
-              shadowColor: shadow,
-              elevation: 3,
-              shape: const CircleBorder(),
-              child: SizedBox.square(
-                dimension: _SlidingNavigationBar.height,
-                child: Padding(
-                  padding: const EdgeInsets.all(_SlidingNavigationBar.padding),
-                  child: AnimatedContainer(
-                    duration: reduced ? Duration.zero : AppMotion.fast,
-                    curve: AppMotion.settle,
-                    decoration: ShapeDecoration(
-                      color: selected
-                          ? colors.secondaryContainer
-                          : Colors.transparent,
-                      shape: const CircleBorder(),
-                    ),
-                    child: Center(
-                      child: _SpringIcon(item: item, selected: selected),
-                    ),
-                  ),
+            child: AnimatedContainer(
+              duration: reduced ? Duration.zero : AppMotion.fast,
+              curve: AppMotion.settle,
+              width: _SlidingNavigationBar.height,
+              height: _SlidingNavigationBar.height,
+              decoration: ShapeDecoration(
+                color: color,
+                shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(20),
                 ),
+                shadows: [
+                  BoxShadow(
+                    color: shadow,
+                    blurRadius: 8,
+                    offset: const Offset(0, 3),
+                  ),
+                ],
               ),
+              alignment: Alignment.center,
+              child: child,
             ),
           ),
         ),
@@ -807,8 +819,8 @@ class _RoundButtonSwitcher extends StatelessWidget {
   }
 }
 
-/// A tab's primary action in the round button: filled with the primary
-/// colour so it reads as the thing to do here, not as another place to go.
+/// A tab's primary action in the FAB: primary, so it reads as the thing to
+/// do here rather than another place to go.
 class _RoundAction extends StatelessWidget {
   const _RoundAction({required this.action, required this.shadow, super.key});
 
@@ -818,48 +830,30 @@ class _RoundAction extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final colors = Theme.of(context).colorScheme;
-    return Semantics(
-      button: true,
+    return _Fab(
       label: action.label,
-      excludeSemantics: true,
-      child: Tooltip(
-        message: action.label,
-        child: GestureDetector(
-          behavior: HitTestBehavior.opaque,
-          onTap: action.onPressed,
-          child: PressScale(
-            child: Material(
-              color: colors.primary,
-              surfaceTintColor: Colors.transparent,
-              shadowColor: shadow,
-              elevation: 3,
-              shape: const CircleBorder(),
-              child: SizedBox.square(
-                dimension: _SlidingNavigationBar.height,
-                child: Icon(
-                  action.icon ?? Icons.add,
-                  size: 24,
-                  color: colors.onPrimary,
-                ),
-              ),
-            ),
-          ),
-        ),
-      ),
+      onTap: action.onPressed,
+      color: colors.primary,
+      shadow: shadow,
+      child: Icon(action.icon ?? Icons.add, size: 24, color: colors.onPrimary),
     );
   }
 }
 
 /// The destination's icon; the newly selected one springs up from 80%.
 class _SpringIcon extends StatelessWidget {
-  const _SpringIcon({required this.item, required this.selected});
+  const _SpringIcon({
+    required this.item,
+    required this.selected,
+    required this.color,
+  });
 
   final AdaptiveTabItem item;
   final bool selected;
+  final Color color;
 
   @override
   Widget build(BuildContext context) {
-    final colors = Theme.of(context).colorScheme;
     final reduced = AppMotion.reduced(context);
     return TweenAnimationBuilder<double>(
       key: ValueKey(selected),
@@ -870,8 +864,8 @@ class _SpringIcon extends StatelessWidget {
           Transform.scale(scale: scale, child: child),
       child: Icon(
         selected ? (item.activeIcon ?? item.icon) : item.icon,
-        size: 22,
-        color: selected ? colors.onSecondaryContainer : colors.onSurfaceVariant,
+        size: 24,
+        color: color,
       ),
     );
   }
