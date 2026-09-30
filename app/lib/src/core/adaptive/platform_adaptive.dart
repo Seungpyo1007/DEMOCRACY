@@ -316,13 +316,23 @@ class _CapsuleTabStrip extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final colors = Theme.of(context).colorScheme;
+    // Six at 56 need 376dp with the insets; the iPhone SE and mini have 375.
+    // Past that the items give way, down to the minimized width.
+    final free =
+        MediaQuery.sizeOf(context).width -
+        MediaQuery.paddingOf(context).horizontal -
+        AppNavBarInsets.ios * 2 -
+        _padding * 2;
+    final expandedWidth = items.isEmpty
+        ? _expandedWidth
+        : (free / items.length).clamp(_minimizedWidth, _expandedWidth);
 
     return TweenAnimationBuilder<double>(
       duration: _duration,
       curve: _curve,
       tween: Tween(begin: 0, end: minimized ? 1 : 0),
       builder: (context, t, _) {
-        final itemWidth = lerpDouble(_expandedWidth, _minimizedWidth, t)!;
+        final itemWidth = lerpDouble(expandedWidth, _minimizedWidth, t)!;
         final itemHeight = lerpDouble(_expandedHeight, _minimizedHeight, t)!;
         final labelOpacity = (1 - t / _labelFadeEnd).clamp(0.0, 1.0);
 
@@ -479,9 +489,12 @@ class _SlidingNavigationBar extends StatefulWidget {
 
   static const maxTabs = 5;
 
-  /// Five 54dp tabs, the capsule's padding, the gap and one 64dp button fit
-  /// a 390dp screen inside the insets.
+  /// Five 52dp tabs, the capsule's padding, the gap and one 64dp button fit
+  /// a 390dp screen inside the insets. Narrower screens (360dp is common on
+  /// Android) shrink the tabs toward [minItemWidth], the touch-target floor,
+  /// rather than push the button off the edge.
   static const itemWidth = 52.0;
+  static const minItemWidth = 44.0;
   static const height = 64.0;
   static const padding = 8.0;
   static const gap = 8.0;
@@ -531,6 +544,22 @@ class _SlidingNavigationBarState extends State<_SlidingNavigationBar>
     super.dispose();
   }
 
+  double _itemWidthFor(BuildContext context, int tabs, int extras) {
+    if (tabs == 0) return _SlidingNavigationBar.itemWidth;
+    final width =
+        MediaQuery.sizeOf(context).width -
+        MediaQuery.paddingOf(context).horizontal;
+    final free =
+        width -
+        widget.inset * 2 -
+        _SlidingNavigationBar.padding * 2 -
+        extras * (_SlidingNavigationBar.gap + _SlidingNavigationBar.height);
+    return (free / tabs).clamp(
+      _SlidingNavigationBar.minItemWidth,
+      _SlidingNavigationBar.itemWidth,
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     final colors = Theme.of(context).colorScheme;
@@ -539,9 +568,9 @@ class _SlidingNavigationBarState extends State<_SlidingNavigationBar>
     final surface = colors.primaryContainer;
     final shadow = AppColors.ink.withValues(alpha: 0.22);
     const maxTabs = _SlidingNavigationBar.maxTabs;
-    const itemWidth = _SlidingNavigationBar.itemWidth;
     final tabs = widget.items.take(maxTabs).toList();
     final extras = widget.items.skip(maxTabs).toList();
+    final itemWidth = _itemWidthFor(context, tabs.length, extras.length);
     final pillVisible = widget.currentIndex < maxTabs;
 
     return SafeArea(
