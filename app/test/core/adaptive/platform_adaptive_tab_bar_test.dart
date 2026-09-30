@@ -119,7 +119,11 @@ void main() {
       final tapped = <int>[];
       await tester.pumpWidget(harness(platform, onTap: tapped.add));
 
-      await tester.tap(find.text('커뮤니티'));
+      await tester.tap(
+        platform == TargetPlatform.android
+            ? find.byTooltip('커뮤니티')
+            : find.text('커뮤니티'),
+      );
       await tester.pump();
 
       expect(tapped, [4]);
@@ -129,13 +133,12 @@ void main() {
   testWidgets('every destination is labelled', (tester) async {
     await tester.pumpWidget(harness(TargetPlatform.android));
 
-    // The five in the capsule show their label; the round sixth carries it
-    // as its semantics label and tooltip.
-    for (final item in items.take(5)) {
-      expect(find.text(item.label), findsOneWidget);
+    // Android's toolbar is icons only: every destination carries its name as
+    // a tooltip and a semantics label.
+    for (final item in items) {
+      expect(find.byTooltip(item.label), findsOneWidget);
+      expect(find.bySemanticsLabel(item.label), findsOneWidget);
     }
-    expect(find.bySemanticsLabel(items.last.label), findsOneWidget);
-    expect(find.byTooltip(items.last.label), findsOneWidget);
   });
 
   group('minimized', () {
@@ -191,7 +194,7 @@ void main() {
       await tester.pumpAndSettle();
 
       expect(surfaceOf(tester), expanded);
-      expect(find.text('지역구'), findsOneWidget);
+      expect(find.byTooltip('지역구'), findsOneWidget);
     });
   });
 }
