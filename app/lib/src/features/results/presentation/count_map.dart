@@ -98,7 +98,11 @@ class CountMap extends StatelessWidget {
                     for (var i = 0; i < districts.length; i++)
                       SizedBox(
                         width: width,
-                        height: dense ? tileHeight * 0.75 : tileHeight,
+                        // Grown with the reader's text size: the name and
+                        // the figure are stacked in a fixed box otherwise.
+                        height: MediaQuery.textScalerOf(
+                          context,
+                        ).scale(dense ? tileHeight * 0.75 : tileHeight),
                         child: _DistrictTile(
                           district: districts[i],
                           index: i,
@@ -146,6 +150,14 @@ class _DistrictTile extends StatelessWidget {
     return words.length > 1 ? words.skip(1).join(' ') : district.districtName;
   }
 
+  /// '동두천시양주시연천군 갑' split so the 갑 survives: merged districts run
+  /// past a tile's width, and cut at the end, 갑 and 을 read the same.
+  (String, String?) get _nameParts {
+    final name = _shortName;
+    final match = RegExp(r'^(.*\S)\s+([갑을병정무])$').firstMatch(name);
+    return match == null ? (name, null) : (match[1]!, match[2]);
+  }
+
   @override
   Widget build(BuildContext context) {
     final target = district.countedFraction.clamp(0.0, 1.0);
@@ -174,6 +186,10 @@ class _DistrictTile extends StatelessWidget {
             builder: (context, shown, _) {
               final fill = CountMap.shadeFor(shown);
               final label = CountMap.labelOn(fill);
+              final nameStyle = AppTextStyles.ctaSmall.copyWith(
+                color: label,
+                fontSize: dense ? 12 : 13,
+              );
               return DecoratedBox(
                 decoration: BoxDecoration(color: fill),
                 position: DecorationPosition.background,
@@ -195,14 +211,19 @@ class _DistrictTile extends StatelessWidget {
                         Row(
                           children: [
                             Expanded(
-                              child: Text(
-                                home ? '$_shortName · 내 지역구' : _shortName,
-                                maxLines: 1,
-                                overflow: TextOverflow.ellipsis,
-                                style: AppTextStyles.ctaSmall.copyWith(
-                                  color: label,
-                                  fontSize: dense ? 12 : 13,
-                                ),
+                              child: Row(
+                                children: [
+                                  Flexible(
+                                    child: Text(
+                                      _nameParts.$1,
+                                      maxLines: 1,
+                                      overflow: TextOverflow.ellipsis,
+                                      style: nameStyle,
+                                    ),
+                                  ),
+                                  if (_nameParts.$2 != null)
+                                    Text(' ${_nameParts.$2}', style: nameStyle),
+                                ],
                               ),
                             ),
                             // The selection is a mark, not a tint: a tint
@@ -211,12 +232,34 @@ class _DistrictTile extends StatelessWidget {
                               Icon(Icons.circle, size: 8, color: label),
                           ],
                         ),
-                        Text(
-                          '${(shown * 100).round()}%',
-                          style: AppTextStyles.figureSmall.copyWith(
-                            color: label,
-                            fontSize: dense ? 18 : 22,
-                          ),
+                        Row(
+                          crossAxisAlignment: CrossAxisAlignment.baseline,
+                          textBaseline: TextBaseline.alphabetic,
+                          children: [
+                            Text(
+                              '${(shown * 100).round()}%',
+                              style: AppTextStyles.figureSmall.copyWith(
+                                color: label,
+                                fontSize: dense ? 18 : 22,
+                              ),
+                            ),
+                            // Its own line end, not a suffix on the name, so
+                            // a long name cannot push it out of the tile.
+                            if (home) ...[
+                              const SizedBox(width: AppSpacing.x1),
+                              Flexible(
+                                child: Text(
+                                  '내 지역구',
+                                  maxLines: 1,
+                                  overflow: TextOverflow.fade,
+                                  softWrap: false,
+                                  style: nameStyle.copyWith(
+                                    fontSize: dense ? 10 : 11,
+                                  ),
+                                ),
+                              ),
+                            ],
+                          ],
                         ),
                       ],
                     ),

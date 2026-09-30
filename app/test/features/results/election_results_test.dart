@@ -126,7 +126,8 @@ void main() {
     testWidgets('marks the reader\'s own district in words', (tester) async {
       await pumpResults(tester);
 
-      expect(find.text('마포구 을 · 내 지역구'), findsOneWidget);
+      expect(find.text('내 지역구'), findsOneWidget);
+      expect(find.bySemanticsLabel(RegExp(r'^서울 마포구 을, ')), findsOneWidget);
       expect(find.text('개표율 농도'), findsOneWidget);
     });
   });

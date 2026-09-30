@@ -172,13 +172,22 @@ class Figure extends StatelessWidget {
             child: child,
           ),
         ),
-        child: Text.rich(
-          TextSpan(
-            text: text,
-            style: style,
-            children: [
-              if (unit != null) TextSpan(text: unit, style: unitStyle ?? style),
-            ],
+        // A figure is one word: where it is short of room ('100.0%' beside
+        // a source line at a large text size) it shrinks rather than drop
+        // its unit onto a line of its own.
+        child: FittedBox(
+          fit: BoxFit.scaleDown,
+          alignment: AlignmentDirectional.centerStart,
+          child: Text.rich(
+            TextSpan(
+              text: text,
+              style: style,
+              children: [
+                if (unit != null)
+                  TextSpan(text: unit, style: unitStyle ?? style),
+              ],
+            ),
+            softWrap: false,
           ),
         ),
       ),

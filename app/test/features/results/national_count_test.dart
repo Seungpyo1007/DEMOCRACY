@@ -82,7 +82,7 @@ void main() {
         map.districts.every((d) => d.districtName.startsWith('경기 ')),
         true,
       );
-      expect(find.text('가상7구 · 내 지역구'), findsOneWidget);
+      expect(find.text('내 지역구'), findsOneWidget);
       // The panel opens on the reader's district.
       expect(find.text('경기 가상7구'), findsOneWidget);
       expect(find.text('서울'), findsOneWidget);

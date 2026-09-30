@@ -79,6 +79,38 @@ void main() {
     },
   );
 
+  // 360dp is a common Android width and 375dp is the iPhone SE / mini; the
+  // bar has to fit both without overflowing, and every target stays 44dp.
+  for (final platform in [TargetPlatform.iOS, TargetPlatform.android]) {
+    for (final width in [360.0, 375.0]) {
+      testWidgets('$platform fits a ${width.toInt()}dp screen', (tester) async {
+        tester.view.physicalSize = Size(width, 780);
+        tester.view.devicePixelRatio = 1;
+        addTearDown(tester.view.reset);
+        await tester.pumpWidget(harness(platform));
+
+        expect(tester.takeException(), isNull);
+        final screen = tester.getRect(find.byType(MaterialApp));
+        final surface = tester.getRect(
+          find.byKey(PlatformAdaptiveTabBar.surfaceKey),
+        );
+        expect(surface.left, greaterThanOrEqualTo(screen.left));
+        if (platform == TargetPlatform.android) {
+          final extra = tester.getRect(
+            find.byKey(const ValueKey('tab-extra-5')),
+          );
+          expect(extra.right, lessThanOrEqualTo(screen.right));
+          expect(
+            tester.getSize(find.byTooltip('지역구')).width,
+            greaterThanOrEqualTo(44),
+          );
+        } else {
+          expect(surface.right, lessThanOrEqualTo(screen.right));
+        }
+      });
+    }
+  }
+
   testWidgets('Android slides the pill to the new tab and settles on it', (
     tester,
   ) async {

@@ -468,7 +468,10 @@ class _PledgePane extends StatelessWidget {
                   Expanded(
                     child: Text(
                       shown[i].title,
-                      maxLines: 1,
+                      // Two lines, as on the tracker: pledge titles run long
+                      // ('재건축·재개발·리모델링 지원 및 …') and one line
+                      // kept only their first few words.
+                      maxLines: 2,
                       overflow: TextOverflow.ellipsis,
                       style: AppTextStyles.cardBody.copyWith(
                         color: AppColors.ink,
