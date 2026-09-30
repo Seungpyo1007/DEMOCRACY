@@ -1,7 +1,6 @@
-import 'dart:math' as math;
-
 import 'package:democracy/src/design/app_motion.dart';
 import 'package:democracy/src/design/app_tokens.dart';
+import 'package:democracy/src/design/components/ink_loading.dart';
 import 'package:flutter/widgets.dart';
 
 /// The launch motion: the 기표 도장 drawn in ink at the centre of the screen,
@@ -128,59 +127,4 @@ class _BootSplashState extends State<BootSplash>
     if (t >= end) return 1;
     return AppMotion.writeCurve.transform((t - start) / (end - start));
   }
-}
-
-/// The 기표 도장 as three strokes, each drawn up to its fraction.
-///
-/// Same geometry as the app icon, in a 100-unit square: a ring of radius 27
-/// at the centre, a stem from 30 to 70, and a short stroke from the stem's
-/// middle up and to the right, all 6 units wide with round ends.
-class StampStrokes extends CustomPainter {
-  const StampStrokes({
-    required this.ring,
-    required this.stem,
-    required this.branch,
-  });
-
-  final double ring;
-  final double stem;
-  final double branch;
-
-  @override
-  void paint(Canvas canvas, Size size) {
-    final k = size.shortestSide / 100;
-    canvas.save();
-    canvas.translate((size.width - 100 * k) / 2, (size.height - 100 * k) / 2);
-    canvas.scale(k);
-    final ink = Paint()
-      ..color = AppColors.ink
-      ..style = PaintingStyle.stroke
-      ..strokeWidth = 6
-      ..strokeCap = StrokeCap.round;
-
-    if (ring > 0) {
-      canvas.drawArc(
-        Rect.fromCircle(center: const Offset(50, 50), radius: 27),
-        -math.pi / 2,
-        2 * math.pi * ring,
-        false,
-        ink,
-      );
-    }
-    if (stem > 0) {
-      canvas.drawLine(const Offset(50, 30), Offset(50, 30 + 40 * stem), ink);
-    }
-    if (branch > 0) {
-      canvas.drawLine(
-        const Offset(50, 50),
-        Offset(50 + 15 * branch, 50 - 8 * branch),
-        ink,
-      );
-    }
-    canvas.restore();
-  }
-
-  @override
-  bool shouldRepaint(StampStrokes old) =>
-      old.ring != ring || old.stem != stem || old.branch != branch;
 }

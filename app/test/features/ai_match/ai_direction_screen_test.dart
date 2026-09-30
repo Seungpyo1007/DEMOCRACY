@@ -3,6 +3,7 @@ import 'package:democracy/src/core/auth/address_controller.dart';
 import 'package:democracy/src/core/auth/address_state.dart';
 import 'package:democracy/src/core/auth/address_store.dart';
 import 'package:democracy/src/core/network/not_available.dart';
+import 'package:democracy/src/core/network/retry_policy.dart';
 import 'package:democracy/src/design/app_theme.dart';
 import 'package:democracy/src/design/components/editorial.dart';
 import 'package:democracy/src/features/ai_match/application/direction_providers.dart';
@@ -38,6 +39,8 @@ void main() {
     addTearDown(tester.view.reset);
 
     final container = ProviderContainer(
+      // As the app retries: a refused payload is not tried again.
+      retry: appRetry,
       overrides: [
         addressStoreProvider.overrideWithValue(InMemoryAddressStore()),
         matchRepositoryProvider.overrideWithValue(

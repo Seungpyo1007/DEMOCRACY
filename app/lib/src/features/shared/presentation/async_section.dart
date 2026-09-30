@@ -1,7 +1,7 @@
-import 'package:democracy/src/core/adaptive/platform_adaptive.dart';
 import 'package:democracy/src/core/network/not_available.dart';
 import 'package:democracy/src/core/provenance/source_metadata.dart';
 import 'package:democracy/src/design/app_tokens.dart';
+import 'package:democracy/src/design/components/ink_loading.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
@@ -27,10 +27,7 @@ class AsyncSection<T> extends StatelessWidget {
   Widget build(BuildContext context) {
     return value.when(
       data: (data) => builder(context, data),
-      loading: () => Padding(
-        padding: const EdgeInsets.symmetric(vertical: AppSpacing.x8),
-        child: Center(child: PlatformAdaptiveProgress.circular(context)),
-      ),
+      loading: () => const InkLoadingSection(),
       error: (error, _) => _SectionError(error: error, onRetry: onRetry),
     );
   }
