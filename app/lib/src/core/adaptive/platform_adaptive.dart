@@ -105,10 +105,14 @@ class AdaptiveTabAccessory {
     required this.label,
     required this.sfSymbol,
     required this.onPressed,
+    this.icon,
   });
 
   final String label;
   final String sfSymbol;
+
+  /// The Material glyph for Android's round button.
+  final IconData? icon;
   final VoidCallback onPressed;
 }
 
@@ -122,9 +126,9 @@ class PlatformAdaptiveTabBar extends StatelessWidget {
     super.key,
   });
 
-  /// Native iOS only: while set, the round button beside the bar is this
-  /// action instead of the sixth destination, and morphs between the two as
-  /// the reader changes tab. Pages that lend one draw no floating button of
+  /// While set, the round button beside the bar is this action instead of the
+  /// sixth destination, and morphs between the two as the reader changes tab
+  /// (native iOS and Android). Pages that lend one draw no floating button of
   /// their own there.
   final AdaptiveTabAccessory? accessory;
 
@@ -197,6 +201,7 @@ class PlatformAdaptiveTabBar extends StatelessWidget {
         items: items,
         onTap: onTap,
         inset: surfaceTokens.navBarInset,
+        accessory: accessory,
       );
     }
 
@@ -460,12 +465,17 @@ class _SlidingNavigationBar extends StatefulWidget {
     required this.items,
     required this.onTap,
     required this.inset,
+    this.accessory,
   });
 
   final int currentIndex;
   final List<AdaptiveTabItem> items;
   final ValueChanged<int> onTap;
   final double inset;
+
+  /// The current tab's primary action, shown in the first round button in
+  /// place of its destination while set.
+  final AdaptiveTabAccessory? accessory;
 
   static const maxTabs = 5;
 
@@ -625,13 +635,23 @@ class _SlidingNavigationBarState extends State<_SlidingNavigationBar>
             ),
             for (var i = 0; i < extras.length; i++) ...[
               const SizedBox(width: _SlidingNavigationBar.gap),
-              _RoundDestination(
-                key: ValueKey('tab-extra-${maxTabs + i}'),
-                item: extras[i],
-                selected: widget.currentIndex == maxTabs + i,
-                onTap: () => widget.onTap(maxTabs + i),
-                surface: surface,
-                shadow: shadow,
+              _RoundButtonSwitcher(
+                child: i == 0 && widget.accessory != null
+                    ? _RoundAction(
+                        key: ValueKey(
+                          'tab-accessory-${widget.accessory!.label}',
+                        ),
+                        action: widget.accessory!,
+                        shadow: shadow,
+                      )
+                    : _RoundDestination(
+                        key: ValueKey('tab-extra-${maxTabs + i}'),
+                        item: extras[i],
+                        selected: widget.currentIndex == maxTabs + i,
+                        onTap: () => widget.onTap(maxTabs + i),
+                        surface: surface,
+                        shadow: shadow,
+                      ),
               ),
             ],
           ],
@@ -754,6 +774,72 @@ class _RoundDestination extends StatelessWidget {
                       child: _SpringIcon(item: item, selected: selected),
                     ),
                   ),
+                ),
+              ),
+            ),
+          ),
+        ),
+      ),
+    );
+  }
+}
+
+/// Swaps the round button between a destination and a lent action: the old
+/// one goes at once, the new one grows in from the centre.
+class _RoundButtonSwitcher extends StatelessWidget {
+  const _RoundButtonSwitcher({required this.child});
+
+  final Widget child;
+
+  @override
+  Widget build(BuildContext context) {
+    final reduced = AppMotion.reduced(context);
+    return AnimatedSwitcher(
+      duration: reduced ? Duration.zero : AppMotion.base,
+      reverseDuration: AppMotion.leave,
+      switchInCurve: Curves.easeOutBack,
+      transitionBuilder: (child, animation) => ScaleTransition(
+        scale: Tween(begin: 0.6, end: 1.0).animate(animation),
+        child: FadeTransition(opacity: animation, child: child),
+      ),
+      child: child,
+    );
+  }
+}
+
+/// A tab's primary action in the round button: filled with the primary
+/// colour so it reads as the thing to do here, not as another place to go.
+class _RoundAction extends StatelessWidget {
+  const _RoundAction({required this.action, required this.shadow, super.key});
+
+  final AdaptiveTabAccessory action;
+  final Color shadow;
+
+  @override
+  Widget build(BuildContext context) {
+    final colors = Theme.of(context).colorScheme;
+    return Semantics(
+      button: true,
+      label: action.label,
+      excludeSemantics: true,
+      child: Tooltip(
+        message: action.label,
+        child: GestureDetector(
+          behavior: HitTestBehavior.opaque,
+          onTap: action.onPressed,
+          child: PressScale(
+            child: Material(
+              color: colors.primary,
+              surfaceTintColor: Colors.transparent,
+              shadowColor: shadow,
+              elevation: 3,
+              shape: const CircleBorder(),
+              child: SizedBox.square(
+                dimension: _SlidingNavigationBar.height,
+                child: Icon(
+                  action.icon ?? Icons.add,
+                  size: 24,
+                  color: colors.onPrimary,
                 ),
               ),
             ),

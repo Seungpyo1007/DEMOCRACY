@@ -289,7 +289,8 @@ void main() {
       router.go(AppRoutes.community);
       await tester.pumpAndSettle();
 
-      await tester.tap(find.text('평가 작성').first);
+      // Android: the action is lent to the round button beside the tab bar.
+      await tester.tap(find.byTooltip('평가 작성'));
       await tester.pumpAndSettle();
       await tester.tap(find.text('로그인하고 계속'));
       await tester.pumpAndSettle();

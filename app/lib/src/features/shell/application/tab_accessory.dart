@@ -1,11 +1,12 @@
+import 'package:democracy/src/design/app_tokens.dart';
 import 'package:democracy/src/design/components/native_controls.dart';
-import 'package:flutter/widgets.dart';
+import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 /// The tabs that can lend the tab bar's round accessory an action.
 enum TabSlot { tracker, community }
 
-/// What the accessory beside the iOS tab bar does while a tab is showing.
+/// What the round button beside the tab bar does while a tab is showing.
 ///
 /// Elsewhere it is the 개표 destination. On a tab that has one primary
 /// action -- report a pledge, write a review -- it becomes that action, so
@@ -23,6 +24,31 @@ class TabAccessory {
   final VoidCallback onPressed;
 }
 
+/// Whether this platform's tab bar takes a tab's primary action.
+///
+/// iOS with native controls lends it to the UITabBar's round accessory;
+/// Android lends it to the round button beside its floating capsule. Where
+/// neither is drawn (the Flutter-drawn iOS capsule in tests and goldens) the
+/// page floats the action itself.
+///
+/// Only under a [TabBarHost]: a screen shown on its own (a test, a pushed
+/// page) has no bar to lend to and keeps its action on the page.
+bool tabBarTakesAction(BuildContext context) =>
+    TabBarHost.present(context) &&
+    (usesNativeIosControls(context) ||
+        !(Theme.of(context).extension<AppSurfaceTokens>()?.isGlass ?? true));
+
+/// Marks the subtree the shell's tab bar sits over.
+class TabBarHost extends InheritedWidget {
+  const TabBarHost({required super.child, super.key});
+
+  static bool present(BuildContext context) =>
+      context.getInheritedWidgetOfExactType<TabBarHost>() != null;
+
+  @override
+  bool updateShouldNotify(TabBarHost oldWidget) => false;
+}
+
 final tabAccessoriesProvider =
     NotifierProvider<TabAccessories, Map<TabSlot, TabAccessory>>(
       TabAccessories.new,
@@ -33,6 +59,8 @@ class TabAccessories extends Notifier<Map<TabSlot, TabAccessory>> {
   Map<TabSlot, TabAccessory> build() => const {};
 
   void set(TabSlot slot, TabAccessory? accessory) {
+    // A scope's last withdrawal can land after the container is gone.
+    if (!ref.mounted) return;
     final next = {...state};
     if (accessory == null) {
       next.remove(slot);
