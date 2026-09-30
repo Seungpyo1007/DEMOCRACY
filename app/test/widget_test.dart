@@ -61,9 +61,11 @@ void main() {
     // collapsed -- so the home title is found at least once, not once.
     expect(find.text('서울 마포구 을'), findsWidgets);
     expect(find.text('읽기 전용'), findsOneWidget);
-    for (final tab in const ['역사', '트래커', 'AI', '커뮤니티', '개표']) {
+    for (final tab in const ['역사', '트래커', 'AI', '커뮤니티']) {
       expect(find.text(tab), findsOneWidget);
     }
+    // 개표 floats beside the capsule as a round, icon-only button.
+    expect(find.bySemanticsLabel('개표'), findsOneWidget);
   });
 
   // Setting a district is a one-time act in the product. Before the address
