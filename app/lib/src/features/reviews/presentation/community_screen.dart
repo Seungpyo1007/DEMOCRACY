@@ -9,6 +9,7 @@ import 'package:democracy/src/design/app_tokens.dart';
 import 'package:democracy/src/design/components/app_card.dart';
 import 'package:democracy/src/design/components/app_labels.dart';
 import 'package:democracy/src/design/components/editorial.dart';
+import 'package:democracy/src/design/components/ink_loading.dart';
 import 'package:democracy/src/design/components/labeled_bar.dart';
 import 'package:democracy/src/design/components/motion.dart';
 import 'package:democracy/src/design/components/native_controls.dart';
@@ -630,10 +631,7 @@ class _ChannelTab extends ConsumerWidget {
         crossAxisAlignment: CrossAxisAlignment.stretch,
         children: [
           messages.when(
-            loading: () => Padding(
-              padding: const EdgeInsets.symmetric(vertical: AppSpacing.x8),
-              child: Center(child: PlatformAdaptiveProgress.circular(context)),
-            ),
+            loading: () => const InkLoadingSection(),
             error: (error, _) => Padding(
               padding: const EdgeInsets.symmetric(vertical: AppSpacing.x8),
               child: Center(

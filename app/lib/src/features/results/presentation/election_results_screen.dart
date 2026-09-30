@@ -1,4 +1,3 @@
-import 'package:democracy/src/core/adaptive/platform_adaptive.dart';
 import 'package:democracy/src/core/auth/address_controller.dart';
 import 'package:democracy/src/core/network/not_available.dart';
 import 'package:democracy/src/design/app_motion.dart';
@@ -6,6 +5,7 @@ import 'package:democracy/src/design/app_tokens.dart';
 import 'package:democracy/src/design/components/app_controls.dart';
 import 'package:democracy/src/design/components/app_labels.dart';
 import 'package:democracy/src/design/components/editorial.dart';
+import 'package:democracy/src/design/components/ink_loading.dart';
 import 'package:democracy/src/design/components/motion.dart';
 import 'package:democracy/src/features/district/domain/district_profile.dart';
 import 'package:democracy/src/features/results/application/results_providers.dart';
@@ -42,8 +42,8 @@ class _ElectionResultsScreenState extends ConsumerState<ElectionResultsScreen> {
 
     return Scaffold(
       body: results.when(
-        loading: () =>
-            Center(child: PlatformAdaptiveProgress.circular(context)),
+        // The whole screen waits on this one payload, so the whole stamp.
+        loading: () => const Center(child: InkStampIndicator(size: 56)),
         error: (error, _) => Center(
           child: Text(
             error is NotAvailableException

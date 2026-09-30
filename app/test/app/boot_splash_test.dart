@@ -1,4 +1,5 @@
 import 'package:democracy/src/app/boot_splash.dart';
+import 'package:democracy/src/design/components/ink_loading.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 

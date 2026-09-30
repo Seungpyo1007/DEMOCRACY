@@ -1,6 +1,6 @@
-import 'package:democracy/src/core/adaptive/platform_adaptive.dart';
 import 'package:democracy/src/design/app_tokens.dart';
 import 'package:democracy/src/design/components/editorial.dart';
+import 'package:democracy/src/design/components/ink_loading.dart';
 import 'package:democracy/src/design/components/motion.dart';
 import 'package:democracy/src/design/components/native_controls.dart';
 import 'package:democracy/src/features/onboarding/application/onboarding_providers.dart';
@@ -181,12 +181,7 @@ class _AddressSearchScreenState extends ConsumerState<AddressSearchScreen> {
 
   List<Widget> _resultsSection() {
     if (_searching) {
-      return [
-        Padding(
-          padding: const EdgeInsets.symmetric(vertical: AppSpacing.x6),
-          child: Center(child: PlatformAdaptiveProgress.circular(context)),
-        ),
-      ];
+      return [const InkLoadingSection()];
     }
 
     if (_results.isEmpty) {
@@ -345,7 +340,7 @@ class _LocationRow extends StatelessWidget {
             SizedBox.square(
               dimension: 24,
               child: detecting
-                  ? Center(child: PlatformAdaptiveProgress.circular(context))
+                  ? const Center(child: InkRingIndicator())
                   : Icon(
                       AppIcons.location.material,
                       size: 20,

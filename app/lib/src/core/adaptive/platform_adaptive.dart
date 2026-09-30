@@ -1145,15 +1145,6 @@ abstract final class PlatformAdaptiveSheet {
   }
 }
 
-/// The busy indicator, so a Material spinner does not appear mid-iOS.
-abstract final class PlatformAdaptiveProgress {
-  static Widget circular(BuildContext context) {
-    return _isCupertino(context)
-        ? const CupertinoActivityIndicator()
-        : const CircularProgressIndicator();
-  }
-}
-
 abstract interface class PlatformAdaptiveAuth {
   /// Performs device/account reauthentication only.
   ///
