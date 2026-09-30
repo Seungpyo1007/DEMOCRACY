@@ -1,3 +1,4 @@
+import 'package:democracy/src/app/boot_splash.dart';
 import 'package:democracy/src/app/democracy_app.dart';
 import 'package:democracy/src/app/font_licenses.dart';
 import 'package:democracy/src/app/live_data.dart';
@@ -24,7 +25,8 @@ void main() {
         // Fixtures unless the build was given a BFF with --dart-define.
         ...liveDataOverrides(BffConfig.fromEnvironment()),
       ],
-      child: const DemocracyApp(),
+      // The launch motion draws the logo over the app while it starts.
+      child: const BootSplash(child: DemocracyApp()),
     ),
   );
 }
