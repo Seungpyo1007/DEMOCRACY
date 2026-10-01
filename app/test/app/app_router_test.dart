@@ -354,7 +354,12 @@ void main() {
       final handle = container.read(authControllerProvider).account!.handle;
       expect(find.text(handle), findsOneWidget);
 
-      await tester.ensureVisible(find.text('로그아웃'));
+      // At the end of the page, built once scrolled to.
+      await tester.scrollUntilVisible(
+        find.text('로그아웃'),
+        300,
+        scrollable: find.byType(Scrollable).first,
+      );
       await tester.tap(find.text('로그아웃'));
       await tester.pumpAndSettle();
       await tester.tap(find.text('로그아웃').last);
@@ -385,7 +390,12 @@ void main() {
     ) async {
       final (container, router) = await signedIn(tester);
 
-      await tester.ensureVisible(find.text('계정 삭제'));
+      // At the end of the page, built once scrolled to.
+      await tester.scrollUntilVisible(
+        find.text('계정 삭제'),
+        300,
+        scrollable: find.byType(Scrollable).first,
+      );
       await tester.tap(find.text('계정 삭제'));
       await tester.pumpAndSettle();
       expect(locationOf(router), AppRoutes.accountDelete);

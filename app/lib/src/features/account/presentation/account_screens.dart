@@ -66,21 +66,6 @@ class AccountScreen extends ConsumerWidget {
     return AccountPage(
       title: '내 계정',
       onBack: () => _back(context),
-      action: Column(
-        mainAxisSize: MainAxisSize.min,
-        crossAxisAlignment: CrossAxisAlignment.stretch,
-        children: [
-          AppSecondaryButton(label: '로그아웃', onPressed: signOut),
-          TextButton(
-            onPressed: () => context.push(AppRoutes.accountDelete),
-            style: TextButton.styleFrom(
-              foregroundColor: AppColors.systemError,
-              minimumSize: const Size(44, 48),
-            ),
-            child: const Text('계정 삭제'),
-          ),
-        ],
-      ),
       children: [
         const SectionHeader(number: '01', label: '계정'),
         _ValueRow(label: '로그인 방식', value: account.provider.label),
@@ -213,6 +198,22 @@ class AccountScreen extends ConsumerWidget {
             context: context,
             applicationName: 'DEMOCRACY',
             applicationVersion: '$appVersion ($appBuild)',
+          ),
+        ),
+        // In the page, after everything else: signing out and deleting are
+        // rare and final, so they are reached by scrolling to the end rather
+        // than kept on screen over every section.
+        const SizedBox(height: AppSpacing.x12),
+        AppSecondaryButton(label: '로그아웃', onPressed: signOut),
+        const SizedBox(height: AppSpacing.x2),
+        Center(
+          child: TextButton(
+            onPressed: () => context.push(AppRoutes.accountDelete),
+            style: TextButton.styleFrom(
+              foregroundColor: AppColors.systemError,
+              minimumSize: const Size(44, 48),
+            ),
+            child: const Text('계정 삭제'),
           ),
         ),
       ],
