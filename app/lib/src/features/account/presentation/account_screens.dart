@@ -6,6 +6,7 @@ import 'package:democracy/src/core/account/auth_controller.dart';
 import 'package:democracy/src/core/account/auth_state.dart';
 import 'package:democracy/src/core/account/device_services.dart';
 import 'package:democracy/src/core/adaptive/platform_adaptive.dart';
+import 'package:democracy/src/core/legal/legal_links.dart';
 import 'package:democracy/src/core/time/clock_providers.dart';
 import 'package:democracy/src/design/app_tokens.dart';
 import 'package:democracy/src/design/components/app_card.dart';
@@ -197,6 +198,11 @@ class AccountScreen extends ConsumerWidget {
         const SizedBox(height: AppSpacing.x8),
         const SectionHeader(number: '05', label: '앱 정보'),
         const _ValueRow(label: '버전', value: '$appVersion ($appBuild)'),
+        _LinkRow(
+          label: '개인정보처리방침',
+          onTap: () => LegalLinks.open(LegalLinks.privacy),
+        ),
+        _LinkRow(label: '이용약관', onTap: () => LegalLinks.open(LegalLinks.terms)),
         _LinkRow(
           label: '오픈소스 라이선스',
           onTap: () => showLicensePage(

@@ -1,0 +1,5 @@
+title: DEMOCRACY
+description: 내 지역구 의원을 기록으로 보는 앱
+lang: ko
+theme: jekyll-theme-primer
+# GitHub Pages로 공개되는 건 legal/ 아래 문서뿐. 나머지 docs/*.md도 렌더링은 되지만 링크하지 않음.
