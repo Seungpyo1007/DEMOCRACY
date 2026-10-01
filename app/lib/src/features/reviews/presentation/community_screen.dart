@@ -631,7 +631,7 @@ class _ChannelTab extends ConsumerWidget {
         crossAxisAlignment: CrossAxisAlignment.stretch,
         children: [
           messages.when(
-            loading: () => const InkLoadingSection(),
+            loading: () => const InkLoadingRows(rows: 4),
             error: (error, _) => Padding(
               padding: const EdgeInsets.symmetric(vertical: AppSpacing.x8),
               child: Center(

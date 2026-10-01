@@ -287,7 +287,7 @@ class ProviderButton extends StatelessWidget {
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
                 if (busy)
-                  InkRingIndicator(size: 18, color: foreground, delayed: false)
+                  InkStampIndicator(size: 20, color: foreground, delayed: false)
                 else
                   ExcludeSemantics(child: mark),
                 const SizedBox(width: AppSpacing.x2),

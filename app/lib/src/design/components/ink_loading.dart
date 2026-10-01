@@ -1,15 +1,19 @@
 /// The app's loading marks, in place of the platform spinners.
 ///
-/// All of them are the 기표 도장 the app opens with. [InkRingIndicator] is
-/// its ring, written from the top and erased from where it began: it stands
-/// in for a loading section ([InkLoadingSection]) and fits a small place --
-/// a search field, a row. [InkStampIndicator] draws the whole stamp, for
-/// the waits that run to seconds: a whole screen, the on-device model.
+/// Two, by what is waited on:
 ///
-/// None of them shows for the first [appearDelay]: most loads here are a
-/// cache away, and a mark that flashes for a tenth of a second is worse
-/// than none. With reduced motion (and in tests) they stand still, drawn
-/// faintly, and each is read out as 불러오는 중.
+/// * [InkLoadingRows] stands in for a section: ruled rows the height of the
+///   content's own, with a short ink stroke written across each. The
+///   content arrives into the same rows, so nothing below it moves.
+/// * [InkStampIndicator] draws the 기표 도장 the app opens with, then lets
+///   it fade, over and over: for a whole screen, the on-device model, a
+///   pull to refresh, a pressed button.
+///
+/// Neither shows for the first [appearDelay] unless the reader asked for
+/// the wait: most loads here are a cache away, and a mark that flashes for
+/// a tenth of a second is worse than none. With reduced motion (and in
+/// tests) they stand still, drawn faintly, and each is read out as
+/// 불러오는 중.
 library;
 
 import 'dart:math' as math;
@@ -21,24 +25,102 @@ import 'package:flutter/material.dart';
 /// How long a load runs before any mark appears.
 const appearDelay = Duration(milliseconds: 250);
 
-/// A section still loading: the ring, centred in the room the section
-/// will take.
-class InkLoadingSection extends StatelessWidget {
-  const InkLoadingSection({super.key});
+/// A section's placeholder: [rows] ruled rows with an ink stroke each.
+class InkLoadingRows extends StatelessWidget {
+  const InkLoadingRows({this.rows = 3, this.rowHeight = 54, super.key});
+
+  final int rows;
+
+  /// [RuledRow]'s own minimum, so the content lands on the same lines.
+  final double rowHeight;
+
+  /// Stroke lengths, as a fraction of the row: uneven, like lines of text.
+  static const _lengths = [0.62, 0.78, 0.48, 0.7, 0.56, 0.66];
+
+  static const _period = Duration(milliseconds: 2400);
 
   @override
   Widget build(BuildContext context) {
-    return const Padding(
-      padding: EdgeInsets.symmetric(vertical: AppSpacing.x8),
-      child: Center(child: InkRingIndicator(size: 24)),
+    return _Appear(
+      child: _InkLoop(
+        period: _period,
+        builder: (context, phase, moving) => Column(
+          mainAxisSize: MainAxisSize.min,
+          crossAxisAlignment: CrossAxisAlignment.stretch,
+          children: [
+            for (var i = 0; i < rows; i++)
+              SizedBox(
+                height: rowHeight,
+                child: DecoratedBox(
+                  decoration: const BoxDecoration(
+                    border: Border(
+                      bottom: BorderSide(color: AppColors.divider),
+                    ),
+                  ),
+                  child: Align(
+                    alignment: AlignmentDirectional.centerStart,
+                    child: _stroke(
+                      moving ? _offset(phase, i) : null,
+                      _lengths[i % _lengths.length],
+                    ),
+                  ),
+                ),
+              ),
+          ],
+        ),
+      ),
+    );
+  }
+
+  /// Row [i]'s own phase: each starts [AppMotion.stagger] after the last.
+  static double _offset(double phase, int i) {
+    final lag = AppMotion.stagger.inMilliseconds / _period.inMilliseconds;
+    return (phase - lag * i) % 1;
+  }
+
+  /// Written left to right, held, then faded out before the next line.
+  /// [phase] null is the still, faint mark.
+  static Widget _stroke(double? phase, double length) {
+    double width;
+    double opacity;
+    if (phase == null) {
+      width = 1;
+      opacity = 0.55;
+    } else if (phase < 0.4) {
+      width = AppMotion.writeCurve.transform(phase / 0.4);
+      opacity = 1;
+    } else if (phase < 0.62) {
+      width = 1;
+      opacity = 1;
+    } else if (phase < 0.9) {
+      width = 1;
+      opacity = 1 - AppMotion.settle.transform((phase - 0.62) / 0.28);
+    } else {
+      width = 0;
+      opacity = 0;
+    }
+    return FractionallySizedBox(
+      widthFactor: length * width,
+      child: Opacity(
+        opacity: opacity,
+        child: const SizedBox(
+          height: 6,
+          child: DecoratedBox(
+            decoration: BoxDecoration(
+              color: AppColors.neutral300,
+              borderRadius: BorderRadius.all(Radius.circular(3)),
+            ),
+          ),
+        ),
+      ),
     );
   }
 }
 
-/// The stamp's ring, written from the top and erased from where it began.
-class InkRingIndicator extends StatelessWidget {
-  const InkRingIndicator({
-    this.size = 20,
+/// The whole 기표 도장, drawn as at launch and faded, over and over.
+class InkStampIndicator extends StatelessWidget {
+  const InkStampIndicator({
+    this.size = 28,
     this.color = AppColors.ink,
     this.delayed = true,
     this.active = true,
@@ -48,11 +130,11 @@ class InkRingIndicator extends StatelessWidget {
   final double size;
   final Color color;
 
-  /// False where the reader asked for the wait (a pull to refresh), so the
-  /// ring answers at once rather than after [appearDelay].
+  /// False where the reader asked for the wait (a pull, a pressed button),
+  /// so the stamp answers at once rather than after [appearDelay].
   final bool delayed;
 
-  /// False draws the ring still and whole: a pull not yet let go.
+  /// False draws the stamp still and whole: a pull not yet let go.
   final bool active;
 
   @override
@@ -60,29 +142,35 @@ class InkRingIndicator extends StatelessWidget {
     return _Appear(
       delay: delayed ? appearDelay : Duration.zero,
       child: _InkLoop(
-        period: const Duration(milliseconds: 1400),
+        period: const Duration(milliseconds: 2600),
         enabled: active,
         builder: (context, phase, moving) {
-          double start;
-          double end;
-          if (!moving) {
-            (start, end) = (0, 1);
-          } else if (phase < 0.5) {
-            (start, end) = (0, AppMotion.writeCurve.transform(phase / 0.5));
-          } else if (phase < 0.58) {
-            (start, end) = (0, 1);
-          } else {
-            (start, end) = (
-              AppMotion.writeCurve.transform((phase - 0.58) / 0.42),
-              1,
-            );
+          double part(double from, double to) {
+            if (phase <= from) return 0;
+            if (phase >= to) return 1;
+            return AppMotion.writeCurve.transform((phase - from) / (to - from));
           }
+
+          final opacity = !moving
+              ? 0.5
+              : phase < 0.8
+              ? 1.0
+              : phase < 0.96
+              ? 1 - AppMotion.settle.transform((phase - 0.8) / 0.16)
+              : 0.0;
           return Opacity(
-            opacity: moving ? 1 : 0.45,
+            opacity: opacity,
             child: SizedBox.square(
               dimension: size,
               child: CustomPaint(
-                painter: _RingPainter(start: start, end: end, color: color),
+                painter: moving
+                    ? StampStrokes(
+                        ring: part(0, 0.34),
+                        stem: part(0.31, 0.48),
+                        branch: part(0.46, 0.58),
+                        color: color,
+                      )
+                    : StampStrokes(ring: 1, stem: 1, branch: 1, color: color),
               ),
             ),
           );
@@ -92,10 +180,11 @@ class InkRingIndicator extends StatelessWidget {
   }
 }
 
-/// Pull to refresh, with the ring in place of the platform's spinner.
+/// Pull to refresh, with the stamp in place of the platform's spinner.
 ///
-/// The ring shows still and faint while the page is pulled, whole once the
-/// pull would refresh, and turns while the refresh runs.
+/// The stamp shows still and faint while the page is pulled, whole once the
+/// pull would refresh, and is drawn over and over while the refresh runs.
+/// It sits on the page itself, below the top bar, with nothing behind it.
 class InkRefresh extends StatefulWidget {
   const InkRefresh({required this.onRefresh, required this.child, super.key});
 
@@ -140,83 +229,17 @@ class _InkRefreshState extends State<InkRefresh> {
               opacity: shown ? (pulled ? 1 : 0.6) : 0,
               duration: reduced ? Duration.zero : AppMotion.fast,
               child: Center(
-                child: DecoratedBox(
-                  decoration: BoxDecoration(
-                    color: AppColors.ground,
-                    shape: BoxShape.circle,
-                    boxShadow: [
-                      BoxShadow(
-                        color: AppColors.ink.withValues(alpha: 0.12),
-                        blurRadius: 8,
-                        offset: const Offset(0, 2),
-                      ),
-                    ],
-                  ),
-                  child: Padding(
-                    padding: const EdgeInsets.all(AppSpacing.x2),
-                    child: shown
-                        ? InkRingIndicator(
-                            size: 22,
-                            delayed: false,
-                            active: status == RefreshIndicatorStatus.refresh,
-                          )
-                        : const SizedBox.square(dimension: 22),
-                  ),
-                ),
+                child: shown
+                    ? InkStampIndicator(
+                        delayed: false,
+                        active: status == RefreshIndicatorStatus.refresh,
+                      )
+                    : const SizedBox.square(dimension: 28),
               ),
             ),
           ),
         ),
       ],
-    );
-  }
-}
-
-/// The whole 기표 도장, drawn as at launch and faded, over and over.
-///
-/// For waits of seconds -- the on-device model reading a district's
-/// pledges -- where a small ring would look stuck.
-class InkStampIndicator extends StatelessWidget {
-  const InkStampIndicator({this.size = 28, super.key});
-
-  final double size;
-
-  @override
-  Widget build(BuildContext context) {
-    return _Appear(
-      child: _InkLoop(
-        period: const Duration(milliseconds: 2600),
-        builder: (context, phase, moving) {
-          double part(double from, double to) {
-            if (phase <= from) return 0;
-            if (phase >= to) return 1;
-            return AppMotion.writeCurve.transform((phase - from) / (to - from));
-          }
-
-          final opacity = !moving
-              ? 0.5
-              : phase < 0.8
-              ? 1.0
-              : phase < 0.96
-              ? 1 - AppMotion.settle.transform((phase - 0.8) / 0.16)
-              : 0.0;
-          return Opacity(
-            opacity: opacity,
-            child: SizedBox.square(
-              dimension: size,
-              child: CustomPaint(
-                painter: moving
-                    ? StampStrokes(
-                        ring: part(0, 0.34),
-                        stem: part(0.31, 0.48),
-                        branch: part(0.46, 0.58),
-                      )
-                    : const StampStrokes(ring: 1, stem: 1, branch: 1),
-              ),
-            ),
-          );
-        },
-      ),
     );
   }
 }
@@ -231,11 +254,13 @@ class StampStrokes extends CustomPainter {
     required this.ring,
     required this.stem,
     required this.branch,
+    this.color = AppColors.ink,
   });
 
   final double ring;
   final double stem;
   final double branch;
+  final Color color;
 
   @override
   void paint(Canvas canvas, Size size) {
@@ -244,7 +269,7 @@ class StampStrokes extends CustomPainter {
     canvas.translate((size.width - 100 * k) / 2, (size.height - 100 * k) / 2);
     canvas.scale(k);
     final ink = Paint()
-      ..color = AppColors.ink
+      ..color = color
       ..style = PaintingStyle.stroke
       ..strokeWidth = 6
       ..strokeCap = StrokeCap.round;
@@ -273,45 +298,13 @@ class StampStrokes extends CustomPainter {
 
   @override
   bool shouldRepaint(StampStrokes old) =>
-      old.ring != ring || old.stem != stem || old.branch != branch;
+      old.ring != ring ||
+      old.stem != stem ||
+      old.branch != branch ||
+      old.color != color;
 }
 
-class _RingPainter extends CustomPainter {
-  const _RingPainter({
-    required this.start,
-    required this.end,
-    required this.color,
-  });
-
-  final double start;
-  final double end;
-  final Color color;
-
-  @override
-  void paint(Canvas canvas, Size size) {
-    final sweep = end - start;
-    if (sweep <= 0) return;
-    final stroke = size.shortestSide * 0.11;
-    final radius = (size.shortestSide - stroke) / 2;
-    canvas.drawArc(
-      Rect.fromCircle(center: size.center(Offset.zero), radius: radius),
-      -math.pi / 2 + 2 * math.pi * start,
-      2 * math.pi * sweep,
-      false,
-      Paint()
-        ..color = color
-        ..style = PaintingStyle.stroke
-        ..strokeWidth = stroke
-        ..strokeCap = StrokeCap.round,
-    );
-  }
-
-  @override
-  bool shouldRepaint(_RingPainter old) =>
-      old.start != start || old.end != end || old.color != color;
-}
-
-/// Holds its child back for [appearDelay], then fades it in.
+/// Holds its child back for [delay], then fades it in.
 ///
 /// A controller rather than a timer, so a test that ends mid-wait is not
 /// left with one pending.
@@ -360,8 +353,8 @@ class _AppearState extends State<_Appear> with SingleTickerProviderStateMixin {
   }
 }
 
-/// Repeats [builder]'s phase over [period] while motion is allowed; stands
-/// still (moving false) with reduced motion and in tests.
+/// Repeats [builder]'s phase over [period] while motion is allowed and
+/// [enabled]; stands still (moving false) otherwise, and in tests.
 class _InkLoop extends StatefulWidget {
   const _InkLoop({
     required this.period,

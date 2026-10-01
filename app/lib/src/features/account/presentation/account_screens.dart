@@ -346,10 +346,7 @@ class _HandleSheetState extends ConsumerState<HandleSheet> {
             }
             final options = snapshot.data;
             if (options == null) {
-              return const SizedBox(
-                height: 200,
-                child: Center(child: InkRingIndicator(size: 24)),
-              );
+              return const InkLoadingRows();
             }
             final picked = _picked ?? options.first;
             return Column(
