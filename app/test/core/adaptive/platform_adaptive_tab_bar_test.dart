@@ -55,26 +55,95 @@ void main() {
     expect(surface.right, lessThan(screen.right));
   });
 
-  testWidgets('Android is the Material 3 navigation bar itself', (
+  // Android: the iOS 26 shape -- a capsule of five and a round sixth, both
+  // clear of every edge -- with one pill that travels to the selected tab.
+  testWidgets(
+    'Android floats five tabs and a round sixth, clear of the edges',
+    (tester) async {
+      tester.view.physicalSize = const Size(390, 844);
+      tester.view.devicePixelRatio = 1;
+      addTearDown(tester.view.reset);
+      await tester.pumpWidget(harness(TargetPlatform.android));
+
+      final screen = tester.getRect(find.byType(MaterialApp));
+      final capsule = tester.getRect(
+        find.byKey(PlatformAdaptiveTabBar.surfaceKey),
+      );
+      final extra = tester.getRect(find.byKey(const ValueKey('tab-extra-5')));
+      expect(capsule.left, greaterThan(screen.left));
+      expect(extra.right, lessThan(screen.right));
+      expect(capsule.bottom, lessThan(screen.bottom));
+      expect(extra.left, greaterThan(capsule.right));
+      expect(extra.height, capsule.height);
+      expect(find.byKey(const ValueKey('tab-indicator')), findsOneWidget);
+    },
+  );
+
+  // 360dp is a common Android width and 375dp is the iPhone SE / mini; the
+  // bar has to fit both without overflowing, and every target stays 44dp.
+  for (final platform in [TargetPlatform.iOS, TargetPlatform.android]) {
+    for (final width in [360.0, 375.0]) {
+      testWidgets('$platform fits a ${width.toInt()}dp screen', (tester) async {
+        tester.view.physicalSize = Size(width, 780);
+        tester.view.devicePixelRatio = 1;
+        addTearDown(tester.view.reset);
+        await tester.pumpWidget(harness(platform));
+
+        expect(tester.takeException(), isNull);
+        final screen = tester.getRect(find.byType(MaterialApp));
+        final surface = tester.getRect(
+          find.byKey(PlatformAdaptiveTabBar.surfaceKey),
+        );
+        expect(surface.left, greaterThanOrEqualTo(screen.left));
+        if (platform == TargetPlatform.android) {
+          final extra = tester.getRect(
+            find.byKey(const ValueKey('tab-extra-5')),
+          );
+          expect(extra.right, lessThanOrEqualTo(screen.right));
+          expect(
+            tester.getSize(find.byTooltip('지역구')).width,
+            greaterThanOrEqualTo(44),
+          );
+        } else {
+          expect(surface.right, lessThanOrEqualTo(screen.right));
+        }
+      });
+    }
+  }
+
+  testWidgets('Android slides the pill to the new tab and settles on it', (
     tester,
   ) async {
+    tester.view.physicalSize = const Size(390, 844);
+    tester.view.devicePixelRatio = 1;
+    addTearDown(tester.view.reset);
     await tester.pumpWidget(harness(TargetPlatform.android));
-    expect(find.byType(NavigationBar), findsOneWidget);
-    expect(find.byType(NavigationDestination), findsNWidgets(items.length));
+    Rect pill() => tester.getRect(find.byKey(const ValueKey('tab-indicator')));
+    final start = pill();
+
+    await tester.pumpWidget(harness(TargetPlatform.android, currentIndex: 4));
+    await tester.pump(const Duration(milliseconds: 120));
+    // Mid-travel the leading edge has run ahead: the pill is stretched.
+    expect(pill().width, greaterThan(start.width));
+
+    await tester.pumpAndSettle();
+    final end = pill();
+    expect(end.width, start.width);
+    expect(end.center.dx, greaterThan(start.center.dx));
   });
 
-  // Android: Material 3's own bar -- edge to edge, 80dp, on the tonal step.
-  testWidgets('Android spans the width at the Material height', (tester) async {
-    await tester.pumpWidget(harness(TargetPlatform.android));
-
-    final screen = tester.getRect(find.byType(MaterialApp));
-    final surface = tester.getRect(
-      find.byKey(PlatformAdaptiveTabBar.surfaceKey),
+  testWidgets('Android fades the pill while the round button is current', (
+    tester,
+  ) async {
+    await tester.pumpWidget(harness(TargetPlatform.android, currentIndex: 5));
+    await tester.pumpAndSettle();
+    final opacity = tester.widget<AnimatedOpacity>(
+      find.descendant(
+        of: find.byKey(const ValueKey('tab-indicator')),
+        matching: find.byType(AnimatedOpacity),
+      ),
     );
-
-    expect(surface.width, screen.width);
-    expect(surface.bottom, screen.bottom);
-    expect(surface.height, greaterThanOrEqualTo(80));
+    expect(opacity.opacity, 0);
   });
 
   for (final platform in [TargetPlatform.iOS, TargetPlatform.android]) {
@@ -82,7 +151,11 @@ void main() {
       final tapped = <int>[];
       await tester.pumpWidget(harness(platform, onTap: tapped.add));
 
-      await tester.tap(find.text('커뮤니티'));
+      await tester.tap(
+        platform == TargetPlatform.android
+            ? find.byTooltip('커뮤니티')
+            : find.text('커뮤니티'),
+      );
       await tester.pump();
 
       expect(tapped, [4]);
@@ -92,8 +165,11 @@ void main() {
   testWidgets('every destination is labelled', (tester) async {
     await tester.pumpWidget(harness(TargetPlatform.android));
 
+    // Android's toolbar is icons only: every destination carries its name as
+    // a tooltip and a semantics label.
     for (final item in items) {
-      expect(find.text(item.label), findsOneWidget);
+      expect(find.byTooltip(item.label), findsOneWidget);
+      expect(find.bySemanticsLabel(item.label), findsOneWidget);
     }
   });
 
@@ -150,7 +226,7 @@ void main() {
       await tester.pumpAndSettle();
 
       expect(surfaceOf(tester), expanded);
-      expect(find.text('지역구'), findsOneWidget);
+      expect(find.byTooltip('지역구'), findsOneWidget);
     });
   });
 }

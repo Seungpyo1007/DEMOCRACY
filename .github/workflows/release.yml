@@ -1,0 +1,173 @@
+name: release
+
+# A version tag on main builds both stores' bundles and uploads them:
+# Android to Play's internal testing track, iOS to TestFlight. Promoting a
+# build to production stays a human step in each console.
+on:
+  push:
+    tags: ["v*.*.*"]
+  workflow_dispatch:
+
+concurrency:
+  group: release-${{ github.ref }}
+  cancel-in-progress: false
+
+jobs:
+  # Until the store secrets are in place a tag still makes a GitHub release
+  # but uploads nothing, rather than failing the run.
+  secrets:
+    name: check secrets
+    runs-on: ubuntu-latest
+    outputs:
+      play: ${{ steps.check.outputs.play }}
+      asc: ${{ steps.check.outputs.asc }}
+    steps:
+      - id: check
+        env:
+          PLAY: ${{ secrets.PLAY_SERVICE_ACCOUNT_JSON }}
+          ASC: ${{ secrets.ASC_KEY_P8 }}
+        run: |
+          echo "play=$([ -n "$PLAY" ] && echo true || echo false)" >> "$GITHUB_OUTPUT"
+          echo "asc=$([ -n "$ASC" ] && echo true || echo false)" >> "$GITHUB_OUTPUT"
+          [ -n "$PLAY" ] || echo "::notice::PLAY_SERVICE_ACCOUNT_JSON 없음: Android 업로드 건너뜀"
+          [ -n "$ASC" ] || echo "::notice::ASC_KEY_P8 없음: iOS 업로드 건너뜀"
+
+  android:
+    name: Play internal testing
+    needs: secrets
+    if: needs.secrets.outputs.play == 'true'
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: app
+    steps:
+      - uses: actions/checkout@v7
+
+      - uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: "21"
+
+      - uses: subosito/flutter-action@v2
+        with:
+          flutter-version: 3.44.8
+          channel: stable
+          cache: true
+
+      # Everything below comes from repository secrets; none of it is in git.
+      - name: Write build configuration
+        env:
+          DART_DEFINES_JSON: ${{ secrets.DART_DEFINES_JSON }}
+          ANDROID_KEYSTORE_BASE64: ${{ secrets.ANDROID_KEYSTORE_BASE64 }}
+          ANDROID_KEY_ALIAS: ${{ secrets.ANDROID_KEY_ALIAS }}
+          ANDROID_KEY_PASSWORD: ${{ secrets.ANDROID_KEY_PASSWORD }}
+          ANDROID_STORE_PASSWORD: ${{ secrets.ANDROID_STORE_PASSWORD }}
+          KAKAO_NATIVE_KEY: ${{ secrets.KAKAO_NATIVE_KEY }}
+        run: |
+          printf '%s' "$DART_DEFINES_JSON" > dart_defines.json
+          printf '%s' "$ANDROID_KEYSTORE_BASE64" | base64 --decode > android/upload.jks
+          cat > android/key.properties <<PROPS
+          storeFile=$GITHUB_WORKSPACE/app/android/upload.jks
+          keyAlias=$ANDROID_KEY_ALIAS
+          keyPassword=$ANDROID_KEY_PASSWORD
+          storePassword=$ANDROID_STORE_PASSWORD
+          PROPS
+          if [ -n "$KAKAO_NATIVE_KEY" ]; then
+            echo "KAKAO_NATIVE_KEY=$KAKAO_NATIVE_KEY" >> android/local.properties
+          fi
+
+      - name: Build app bundle
+        run: flutter build appbundle --release --dart-define-from-file=dart_defines.json
+
+      - uses: actions/upload-artifact@v4
+        with:
+          name: android-aab
+          path: app/build/app/outputs/bundle/release/app-release.aab
+
+      # A draft until the app has gone through Play's first review; set the
+      # PLAY_RELEASE_STATUS variable to "completed" after that.
+      - name: Upload to Play
+        uses: r0adkll/upload-google-play@v1
+        with:
+          serviceAccountJsonPlainText: ${{ secrets.PLAY_SERVICE_ACCOUNT_JSON }}
+          packageName: com.democracy.kr
+          releaseFiles: app/build/app/outputs/bundle/release/app-release.aab
+          track: internal
+          status: ${{ vars.PLAY_RELEASE_STATUS || 'draft' }}
+
+  ios:
+    name: TestFlight
+    needs: secrets
+    if: needs.secrets.outputs.asc == 'true'
+    runs-on: macos-latest
+    defaults:
+      run:
+        working-directory: app
+    steps:
+      - uses: actions/checkout@v7
+
+      - uses: maxim-lobanov/setup-xcode@v1
+        with:
+          xcode-version: latest-stable
+
+      - uses: subosito/flutter-action@v2
+        with:
+          flutter-version: 3.44.8
+          channel: stable
+          cache: true
+
+      - name: Write build configuration
+        env:
+          DART_DEFINES_JSON: ${{ secrets.DART_DEFINES_JSON }}
+          IOS_KEYS_XCCONFIG: ${{ secrets.IOS_KEYS_XCCONFIG }}
+          ASC_KEY_P8: ${{ secrets.ASC_KEY_P8 }}
+          ASC_KEY_ID: ${{ secrets.ASC_KEY_ID }}
+        run: |
+          printf '%s' "$DART_DEFINES_JSON" > dart_defines.json
+          printf '%s' "$IOS_KEYS_XCCONFIG" > ios/Flutter/Keys.xcconfig
+          mkdir -p "$RUNNER_TEMP/asc"
+          printf '%s' "$ASC_KEY_P8" > "$RUNNER_TEMP/asc/AuthKey_$ASC_KEY_ID.p8"
+
+      # Flutter writes Generated.xcconfig (dart defines included); xcodebuild
+      # then archives and signs. Signing is automatic: the App Store Connect
+      # key lets Xcode fetch or create the distribution certificate and
+      # profile itself, so no certificate is stored in this repository.
+      - name: Configure
+        run: flutter build ios --release --config-only --dart-define-from-file=dart_defines.json
+
+      - name: Archive
+        working-directory: app/ios
+        env:
+          ASC_KEY_ID: ${{ secrets.ASC_KEY_ID }}
+          ASC_ISSUER_ID: ${{ secrets.ASC_ISSUER_ID }}
+          APPLE_TEAM_ID: ${{ secrets.APPLE_TEAM_ID }}
+        run: |
+          xcodebuild archive \
+            -workspace Runner.xcworkspace -scheme Runner -configuration Release \
+            -destination generic/platform=iOS \
+            -archivePath "$RUNNER_TEMP/Runner.xcarchive" \
+            DEVELOPMENT_TEAM="$APPLE_TEAM_ID" CODE_SIGN_STYLE=Automatic \
+            -allowProvisioningUpdates \
+            -authenticationKeyPath "$RUNNER_TEMP/asc/AuthKey_$ASC_KEY_ID.p8" \
+            -authenticationKeyID "$ASC_KEY_ID" \
+            -authenticationKeyIssuerID "$ASC_ISSUER_ID"
+
+      # destination=upload in ExportOptions.plist sends the build straight to
+      # App Store Connect, where it appears in TestFlight after processing.
+      - name: Export and upload
+        working-directory: app/ios
+        env:
+          ASC_KEY_ID: ${{ secrets.ASC_KEY_ID }}
+          ASC_ISSUER_ID: ${{ secrets.ASC_ISSUER_ID }}
+          APPLE_TEAM_ID: ${{ secrets.APPLE_TEAM_ID }}
+        run: |
+          cp ExportOptions.plist "$RUNNER_TEMP/ExportOptions.plist"
+          /usr/libexec/PlistBuddy -c "Add :teamID string $APPLE_TEAM_ID" "$RUNNER_TEMP/ExportOptions.plist"
+          xcodebuild -exportArchive \
+            -archivePath "$RUNNER_TEMP/Runner.xcarchive" \
+            -exportOptionsPlist "$RUNNER_TEMP/ExportOptions.plist" \
+            -exportPath "$RUNNER_TEMP/export" \
+            -allowProvisioningUpdates \
+            -authenticationKeyPath "$RUNNER_TEMP/asc/AuthKey_$ASC_KEY_ID.p8" \
+            -authenticationKeyID "$ASC_KEY_ID" \
+            -authenticationKeyIssuerID "$ASC_ISSUER_ID"

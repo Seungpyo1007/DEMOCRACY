@@ -44,7 +44,10 @@ class SourceBadge extends StatelessWidget {
             alignment: AlignmentDirectional.centerStart,
             child: Text(
               '출처 ${source.publisher} · ${source.asOfLabel} ↗',
-              maxLines: 1,
+              // Two lines, not one: beside a figure or a note on a 360dp
+              // screen one line cut the date off, and the date is the part
+              // the reader checks.
+              maxLines: 2,
               overflow: TextOverflow.ellipsis,
               style: AppTextStyles.disclaimer.copyWith(
                 color: AppColors.neutral600,

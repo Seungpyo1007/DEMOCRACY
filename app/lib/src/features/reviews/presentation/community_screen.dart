@@ -9,6 +9,7 @@ import 'package:democracy/src/design/app_tokens.dart';
 import 'package:democracy/src/design/components/app_card.dart';
 import 'package:democracy/src/design/components/app_labels.dart';
 import 'package:democracy/src/design/components/editorial.dart';
+import 'package:democracy/src/design/components/ink_loading.dart';
 import 'package:democracy/src/design/components/labeled_bar.dart';
 import 'package:democracy/src/design/components/motion.dart';
 import 'package:democracy/src/design/components/native_controls.dart';
@@ -233,7 +234,7 @@ class _CommunityScreenState extends ConsumerState<CommunityScreen> {
     return TabAccessoryScope(
       slot: TabSlot.community,
       // Only the reviews pane has a single primary action to lend.
-      accessory: _tab == 0 && usesNativeIosControls(context)
+      accessory: _tab == 0 && tabBarTakesAction(context)
           ? _ComposeAction.accessory(context, ref)
           : null,
       child: Scaffold(
@@ -244,7 +245,7 @@ class _CommunityScreenState extends ConsumerState<CommunityScreen> {
                 controller: _scroll,
                 title: '커뮤니티',
                 kicker: communityKicker(ref),
-                floatingAction: _tab == 0 && !usesNativeIosControls(context)
+                floatingAction: _tab == 0 && !tabBarTakesAction(context)
                     ? const _ComposeAction()
                     : null,
                 // The composer floats over the end of the channel.
@@ -360,8 +361,11 @@ class _ReviewTab extends ConsumerWidget {
               index: 1,
               child: DisclaimerBox(
                 text:
-                    '주소 인증 주민만 작성 가능 · 조작 방지 알고리즘 · '
-                    '혐오·허위정보 자동 필터링',
+                    // What the app actually does: residency, a fixed list
+                    // of hate terms refused, and a warning (not a block)
+                    // on claims that may be false.
+                    '주소 인증 주민만 작성 가능 · 혐오 표현은 올라가지 않음 · '
+                    '사실과 다를 수 있는 주장엔 경고',
               ),
             ),
             const SizedBox(height: AppSpacing.x2),
@@ -630,10 +634,7 @@ class _ChannelTab extends ConsumerWidget {
         crossAxisAlignment: CrossAxisAlignment.stretch,
         children: [
           messages.when(
-            loading: () => Padding(
-              padding: const EdgeInsets.symmetric(vertical: AppSpacing.x8),
-              child: Center(child: PlatformAdaptiveProgress.circular(context)),
-            ),
+            loading: () => const InkLoadingRows(rows: 4),
             error: (error, _) => Padding(
               padding: const EdgeInsets.symmetric(vertical: AppSpacing.x8),
               child: Center(

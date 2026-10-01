@@ -5,6 +5,7 @@ import 'package:democracy/src/core/network/not_available.dart';
 import 'package:democracy/src/design/app_motion.dart';
 import 'package:democracy/src/design/app_tokens.dart';
 import 'package:democracy/src/design/components/editorial.dart';
+import 'package:democracy/src/design/components/ink_loading.dart';
 import 'package:democracy/src/design/components/motion.dart';
 import 'package:democracy/src/features/ai_match/application/direction_providers.dart';
 import 'package:democracy/src/features/ai_match/application/match_providers.dart';
@@ -61,7 +62,7 @@ class AiDirectionScreen extends ConsumerWidget {
           loading: () => SliverToBoxAdapter(
             child: Padding(
               padding: const EdgeInsets.all(AppSpacing.screen),
-              child: Center(child: PlatformAdaptiveProgress.circular(context)),
+              child: const InkLoadingRows(rows: 4),
             ),
           ),
           error: (error, _) => SliverToBoxAdapter(
@@ -225,11 +226,7 @@ class _RunningSection extends StatelessWidget {
         const SizedBox(height: AppSpacing.x3),
         Row(
           children: [
-            SizedBox(
-              width: 16,
-              height: 16,
-              child: PlatformAdaptiveProgress.circular(context),
-            ),
+            const InkStampIndicator(),
             const SizedBox(width: AppSpacing.x2),
             Expanded(
               child: Text(

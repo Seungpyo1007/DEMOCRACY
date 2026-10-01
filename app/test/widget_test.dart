@@ -61,8 +61,10 @@ void main() {
     // collapsed -- so the home title is found at least once, not once.
     expect(find.text('서울 마포구 을'), findsWidgets);
     expect(find.text('읽기 전용'), findsOneWidget);
+    // Android's floating toolbar is icons only; each tab is named by its
+    // tooltip and semantics label.
     for (final tab in const ['역사', '트래커', 'AI', '커뮤니티', '개표']) {
-      expect(find.text(tab), findsOneWidget);
+      expect(find.byTooltip(tab), findsOneWidget);
     }
   });
 

@@ -619,7 +619,9 @@ void main() {
       await pumpCommunity(tester);
 
       expect(
-        find.textContaining('주소 인증 주민만 작성 가능 · 조작 방지 알고리즘 · 혐오·허위정보 자동 필터링'),
+        find.textContaining(
+          '주소 인증 주민만 작성 가능 · 혐오 표현은 올라가지 않음 · 사실과 다를 수 있는 주장엔 경고',
+        ),
         findsOneWidget,
       );
     });

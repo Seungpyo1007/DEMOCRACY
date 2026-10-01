@@ -8,6 +8,7 @@ import 'package:democracy/src/design/app_tokens.dart';
 import 'package:democracy/src/design/components/app_card.dart';
 import 'package:democracy/src/design/components/app_controls.dart';
 import 'package:democracy/src/design/components/editorial.dart';
+import 'package:democracy/src/design/components/ink_loading.dart';
 import 'package:democracy/src/design/components/labeled_bar.dart';
 import 'package:democracy/src/design/components/motion.dart';
 import 'package:democracy/src/design/components/native_controls.dart';
@@ -340,16 +341,14 @@ class _AnalysingSkeleton extends StatelessWidget {
           const SizedBox(height: AppSpacing.x4),
           Row(
             children: [
-              SizedBox(
-                width: 16,
-                height: 16,
-                child: PlatformAdaptiveProgress.circular(context),
-              ),
+              const InkStampIndicator(),
               const SizedBox(width: AppSpacing.x2),
-              Text(
-                '후보별 공약 원문을 대조하고 있습니다',
-                style: AppTextStyles.statLabel.copyWith(
-                  color: AppColors.neutral700,
+              Expanded(
+                child: Text(
+                  '후보별 공약 원문을 대조하고 있습니다',
+                  style: AppTextStyles.statLabel.copyWith(
+                    color: AppColors.neutral700,
+                  ),
                 ),
               ),
             ],
@@ -397,11 +396,7 @@ class _OnDeviceProgress extends ConsumerWidget {
           const SizedBox(height: AppSpacing.x4),
           Row(
             children: [
-              SizedBox(
-                width: 16,
-                height: 16,
-                child: PlatformAdaptiveProgress.circular(context),
-              ),
+              const InkStampIndicator(),
               const SizedBox(width: AppSpacing.x2),
               Expanded(
                 child: Text(

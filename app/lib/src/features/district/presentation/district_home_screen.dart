@@ -6,6 +6,7 @@ import 'package:democracy/src/design/app_motion.dart';
 import 'package:democracy/src/design/app_tokens.dart';
 import 'package:democracy/src/design/components/app_labels.dart';
 import 'package:democracy/src/design/components/editorial.dart';
+import 'package:democracy/src/design/components/ink_loading.dart';
 import 'package:democracy/src/design/components/motion.dart';
 import 'package:democracy/src/design/components/native_controls.dart';
 import 'package:democracy/src/design/components/sparkline.dart';
@@ -77,9 +78,8 @@ class DistrictHomeScreen extends ConsumerWidget {
 
     // The district name is the page title and the switch is a toolbar
     // action: the platform's own top bar on Android, a glass button on iOS.
-    // `.adaptive` gives iOS its own activity spinner for the pull.
     return Scaffold(
-      body: RefreshIndicator.adaptive(
+      body: InkRefresh(
         onRefresh: () => _refresh(ref),
         child: EditorialScrollView(
           title: address.district!.displayName,
@@ -468,7 +468,10 @@ class _PledgePane extends StatelessWidget {
                   Expanded(
                     child: Text(
                       shown[i].title,
-                      maxLines: 1,
+                      // Two lines, as on the tracker: pledge titles run long
+                      // ('재건축·재개발·리모델링 지원 및 …') and one line
+                      // kept only their first few words.
+                      maxLines: 2,
                       overflow: TextOverflow.ellipsis,
                       style: AppTextStyles.cardBody.copyWith(
                         color: AppColors.ink,
