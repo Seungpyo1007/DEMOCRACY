@@ -27,7 +27,7 @@ class AsyncSection<T> extends StatelessWidget {
   Widget build(BuildContext context) {
     return value.when(
       data: (data) => builder(context, data),
-      loading: () => const InkLoadingSection(),
+      loading: () => const InkLoadingRows(),
       error: (error, _) => _SectionError(error: error, onRetry: onRetry),
     );
   }

@@ -181,7 +181,7 @@ class _AddressSearchScreenState extends ConsumerState<AddressSearchScreen> {
 
   List<Widget> _resultsSection() {
     if (_searching) {
-      return [const InkLoadingSection()];
+      return [const InkLoadingRows()];
     }
 
     if (_results.isEmpty) {
@@ -340,7 +340,7 @@ class _LocationRow extends StatelessWidget {
             SizedBox.square(
               dimension: 24,
               child: detecting
-                  ? const Center(child: InkRingIndicator())
+                  ? const Center(child: InkStampIndicator(size: 24))
                   : Icon(
                       AppIcons.location.material,
                       size: 20,

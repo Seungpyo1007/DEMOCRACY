@@ -62,7 +62,7 @@ class AiDirectionScreen extends ConsumerWidget {
           loading: () => SliverToBoxAdapter(
             child: Padding(
               padding: const EdgeInsets.all(AppSpacing.screen),
-              child: const InkLoadingSection(),
+              child: const InkLoadingRows(rows: 4),
             ),
           ),
           error: (error, _) => SliverToBoxAdapter(

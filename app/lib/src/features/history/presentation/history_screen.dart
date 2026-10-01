@@ -5,6 +5,7 @@ import 'package:democracy/src/design/app_motion.dart';
 import 'package:democracy/src/design/app_tokens.dart';
 import 'package:democracy/src/design/components/app_controls.dart';
 import 'package:democracy/src/design/components/editorial.dart';
+import 'package:democracy/src/design/components/ink_loading.dart';
 import 'package:democracy/src/design/components/motion.dart';
 import 'package:democracy/src/features/history/application/history_providers.dart';
 import 'package:democracy/src/features/history/domain/history_record.dart';
@@ -140,7 +141,7 @@ class _HistoryScreenState extends ConsumerState<HistoryScreen> {
     final surface = Theme.of(context).extension<AppSurfaceTokens>()!;
 
     return Scaffold(
-      body: RefreshIndicator(
+      body: InkRefresh(
         onRefresh: _refresh,
         child: EditorialScrollView(
           controller: _scroll,
