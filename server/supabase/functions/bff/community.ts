@@ -49,6 +49,8 @@ const MESSAGE_LIMIT = 50;
 const THREAD_LIMIT = 30;
 
 export const ANONYMOUS_AUTHOR = "익명 주민";
+/** Shown in place of a post hidden by reports or staff; the body never leaves. */
+export const HIDDEN_BODY = "신고로 가려진 글입니다.";
 export const DELETED_AUTHOR = "탈퇴한 주민";
 export const BILL_THREAD_ORIGIN = "법안 발의로 자동 생성";
 
@@ -85,26 +87,41 @@ function summaryView(s: ReviewSummaryRec) {
 }
 
 function reviewView(r: WithHandle<ReviewRec>, me: string | null) {
+  const hidden = Boolean(r.hidden_at);
   return {
     id: r.id,
     author: authorOf(r),
     score: Number(r.score),
     verifiedResident: r.verified_resident,
-    body: r.body,
+    body: hidden ? HIDDEN_BODY : r.body,
+    hidden,
     mine: me !== null && r.author_id === me,
     createdAt: iso(r.updated_at),
   };
 }
 
 function messageView(m: WithHandle<MessageRec>, me: string | null) {
+  const hidden = Boolean(m.hidden_at);
   return {
     id: m.id,
     author: authorOf(m),
-    body: m.body,
+    body: hidden ? HIDDEN_BODY : m.body,
+    hidden,
     verifiedResident: m.verified_resident,
     mine: me !== null && m.author_id === me,
     createdAt: iso(m.created_at),
   };
+}
+
+/** Leaves out the posts of authors the reader blocked. */
+function notBlocked<T extends { author_id: string | null }>(rows: T[], blocked: Set<string>) {
+  return blocked.size === 0
+    ? rows
+    : rows.filter((r) => r.author_id === null || !blocked.has(r.author_id));
+}
+
+async function blockedBy(ctx: CommunityContext, me: string | null): Promise<Set<string>> {
+  return new Set(me ? await ctx.community.blockedAuthors(me) : []);
 }
 
 /** Maps what the community SQL functions raise; the rest goes to accountError. */
@@ -190,11 +207,15 @@ async function district(ctx: CommunityContext, id: string) {
 }
 
 async function board(ctx: CommunityContext, id: string, me: string | null) {
-  const [summary, reviews] = await Promise.all([
+  const [summary, reviews, blocked] = await Promise.all([
     ctx.community.reviewSummary(id),
     ctx.community.recentReviews(id, REVIEW_LIMIT),
+    blockedBy(ctx, me),
   ]);
-  return { summary: summaryView(summary), reviews: reviews.map((r) => reviewView(r, me)) };
+  return {
+    summary: summaryView(summary),
+    reviews: notBlocked(reviews, blocked).map((r) => reviewView(r, me)),
+  };
 }
 
 /** Handles community paths; null when `path` is not one of them. */
@@ -238,13 +259,14 @@ export async function handleCommunity(
       const me = await reader(ctx, req);
       const cache = me ? undefined : COMMUNITY_CACHE;
       if (what === "reviews") return { data: await board(ctx, id, me?.id ?? null), cache };
-      const [messages, threads] = await Promise.all([
+      const [messages, threads, blocked] = await Promise.all([
         ctx.community.recentMessages(id, MESSAGE_LIMIT),
         ctx.community.threads(id, THREAD_LIMIT),
+        blockedBy(ctx, me?.id ?? null),
       ]);
       return {
         data: {
-          messages: messages.map((m) => messageView(m, me?.id ?? null)),
+          messages: notBlocked(messages, blocked).map((m) => messageView(m, me?.id ?? null)),
           threads: threads.map((t) => ({
             id: t.id,
             title: t.title,
