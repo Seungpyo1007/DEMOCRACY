@@ -23,12 +23,36 @@ export interface DistrictRec extends Sourced {
   s_order?: number | null;
 }
 
+/** A portrait whose licence someone confirmed: where it is served, and its credit. */
+export interface PortraitView {
+  url: string;
+  credit: string;
+}
+
+/** The portraits table as the store reads it (see the portraits migration). */
+export interface PortraitRec {
+  mona_cd: string;
+  storage_path: string;
+  license?: "unconfirmed" | "kogl-1" | "permitted";
+  attribution?: string | null;
+}
+
+/** Only a licensed copy leaves; an unconfirmed one, or no copy, is null. */
+export function portraitView(row: PortraitRec | null | undefined, base: string | null) {
+  if (!row || !base || !row.attribution || (row.license ?? "unconfirmed") === "unconfirmed") {
+    return null;
+  }
+  return { url: `${base}${row.storage_path}`, credit: row.attribution };
+}
+
 export interface MemberRec extends Sourced {
   mona_cd: string;
   name: string;
   party: string | null;
   reele_gbn: string | null;
   photo_url: string | null;
+  /** Filled by incumbent(): the approved copy, or null. */
+  portrait?: PortraitView | null;
   district_id: string | null;
   is_current: boolean;
   /** ORIG_NM as a name key; null for 비례대표. Read only by memberList. */
@@ -252,6 +276,7 @@ export interface MemoryTables {
   pledges: PledgeRec[];
   areas: AreaRec[];
   bridge: BridgeRec[];
+  portraits: PortraitRec[];
 }
 
 export function emptyTables(): MemoryTables {
@@ -272,6 +297,7 @@ export function emptyTables(): MemoryTables {
     pledges: [],
     areas: [],
     bridge: [],
+    portraits: [],
   };
 }
 
@@ -280,7 +306,11 @@ function lastMonths(rates: Map<string, MonthlyRate>, months: number): MonthlyRat
 }
 
 export class MemoryStore implements ReadStore {
-  constructor(readonly t: MemoryTables) {}
+  constructor(
+    readonly t: MemoryTables,
+    /** Where the 'portraits' bucket is served; tests pass one to see portraits. */
+    private readonly portraitBase: string | null = null,
+  ) {}
 
   district(id: string) {
     return Promise.resolve(this.t.districts.find((d) => d.id === id) ?? null);
@@ -291,9 +321,10 @@ export class MemoryStore implements ReadStore {
     );
   }
   incumbent(districtId: string) {
-    return Promise.resolve(
-      this.t.members.find((m) => m.is_current && m.district_id === districtId) ?? null,
-    );
+    const m = this.t.members.find((m) => m.is_current && m.district_id === districtId);
+    if (!m) return Promise.resolve(null);
+    const row = this.t.portraits.find((p) => p.mona_cd === m.mona_cd);
+    return Promise.resolve({ ...m, portrait: portraitView(row, this.portraitBase) });
   }
   memberList() {
     const current = this.t.members.filter((m) => m.is_current);
@@ -458,7 +489,11 @@ export class MemoryStore implements ReadStore {
 const SRC = "source_url,fetched_at";
 
 export class PostgrestStore implements ReadStore {
-  constructor(private readonly db: Postgrest) {}
+  constructor(
+    private readonly db: Postgrest,
+    /** `<SUPABASE_URL>/storage/v1/object/public/portraits/`. */
+    private readonly portraitBase: string | null = null,
+  ) {}
 
   async district(id: string) {
     const rows = await this.db.select<DistrictRec>("districts", {
@@ -476,13 +511,17 @@ export class PostgrestStore implements ReadStore {
     });
   }
   async incumbent(districtId: string) {
-    const rows = await this.db.select<MemberRec>("members", {
-      select: `mona_cd,name,party,reele_gbn,photo_url,district_id,is_current,${SRC}`,
+    const rows = await this.db.select<MemberRec & { copy: PortraitRec | null }>("members", {
+      select: `mona_cd,name,party,reele_gbn,photo_url,district_id,is_current,${SRC},` +
+        "copy:portraits(mona_cd,storage_path,license,attribution)",
       district_id: `eq.${districtId}`,
       is_current: "eq.true",
       limit: "1",
     });
-    return rows[0] ?? null;
+    const row = rows[0];
+    if (!row) return null;
+    const { copy, ...member } = row;
+    return { ...member, portrait: portraitView(copy, this.portraitBase) };
   }
   async memberList() {
     const [last, unplaced] = await Promise.all([

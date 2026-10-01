@@ -65,11 +65,11 @@ export async function loadDistrictAndSeat(
   return { district, seat: source ? { kind: "vacant", source } : { kind: "unknown" } };
 }
 
-function portrait(member: MemberRec): string | undefined {
-  // Link to the Assembly's own image; never a re-hosted copy.
-  if (!member.photo_url || !isPresentableSourceUrl(member.photo_url)) return undefined;
-  const host = new URL(member.photo_url).host;
-  return host.endsWith("assembly.go.kr") ? member.photo_url : undefined;
+/** The approved Storage copy, with its credit; nothing until a licence is recorded. */
+function portraitFields(member: MemberRec) {
+  return member.portrait
+    ? { portraitUrl: member.portrait.url, portraitCredit: member.portrait.credit }
+    : {};
 }
 
 function series(rates: MonthlyRate[], fallbackUrl: string) {
@@ -268,7 +268,6 @@ export async function buildProfile(store: ReadStore, id: string, now: Date) {
     if (vt) record.votes = vt;
   }
 
-  const photo = portrait(member);
   return {
     district: { id: district.id, displayName: district.display_name },
     source: memberSource,
@@ -277,7 +276,7 @@ export async function buildProfile(store: ReadStore, id: string, now: Date) {
       name: member.name,
       party: member.party ?? "무소속",
       summary: member.reele_gbn ?? "",
-      ...(photo ? { portraitUrl: photo } : {}),
+      ...portraitFields(member),
       stats,
       ...(record ? { record } : {}),
     },
@@ -407,7 +406,6 @@ function legislatorBlock(
       };
     }).filter((e) => e.mark !== ""),
   ];
-  const photo = portrait(member);
   return {
     source: billsSource ?? memberSource,
     incumbent: {
@@ -415,7 +413,7 @@ function legislatorBlock(
       name: member.name,
       party: member.party ?? "무소속",
       summary: member.reele_gbn ?? "",
-      ...(photo ? { portraitUrl: photo } : {}),
+      ...portraitFields(member),
     },
     events,
   };

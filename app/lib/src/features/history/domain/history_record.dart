@@ -257,6 +257,7 @@ class LegislatorChronicle {
     required this.events,
     required this.source,
     this.portraitUrl,
+    this.portraitCredit,
   });
 
   factory LegislatorChronicle.fromJson(Object? json) {
@@ -284,6 +285,7 @@ class LegislatorChronicle {
       party: PartyRef(name: incumbent['party'] as String? ?? '무소속'),
       summary: incumbent['summary'] as String? ?? '',
       portraitUrl: incumbent['portraitUrl'] as String?,
+      portraitCredit: incumbent['portraitCredit'] as String?,
       events: List.unmodifiable(
         raw is List
             ? raw.map(ChronicleEvent.fromJson)
@@ -298,6 +300,7 @@ class LegislatorChronicle {
   final PartyRef party;
   final String summary;
   final String? portraitUrl;
+  final String? portraitCredit;
   final List<ChronicleEvent> events;
   final SourceMetadata source;
 }

@@ -12,7 +12,10 @@ const env = (name: string) => Deno.env.get(name) ?? "";
 
 const db = createPostgrest(fetch, env("SUPABASE_URL"), env("SUPABASE_SERVICE_ROLE_KEY"));
 const handler = createHandler({
-  store: new PostgrestStore(db),
+  store: new PostgrestStore(
+    db,
+    `${env("SUPABASE_URL").replace(/\/$/, "")}/storage/v1/object/public/portraits/`,
+  ),
   accounts: new PostgrestAccountStore(db),
   community: new PostgrestCommunityStore(db),
   auth: createAuth(

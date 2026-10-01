@@ -282,6 +282,10 @@ class _IncumbentSectionState extends State<_IncumbentSection> {
             ),
           ],
         ),
+        if (incumbent.portraitCredit != null) ...[
+          const SizedBox(height: AppSpacing.x1),
+          PortraitCredit(incumbent.portraitCredit!),
+        ],
         // No margin note on the tenure: the payload carries no election
         // years, and a note the data cannot back would be an invented fact.
         if (stats.isNotEmpty) ...[
