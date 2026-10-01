@@ -39,6 +39,7 @@ export interface ReviewRec {
   verified_resident: boolean;
   created_at: string;
   updated_at: string;
+  hidden_at?: string | null;
 }
 
 export interface MessageRec {
@@ -49,6 +50,7 @@ export interface MessageRec {
   anonymous: boolean;
   verified_resident: boolean;
   created_at: string;
+  hidden_at?: string | null;
 }
 
 export interface ThreadRec {
@@ -69,6 +71,84 @@ export interface ReplyRec {
   anonymous: boolean;
   verified_resident: boolean;
   created_at: string;
+  hidden_at?: string | null;
+}
+
+/** What can be reported or blocked: a review, a channel message or a thread reply. */
+export type PostType = "review" | "message" | "reply";
+export const POST_TYPES: readonly PostType[] = ["review", "message", "reply"];
+export type ReportReason = "hate" | "privacy" | "false" | "spam" | "other";
+export const REPORT_REASONS: readonly ReportReason[] = [
+  "hate",
+  "privacy",
+  "false",
+  "spam",
+  "other",
+];
+export type ResolveAction = "keep" | "hide" | "delete";
+
+/** Reports one reader may file in a day. Mirrors report_post(). */
+export const REPORTS_PER_DAY = 20;
+/** Distinct readers whose open reports hide a post. Mirrors report_post(). */
+export const REPORTS_TO_HIDE = 3;
+
+export interface NewReport {
+  reporterId: string;
+  targetType: PostType;
+  targetId: string;
+  reason: ReportReason;
+  note: string | null;
+}
+
+export interface ReportRec {
+  id: string;
+  target_type: PostType;
+  target_id: string;
+  reporter_id: string | null;
+  reason: ReportReason;
+  note: string | null;
+  status: "open" | "kept" | "hidden" | "deleted";
+  created_at: string;
+  resolved_by: string | null;
+  resolved_at: string | null;
+}
+
+export interface BlockRec {
+  id: string;
+  blocker_id: string;
+  blocked_id: string;
+  label: string;
+  created_at: string;
+}
+
+/** A reader's block as they see it: never the account, only how it showed and its tag. */
+export interface BlockView {
+  id: string;
+  label: string;
+  created_at: string;
+  author_tag: string | null;
+}
+
+export interface StaffReportView {
+  report_id: string;
+  target_type: PostType;
+  target_id: string;
+  district_id: string | null;
+  body: string | null;
+  hidden: boolean;
+  reasons: ReportReason[];
+  reports: number;
+  first_at: string;
+}
+
+export interface StaffActionRec {
+  id: string;
+  staff_id: string | null;
+  action: ResolveAction;
+  target_type: PostType;
+  target_id: string;
+  reason: string;
+  at: string;
 }
 
 /** A post as read for display: the author's current 활동명, or null when the account is gone. */
@@ -132,6 +212,28 @@ export interface CommunityStore {
   }>;
   /** DELETE /me?posts=delete: removes the user's posts before the profile goes. */
   deletePostsBy(userId: string): Promise<void>;
+
+  /**
+   * report_post: files a report; true when the post is hidden afterwards. Raises
+   * consent_required / not_found / own_post / already_reported / rate_limited.
+   */
+  report(r: NewReport): Promise<boolean>;
+  /** block_author: raises consent_required / not_found / no_author / own_post. */
+  block(blockerId: string, targetType: PostType, targetId: string): Promise<BlockRec>;
+  /** Removes one of the blocker's blocks; false when it is not theirs or not there. */
+  unblock(blockerId: string, blockId: string): Promise<boolean>;
+  myBlocks(userId: string): Promise<BlockView[]>;
+  /** The authors whose posts are left out of this reader's lists. */
+  blockedAuthors(userId: string): Promise<string[]>;
+  isStaff(userId: string): Promise<boolean>;
+  openReports(limit: number): Promise<StaffReportView[]>;
+  /** resolve_report: raises not_staff / not_found. */
+  resolveReport(
+    staffId: string,
+    reportId: string,
+    action: ResolveAction,
+    reason: string,
+  ): Promise<void>;
 }
 
 // ---------------------------------------------------------------- memory
@@ -141,10 +243,38 @@ export interface CommunityTables {
   messages: MessageRec[];
   threads: ThreadRec[];
   replies: ReplyRec[];
+  reports: ReportRec[];
+  blocks: BlockRec[];
+  staff: string[];
+  staffActions: StaffActionRec[];
 }
 
 export function emptyCommunityTables(): CommunityTables {
-  return { reviews: [], messages: [], threads: [], replies: [] };
+  return {
+    reviews: [],
+    messages: [],
+    threads: [],
+    replies: [],
+    reports: [],
+    blocks: [],
+    staff: [],
+    staffActions: [],
+  };
+}
+
+/**
+ * Stands in for author_tag(): stable within a KST day, different the next. The SQL one is
+ * an HMAC under a key only the database holds.
+ */
+export function memoryAuthorTag(author: string | null, at: Date): string | null {
+  if (author === null) return null;
+  const kstDay = new Date(at.getTime() + 9 * 3_600_000).toISOString().slice(0, 10);
+  // FNV-1a: opaque enough that a test can check the author id never shows.
+  let h = 0x811c9dc5;
+  for (const c of `${author}:${kstDay}`) {
+    h = Math.imul(h ^ c.charCodeAt(0), 0x01000193) >>> 0;
+  }
+  return `tag${h.toString(16).padStart(8, "0")}`;
 }
 
 const mean = (xs: number[]) =>
@@ -205,7 +335,7 @@ export class MemoryCommunityStore implements CommunityStore {
   }
 
   reviewSummary(districtId: string) {
-    const rows = this.t.reviews.filter((r) => r.district_id === districtId);
+    const rows = this.t.reviews.filter((r) => r.district_id === districtId && !r.hidden_at);
     return Promise.resolve({
       respondents: rows.length,
       average: mean(rows.map((r) => r.score)),
@@ -336,6 +466,183 @@ export class MemoryCommunityStore implements CommunityStore {
     return Promise.resolve();
   }
 
+  private posts(
+    type: PostType,
+  ): {
+    id: string;
+    author_id: string | null;
+    anonymous: boolean;
+    hidden_at?: string | null;
+    hidden_reason?: string | null;
+  }[] {
+    return type === "review"
+      ? this.t.reviews
+      : type === "message"
+      ? this.t.messages
+      : this.t.replies;
+  }
+
+  private hide(type: PostType, id: string, reason: string | null) {
+    const row = this.posts(type).find((p) => p.id === id);
+    if (row) {
+      row.hidden_at = reason === null ? null : this.now().toISOString();
+      row.hidden_reason = reason;
+    }
+  }
+
+  report(r: NewReport) {
+    if (!this.accounts.profiles.some((p) => p.user_id === r.reporterId)) {
+      return Promise.reject(raised("consent_required"));
+    }
+    const post = this.posts(r.targetType).find((p) => p.id === r.targetId);
+    if (!post) return Promise.reject(raised("not_found"));
+    if (this.author(post.author_id) === r.reporterId) return Promise.reject(raised("own_post"));
+    const since = new Date(this.now().getTime() - 86_400_000).toISOString();
+    if (
+      this.t.reports.filter((x) => x.reporter_id === r.reporterId && x.created_at > since)
+        .length >= REPORTS_PER_DAY
+    ) {
+      return Promise.reject(raised("rate_limited"));
+    }
+    const same = (x: ReportRec) => x.target_type === r.targetType && x.target_id === r.targetId;
+    if (this.t.reports.some((x) => same(x) && x.reporter_id === r.reporterId)) {
+      return Promise.reject(raised("already_reported"));
+    }
+    this.t.reports.push({
+      id: this.nextId(),
+      target_type: r.targetType,
+      target_id: r.targetId,
+      reporter_id: r.reporterId,
+      reason: r.reason,
+      note: r.note,
+      status: "open",
+      created_at: this.now().toISOString(),
+      resolved_by: null,
+      resolved_at: null,
+    });
+    const reporters = new Set(
+      this.t.reports.filter((x) => same(x) && x.status === "open").map((x) => x.reporter_id),
+    ).size;
+    if (r.reason === "privacy" || reporters >= REPORTS_TO_HIDE) {
+      this.hide(r.targetType, r.targetId, r.reason === "privacy" ? "privacy" : "reports");
+      return Promise.resolve(true);
+    }
+    return Promise.resolve(false);
+  }
+  block(blockerId: string, targetType: PostType, targetId: string) {
+    if (!this.accounts.profiles.some((p) => p.user_id === blockerId)) {
+      return Promise.reject(raised("consent_required"));
+    }
+    const post = this.posts(targetType).find((p) => p.id === targetId);
+    if (!post) return Promise.reject(raised("not_found"));
+    const author = this.author(post.author_id);
+    if (author === null) return Promise.reject(raised("no_author"));
+    if (author === blockerId) return Promise.reject(raised("own_post"));
+    const existing = this.t.blocks.find((b) =>
+      b.blocker_id === blockerId && b.blocked_id === author
+    );
+    if (existing) return Promise.resolve({ ...existing });
+    const row: BlockRec = {
+      id: this.nextId(),
+      blocker_id: blockerId,
+      blocked_id: author,
+      label: post.anonymous ? "익명 주민" : this.handle(author) ?? "익명 주민",
+      created_at: this.now().toISOString(),
+    };
+    this.t.blocks.push(row);
+    return Promise.resolve({ ...row });
+  }
+  unblock(blockerId: string, blockId: string) {
+    const before = this.t.blocks.length;
+    this.t.blocks = this.t.blocks.filter((b) => !(b.id === blockId && b.blocker_id === blockerId));
+    return Promise.resolve(this.t.blocks.length < before);
+  }
+  myBlocks(userId: string) {
+    return Promise.resolve(
+      this.t.blocks
+        .filter((b) => b.blocker_id === userId && this.author(b.blocked_id) !== null)
+        .sort((a, b) => b.created_at.localeCompare(a.created_at))
+        .map((b) => ({
+          id: b.id,
+          label: b.label,
+          created_at: b.created_at,
+          author_tag: memoryAuthorTag(b.blocked_id, this.now()),
+        })),
+    );
+  }
+  blockedAuthors(userId: string) {
+    return Promise.resolve(
+      this.t.blocks.filter((b) => b.blocker_id === userId).map((b) => b.blocked_id),
+    );
+  }
+  isStaff(userId: string) {
+    return Promise.resolve(this.t.staff.includes(userId));
+  }
+  openReports(limit: number) {
+    const groups = new Map<string, ReportRec[]>();
+    for (const r of this.t.reports.filter((r) => r.status === "open")) {
+      const key = `${r.target_type}:${r.target_id}`;
+      groups.set(key, [...(groups.get(key) ?? []), r]);
+    }
+    const views = [...groups.values()].map((rs) => {
+      rs.sort((a, b) => a.created_at.localeCompare(b.created_at));
+      const first = rs[0];
+      const post = this.posts(first.target_type).find((p) => p.id === first.target_id) as
+        | (MessageRec | ReviewRec | ReplyRec)
+        | undefined;
+      const district = post && "district_id" in post
+        ? post.district_id
+        : this.t.threads.find((t) => post && "thread_id" in post && t.id === post.thread_id)
+          ?.district_id ?? null;
+      return {
+        report_id: first.id,
+        target_type: first.target_type,
+        target_id: first.target_id,
+        district_id: district,
+        body: post?.body ?? null,
+        hidden: Boolean(post?.hidden_at),
+        reasons: [...new Set(rs.map((r) => r.reason))],
+        reports: rs.length,
+        first_at: first.created_at,
+      };
+    });
+    views.sort((a, b) => a.first_at.localeCompare(b.first_at));
+    return Promise.resolve(views.slice(0, limit));
+  }
+  resolveReport(staffId: string, reportId: string, action: ResolveAction, reason: string) {
+    if (!this.t.staff.includes(staffId)) return Promise.reject(raised("not_staff"));
+    const r = this.t.reports.find((x) => x.id === reportId);
+    if (!r) return Promise.reject(raised("not_found"));
+    if (action === "keep") this.hide(r.target_type, r.target_id, null);
+    if (action === "hide") this.hide(r.target_type, r.target_id, "staff");
+    if (action === "delete") {
+      if (r.target_type === "review") {
+        this.t.reviews = this.t.reviews.filter((x) => x.id !== r.target_id);
+      } else if (r.target_type === "message") {
+        this.t.messages = this.t.messages.filter((x) => x.id !== r.target_id);
+      } else {
+        this.t.replies = this.t.replies.filter((x) => x.id !== r.target_id);
+      }
+    }
+    const status = action === "keep" ? "kept" : action === "hide" ? "hidden" : "deleted";
+    const at = this.now().toISOString();
+    for (const x of this.t.reports) {
+      if (x.target_type === r.target_type && x.target_id === r.target_id && x.status === "open") {
+        Object.assign(x, { status, resolved_by: staffId, resolved_at: at });
+      }
+    }
+    this.t.staffActions.push({
+      id: this.nextId(),
+      staff_id: staffId,
+      action,
+      target_type: r.target_type,
+      target_id: r.target_id,
+      reason,
+      at,
+    });
+    return Promise.resolve();
+  }
+
   /**
    * Mirrors sync_bill_threads(): a thread per current-term bill whose 대표발의자 is a
    * district's current member, existing threads left alone.
@@ -369,9 +676,10 @@ export class MemoryCommunityStore implements CommunityStore {
 // ---------------------------------------------------------------- postgrest
 
 const REVIEW_COLS = "id,district_id,author_id,communication,pledges,development,integrity," +
-  "score,body,anonymous,verified_resident,created_at,updated_at";
-const MESSAGE_COLS = "id,district_id,author_id,body,anonymous,verified_resident,created_at";
-const REPLY_COLS = "id,thread_id,author_id,body,anonymous,verified_resident,created_at";
+  "score,body,anonymous,verified_resident,created_at,updated_at,hidden_at";
+const MESSAGE_COLS =
+  "id,district_id,author_id,body,anonymous,verified_resident,created_at,hidden_at";
+const REPLY_COLS = "id,thread_id,author_id,body,anonymous,verified_resident,created_at,hidden_at";
 
 /** Rows read with the author's handle embedded through the profiles foreign key. */
 type Embedded<T> = T & { author: { handle: string } | null };
@@ -487,6 +795,54 @@ export class PostgrestCommunityStore implements CommunityStore {
     await this.db.delete("thread_replies", by);
     await this.db.delete("community_messages", by);
     await this.db.delete("reviews", by);
+  }
+  report(r: NewReport) {
+    return this.db.rpc<boolean>("report_post", {
+      p_reporter: r.reporterId,
+      p_type: r.targetType,
+      p_id: r.targetId,
+      p_reason: r.reason,
+      p_note: r.note,
+    });
+  }
+  async block(blockerId: string, targetType: PostType, targetId: string) {
+    const [row] = await this.db.rpc<BlockRec[]>("block_author", {
+      p_blocker: blockerId,
+      p_type: targetType,
+      p_id: targetId,
+    });
+    return row;
+  }
+  async unblock(blockerId: string, blockId: string) {
+    const query = { id: `eq.${blockId}`, blocker_id: `eq.${blockerId}` };
+    const [row] = await this.db.select<{ id: string }>("blocks", { select: "id", ...query });
+    if (!row) return false;
+    await this.db.delete("blocks", query);
+    return true;
+  }
+  myBlocks(userId: string) {
+    return this.db.rpc<BlockView[]>("bff_my_blocks", { p_user: userId });
+  }
+  blockedAuthors(userId: string) {
+    return this.db.rpc<string[]>("bff_blocked_authors", { p_user: userId });
+  }
+  async isStaff(userId: string) {
+    const rows = await this.db.select<{ user_id: string }>("staff", {
+      select: "user_id",
+      user_id: `eq.${userId}`,
+    });
+    return rows.length > 0;
+  }
+  openReports(limit: number) {
+    return this.db.rpc<StaffReportView[]>("staff_open_reports", { p_limit: limit });
+  }
+  async resolveReport(staffId: string, reportId: string, action: ResolveAction, reason: string) {
+    await this.db.rpc("resolve_report", {
+      p_staff: staffId,
+      p_report: reportId,
+      p_action: action,
+      p_reason: reason,
+    });
   }
 }
 

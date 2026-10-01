@@ -178,6 +178,10 @@ class AccountScreen extends ConsumerWidget {
           label: '내 데이터 내려받기',
           onTap: () => context.push(AppRoutes.accountExport),
         ),
+        _LinkRow(
+          label: '숨긴 주민',
+          onTap: () => context.push(AppRoutes.accountBlocks),
+        ),
         RuledRow(
           minHeight: 60,
           child: Row(

@@ -102,8 +102,10 @@ class PartyTag extends StatelessWidget {
 /// A portrait, always desaturated.
 ///
 /// The grayscale rule exists to keep colour from biasing how a face reads, so
-/// the filter is applied here rather than left to each caller. No portraits
-/// ship with the app yet, so this currently draws a neutral placeholder.
+/// the filter is applied here rather than left to each caller, over the photo
+/// and the placeholder alike. The server sends a photo only once its licence
+/// has been recorded; until then, and whenever a photo fails to load, this
+/// draws the neutral placeholder.
 class GrayscalePortrait extends StatelessWidget {
   const GrayscalePortrait({
     required this.name,
@@ -123,6 +125,25 @@ class GrayscalePortrait extends StatelessWidget {
     final surface = Theme.of(context).extension<AppSurfaceTokens>()!;
     // Small radii: a portrait is a photograph on the page, not a control.
     final radius = surface.isGlass ? 6.0 : 4.0;
+    final url = imageUrl;
+
+    final placeholder = Container(
+      width: width,
+      height: height,
+      decoration: const BoxDecoration(
+        gradient: LinearGradient(
+          begin: Alignment.topLeft,
+          end: Alignment.bottomRight,
+          colors: [AppColors.neutral300, AppColors.neutral500],
+        ),
+      ),
+      alignment: Alignment.center,
+      child: const Icon(
+        Icons.person_outline,
+        color: AppColors.neutral600,
+        size: 22,
+      ),
+    );
 
     return Semantics(
       label: '$name 사진',
@@ -134,25 +155,41 @@ class GrayscalePortrait extends StatelessWidget {
           0.2126, 0.7152, 0.0722, 0, 0, //
           0, 0, 0, 1, 0, //
         ]),
-        child: Container(
-          width: width,
-          height: height,
-          decoration: BoxDecoration(
-            borderRadius: BorderRadius.circular(radius),
-            gradient: const LinearGradient(
-              begin: Alignment.topLeft,
-              end: Alignment.bottomRight,
-              colors: [AppColors.neutral300, AppColors.neutral500],
-            ),
-          ),
-          alignment: Alignment.center,
-          child: const Icon(
-            Icons.person_outline,
-            color: AppColors.neutral600,
-            size: 22,
-          ),
+        child: ClipRRect(
+          borderRadius: BorderRadius.circular(radius),
+          child: url == null
+              ? placeholder
+              : Image.network(
+                  url,
+                  key: ValueKey('portrait-$url'),
+                  width: width,
+                  height: height,
+                  fit: BoxFit.cover,
+                  // Faces sit in the upper half of an official portrait.
+                  alignment: const Alignment(0, -0.4),
+                  cacheWidth: (width * 3).round(),
+                  excludeFromSemantics: true,
+                  frameBuilder: (context, child, frame, sync) =>
+                      frame == null && !sync ? placeholder : child,
+                  errorBuilder: (context, _, _) => placeholder,
+                ),
         ),
       ),
+    );
+  }
+}
+
+/// The credit a licensed portrait carries, set small under it.
+class PortraitCredit extends StatelessWidget {
+  const PortraitCredit(this.text, {super.key});
+
+  final String text;
+
+  @override
+  Widget build(BuildContext context) {
+    return Text(
+      text,
+      style: AppTextStyles.disclaimer.copyWith(color: AppColors.neutral600),
     );
   }
 }

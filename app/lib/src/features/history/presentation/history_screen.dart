@@ -584,6 +584,10 @@ class _LegislatorSection extends StatelessWidget {
             ),
           ],
         ),
+        if (legislator.portraitCredit != null) ...[
+          const SizedBox(height: AppSpacing.x1),
+          PortraitCredit(legislator.portraitCredit!),
+        ],
         const SizedBox(height: AppSpacing.x4 + 2),
         HistoryTimeline(
           entries: [

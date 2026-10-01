@@ -5,6 +5,7 @@ import 'package:democracy/src/core/account/auth_state.dart';
 import 'package:democracy/src/core/adaptive/platform_adaptive.dart';
 import 'package:democracy/src/core/auth/address_controller.dart';
 import 'package:democracy/src/features/account/presentation/account_screens.dart';
+import 'package:democracy/src/features/account/presentation/blocked_authors_screen.dart';
 import 'package:democracy/src/features/account/presentation/consent_screen.dart';
 import 'package:democracy/src/features/account/presentation/login_screens.dart';
 import 'package:democracy/src/features/account/presentation/residency_screens.dart';
@@ -217,6 +218,14 @@ final appRouterProvider = Provider<GoRouter>((ref) {
           context: context,
           key: state.pageKey,
           child: const AccountScreen(),
+        ),
+      ),
+      GoRoute(
+        path: AppRoutes.accountBlocks,
+        pageBuilder: (context, state) => PlatformAdaptiveRoute.page(
+          context: context,
+          key: state.pageKey,
+          child: const BlockedAuthorsScreen(),
         ),
       ),
       GoRoute(

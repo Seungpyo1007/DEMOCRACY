@@ -52,7 +52,7 @@ function politician(v: unknown, field: string, errs: string[]) {
   if (typeof v.id !== "string" || typeof v.name !== "string") {
     errs.push(`${field}: id and name are required`);
   }
-  for (const k of ["party", "summary", "portraitUrl"]) {
+  for (const k of ["party", "summary", "portraitUrl", "portraitCredit"]) {
     if (v[k] !== undefined && v[k] !== null && typeof v[k] !== "string") {
       errs.push(`${field}.${k}: must be a string`);
     }
