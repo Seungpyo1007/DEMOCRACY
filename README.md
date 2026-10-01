@@ -20,7 +20,7 @@
 - **역사**: 20~22대 선거 결과, 선거구가 어떻게 합쳐지고 나뉘었는지, 보궐·궐위
 - **개표**: 22대 선거구별 최종 결과. 선거 기간 여론조사 공표 제한도 지킴
 - **AI 대조**: 내 관심사와 의원 공약·법안을 폰 안에서 대조함 (Apple Foundation Models, Gemini Nano). 서버로 안 보냄
-- **커뮤니티**: 지역구별 실시간 채팅과 평가. 읽기는 누구나, 쓰기는 로그인과 주민 인증 후
+- **커뮤니티**: 지역구별 실시간 채팅과 평가. 읽기는 누구나, 쓰기는 로그인과 주민 인증 후. 글마다 신고하거나 그 주민 글을 숨길 수 있음
 
 정당은 색으로 표시하지 않고, 인물 사진은 흑백, 상태는 색 말고 아이콘과 글자로 같이 보여 줌.
 
@@ -32,7 +32,9 @@
 
 ## 다운로드
 
-최신 버전은 [릴리스 페이지](https://github.com/Seungpyo1007/DEMOCRACY/releases/latest)에 있음. 스토어 출시는 준비 중.
+최신 버전은 [릴리스 페이지](https://github.com/Seungpyo1007/DEMOCRACY/releases/latest)에 있음. Google Play, App Store 출시는 심사 준비 중.
+
+[개인정보처리방침](https://seungpyo1007.github.io/DEMOCRACY/privacy/) · [이용약관](https://seungpyo1007.github.io/DEMOCRACY/terms/) · [계정 삭제](https://seungpyo1007.github.io/DEMOCRACY/account-deletion/)
 
 ## 사용 기술
 
@@ -88,11 +90,9 @@ cd app && flutter run --dart-define-from-file=dart_defines.json
 
 - **실시간 개표**: 지금은 22대 최종 결과만 있음. 다음 선거 때 선관위 실시간 데이터 붙일 예정
 - **답글**: 채팅·평가에 답글 (#54)
-- **운영 기능**: 신고·삭제, 반론·정정 경로, 공약 이행 판정, 푸시 알림 순서로 (#55~#59, `docs/OPS_ROADMAP.md`)
+- **운영 기능**: 반론·정정 경로, 공약 이행 판정, 푸시 알림 (#57~#59, `docs/OPS_ROADMAP.md`). 신고·숨기기·관리자 처리는 0.2.2에 들어감
 - **지도**: Google Maps 키 없어서 지금은 회색 격자. 개표율 색칠이랑 선택은 동작함
-- **의원 사진**: 저작권 확인 끝나면 넣음 (#31)
-
-개인정보처리방침, 이용약관, 계정 삭제 안내는 [docs/legal](docs/legal)에 있고 GitHub Pages로 공개됨.
+- **의원 사진**: 사진은 미리 옮겨 둠. 국회사무처에 사용 허락 확인되면 앱 업데이트 없이 보이기 시작함 (#31)
 
 ## 기여
 
