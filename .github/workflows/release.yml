@@ -13,8 +13,29 @@ concurrency:
   cancel-in-progress: false
 
 jobs:
+  # Until the store secrets are in place a tag still makes a GitHub release
+  # but uploads nothing, rather than failing the run.
+  secrets:
+    name: check secrets
+    runs-on: ubuntu-latest
+    outputs:
+      play: ${{ steps.check.outputs.play }}
+      asc: ${{ steps.check.outputs.asc }}
+    steps:
+      - id: check
+        env:
+          PLAY: ${{ secrets.PLAY_SERVICE_ACCOUNT_JSON }}
+          ASC: ${{ secrets.ASC_KEY_P8 }}
+        run: |
+          echo "play=$([ -n "$PLAY" ] && echo true || echo false)" >> "$GITHUB_OUTPUT"
+          echo "asc=$([ -n "$ASC" ] && echo true || echo false)" >> "$GITHUB_OUTPUT"
+          [ -n "$PLAY" ] || echo "::notice::PLAY_SERVICE_ACCOUNT_JSON 없음: Android 업로드 건너뜀"
+          [ -n "$ASC" ] || echo "::notice::ASC_KEY_P8 없음: iOS 업로드 건너뜀"
+
   android:
     name: Play internal testing
+    needs: secrets
+    if: needs.secrets.outputs.play == 'true'
     runs-on: ubuntu-latest
     defaults:
       run:
@@ -76,6 +97,8 @@ jobs:
 
   ios:
     name: TestFlight
+    needs: secrets
+    if: needs.secrets.outputs.asc == 'true'
     runs-on: macos-latest
     defaults:
       run:
