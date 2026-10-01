@@ -77,6 +77,8 @@ class ResidentReview {
     required this.body,
     required this.score,
     required this.verifiedResident,
+    this.mine = false,
+    this.hidden = false,
   });
 
   factory ResidentReview.fromJson(Map<String, Object?> json) {
@@ -96,6 +98,8 @@ class ResidentReview {
       body: body,
       score: score.toDouble(),
       verifiedResident: json['verifiedResident'] as bool? ?? false,
+      mine: json['mine'] as bool? ?? false,
+      hidden: json['hidden'] as bool? ?? false,
     );
   }
 
@@ -104,6 +108,12 @@ class ResidentReview {
   final String body;
   final double score;
   final bool verifiedResident;
+
+  /// The reader's own: no report or hide on it.
+  final bool mine;
+
+  /// Hidden by reports or staff: [body] is the server's placeholder.
+  final bool hidden;
 }
 
 class ReviewBoard {

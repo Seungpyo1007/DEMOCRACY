@@ -3,7 +3,7 @@ import { inspectContent } from "../_shared/content_guard.ts";
 import { ApiError } from "../_shared/envelope.ts";
 import { MemoryPostgrest } from "../_shared/memory_postgrest.ts";
 import { MemoryAccountStore, raised } from "./account_store.ts";
-import { ANONYMOUS_AUTHOR, communityError, DELETED_AUTHOR } from "./community.ts";
+import { ANONYMOUS_AUTHOR, communityError, DELETED_AUTHOR, HIDDEN_BODY } from "./community.ts";
 import { MemoryCommunityStore, PostgrestCommunityStore } from "./community_store.ts";
 import { validateCommunity, validateEnvelope, validateReviewBoard } from "./contract.ts";
 import { createHandler } from "./handler.ts";
@@ -409,13 +409,15 @@ Deno.test("content guard: the app's hate list, spaces ignored; claims are not re
 });
 
 Deno.test("channel broadcast: the trigger's payload is the GET message minus `mine`", async () => {
-  // The broadcast is composed in SQL (migrations/*_channel_broadcast.sql), not here, so this
-  // pins the two together: the same keys, the same author labels, createdAt in the same form.
+  // The broadcast is composed in SQL, not here, so this pins the two together: the same
+  // keys (plus authorTag, which only the channel needs), the same author labels and hidden
+  // text, createdAt in the same form. The newest definition is the moderation migration's.
   const sql = await Deno.readTextFile(
-    new URL("../../migrations/20260930000000_channel_broadcast.sql", import.meta.url),
+    new URL("../../migrations/20261002000000_moderation.sql", import.meta.url),
   );
   const payload = /function public\.channel_message_payload[\s\S]*?\$\$;/.exec(sql)?.[0] ?? "";
-  const sqlKeys = [...payload.matchAll(/^\s+'(\w+)', /gm)].map((m) => m[1]).sort();
+  const sqlKeys = [...payload.matchAll(/^\s+'(\w+)', /gm)].map((m) => m[1])
+    .filter((k) => k !== "authorTag").sort();
 
   const { call, signUp, reside } = await setup();
   await signUp();
@@ -429,6 +431,7 @@ Deno.test("channel broadcast: the trigger's payload is the GET message minus `mi
 
   assert(payload.includes(`'${ANONYMOUS_AUTHOR}'`));
   assert(payload.includes(`'${DELETED_AUTHOR}'`));
+  assert(payload.includes(`'${HIDDEN_BODY}'`));
   assert(!/'author_id'|'anonymous'|'mine'/.test(payload), "no author id, flag or `mine` leaves");
   assert(/"T"HH24:MI:SS\.MS"Z"/.test(payload), "createdAt as toISOString writes it");
   assert(/^\d{4}-\d\d-\d\dT\d\d:\d\d:\d\d\.\d{3}Z$/.test(message.createdAt));

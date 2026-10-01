@@ -141,6 +141,8 @@ class ChatMessage {
     required this.body,
     required this.verifiedResident,
     required this.mine,
+    this.hidden = false,
+    this.authorTag,
   });
 
   factory ChatMessage.fromJson(Object? json) {
@@ -158,6 +160,8 @@ class ChatMessage {
       body: body,
       verifiedResident: json['verifiedResident'] as bool? ?? false,
       mine: json['mine'] as bool? ?? false,
+      hidden: json['hidden'] as bool? ?? false,
+      authorTag: json['authorTag'] as String?,
     );
   }
 
@@ -167,6 +171,13 @@ class ChatMessage {
   final bool verifiedResident;
   final bool mine;
 
+  /// Hidden by reports or staff: [body] is the server's placeholder.
+  final bool hidden;
+
+  /// Today's opaque tag for the author, on broadcasts only; matched against
+  /// the reader's blocks to leave a blocked author's new messages out.
+  final String? authorTag;
+
   /// The same message, known to be the reader's own.
   ChatMessage asMine() => ChatMessage(
     id: id,
@@ -174,6 +185,8 @@ class ChatMessage {
     body: body,
     verifiedResident: verifiedResident,
     mine: true,
+    hidden: hidden,
+    authorTag: authorTag,
   );
 }
 

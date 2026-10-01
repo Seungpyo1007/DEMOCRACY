@@ -7,6 +7,7 @@
 //   POST /residency/verify, DELETE /residency (signed-in; see residency.ts)
 //   GET|POST /districts/{id}/reviews, GET /districts/{id}/community,
 //   POST /districts/{id}/messages, DELETE /reviews/{id} | /messages/{id} (see community.ts)
+//   POST /reports, GET|POST /blocks, DELETE /blocks/{id}, /staff/reports (see moderation.ts)
 //
 // The public routes are GET only and need no account. Signed-in routes are no-store.
 // Privacy: the address query and coordinates are never logged or stored, nor are post bodies.
@@ -24,6 +25,7 @@ import { type CommunityContext, handleCommunity } from "./community.ts";
 import type { CommunityStore } from "./community_store.ts";
 import { buildHistory, buildPledges, buildProfile } from "./builders.ts";
 import { buildMemberBills, parseMonths } from "./bills.ts";
+import { handleModeration } from "./moderation.ts";
 import { buildDirection } from "./direction.ts";
 import { districtForPlace, suggestionsFor } from "./mapping.ts";
 import { buildResults } from "./results.ts";
@@ -100,6 +102,8 @@ export function createHandler(deps: BffDeps): (req: Request) => Promise<Response
       if (verified !== null) return respond(verified);
       const posted = await handleCommunity(account, req, path);
       if (posted !== null) return respond(posted.data, posted.cache);
+      const moderated = await handleModeration(account, req, path);
+      if (moderated !== null) return respond(moderated.data);
       if (req.method !== "GET") throw new ApiError("bad_request", "Only GET is supported.");
 
       const district = /^\/districts\/([^/]+)\/(profile|history|pledges|results|direction|bills)$/
