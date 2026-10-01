@@ -73,7 +73,8 @@ Deno.test("profile: matches the DistrictProfile contract", async () => {
   assertEquals(d.district, { id: MAPO_B, displayName: "서울 마포구 을" });
   assertEquals(d.incumbent.name, "가상 의원");
   assertEquals(d.incumbent.summary, "재선");
-  assert(d.incumbent.portraitUrl.startsWith("https://www.assembly.go.kr/"));
+  // No licensed copy yet: no portrait (see portraits_test.ts for an approved one).
+  assertEquals(d.incumbent.portraitUrl, undefined);
   const stats = Object.fromEntries(
     d.incumbent.stats.map((
       s: { label: string; value: { value: number } },

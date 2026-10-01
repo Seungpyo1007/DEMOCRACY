@@ -250,5 +250,6 @@ export function toTables(db: MemoryPostgrest): MemoryTables {
   t.pledges = r("pledges");
   t.areas = r("district_areas");
   t.bridge = r("bjdong_hdong");
+  t.portraits = r("portraits");
   return t;
 }
