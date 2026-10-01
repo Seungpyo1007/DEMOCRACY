@@ -597,18 +597,22 @@ class _PledgeRow extends StatelessWidget {
         onTap: () => context.push(AppRoutes.pledgeDetail(pledge.id)),
         child: Row(
           children: [
-            SizedBox(
-              width: 40,
-              child: Text(
-                pledge.category,
-                maxLines: 1,
-                overflow: TextOverflow.ellipsis,
-                style: AppTextStyles.disclaimer.copyWith(
-                  color: AppColors.neutral600,
+            // The NEC's 선거공보 carry no category, so most boards have
+            // none; the column is only kept where there is something in it.
+            if (pledge.category.isNotEmpty) ...[
+              SizedBox(
+                width: 40,
+                child: Text(
+                  pledge.category,
+                  maxLines: 1,
+                  overflow: TextOverflow.ellipsis,
+                  style: AppTextStyles.disclaimer.copyWith(
+                    color: AppColors.neutral600,
+                  ),
                 ),
               ),
-            ),
-            const SizedBox(width: AppSpacing.x3),
+              const SizedBox(width: AppSpacing.x3),
+            ],
             Expanded(
               child: Text(
                 pledge.title,
