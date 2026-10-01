@@ -32,7 +32,7 @@
 
 ## 다운로드
 
-최신 버전은 [릴리스 페이지](https://github.com/Seungpyo1007/DEMOCRACY/releases/latest)에 있음. 지금은 `v0.2.0`. 스토어 출시는 준비 중.
+최신 버전은 [릴리스 페이지](https://github.com/Seungpyo1007/DEMOCRACY/releases/latest)에 있음. 스토어 출시는 준비 중.
 
 ## 사용 기술
 
@@ -91,6 +91,8 @@ cd app && flutter run --dart-define-from-file=dart_defines.json
 - **운영 기능**: 신고·삭제, 반론·정정 경로, 공약 이행 판정, 푸시 알림 순서로 (#55~#59, `docs/OPS_ROADMAP.md`)
 - **지도**: Google Maps 키 없어서 지금은 회색 격자. 개표율 색칠이랑 선택은 동작함
 - **의원 사진**: 저작권 확인 끝나면 넣음 (#31)
+
+개인정보처리방침, 이용약관, 계정 삭제 안내는 [docs/legal](docs/legal)에 있고 GitHub Pages로 공개됨.
 
 ## 기여
 
