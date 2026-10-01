@@ -6,6 +6,7 @@ import 'package:democracy/src/design/app_motion.dart';
 import 'package:democracy/src/design/app_tokens.dart';
 import 'package:democracy/src/design/components/app_labels.dart';
 import 'package:democracy/src/design/components/editorial.dart';
+import 'package:democracy/src/design/components/ink_loading.dart';
 import 'package:democracy/src/design/components/motion.dart';
 import 'package:democracy/src/design/components/native_controls.dart';
 import 'package:democracy/src/design/components/sparkline.dart';
@@ -77,9 +78,8 @@ class DistrictHomeScreen extends ConsumerWidget {
 
     // The district name is the page title and the switch is a toolbar
     // action: the platform's own top bar on Android, a glass button on iOS.
-    // `.adaptive` gives iOS its own activity spinner for the pull.
     return Scaffold(
-      body: RefreshIndicator.adaptive(
+      body: InkRefresh(
         onRefresh: () => _refresh(ref),
         child: EditorialScrollView(
           title: address.district!.displayName,
@@ -282,6 +282,10 @@ class _IncumbentSectionState extends State<_IncumbentSection> {
             ),
           ],
         ),
+        if (incumbent.portraitCredit != null) ...[
+          const SizedBox(height: AppSpacing.x1),
+          PortraitCredit(incumbent.portraitCredit!),
+        ],
         // No margin note on the tenure: the payload carries no election
         // years, and a note the data cannot back would be an invented fact.
         if (stats.isNotEmpty) ...[

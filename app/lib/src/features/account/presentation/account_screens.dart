@@ -6,12 +6,14 @@ import 'package:democracy/src/core/account/auth_controller.dart';
 import 'package:democracy/src/core/account/auth_state.dart';
 import 'package:democracy/src/core/account/device_services.dart';
 import 'package:democracy/src/core/adaptive/platform_adaptive.dart';
+import 'package:democracy/src/core/legal/legal_links.dart';
 import 'package:democracy/src/core/time/clock_providers.dart';
 import 'package:democracy/src/design/app_tokens.dart';
 import 'package:democracy/src/design/components/app_card.dart';
 import 'package:democracy/src/design/components/app_controls.dart';
 import 'package:democracy/src/design/components/app_labels.dart';
 import 'package:democracy/src/design/components/editorial.dart';
+import 'package:democracy/src/design/components/ink_loading.dart';
 import 'package:democracy/src/design/components/native_controls.dart';
 import 'package:democracy/src/features/account/presentation/account_page.dart';
 import 'package:democracy/src/features/account/presentation/residency_screens.dart';
@@ -176,6 +178,10 @@ class AccountScreen extends ConsumerWidget {
           label: '내 데이터 내려받기',
           onTap: () => context.push(AppRoutes.accountExport),
         ),
+        _LinkRow(
+          label: '숨긴 주민',
+          onTap: () => context.push(AppRoutes.accountBlocks),
+        ),
         RuledRow(
           minHeight: 60,
           child: Row(
@@ -196,6 +202,11 @@ class AccountScreen extends ConsumerWidget {
         const SizedBox(height: AppSpacing.x8),
         const SectionHeader(number: '05', label: '앱 정보'),
         const _ValueRow(label: '버전', value: '$appVersion ($appBuild)'),
+        _LinkRow(
+          label: '개인정보처리방침',
+          onTap: () => LegalLinks.open(LegalLinks.privacy),
+        ),
+        _LinkRow(label: '이용약관', onTap: () => LegalLinks.open(LegalLinks.terms)),
         _LinkRow(
           label: '오픈소스 라이선스',
           onTap: () => showLicensePage(
@@ -345,10 +356,7 @@ class _HandleSheetState extends ConsumerState<HandleSheet> {
             }
             final options = snapshot.data;
             if (options == null) {
-              return const SizedBox(
-                height: 200,
-                child: Center(child: CircularProgressIndicator.adaptive()),
-              );
+              return const InkLoadingRows();
             }
             final picked = _picked ?? options.first;
             return Column(

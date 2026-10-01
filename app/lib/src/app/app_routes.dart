@@ -29,6 +29,7 @@ abstract final class AppRoutes {
   /// The signed-in person's own page and what hangs off it.
   static const account = '/account';
   static const accountExport = '/account/export';
+  static const accountBlocks = '/account/blocks';
   static const accountDelete = '/account/delete';
 
   /// Checking an address against the district map.

@@ -56,6 +56,7 @@ class Politician {
     required this.summary,
     required this.stats,
     this.portraitUrl,
+    this.portraitCredit,
     this.record,
   });
 
@@ -76,6 +77,7 @@ class Politician {
       party: PartyRef(name: json['party'] as String? ?? '무소속'),
       summary: json['summary'] as String? ?? '',
       portraitUrl: json['portraitUrl'] as String?,
+      portraitCredit: json['portraitCredit'] as String?,
       // Only an incumbent has one, and even then only once the feed behind it
       // is wired -- so its absence is a shape, not a failure.
       record: LegislatorRecord.fromJson(
@@ -96,6 +98,10 @@ class Politician {
   final String summary;
   final List<DistrictStat> stats;
   final String? portraitUrl;
+
+  /// Who to credit for the portrait, shown beside it: 「사진: 국회사무처
+  /// (공공누리 제1유형)」. The server sends a portrait only with one.
+  final String? portraitCredit;
 
   /// Bills, attendance and votes. Null for a candidate.
   final LegislatorRecord? record;

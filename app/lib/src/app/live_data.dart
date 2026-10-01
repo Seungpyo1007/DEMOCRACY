@@ -30,8 +30,10 @@ import 'package:democracy/src/features/pledges/application/pledge_providers.dart
 import 'package:democracy/src/features/pledges/data/remote_pledge_repository.dart';
 import 'package:democracy/src/features/results/application/results_providers.dart';
 import 'package:democracy/src/features/results/data/remote_results_repository.dart';
+import 'package:democracy/src/features/reviews/application/moderation_providers.dart';
 import 'package:democracy/src/features/reviews/application/review_providers.dart';
 import 'package:democracy/src/features/reviews/data/realtime_channel_transport.dart';
+import 'package:democracy/src/features/reviews/data/remote_moderation_repository.dart';
 import 'package:democracy/src/features/reviews/data/remote_review_repository.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -136,6 +138,9 @@ List<Override> liveDataOverrides(BffConfig? config) {
       RemoteResultsRepository(client),
     ),
     reviewRepositoryProvider.overrideWithValue(RemoteReviewRepository(client)),
+    moderationRepositoryProvider.overrideWithValue(
+      RemoteModerationRepository(client),
+    ),
     communityRepositoryProvider.overrideWithValue(community),
     addressStoreProvider.overrideWith(
       (ref) => LiveAddressStore(const SecureAddressStore()),

@@ -21,6 +21,9 @@ sealed class ChannelEvent {
       if (event == 'message') {
         return MessagePosted(ChatMessage.fromJson(body));
       }
+      if (event == 'hidden') {
+        return MessageChanged(ChatMessage.fromJson(body));
+      }
     } on FormatException {
       return null;
     }
@@ -31,6 +34,13 @@ sealed class ChannelEvent {
 /// A message was posted, by anyone.
 final class MessagePosted extends ChannelEvent {
   const MessagePosted(this.message);
+
+  final ChatMessage message;
+}
+
+/// A message was hidden by reports or staff, or shown again.
+final class MessageChanged extends ChannelEvent {
+  const MessageChanged(this.message);
 
   final ChatMessage message;
 }
@@ -68,11 +78,24 @@ class ChannelLog {
 
   ChannelLog apply(ChannelEvent event) => switch (event) {
     MessagePosted(:final message) => merge([message]),
+    MessageChanged(:final message) => replace(message),
     MessageDeleted(:final id) =>
       messages.any((m) => m.id == id)
           ? ChannelLog._(List.unmodifiable(messages.where((m) => m.id != id)))
           : this,
   };
+
+  /// Puts [message] in place of the one with its id, keeping whether it is
+  /// the reader's own; a message this device never had is left out.
+  ChannelLog replace(ChatMessage message) {
+    final i = messages.indexWhere((m) => m.id == message.id);
+    if (i < 0) {
+      return this;
+    }
+    final next = [...messages];
+    next[i] = next[i].mine ? message.asMine() : message;
+    return ChannelLog._(List.unmodifiable(next));
+  }
 
   /// Adds [incoming] in order, skipping what is already here.
   ChannelLog merge(List<ChatMessage> incoming) {
@@ -119,6 +142,7 @@ class ChannelLog {
           a.mine != b.mine ||
           a.author != b.author ||
           a.body != b.body ||
+          a.hidden != b.hidden ||
           a.verifiedResident != b.verifiedResident) {
         return false;
       }

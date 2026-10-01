@@ -1,7 +1,7 @@
 name: democracy
 description: A politically neutral, source-first local democracy data app.
 publish_to: "none"
-version: 0.2.0+2
+version: 0.2.2+4
 
 environment:
   sdk: ">=3.12.0 <4.0.0"
@@ -33,6 +33,9 @@ dependencies:
 
 dev_dependencies:
   flutter_test:
+    sdk: flutter
+  # Store screenshots (integration_test/store_screenshots_test.dart).
+  integration_test:
     sdk: flutter
   flutter_lints: ^6.0.0
 

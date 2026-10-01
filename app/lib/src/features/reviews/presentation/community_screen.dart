@@ -13,10 +13,13 @@ import 'package:democracy/src/design/components/ink_loading.dart';
 import 'package:democracy/src/design/components/labeled_bar.dart';
 import 'package:democracy/src/design/components/motion.dart';
 import 'package:democracy/src/design/components/native_controls.dart';
+import 'package:democracy/src/features/reviews/application/moderation_providers.dart';
 import 'package:democracy/src/features/reviews/application/review_providers.dart';
+import 'package:democracy/src/features/reviews/domain/moderation.dart';
 import 'package:democracy/src/features/reviews/domain/resident_review.dart';
 import 'package:democracy/src/features/reviews/domain/review_draft.dart';
 import 'package:democracy/src/features/reviews/presentation/community_kicker.dart';
+import 'package:democracy/src/features/reviews/presentation/moderation_actions.dart';
 import 'package:democracy/src/features/shared/presentation/async_section.dart';
 import 'package:democracy/src/features/shell/application/tab_accessory.dart';
 import 'package:flutter/cupertino.dart';
@@ -361,8 +364,11 @@ class _ReviewTab extends ConsumerWidget {
               index: 1,
               child: DisclaimerBox(
                 text:
-                    '주소 인증 주민만 작성 가능 · 조작 방지 알고리즘 · '
-                    '혐오·허위정보 자동 필터링',
+                    // What the app actually does: residency, a fixed list
+                    // of hate terms refused, a warning (not a block) on
+                    // claims that may be false, and a report on every post.
+                    '주소 인증 주민만 작성 가능 · 혐오 표현은 올라가지 않음 · '
+                    '사실과 다를 수 있는 주장엔 경고 · 글마다 ⋯에서 신고·숨기기',
               ),
             ),
             const SizedBox(height: AppSpacing.x2),
@@ -485,6 +491,23 @@ class _ReviewEntry extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final header = Wrap(
+      spacing: AppSpacing.x2,
+      runSpacing: AppSpacing.x1,
+      crossAxisAlignment: WrapCrossAlignment.center,
+      children: [
+        Text(
+          review.author,
+          style: AppTextStyles.ctaSmall.copyWith(
+            color: AppColors.ink,
+            fontSize: 13,
+          ),
+        ),
+        if (review.verifiedResident) const VerifiedBadge(label: '인증'),
+        if (!review.hidden) _Stars(score: review.score.round()),
+      ],
+    );
+
     return DecoratedBox(
       decoration: const BoxDecoration(
         border: Border(bottom: BorderSide(color: AppColors.divider)),
@@ -494,30 +517,25 @@ class _ReviewEntry extends StatelessWidget {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            Wrap(
-              spacing: AppSpacing.x2,
-              runSpacing: AppSpacing.x1,
-              crossAxisAlignment: WrapCrossAlignment.center,
+            Row(
+              crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                Text(
-                  review.author,
-                  style: AppTextStyles.ctaSmall.copyWith(
-                    color: AppColors.ink,
-                    fontSize: 13,
-                  ),
-                ),
-                if (review.verifiedResident) const VerifiedBadge(label: '인증'),
-                _Stars(score: review.score.round()),
+                Expanded(child: header),
+                if (!review.mine && !review.hidden)
+                  PostMenu(kind: PostKind.review, postId: review.id),
               ],
             ),
             const SizedBox(height: AppSpacing.x2),
-            Text(
-              '“${review.body}”',
-              style: AppTextStyles.reading.copyWith(
-                color: AppColors.ink,
-                height: 1.6,
+            if (review.hidden)
+              _HiddenBody(text: review.body)
+            else
+              Text(
+                '“${review.body}”',
+                style: AppTextStyles.reading.copyWith(
+                  color: AppColors.ink,
+                  height: 1.6,
+                ),
               ),
-            ),
           ],
         ),
       ),
@@ -615,7 +633,20 @@ class _ChannelTab extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final messages = ref.watch(channelProvider);
+    // The server leaves blocked authors out of every read; what arrives
+    // over the socket afterwards is matched on today's author tag.
+    final blocked = ref.watch(blockedTagsProvider);
+    final messages = ref
+        .watch(channelProvider)
+        .whenData(
+          (all) => blocked.isEmpty
+              ? all
+              : [
+                  for (final m in all)
+                    if (m.authorTag == null || !blocked.contains(m.authorTag))
+                      m,
+                ],
+        );
     final duration = AppMotion.reduced(context)
         ? Duration.zero
         : AppMotion.base;
@@ -631,7 +662,7 @@ class _ChannelTab extends ConsumerWidget {
         crossAxisAlignment: CrossAxisAlignment.stretch,
         children: [
           messages.when(
-            loading: () => const InkLoadingSection(),
+            loading: () => const InkLoadingRows(rows: 4),
             error: (error, _) => Padding(
               padding: const EdgeInsets.symmetric(vertical: AppSpacing.x8),
               child: Center(
@@ -721,7 +752,21 @@ class _Message extends StatelessWidget {
           ? CrossAxisAlignment.end
           : CrossAxisAlignment.start,
       children: [
-        if (!mine) ...[author, const SizedBox(height: AppSpacing.x1)],
+        if (!mine) ...[
+          Row(
+            children: [
+              Expanded(
+                child: Align(
+                  alignment: AlignmentDirectional.centerStart,
+                  child: author,
+                ),
+              ),
+              if (!message.hidden)
+                PostMenu(kind: PostKind.message, postId: message.id),
+            ],
+          ),
+          const SizedBox(height: AppSpacing.x1),
+        ],
         ConstrainedBox(
           constraints: const BoxConstraints(maxWidth: 280),
           child: DecoratedBox(
@@ -735,14 +780,45 @@ class _Message extends StatelessWidget {
                 horizontal: AppSpacing.x3,
                 vertical: AppSpacing.x2 + 2,
               ),
-              child: Text(
-                message.body,
-                style: AppTextStyles.cardBody.copyWith(
-                  color: AppColors.ink,
-                  height: 1.45,
-                ),
-              ),
+              child: message.hidden
+                  ? _HiddenBody(text: message.body)
+                  : Text(
+                      message.body,
+                      style: AppTextStyles.cardBody.copyWith(
+                        color: AppColors.ink,
+                        height: 1.45,
+                      ),
+                    ),
             ),
+          ),
+        ),
+      ],
+    );
+  }
+}
+
+/// What stands in for a post hidden by reports or staff: the server's
+/// placeholder, set apart from what residents wrote.
+class _HiddenBody extends StatelessWidget {
+  const _HiddenBody({required this.text});
+
+  final String text;
+
+  @override
+  Widget build(BuildContext context) {
+    return Row(
+      mainAxisSize: MainAxisSize.min,
+      children: [
+        const Icon(
+          Icons.visibility_off_outlined,
+          size: 16,
+          color: AppColors.neutral600,
+        ),
+        const SizedBox(width: AppSpacing.x1 + 2),
+        Flexible(
+          child: Text(
+            text,
+            style: AppTextStyles.cardBody.copyWith(color: AppColors.neutral600),
           ),
         ),
       ],

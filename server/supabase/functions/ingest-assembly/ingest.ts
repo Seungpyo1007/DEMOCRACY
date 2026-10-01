@@ -1,5 +1,6 @@
-// 열린국회정보 ingest: members (daily), bills + plenary votes (every 6h), and a
-// by-hand backfill of an earlier term's bills (`mode=bills_backfill`).
+// 열린국회정보 ingest: members (daily), bills + plenary votes (every 6h), member portraits
+// copied into Storage (daily, `mode=portraits`), and a by-hand backfill of an earlier
+// term's bills (`mode=bills_backfill`).
 // Every run writes raw pages first, then upserts normalized rows. Idempotent.
 
 import { ASSEMBLY_SERVICES, fetchAssemblyAll, fetchAssemblyPages } from "../_shared/assembly.ts";
@@ -16,7 +17,7 @@ import {
   redactAssemblyPayload,
 } from "../_shared/normalize_assembly.ts";
 import { inList, type Postgrest } from "../_shared/postgrest.ts";
-import { SOURCES } from "../_shared/provenance.ts";
+import { isPresentableSourceUrl, SOURCES } from "../_shared/provenance.ts";
 
 export interface AssemblyIngestDeps {
   db: Postgrest;
@@ -29,6 +30,84 @@ export interface AssemblyIngestDeps {
   voteBatch?: number;
   /** Refuse to retire members when fewer than this many came back (partial response guard). */
   minMembers?: number;
+  /** Where portrait copies go: the 'portraits' Storage bucket. Needed by mode=portraits. */
+  storage?: PortraitStorage;
+  /** Portraits copied per run (keeps under the function time limit). */
+  portraitBatch?: number;
+}
+
+export interface PortraitStorage {
+  upload(path: string, bytes: Uint8Array, contentType: string): Promise<void>;
+}
+
+/** Larger than any official portrait; the bucket refuses more anyway. */
+const PORTRAIT_MAX_BYTES = 2 * 1024 * 1024;
+
+const PORTRAIT_TYPES: Record<string, string> = { "image/jpeg": "jpg", "image/png": "png" };
+
+async function sha256Hex(bytes: Uint8Array): Promise<string> {
+  const digest = await crypto.subtle.digest("SHA-256", bytes as BufferSource);
+  return [...new Uint8Array(digest)].map((b) => b.toString(16).padStart(2, "0")).join("");
+}
+
+/**
+ * Copies current members' portraits into Storage: those not copied yet, or whose Assembly
+ * URL changed (a new photo). The path carries the content hash, so a new photo never
+ * overwrites a file an app may have cached. A copy starts 'unconfirmed' and keeps
+ * whatever licence was recorded for the member before (see the portraits migration).
+ */
+export async function ingestPortraits(deps: AssemblyIngestDeps) {
+  if (!deps.storage) throw new Error("portraits: no storage configured");
+  const fetchedAt = (deps.now?.() ?? new Date()).toISOString();
+  const members = await deps.db.select<{ mona_cd: string; photo_url: string | null }>(
+    "members",
+    { select: "mona_cd,photo_url", is_current: "eq.true", photo_url: "not.is.null" },
+  );
+  const copied = await deps.db.select<{ mona_cd: string; source_url: string }>("portraits", {
+    select: "mona_cd,source_url",
+  });
+  const have = new Map(copied.map((c) => [c.mona_cd, c.source_url]));
+  const todo = members.filter((m) =>
+    m.photo_url && isPresentableSourceUrl(m.photo_url) && have.get(m.mona_cd) !== m.photo_url
+  );
+  const batch = todo.slice(0, deps.portraitBatch ?? 60);
+
+  let failed = 0;
+  const rows: object[] = [];
+  for (const m of batch) {
+    try {
+      const res = await deps.fetch(m.photo_url!);
+      const type = (res.headers.get("content-type") ?? "").split(";")[0].trim().toLowerCase();
+      const ext = PORTRAIT_TYPES[type];
+      if (!res.ok || !ext) throw new Error(`status ${res.status}, type ${type || "none"}`);
+      const bytes = new Uint8Array(await res.arrayBuffer());
+      if (bytes.length === 0 || bytes.length > PORTRAIT_MAX_BYTES) {
+        throw new Error(`size ${bytes.length}`);
+      }
+      const sha = await sha256Hex(bytes);
+      const path = `members/${m.mona_cd}-${sha.slice(0, 16)}.${ext}`;
+      await deps.storage.upload(path, bytes, type);
+      rows.push({
+        mona_cd: m.mona_cd,
+        storage_path: path,
+        source_url: m.photo_url,
+        content_type: type,
+        bytes: bytes.length,
+        sha256: sha,
+        fetched_at: fetchedAt,
+      });
+    } catch {
+      // One bad image does not stop the rest; it is tried again tomorrow.
+      failed += 1;
+    }
+  }
+  if (rows.length > 0) await deps.db.upsert("portraits", rows, "mona_cd");
+  return {
+    candidates: todo.length,
+    copied: rows.length,
+    failed,
+    remaining: todo.length - batch.length,
+  };
 }
 
 const AGE = "22";
@@ -285,6 +364,8 @@ export async function runAssemblyIngest(
       return await ingestVotes(deps);
     case "bills_votes":
       return { bills: await ingestBills(deps), votes: await ingestVotes(deps) };
+    case "portraits":
+      return await ingestPortraits(deps);
     case "bills_backfill": {
       const age = intParam(params, "age");
       if (age === undefined) throw new RangeError("bills_backfill needs age, e.g. age=21");
@@ -296,7 +377,7 @@ export async function runAssemblyIngest(
     }
     default:
       throw new RangeError(
-        `unknown mode "${mode}" (members | bills | votes | bills_votes | bills_backfill)`,
+        `unknown mode "${mode}" (members | bills | votes | bills_votes | portraits | bills_backfill)`,
       );
   }
 }
