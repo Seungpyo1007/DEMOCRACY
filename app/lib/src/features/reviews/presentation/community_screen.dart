@@ -361,8 +361,11 @@ class _ReviewTab extends ConsumerWidget {
               index: 1,
               child: DisclaimerBox(
                 text:
-                    '주소 인증 주민만 작성 가능 · 조작 방지 알고리즘 · '
-                    '혐오·허위정보 자동 필터링',
+                    // What the app actually does: residency, a fixed list
+                    // of hate terms refused, and a warning (not a block)
+                    // on claims that may be false.
+                    '주소 인증 주민만 작성 가능 · 혐오 표현은 올라가지 않음 · '
+                    '사실과 다를 수 있는 주장엔 경고',
               ),
             ),
             const SizedBox(height: AppSpacing.x2),

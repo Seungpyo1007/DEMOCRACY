@@ -2,6 +2,7 @@ import 'package:democracy/src/app/app_routes.dart';
 import 'package:democracy/src/core/account/account.dart';
 import 'package:democracy/src/core/account/auth_controller.dart';
 import 'package:democracy/src/core/account/auth_state.dart';
+import 'package:democracy/src/core/legal/legal_links.dart';
 import 'package:democracy/src/design/app_tokens.dart';
 import 'package:democracy/src/design/components/app_card.dart';
 import 'package:democracy/src/design/components/editorial.dart';
@@ -103,12 +104,22 @@ class _ConsentScreenState extends ConsumerState<ConsentScreen> {
           required: true,
           value: _terms,
           onChanged: (v) => setState(() => _terms = v),
+          trailing: TextLink(
+            label: '전문 보기',
+            small: true,
+            onTap: () => LegalLinks.open(LegalLinks.terms),
+          ),
         ),
         _ConsentRow(
           label: '개인정보 수집·이용',
           required: true,
           value: _privacy,
           onChanged: (v) => setState(() => _privacy = v),
+          trailing: TextLink(
+            label: '전문 보기',
+            small: true,
+            onTap: () => LegalLinks.open(LegalLinks.privacy),
+          ),
         ),
         _ConsentRow(
           label: '공약 이행 기록 알림',

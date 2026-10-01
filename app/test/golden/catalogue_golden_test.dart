@@ -176,7 +176,7 @@ class _Catalogue extends StatelessWidget {
             tone: DisclaimerTone.pinned,
           ),
           const SizedBox(height: AppSpacing.x2),
-          const DisclaimerBox(text: '주소 인증 주민만 작성 가능 · 조작 방지 알고리즘 적용'),
+          const DisclaimerBox(text: '주소 인증 주민만 작성 가능 · 혐오 표현은 올라가지 않음'),
           const SizedBox(height: AppSpacing.x6),
 
           const SectionLabel('액션'),
