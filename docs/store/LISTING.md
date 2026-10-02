@@ -144,31 +144,9 @@ Play 기준상 "기기 밖으로 보냈지만 즉시 처리하고 저장하지 �
   - 사용자 콘텐츠 → 기타 사용자 콘텐츠 (채팅·평가)
 - 위치: 수집 안 함 (요청 처리 후 바로 폐기)
 
-## 심사 메모 (App Store, Play 공통)
+## 심사 메모
 
-심사용 계정은 따로 안 만듦. 이메일 로그인은 비밀번호 없이 메일로 코드를 받는 방식이라 심사자가 받을 수 없고, Apple·Google 로그인은 심사자 본인 계정으로 됨. 운영자 계정(관리자 권한)은 절대 넣지 않음.
-
-App Store Connect → 앱 심사 정보 → 「로그인 필요」 체크 해제, 메모에:
-
-```
-All public records in the app can be read without signing in.
-
-Only posting (district reviews and chat) needs an account. Please use "Sign in with Apple" with your own Apple ID; no demo account is needed. After signing in, accept the terms, then verify residency by entering any address, for example:
-서울특별시 종로구 세종대로 209
-You can then post in that district (서울 종로구).
-
-User-generated content: every review and chat message has a ⋯ menu to report it or hide the author's posts. Posts with personal information are hidden as soon as they are reported; other reports are reviewed by a moderator. Hate terms are refused before posting. Contact: rush94434@gmail.com
-
-The app shows public records published by the National Assembly and the National Election Commission, each with a link to its source. It is not affiliated with any government body or political party.
-```
-
-Play Console → 앱 액세스 → 「일부 기능 제한」, 안내:
-
-```
-기록은 모두 로그인 없이 볼 수 있습니다. 글쓰기(평가·채팅)만 로그인이 필요합니다.
-심사자 본인의 Google 계정으로 「Google로 계속」을 눌러 로그인하세요. 별도 계정은 필요 없습니다.
-로그인 후 약관에 동의하고, 주소 인증에서 아무 주소나 입력하면 됩니다. 예: 서울특별시 종로구 세종대로 209
-```
+저장소에 두지 않음. 업로드 폴더의 `review-note.md`를 씀.
 
 ## 그래픽
 
