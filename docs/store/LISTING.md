@@ -146,15 +146,28 @@ Play 기준상 "기기 밖으로 보냈지만 즉시 처리하고 저장하지 �
 
 ## 심사 메모 (App Store, Play 공통)
 
+심사용 계정은 따로 안 만듦. 이메일 로그인은 비밀번호 없이 메일로 코드를 받는 방식이라 심사자가 받을 수 없고, Apple·Google 로그인은 심사자 본인 계정으로 됨. 운영자 계정(관리자 권한)은 절대 넣지 않음.
+
+App Store Connect → 앱 심사 정보 → 「로그인 필요」 체크 해제, 메모에:
+
 ```
-이 앱은 로그인 없이 모든 기록을 읽을 수 있습니다. 글쓰기(채팅·평가)만 로그인과 주민 인증이 필요합니다.
+All public records in the app can be read without signing in.
 
-심사용 계정: [이메일 로그인용 테스트 계정 — 출시 전에 만들어 넣을 것]
-주민 인증은 주소 입력으로 진행됩니다. 예: 서울특별시 종로구 세종대로 209
+Only posting (district reviews and chat) needs an account. Please use "Sign in with Apple" with your own Apple ID; no demo account is needed. After signing in, accept the terms, then verify residency by entering any address, for example:
+서울특별시 종로구 세종대로 209
+You can then post in that district (서울 종로구).
 
-사용자 생성 콘텐츠: 혐오 표현 목록에 걸리는 글은 서버와 앱 양쪽에서 거부합니다. 운영자는 문제 글을 삭제할 수 있고, 문의 이메일(rush94434@gmail.com)로 신고를 받습니다.
+User-generated content: every review and chat message has a ⋯ menu to report it or hide the author's posts. Posts with personal information are hidden as soon as they are reported; other reports are reviewed by a moderator. Hate terms are refused before posting. Contact: rush94434@gmail.com
 
-정치 관련 자료는 국회, 중앙선거관리위원회 등이 공개한 원문을 그대로 보여 주며, 각 수치에 원문 링크가 있습니다. 앱은 정부 기관이나 정당과 관련이 없습니다.
+The app shows public records published by the National Assembly and the National Election Commission, each with a link to its source. It is not affiliated with any government body or political party.
+```
+
+Play Console → 앱 액세스 → 「일부 기능 제한」, 안내:
+
+```
+기록은 모두 로그인 없이 볼 수 있습니다. 글쓰기(평가·채팅)만 로그인이 필요합니다.
+심사자 본인의 Google 계정으로 「Google로 계속」을 눌러 로그인하세요. 별도 계정은 필요 없습니다.
+로그인 후 약관에 동의하고, 주소 인증에서 아무 주소나 입력하면 됩니다. 예: 서울특별시 종로구 세종대로 209
 ```
 
 ## 그래픽
