@@ -7,4 +7,4 @@ const appVersion = '0.2.2';
 
 /// The build number after `+` in pubspec.yaml: Android's versionCode and iOS's
 /// CFBundleVersion. Play requires it to rise with every upload.
-const appBuild = 4;
+const appBuild = 5;
