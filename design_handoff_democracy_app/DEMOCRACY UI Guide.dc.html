@@ -74,7 +74,7 @@
       <div style="display:flex;flex-direction:column;gap:20px">
         <h3 style="margin:0;font-family:var(--font-heading);font-weight:700;font-size:18px">정치적 중립 UI 가이드라인 (필수 규칙)</h3>
         <div style="display:flex;flex-direction:column;gap:0;border:2px solid var(--color-divider);background:#fff">
-          <div style="padding:14px 16px;border-bottom:1px solid var(--color-neutral-300);font-size:13px;line-height:1.6"><b>N-1. 당색 금지.</b> 정당은 색이 아닌 <b>회색 아웃라인 태그 + 텍스트</b>로만 표기. 빨강·파랑·초록 등 당 연상 색을 데이터 색으로 쓰지 않는다.</div>
+          <div style="padding:14px 16px;border-bottom:1px solid var(--color-neutral-300);font-size:13px;line-height:1.6"><b>N-1. 당색 표기 (2026-10-07 개정, 원래는 당색 금지).</b> 정당은 <b>공식 색 태그 + 정당 이름 텍스트</b>로 표기하고 이름은 늘 같이 쓴다. 여야는 「여」「야」 글자. 색이 확인 안 된 정당은 회색 아웃라인. 지도·막대 같은 데이터 색에는 당색을 쓰지 않는다.</div>
           <div style="padding:14px 16px;border-bottom:1px solid var(--color-neutral-300);font-size:13px;line-height:1.6"><b>N-2. 동일 규격 카드.</b> 모든 후보 카드는 크기·사진 규격·정보 순서 동일. 정렬 기본값은 ‘기호순’이 아닌 <b>가나다순</b>, 정렬 기준 항상 노출.</div>
           <div style="padding:14px 16px;border-bottom:1px solid var(--color-neutral-300);font-size:13px;line-height:1.6"><b>N-3. 흑백 인물 사진.</b> 프로필 사진은 grayscale 처리 — 색으로 인한 호감 편향 제거, 시스템 미학과 일치.</div>
           <div style="padding:14px 16px;border-bottom:1px solid var(--color-neutral-300);font-size:13px;line-height:1.6"><b>N-4. 출처 우선.</b> 모든 수치 옆에 출처 뱃지(예: 열린국회정보 API·선관위) + 원문 URL. 출처 없는 수치는 렌더하지 않는다.</div>
@@ -283,7 +283,7 @@
     </div>
     <div style="flex:1;min-width:0;display:flex;flex-direction:column;gap:18px">
       <h2 style="margin:0;font-family:var(--font-heading);font-weight:800;font-size:13px;letter-spacing:.18em"><span style="color:var(--color-accent)">03</span>&nbsp; 지역구 의원 대시보드 (홈)</h2>
-      <div style="font-size:13px;line-height:1.7;max-width:640px">앱의 홈. 상단 지역구 헤더는 고정(SliverAppBar pinned), 현직 의원 카드 → 후보 가로 스크롤 순. 중립 규칙 N-1~N-4 적용: 당은 회색 태그, 카드 규격 동일, 가나다순, 출처 상시 표기.</div>
+      <div style="font-size:13px;line-height:1.7;max-width:640px">앱의 홈. 상단 지역구 헤더는 고정(SliverAppBar pinned), 현직 의원 카드 → 후보 가로 스크롤 순. 중립 규칙 N-1~N-4 적용: 당은 공식 색 태그 + 이름, 카드 규격 동일, 가나다순, 출처 상시 표기.</div>
       <div style="border:1px solid var(--color-divider);background:#fff;padding:18px;font-size:12px;line-height:1.9;font-family:ui-monospace,Menlo,monospace;max-width:640px">CustomScrollView<br>├ SliverAppBar (pinned, 지역구 selector + 인증 뱃지)<br>├ SliverToBoxAdapter → 현직 의원 Card<br>│&nbsp;&nbsp;└ TabBar(공약·법안·출석·표결) + AnimatedSwitcher 탭 콘텐츠<br>├ SliverToBoxAdapter → SizedBox(h:190) → ListView(horizontal) 후보 카드[]<br>└ bottomNavigationBar: NavigationBar 5탭 (radius 0, indicator 없음·상단 2px 보더)</div>
       <div style="font-size:12px;line-height:1.8;color:var(--color-neutral-700);max-width:640px"><b>인터랙션:</b> 탭 전환은 좌우 스와이프 병행(TabBarView) · 공약 행 탭 → 트래커 상세로 딥링크 · 출석/표결 탭에는 fl_chart 미니 스파크라인 · 출처 뱃지 탭 → 원문 URL 외부 브라우저. Pull-to-refresh로 API 재조회.</div>
     </div>

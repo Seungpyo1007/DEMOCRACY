@@ -129,7 +129,7 @@ cd app && TZ=UTC flutter test --tags golden --update-goldens
 `CLAUDE.md`(저장소에 포함되지 않음)와 `design_handoff_democracy_app/README.md`가 원본이다. 코드에서 타입으로 강제되는 것들:
 
 - 외부 수치는 `SourcedValue<T>`로만 표현한다. 출처와 취득 시각 없이는 파싱이 거부한다
-- 정당은 `PartyRef`와 `PartyTag`로만 표시한다. 색을 넘길 인자가 없다
+- 정당은 `PartyRef`와 `PartyTag`로만 표시한다. 색은 서버가 출처와 함께 내려준 정당 공식 색만 쓰고, 정당 이름 글자가 항상 같이 나간다. 여당·야당은 「여」「야」 글자로 표시한다
 - 인물 사진은 `GrayscalePortrait`를 쓴다. 필터가 위젯에 내장돼 있다
 - 공약 상태는 `PledgeStatusChip`을 쓴다. 색·아이콘·텍스트가 항상 함께 나간다
 - 후보 정렬은 `DistrictProfile.sortedByName`이 담당하고, 화면은 `sortLabel`을 표시한다
