@@ -23,6 +23,10 @@ dependencies:
   kakao_flutter_sdk_user: ^2.0.1
   liquid_glass_widgets: ^0.29.5
   local_auth: ^3.0.2
+  # The androidx graphics-shapes port (RoundedPolygon, Morph, the Material
+  # shape set) the Android loading indicator morphs through. Pinned: the
+  # indicator's look is these exact polygons.
+  material_new_shapes: 1.0.0
   native_liquid_glass: ^0.2.14
   path_provider: ^2.1.6
   realtime_client: ^2.13.0
