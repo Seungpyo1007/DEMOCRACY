@@ -28,6 +28,7 @@ class ScreenHeader extends StatelessWidget {
     this.kicker,
     this.note,
     this.trailing,
+    this.titleAction,
     this.onBack,
     this.backLabel,
     super.key,
@@ -35,6 +36,10 @@ class ScreenHeader extends StatelessWidget {
 
   final String title;
   final String? kicker;
+
+  /// Set right after the title's last word: a [TitleLink] to the page the
+  /// title is the subject of.
+  final Widget? titleAction;
 
   /// A handwritten line under the title. Descriptive only (N-5).
   final String? note;
@@ -96,28 +101,48 @@ class ScreenHeader extends StatelessWidget {
       children: [
         ?back,
         if (kicker != null)
-          Text(
-            kicker!,
-            style: surface.isGlass
-                ? AppTextStyles.sectionLabel.copyWith(
-                    color: AppColors.neutral600,
-                  )
-                : AppTextStyles.statLabel.copyWith(
-                    color: AppColors.neutral700,
-                    fontWeight: FontWeight.w500,
-                  ),
+          Row(
+            children: [
+              Expanded(
+                child: Text(
+                  kicker!,
+                  style: surface.isGlass
+                      ? AppTextStyles.sectionLabel.copyWith(
+                          color: AppColors.neutral600,
+                        )
+                      : AppTextStyles.statLabel.copyWith(
+                          color: AppColors.neutral700,
+                          fontWeight: FontWeight.w500,
+                        ),
+                ),
+              ),
+              // With a title action the title row is full, so the badge
+              // moves up beside the kicker -- where Android always sets it.
+              if (titleAction != null) ?trailing,
+            ],
           ),
         const SizedBox(height: AppSpacing.x1),
         Row(
           crossAxisAlignment: CrossAxisAlignment.center,
           children: [
             Expanded(
-              child: Semantics(
-                header: true,
-                child: Text(title, style: titleStyle),
+              child: Row(
+                children: [
+                  Flexible(
+                    child: Semantics(
+                      header: true,
+                      child: Text(title, style: titleStyle),
+                    ),
+                  ),
+                  if (titleAction != null) ...[
+                    const SizedBox(width: AppSpacing.x2),
+                    titleAction!,
+                  ],
+                ],
               ),
             ),
-            if (trailing != null) ...[
+            if (trailing != null &&
+                (titleAction == null || kicker == null)) ...[
               const SizedBox(width: AppSpacing.x3),
               trailing!,
             ],
@@ -173,6 +198,7 @@ class EditorialScrollView extends StatelessWidget {
     this.kicker,
     this.note,
     this.trailing,
+    this.titleAction,
     this.actions = const [],
     this.onBack,
     this.controller,
@@ -209,6 +235,11 @@ class EditorialScrollView extends StatelessWidget {
 
   /// Beside the kicker: a verification badge and the like.
   final Widget? trailing;
+
+  /// Right after the title, on both platforms: a [TitleLink] to the page
+  /// the title is the subject of. Android sets it in the app bar's title, so
+  /// it stays beside the name when the bar collapses.
+  final Widget? titleAction;
   final List<Widget> actions;
   final VoidCallback? onBack;
   final ScrollController? controller;
@@ -264,7 +295,18 @@ class EditorialScrollView extends StatelessWidget {
                       onPressed: onBack,
                       icon: const Icon(Icons.arrow_back),
                     ),
-              title: Text(title),
+              title: titleAction == null
+                  ? Text(title)
+                  : Row(
+                      mainAxisSize: MainAxisSize.min,
+                      children: [
+                        Flexible(
+                          child: Text(title, overflow: TextOverflow.ellipsis),
+                        ),
+                        const SizedBox(width: AppSpacing.x2),
+                        titleAction!,
+                      ],
+                    ),
               actions: [
                 ...actions,
                 const SizedBox(width: AppSpacing.x1),
@@ -331,6 +373,7 @@ class EditorialScrollView extends StatelessWidget {
                       kicker: kicker,
                       note: note,
                       trailing: trailing,
+                      titleAction: titleAction,
                     ),
                   ),
                 ),
@@ -515,6 +558,80 @@ class TextLink extends StatelessWidget {
             widthFactor: 1,
             alignment: Alignment.centerRight,
             child: Text(label, style: style),
+          ),
+        ),
+      ),
+    );
+  }
+}
+
+/// A compact link set beside a page title: `공약 ›` next to `서울 관악구 갑`.
+///
+/// A tonal pill (the surface fill, ink text and a chevron) rather than an
+/// outline: the outlined pills in a header are states -- 주민 인증됨,
+/// 읽기 전용 -- and this one goes somewhere. The chevron says so without
+/// colour. The pill is drawn small to sit with the title; the touch target
+/// around it is the full 44dp.
+class TitleLink extends StatelessWidget {
+  const TitleLink({required this.label, required this.onTap, super.key});
+
+  final String label;
+  final VoidCallback? onTap;
+
+  @override
+  Widget build(BuildContext context) {
+    final surface = Theme.of(context).extension<AppSurfaceTokens>()!;
+    final radius = BorderRadius.circular(
+      surface.isGlass ? 999 : AppRadii.androidChip,
+    );
+
+    return Semantics(
+      button: true,
+      label: '$label 보기',
+      excludeSemantics: true,
+      child: GestureDetector(
+        behavior: HitTestBehavior.opaque,
+        onTap: onTap,
+        child: ConstrainedBox(
+          constraints: const BoxConstraints(minHeight: 44, minWidth: 44),
+          child: Center(
+            widthFactor: 1,
+            child: PressScale(
+              child: DecoratedBox(
+                decoration: BoxDecoration(
+                  color: AppColors.surface,
+                  borderRadius: radius,
+                ),
+                child: Padding(
+                  padding: const EdgeInsetsDirectional.fromSTEB(
+                    AppSpacing.x2 + 2,
+                    4,
+                    AppSpacing.x1 + 2,
+                    4,
+                  ),
+                  child: Row(
+                    mainAxisSize: MainAxisSize.min,
+                    children: [
+                      // Replaced, not merged: in Android's app bar the
+                      // title's serif would otherwise carry into the pill,
+                      // which is set like the other header chips.
+                      DefaultTextStyle(
+                        style: Theme.of(context).textTheme.bodyMedium!.merge(
+                          AppTextStyles.badge.copyWith(color: AppColors.ink),
+                        ),
+                        child: Text(label),
+                      ),
+                      const SizedBox(width: 2),
+                      const Icon(
+                        Icons.chevron_right,
+                        size: 16,
+                        color: AppColors.ink,
+                      ),
+                    ],
+                  ),
+                ),
+              ),
+            ),
           ),
         ),
       ),

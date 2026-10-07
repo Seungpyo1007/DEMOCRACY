@@ -1,6 +1,7 @@
 import 'package:democracy/src/design/app_theme.dart';
 import 'package:democracy/src/features/shell/presentation/app_shell.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:go_router/go_router.dart';
 
@@ -13,7 +14,7 @@ import 'package:go_router/go_router.dart';
 /// the day that screen's content changes height, which is not what is under
 /// test here.
 void main() {
-  const branchPrefixes = ['A', 'B', 'C', 'D', 'E', 'F'];
+  const branchPrefixes = ['A', 'B', 'C', 'D'];
   const rowsPerBranch = 40;
 
   Widget branchList(String prefix) {
@@ -27,8 +28,8 @@ void main() {
     );
   }
 
-  /// A branch with nothing scrollable, standing in for the history, tracker, AI and
-  /// election placeholders.
+  /// A branch with nothing scrollable, standing in for a tab whose page is
+  /// shorter than the screen.
   Widget staticBranch(String prefix) {
     return Scaffold(body: Center(child: Text('${prefix}static')));
   }
@@ -66,8 +67,14 @@ void main() {
     final router = buildRouter(staticBranches: staticBranches);
     addTearDown(router.dispose);
 
+    // The shell reads which action a page lends the bar from a provider.
     await tester.pumpWidget(
-      MaterialApp.router(theme: AppTheme.light(platform), routerConfig: router),
+      ProviderScope(
+        child: MaterialApp.router(
+          theme: AppTheme.light(platform),
+          routerConfig: router,
+        ),
+      ),
     );
     await tester.pumpAndSettle();
   }
@@ -77,7 +84,7 @@ void main() {
     await tester.pumpAndSettle();
   }
 
-  // `docs/INITIAL_PLAN.md` requires "5탭 전환과 각 탭 상태 보존". Switching was
+  // `docs/INITIAL_PLAN.md` requires "탭 전환과 각 탭 상태 보존". Switching was
   // already covered; the preserved half was not, because no screen was tall
   // enough to have an offset worth preserving.
   for (final platform in [TargetPlatform.iOS, TargetPlatform.android]) {
@@ -96,7 +103,7 @@ void main() {
 
       // Second branch, scrolled to a different offset so a shared position
       // would show up as one of them landing on the other's row.
-      await tapDestination(tester, Icons.menu_book_outlined);
+      await tapDestination(tester, Icons.auto_awesome_outlined);
       expect(find.text('B0'), findsOneWidget);
       await tester.drag(
         find.byKey(const ValueKey('list-B')),
@@ -111,7 +118,7 @@ void main() {
         reason: 'returning to a branch must not reset it to the top',
       );
 
-      await tapDestination(tester, Icons.menu_book_outlined);
+      await tapDestination(tester, Icons.auto_awesome_outlined);
       expect(find.text('B0'), findsNothing);
       expect(find.text('B4'), findsOneWidget);
     });
@@ -181,7 +188,7 @@ void main() {
     await tester.pumpAndSettle();
     expect(find.text('지역구'), findsNothing);
 
-    await tapDestination(tester, Icons.menu_book_outlined);
+    await tapDestination(tester, Icons.auto_awesome_outlined);
 
     expect(find.text('Bstatic'), findsOneWidget);
     expect(
@@ -204,7 +211,7 @@ void main() {
     );
     await tester.pumpAndSettle();
 
-    await tapDestination(tester, Icons.menu_book_outlined);
+    await tapDestination(tester, Icons.auto_awesome_outlined);
     expect(find.text('지역구'), findsOneWidget);
 
     await tapDestination(tester, Icons.location_on_outlined);

@@ -8,9 +8,10 @@ enum TabSlot { tracker, community }
 
 /// What the round button beside the tab bar does while a tab is showing.
 ///
-/// Elsewhere it is the 개표 destination. On a tab that has one primary
-/// action -- report a pledge, write a review -- it becomes that action, so
-/// the page does not float a second button of its own.
+/// With four tabs every destination fits in the bar, so the round button is
+/// only there while a page lends it one -- the pledge tracker (pushed on the
+/// home tab) its report, the community its review. The page then does not
+/// float a second button of its own.
 @immutable
 class TabAccessory {
   const TabAccessory({

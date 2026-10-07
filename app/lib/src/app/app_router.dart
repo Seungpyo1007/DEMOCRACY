@@ -269,42 +269,38 @@ final appRouterProvider = Provider<GoRouter>((ref) {
                   key: state.pageKey,
                   child: const DistrictHomeScreen(),
                 ),
-              ),
-            ],
-          ),
-          StatefulShellBranch(
-            observers: [CNTabBarRouteObserver()],
-            routes: [
-              GoRoute(
-                path: AppRoutes.history,
-                pageBuilder: (context, state) => PlatformAdaptiveRoute.page(
-                  context: context,
-                  key: state.pageKey,
-                  child: const HistoryScreen(),
-                ),
-              ),
-            ],
-          ),
-          StatefulShellBranch(
-            observers: [CNTabBarRouteObserver()],
-            routes: [
-              GoRoute(
-                path: AppRoutes.tracker,
-                pageBuilder: (context, state) => PlatformAdaptiveRoute.page(
-                  context: context,
-                  key: state.pageKey,
-                  child: const PledgeTrackerScreen(),
-                ),
+                // Children of the home, not branches: the tab bar keeps four
+                // destinations, and both pages are opened from the home and
+                // pop back to it.
                 routes: [
                   GoRoute(
-                    path: AppRoutes.pledgeDetailSegment,
+                    path: AppRoutes.historySegment,
                     pageBuilder: (context, state) => PlatformAdaptiveRoute.page(
                       context: context,
                       key: state.pageKey,
-                      child: PledgeDetailScreen(
-                        pledgeId: state.pathParameters['id'] ?? '',
-                      ),
+                      child: const HistoryScreen(),
                     ),
+                  ),
+                  GoRoute(
+                    path: AppRoutes.trackerSegment,
+                    pageBuilder: (context, state) => PlatformAdaptiveRoute.page(
+                      context: context,
+                      key: state.pageKey,
+                      child: const PledgeTrackerScreen(),
+                    ),
+                    routes: [
+                      GoRoute(
+                        path: AppRoutes.pledgeDetailSegment,
+                        pageBuilder: (context, state) =>
+                            PlatformAdaptiveRoute.page(
+                              context: context,
+                              key: state.pageKey,
+                              child: PledgeDetailScreen(
+                                pledgeId: state.pathParameters['id'] ?? '',
+                              ),
+                            ),
+                      ),
+                    ],
                   ),
                 ],
               ),
