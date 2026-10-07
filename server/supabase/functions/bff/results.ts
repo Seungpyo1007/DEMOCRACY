@@ -11,17 +11,21 @@ import { CURRENT_DISTRICT_SG_ID } from "../_shared/district_names.ts";
 import { generalElectionTerm } from "../_shared/normalize_nec.ts";
 import { sourceMeta } from "../_shared/provenance.ts";
 import type { CountRec, DistrictRec, ReadStore } from "./store.ts";
+import { loadPartyBook, PartyBook, type PartyInfo, sgIdDate } from "./parties.ts";
 
 const round1 = (x: number) => Math.round(x * 10) / 10;
 
 interface Tally {
   name: string;
   party: string;
+  /** Colour and 여/야 as of the election day; next to `party`, which stays a plain name. */
+  partyInfo: PartyInfo;
   share: number;
 }
 
 /** Candidates as stored, each with its share of the valid votes; highest first. */
-function tallies(count: CountRec): Tally[] {
+function tallies(count: CountRec, book: PartyBook = PartyBook.empty): Tally[] {
+  const onDate = sgIdDate(count.sg_id);
   if (!Array.isArray(count.candidates) || !(count.valid_votes > 0)) return [];
   return (count.candidates as { name?: unknown; party?: unknown; votes?: unknown }[])
     .filter((c): c is { name: string; party: unknown; votes: number } =>
@@ -29,16 +33,24 @@ function tallies(count: CountRec): Tally[] {
       typeof c.votes === "number" && Number.isFinite(c.votes) && c.votes >= 0
     )
     .sort((a, b) => b.votes - a.votes)
-    .map((c) => ({
-      name: c.name,
-      party: typeof c.party === "string" && c.party.trim() !== "" ? c.party : "무소속",
-      share: round1((c.votes / count.valid_votes) * 100),
-    }));
+    .map((c) => {
+      const partyInfo = book.info(typeof c.party === "string" ? c.party : null, onDate);
+      return {
+        name: c.name,
+        party: partyInfo.name,
+        partyInfo,
+        share: round1((c.votes / count.valid_votes) * 100),
+      };
+    });
 }
 
-function districtCountJson(district: DistrictRec, count: CountRec | undefined) {
+function districtCountJson(
+  district: DistrictRec,
+  count: CountRec | undefined,
+  book: PartyBook,
+) {
   const source = count ? sourceMeta(count.source_url, count.fetched_at) : null;
-  const rows = count ? tallies(count) : [];
+  const rows = count ? tallies(count, book) : [];
   if (!count || !source || rows.length === 0) return null;
   return {
     districtId: district.id,
@@ -73,11 +85,12 @@ export async function buildResults(store: ReadStore, id: string) {
   const district = await store.district(id);
   if (!district) throw new ApiError("not_found", "Unknown district.");
 
-  const [districts, counts, history, elections] = await Promise.all([
+  const [districts, counts, history, elections, book] = await Promise.all([
     store.districtsOf(sgId),
     store.countsOf(sgId),
     store.countHistory(district),
     store.generalElections(),
+    loadPartyBook(store),
   ]);
 
   // Every district the map can draw. 22대 rows carry district_id; name_key
@@ -85,7 +98,7 @@ export async function buildResults(store: ReadStore, id: string) {
   const byId = new Map(counts.filter((c) => c.district_id).map((c) => [c.district_id, c]));
   const byKey = new Map(counts.map((c) => [c.name_key, c]));
   const served = districts
-    .map((d) => districtCountJson(d, byId.get(d.id) ?? byKey.get(d.name_key)))
+    .map((d) => districtCountJson(d, byId.get(d.id) ?? byKey.get(d.name_key), book))
     .filter((d) => d !== null);
   if (!served.some((d) => d.districtId === id)) {
     throw new ApiError("not_found", "No sourced count is on record for this district.");

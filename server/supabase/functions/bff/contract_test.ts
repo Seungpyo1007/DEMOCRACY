@@ -286,10 +286,12 @@ Deno.test("results: matches the RawElectionResults contract", async () => {
   );
   const mapo = r.districts.find((d: { districtId: string }) => d.districtId === MAPO_B);
   assertEquals(mapo.countedShare, 100);
+  // No parties on record in the pipeline fixture: names as before, with no colour and no side.
+  const none = (name: string) => ({ name, color: null, side: null });
   assertEquals(mapo.tallies, [
-    { name: "가상 의원", party: "가나당", share: 45.2 },
-    { name: "가상 후보 나", party: "나다당", share: 40.6 },
-    { name: "가상 후보 다", party: "무소속", share: 14.2 },
+    { name: "가상 의원", party: "가나당", partyInfo: none("가나당"), share: 45.2 },
+    { name: "가상 후보 나", party: "나다당", partyInfo: none("나다당"), share: 40.6 },
+    { name: "가상 후보 다", party: "무소속", partyInfo: none("무소속"), share: 14.2 },
   ]);
   assertEquals(mapo.source.sourceUrl, "https://www.data.go.kr/data/15000900/openapi.do");
   // The winner's share per election, from the counts: the same line the

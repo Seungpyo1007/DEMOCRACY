@@ -23,6 +23,7 @@ import type {
   PledgeRec,
   ReadStore,
 } from "./store.ts";
+import { loadPartyBook, type PartyBook, sgIdDate } from "./parties.ts";
 
 export const CURRENT_AGE = 22;
 /** First day of the 22대 국회 term; 출석률 is computed from here. */
@@ -172,7 +173,16 @@ export async function buildPledges(store: ReadStore, id: string) {
 
 // ------------------------------------------------------------------ profile
 
-function candidateJson(c: CandidateRec) {
+/**
+ * A person's party as the payload carries it: the `party` name every app version reads,
+ * and `partyInfo` beside it (colour, and 여/야 as of `onDate`) for the versions that know it.
+ */
+function partyFields(book: PartyBook, party: string | null, onDate: string | null) {
+  const partyInfo = book.info(party, onDate);
+  return { party: partyInfo.name, partyInfo };
+}
+
+function candidateJson(c: CandidateRec, book: PartyBook) {
   if (!sourceMeta(c.source_url, c.fetched_at)) return null;
   const summary = c.kind === "preliminary"
     ? (c.career1 ? `예비후보 · ${c.career1}` : "예비후보")
@@ -180,19 +190,20 @@ function candidateJson(c: CandidateRec) {
   return {
     id: necPersonId(c.sg_id, c.huboid),
     name: c.name,
-    party: c.party ?? "무소속",
+    // A candidate is placed as of the election they stand in.
+    ...partyFields(book, c.party, sgIdDate(c.sg_id)),
     summary,
     stats: [] as unknown[],
   };
 }
 
 /** Registered candidates of the upcoming election; finals win over preliminaries. */
-function pickCandidates(rows: CandidateRec[]) {
+function pickCandidates(rows: CandidateRec[], book: PartyBook) {
   const standing = rows.filter((c) => c.status === null || c.status === "등록");
   const finals = standing.filter((c) => c.kind === "final");
   const chosen = finals.length > 0 ? finals : standing;
   return chosen
-    .map(candidateJson)
+    .map((c) => candidateJson(c, book))
     .filter((c) => c !== null)
     .sort((a, b) => a.name.localeCompare(b.name, "ko"));
 }
@@ -202,29 +213,34 @@ export async function buildProfile(store: ReadStore, id: string, now: Date) {
   if (seat.kind === "unknown") {
     throw new ApiError("not_found", "No sourced incumbent is on record for this district.");
   }
+  const today = kstToday(now);
   if (seat.kind === "vacant") {
     // The seat is empty; candidates for a coming election may still be registered.
-    const candidates = await store.upcomingCandidates(district, kstToday(now));
+    const [candidates, book] = await Promise.all([
+      store.upcomingCandidates(district, today),
+      loadPartyBook(store),
+    ]);
     return {
       district: { id: district.id, displayName: district.display_name },
       source: seat.source,
       incumbent: null,
       vacant: true,
-      candidates: pickCandidates(candidates),
+      candidates: pickCandidates(candidates, book),
     };
   }
   const { member, source: memberSource } = seat;
   const mona = member.mona_cd;
 
-  const [attendanceTotal, billCount, bills, attendance, votes, pledges, candidates] = await Promise
-    .all([
+  const [attendanceTotal, billCount, bills, attendance, votes, pledges, candidates, book] =
+    await Promise.all([
       store.attendanceSince(mona, TERM_START),
       store.billCount(mona, CURRENT_AGE),
       store.recentBills(mona, CURRENT_AGE, RECORD_BILLS),
       store.monthlyAttendance(mona, SERIES_MONTHS),
       store.monthlyVoteParticipation(mona, SERIES_MONTHS),
       curatedPledges(store, id),
-      store.upcomingCandidates(district, kstToday(now)),
+      store.upcomingCandidates(district, today),
+      loadPartyBook(store),
     ]);
 
   const stats: { label: string; unit: string; value: SourcedNumber }[] = [];
@@ -274,19 +290,20 @@ export async function buildProfile(store: ReadStore, id: string, now: Date) {
     incumbent: {
       id: memberId(mona),
       name: member.name,
-      party: member.party ?? "무소속",
+      // A sitting member is placed as of today.
+      ...partyFields(book, member.party, today),
       summary: member.reele_gbn ?? "",
       ...portraitFields(member),
       stats,
       ...(record ? { record } : {}),
     },
-    candidates: pickCandidates(candidates),
+    candidates: pickCandidates(candidates, book),
   };
 }
 
 // ------------------------------------------------------------------ history
 
-export async function buildHistory(store: ReadStore, id: string) {
+export async function buildHistory(store: ReadStore, id: string, now: Date) {
   // The place and its elections do not depend on who holds the seat; a vacant
   // or unplaced seat changes only the legislator block.
   const { district, seat } = await loadDistrictAndSeat(store, id);
@@ -294,12 +311,13 @@ export async function buildHistory(store: ReadStore, id: string) {
   const incumbentId = member ? memberId(member.mona_cd) : null;
   const districtSource = sourceMeta(district.source_url, district.fetched_at);
 
-  const [elections, results, region, bills, billCount] = await Promise.all([
+  const [elections, results, region, bills, billCount, book] = await Promise.all([
     store.generalElections(),
     store.resultsFor(district),
     store.regionTimeline(id),
     member ? store.recentBills(member.mona_cd, CURRENT_AGE, CHRONICLE_BILLS) : [],
     member ? store.billCount(member.mona_cd, CURRENT_AGE) : null,
+    loadPartyBook(store),
   ]);
 
   // Elections: one row per general election with a sourced winner here, plus
@@ -331,7 +349,8 @@ export async function buildHistory(store: ReadStore, id: string) {
       winner: {
         id: isIncumbent ? incumbentId : necPersonId(w.sg_id, w.huboid),
         name: w.name,
-        party,
+        // As of that election day: who was 여당 then, not now.
+        ...partyFields(book, w.party, e.vote_date ?? sgIdDate(e.sg_id)),
       },
       share: w.share,
     });
@@ -375,7 +394,7 @@ export async function buildHistory(store: ReadStore, id: string) {
     region: regionBlock,
     elections: { source: electionsSource, basis: "득표율은 당선자 기준", rows },
     legislator: seat.kind === "held"
-      ? legislatorBlock(seat.member, seat.source, wins, bills, billCount)
+      ? legislatorBlock(seat.member, seat.source, wins, bills, billCount, book, kstToday(now))
       : seat.kind === "vacant"
       ? { vacant: true, source: seat.source }
       : null,
@@ -388,6 +407,8 @@ function legislatorBlock(
   wins: { year: number; term: number; party: string; share: number }[],
   bills: BillRec[],
   billCount: { count: number; fetched_at: string | null } | null,
+  book: PartyBook,
+  today: string,
 ) {
   const billsSource = sourceMeta(SOURCES.assemblyBills.url, billCount?.fetched_at);
   const events = [
@@ -411,7 +432,7 @@ function legislatorBlock(
     incumbent: {
       id: memberId(member.mona_cd),
       name: member.name,
-      party: member.party ?? "무소속",
+      ...partyFields(book, member.party, today),
       summary: member.reele_gbn ?? "",
       ...portraitFields(member),
     },

@@ -47,6 +47,26 @@ function series(v: unknown, field: string, errs: string[]) {
   source(v.source, field, errs);
 }
 
+/**
+ * PartyRef.fromJson: `partyInfo` is optional and read defensively (an app without it reads
+ * `party` alone), but when sent it must be well formed and name the same party as `party`.
+ */
+function partyInfo(holder: J, field: string, errs: string[]) {
+  const p = holder.partyInfo;
+  if (p === undefined || p === null) return;
+  if (!isMap(p)) return errs.push(`${field}.partyInfo: not an object`);
+  if (!nonEmpty(p.name)) errs.push(`${field}.partyInfo.name: required`);
+  if (typeof holder.party === "string" && p.name !== holder.party) {
+    errs.push(`${field}.partyInfo.name: must match party`);
+  }
+  if (p.color !== null && !(typeof p.color === "string" && /^#[0-9A-F]{6}$/.test(p.color))) {
+    errs.push(`${field}.partyInfo.color: #RRGGBB or null`);
+  }
+  if (p.side !== null && p.side !== "ruling" && p.side !== "opposition") {
+    errs.push(`${field}.partyInfo.side: ruling, opposition or null`);
+  }
+}
+
 function politician(v: unknown, field: string, errs: string[]) {
   if (!isMap(v)) return errs.push(`${field}: not an object`);
   if (typeof v.id !== "string" || typeof v.name !== "string") {
@@ -57,6 +77,7 @@ function politician(v: unknown, field: string, errs: string[]) {
       errs.push(`${field}.${k}: must be a string`);
     }
   }
+  partyInfo(v, field, errs);
   if (Array.isArray(v.stats)) {
     v.stats.forEach((s, i) => {
       if (!isMap(s) || !nonEmpty(s.label)) return errs.push(`${field}.stats[${i}]: label required`);
@@ -138,8 +159,9 @@ export function validateHistoryRecord(json: unknown): string[] {
       if (r.ongoing === true) return;
       const w = r.winner;
       if (!isMap(w) || !nonEmpty(w.name) || typeof r.share !== "number") {
-        errs.push(`elections.rows[${i}]: decided row needs winner and share`);
+        return errs.push(`elections.rows[${i}]: decided row needs winner and share`);
       }
+      partyInfo(w, `elections.rows[${i}].winner`, errs);
     });
     source(elections.source, "elections", errs);
   }
@@ -157,6 +179,8 @@ export function validateHistoryRecord(json: unknown): string[] {
     const inc = leg.incumbent;
     if (!isMap(inc) || typeof inc.id !== "string" || typeof inc.name !== "string") {
       errs.push("legislator.incumbent: id and name");
+    } else {
+      partyInfo(inc, "legislator.incumbent", errs);
     }
     (Array.isArray(leg.events) ? leg.events : []).forEach((e, i) => {
       if (!isMap(e) || !nonEmpty(e.mark) || !nonEmpty(e.title)) {
@@ -362,6 +386,7 @@ export function validateElectionResults(json: unknown): string[] {
       if (t.party !== undefined && t.party !== null && typeof t.party !== "string") {
         errs.push(`${f}.tallies[${k}].party: must be a string`);
       }
+      partyInfo(t, `${f}.tallies[${k}]`, errs);
     });
     source(d.source, f, errs);
   });

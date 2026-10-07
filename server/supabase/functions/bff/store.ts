@@ -5,6 +5,7 @@
 import { inList, type Postgrest } from "../_shared/postgrest.ts";
 import { kstYearMonth } from "../_shared/dates.ts";
 import { latest } from "../_shared/provenance.ts";
+import type { PartyRec, RulingPeriodRec } from "./parties.ts";
 
 interface Sourced {
   source_url: string | null;
@@ -255,6 +256,8 @@ export interface ReadStore {
   pledgeBoard(districtId: string): Promise<{ board: PledgeBoardRec; pledges: PledgeRec[] } | null>;
   areasForSigungu(sgId: string, sigunguCodes: string[]): Promise<AreaRec[]>;
   bridgeFor(bjdCodes: string[]): Promise<BridgeRec[]>;
+  /** Every party on record and every ruling period; both are small curated tables. */
+  partyBook(): Promise<{ parties: PartyRec[]; periods: RulingPeriodRec[] }>;
 }
 
 // ---------------------------------------------------------------- memory
@@ -277,6 +280,8 @@ export interface MemoryTables {
   areas: AreaRec[];
   bridge: BridgeRec[];
   portraits: PortraitRec[];
+  parties: PartyRec[];
+  rulingPeriods: RulingPeriodRec[];
 }
 
 export function emptyTables(): MemoryTables {
@@ -298,6 +303,8 @@ export function emptyTables(): MemoryTables {
     areas: [],
     bridge: [],
     portraits: [],
+    parties: [],
+    rulingPeriods: [],
   };
 }
 
@@ -481,6 +488,9 @@ export class MemoryStore implements ReadStore {
   }
   bridgeFor(bjdCodes: string[]) {
     return Promise.resolve(this.t.bridge.filter((b) => bjdCodes.includes(b.bjd_code)));
+  }
+  partyBook() {
+    return Promise.resolve({ parties: this.t.parties, periods: this.t.rulingPeriods });
   }
 }
 
@@ -699,5 +709,17 @@ export class PostgrestStore implements ReadStore {
       select: "bjd_code,hdong_code",
       bjd_code: inList(bjdCodes),
     });
+  }
+  async partyBook() {
+    const [parties, periods] = await Promise.all([
+      this.db.select<PartyRec>("parties", {
+        select: "name,color,color_source_url,color_checked_at,aliases",
+      }),
+      this.db.select<RulingPeriodRec>("ruling_periods", {
+        select: "starts_on,ends_on,party_name",
+        order: "starts_on.asc",
+      }),
+    ]);
+    return { parties, periods };
   }
 }

@@ -17,22 +17,23 @@ community_messages insert/delete ──trigger→realtime.send──▶ Realtime
 
 ## Layout
 
-| Path                                                       | What                                                                                                                                                               |
-| ---------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------ |
-| `supabase/migrations/20260924000000_init.sql`              | Schema, RLS, BFF SQL helpers, purge functions, cron schedules                                                                                                      |
-| `supabase/migrations/20260926000000_accounts.sql`          | Profiles, consents, 활동명 offers, residency; account SQL functions; orphan-login purge                                                                            |
-| `supabase/migrations/20260927000000_community.sql`         | Reviews, channel messages, bill threads and replies; write functions (residency, rate limit); thread sync                                                          |
-| `supabase/migrations/20260927120000_district_counts.sql`   | Final 개표 per 선거구 per election (`district_counts`)                                                                                                             |
-| `supabase/migrations/20260927130000_pledge_not_judged.sql` | Pledge status `notJudged` (「판정 전」), which may carry no evidence, judgement or bills                                                                           |
-| `supabase/migrations/20260930000000_channel_broadcast.sql` | 지역 채팅 live: a trigger broadcasts each new or deleted channel message to Realtime                                                                               |
-| `supabase/seed.sql`                                        | **Sample** 마포구 갑/을 + 종로구 district mapping, generated from `testdata/`. Not verified against [별표 1].                                                      |
-| `supabase/functions/_shared/`                              | API clients, normalizers (one per source), envelope, provenance, PostgREST client                                                                                  |
-| `supabase/functions/ingest-assembly/`                      | Members (daily), bills and plenary votes (every 6 h), 21대 bills (`?mode=bills_backfill&age=21`)                                                                   |
-| `supabase/functions/ingest-nec/`                           | Election and district codes and candidates (weekly), historical winners (`?mode=backfill`), final counts (`?mode=counts`)                                          |
-| `supabase/functions/bff/`                                  | The API. `contract.ts` mirrors the app's Dart parsers. `account.ts`, `residency.ts`: signed-in. `community.ts`: posts.                                             |
-| `scripts/`                                                 | One-off importers that write SQL to stdout; `build_district_*.ts` build the mapping and 선거구 변천 data                                                           |
-| `data/`                                                    | Inputs kept in git: the 22대 district mapping; `pledges_22/`, pilot pledge lists from 선거공보; `attendance_22/`, 본회의 출결; `region_22/` + lineage, 선거구 변천 |
-| `testdata/`                                                | Hand-written API samples and district-mapping samples. See `testdata/README.md`.                                                                                   |
+| Path                                                       | What                                                                                                                                                                                                    |
+| ---------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `supabase/migrations/20260924000000_init.sql`              | Schema, RLS, BFF SQL helpers, purge functions, cron schedules                                                                                                                                           |
+| `supabase/migrations/20260926000000_accounts.sql`          | Profiles, consents, 활동명 offers, residency; account SQL functions; orphan-login purge                                                                                                                 |
+| `supabase/migrations/20260927000000_community.sql`         | Reviews, channel messages, bill threads and replies; write functions (residency, rate limit); thread sync                                                                                               |
+| `supabase/migrations/20260927120000_district_counts.sql`   | Final 개표 per 선거구 per election (`district_counts`)                                                                                                                                                  |
+| `supabase/migrations/20260927130000_pledge_not_judged.sql` | Pledge status `notJudged` (「판정 전」), which may carry no evidence, judgement or bills                                                                                                                |
+| `supabase/migrations/20260930000000_channel_broadcast.sql` | 지역 채팅 live: a trigger broadcasts each new or deleted channel message to Realtime                                                                                                                    |
+| `supabase/migrations/20261007000000_parties.sql`           | Party colours with their source (`parties`) and 여당 by date (`ruling_periods`), filled from `data/parties.json`                                                                                        |
+| `supabase/seed.sql`                                        | **Sample** 마포구 갑/을 + 종로구 district mapping, generated from `testdata/`. Not verified against [별표 1].                                                                                           |
+| `supabase/functions/_shared/`                              | API clients, normalizers (one per source), envelope, provenance, PostgREST client                                                                                                                       |
+| `supabase/functions/ingest-assembly/`                      | Members (daily), bills and plenary votes (every 6 h), 21대 bills (`?mode=bills_backfill&age=21`)                                                                                                        |
+| `supabase/functions/ingest-nec/`                           | Election and district codes and candidates (weekly), historical winners (`?mode=backfill`), final counts (`?mode=counts`)                                                                               |
+| `supabase/functions/bff/`                                  | The API. `contract.ts` mirrors the app's Dart parsers. `account.ts`, `residency.ts`: signed-in. `community.ts`: posts.                                                                                  |
+| `scripts/`                                                 | One-off importers that write SQL to stdout; `build_district_*.ts` build the mapping and 선거구 변천 data                                                                                                |
+| `data/`                                                    | Inputs kept in git: the 22대 district mapping; `pledges_22/`, pilot pledge lists from 선거공보; `attendance_22/`, 본회의 출결; `region_22/` + lineage, 선거구 변천; `parties.json`, 정당 색과 여당 기간 |
+| `testdata/`                                                | Hand-written API samples and district-mapping samples. See `testdata/README.md`.                                                                                                                        |
 
 ## Develop
 
@@ -376,6 +377,10 @@ write function.
      `data/pledges_22/`, one file per district, taken from each winner's 선거공보 and marked
      `notJudged`:
      `for f in data/pledges_22/*.json; do deno run --allow-read scripts/import_curated.ts --kind pledges "$f"; done > pledges_22.sql`
+   - 정당 색과 여당 기간: `data/parties.json`, one file. Every colour carries the party's own CI
+     page and the date it was checked; a party with no confirmed colour stays `null` and is drawn
+     neutral. A ruling period with `"party": null` is an acting presidency (no 여당).
+     `deno run --allow-read scripts/import_curated.ts --kind parties data/parties.json > parties.sql`
    - 선거구 변천 (history tab 「지역의 역사」, and past elections of renamed or split 선거구):
      `data/region_22/<districtId>.json` and `data/district_lineage_22.csv`, already built.
      ```sh
