@@ -13,6 +13,7 @@ import 'package:democracy/src/design/components/app_labels.dart';
 import 'package:democracy/src/design/components/editorial.dart';
 import 'package:democracy/src/design/components/motion.dart';
 import 'package:democracy/src/design/components/native_controls.dart';
+import 'package:democracy/src/features/interests/presentation/interest_picker.dart';
 import 'package:democracy/src/features/onboarding/application/onboarding_providers.dart';
 import 'package:democracy/src/features/onboarding/domain/address_search.dart';
 import 'package:democracy/src/features/onboarding/domain/resident_profile.dart';
@@ -254,8 +255,10 @@ class _AddressStep extends ConsumerWidget {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.stretch,
             children: [
-              _AddressLauncher(
-                query: state.query,
+              _SearchLauncher(
+                label: '주소 검색',
+                placeholder: '도로명 주소 검색',
+                value: state.query,
                 onTap: () async {
                   final picked = await context.push<AddressSuggestion>(
                     AppRoutes.addressSearch,
@@ -305,27 +308,36 @@ class _AddressStep extends ConsumerWidget {
   }
 }
 
-/// The door to the address search page: a ruled row with the platform's
-/// magnifying glass, the chosen address once there is one, and a chevron
-/// that says it opens a page rather than taking text here.
+/// The door to a search: a ruled row with the platform's magnifying glass,
+/// the choice once there is one, and a chevron that says it opens something
+/// rather than taking text here. The address step opens the address search
+/// page with it; the profile step opens the interest picker.
 ///
 /// Not a search field. A field that cannot be typed into -- because tapping
 /// it goes somewhere else -- was what read as wrong; a row that navigates
 /// is the platform's own idiom for exactly this.
-class _AddressLauncher extends StatelessWidget {
-  const _AddressLauncher({required this.query, required this.onTap});
+class _SearchLauncher extends StatelessWidget {
+  const _SearchLauncher({
+    required this.label,
+    required this.placeholder,
+    required this.value,
+    required this.onTap,
+  });
 
-  final String query;
+  final String label;
+  final String placeholder;
+  final String value;
   final VoidCallback onTap;
 
   @override
   Widget build(BuildContext context) {
     final isGlass = Theme.of(context).extension<AppSurfaceTokens>()!.isGlass;
+    final query = value;
     final hasQuery = query.isNotEmpty;
 
     return Semantics(
       button: true,
-      label: '주소 검색',
+      label: label,
       value: hasQuery ? query : null,
       excludeSemantics: true,
       onTap: onTap,
@@ -351,14 +363,14 @@ class _AddressLauncher extends StatelessWidget {
                   mainAxisSize: MainAxisSize.min,
                   children: [
                     Text(
-                      '주소 검색',
+                      label,
                       style: AppTextStyles.statLabel.copyWith(
                         color: AppColors.neutral600,
                       ),
                     ),
                     const SizedBox(height: 2),
                     Text(
-                      hasQuery ? query : '도로명 주소 검색',
+                      hasQuery ? query : placeholder,
                       maxLines: 1,
                       overflow: TextOverflow.ellipsis,
                       style: AppTextStyles.cardBody.copyWith(
@@ -458,33 +470,109 @@ class _ProfileStep extends ConsumerWidget {
         ),
         const SizedBox(height: AppSpacing.x6 + 4),
 
-        Wrap(
-          spacing: AppSpacing.x2,
-          runSpacing: AppSpacing.x2,
-          children: [
-            for (var i = 0; i < ResidentProfile.availableTags.length; i++)
-              RevealIn(
-                index: 2 + i,
-                child: AppFilterChip(
-                  label: ResidentProfile.availableTags[i],
-                  selected: profile.tags.contains(
-                    ResidentProfile.availableTags[i],
-                  ),
-                  onSelected: (_) =>
-                      controller.toggleTag(ResidentProfile.availableTags[i]),
-                ),
+        RevealIn(
+          index: 2,
+          child: _InterestTopics(
+            profile: profile,
+            onRemove: controller.removeTopic,
+            onPick: () async {
+              final picked = await showInterestPicker(
+                context,
+                initial: ref.read(residentProfileProvider),
+              );
+              if (picked != null) {
+                controller.setTopics(picked.topics);
+              }
+            },
+          ),
+        ),
+        const SizedBox(height: AppSpacing.x6),
+
+        RevealIn(
+          index: 3,
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              const MicroLabel('나에 대해 · 참고로만 씀'),
+              const SizedBox(height: AppSpacing.x2),
+              Wrap(
+                spacing: AppSpacing.x2,
+                runSpacing: AppSpacing.x2,
+                children: [
+                  for (final tag in ResidentProfile.contextTags)
+                    AppFilterChip(
+                      label: tag,
+                      selected: profile.context.contains(tag),
+                      onSelected: (_) => controller.toggleContext(tag),
+                    ),
+                ],
               ),
-          ],
+            ],
+          ),
         ),
         const SizedBox(height: AppSpacing.x8),
 
         RevealIn(
-          index: 6,
+          index: 4,
           child: _InterestScale(
             interest: profile.interest,
             label: profile.interestLabel,
             onChanged: controller.setInterest,
           ),
+        ),
+      ],
+    );
+  }
+}
+
+/// The interests picked so far, removable, and the way to find more.
+///
+/// The taxonomy is a hundred topics, too many to lay out on this page, so
+/// the page shows what was chosen and the launcher opens the picker.
+class _InterestTopics extends StatelessWidget {
+  const _InterestTopics({
+    required this.profile,
+    required this.onRemove,
+    required this.onPick,
+  });
+
+  final ResidentProfile profile;
+  final ValueChanged<String> onRemove;
+  final VoidCallback onPick;
+
+  @override
+  Widget build(BuildContext context) {
+    final interests = profile.interests;
+    const max = ResidentProfile.maxTopics;
+
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.stretch,
+      children: [
+        _SearchLauncher(
+          label: '관심 분야 · ${interests.length}/$max',
+          placeholder: '검색하거나 분야별로 고르기',
+          value: '',
+          onTap: onPick,
+        ),
+        if (interests.isNotEmpty) ...[
+          const SizedBox(height: AppSpacing.x3),
+          Wrap(
+            spacing: AppSpacing.x2,
+            runSpacing: AppSpacing.x2,
+            children: [
+              for (final interest in interests)
+                AppInputChip(
+                  label: interest.label,
+                  caption: interest.isWholeArea ? '전체' : interest.area.label,
+                  onRemove: () => onRemove(interest.id),
+                ),
+            ],
+          ),
+        ],
+        const SizedBox(height: AppSpacing.x2),
+        const SourceLine(
+          '최대 $max개 · 이 기기의 AI가 한 번에 견줘 볼 수 있는 만큼입니다. '
+          '지하철, 전세, ㄱㅌ처럼 검색할 수 있습니다.',
         ),
       ],
     );

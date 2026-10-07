@@ -1,5 +1,6 @@
 import 'package:democracy/src/core/auth/address_state.dart';
 import 'package:democracy/src/features/onboarding/data/fake_address_repositories.dart';
+import 'package:democracy/src/features/onboarding/data/resident_profile_store.dart';
 import 'package:democracy/src/features/onboarding/domain/address_search.dart';
 import 'package:democracy/src/features/onboarding/domain/resident_profile.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -13,28 +14,66 @@ final locationRepositoryProvider = Provider<LocationRepository>(
   (ref) => const FakeLocationRepository(),
 );
 
+/// Where the profile is kept. In memory unless the app wires the device's
+/// preferences in `main.dart`, so no test writes to a real store.
+final residentProfileStoreProvider = Provider<ResidentProfileStore>(
+  (ref) => InMemoryResidentProfileStore(),
+);
+
 /// What the resident said about themselves, kept past onboarding.
 ///
-/// The AI screen reads this, so it outlives the flow that fills it in.
+/// The AI screen reads this, so it outlives the flow that fills it in, and
+/// it is kept on the device so it outlives the app being closed.
 final residentProfileProvider =
     NotifierProvider<ResidentProfileController, ResidentProfile>(
       ResidentProfileController.new,
     );
 
 class ResidentProfileController extends Notifier<ResidentProfile> {
+  /// Set once the reader changes something, so a read that finishes late
+  /// does not put back what they just changed.
+  bool _edited = false;
+
   @override
-  ResidentProfile build() => const ResidentProfile();
+  ResidentProfile build() {
+    _restore();
+    return const ResidentProfile();
+  }
 
-  void toggleTag(String tag) => state = state.toggle(tag);
+  Future<void> _restore() async {
+    try {
+      final stored = await ref.read(residentProfileStoreProvider).read();
+      if (stored != null && !_edited && ref.mounted) {
+        state = stored;
+      }
+    } on Object {
+      // No preferences in this environment; start empty.
+    }
+  }
 
-  /// Replaces every chip at once, so a sheet that edits several commits them
-  /// as one change (and anything reading them reruns once, not per chip).
-  void setTags(Set<String> tags) => state = ResidentProfile(
-    tags: Set.unmodifiable(tags),
-    interest: state.interest,
-  );
+  void toggleContext(String tag) => _set(state.toggleContext(tag));
 
-  void setInterest(int value) => state = state.withInterest(value);
+  /// Replaces the interests at once, so a sheet that edits several commits
+  /// them as one change (and the match reruns once, not per tap).
+  void setTopics(Iterable<String> ids) => _set(state.withTopics(ids));
+
+  void removeTopic(String id) => _set(state.withoutTopic(id));
+
+  /// Both halves of the sheet on the AI tab, as one change.
+  void setSelection({
+    required Iterable<String> topics,
+    required Set<String> context,
+  }) => _set(state.copyWith(context: context).withTopics(topics));
+
+  void setInterest(int value) => _set(state.withInterest(value));
+
+  void _set(ResidentProfile next) {
+    _edited = true;
+    state = next;
+    ref.read(residentProfileStoreProvider).write(next).catchError((_) {
+      // Kept for this run only.
+    });
+  }
 }
 
 /// The three steps the guide names.
