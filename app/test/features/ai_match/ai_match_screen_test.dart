@@ -485,9 +485,8 @@ void main() {
   });
 
   // N-6 used to be the weakest of the six rules in practice: provenance throws
-  // when it is missing and a party colour has no field to live in, but the
-  // disclosure was a sliver anyone could delete while the screen went on
-  // compiling. These pin the two halves of the fix.
+  // when it is missing, but the disclosure was a sliver anyone could delete
+  // while the screen went on compiling. These pin the two halves of the fix.
   group('the disclosure cannot be dropped', () {
     testWidgets('a widget that draws a score refuses to build without it', (
       tester,

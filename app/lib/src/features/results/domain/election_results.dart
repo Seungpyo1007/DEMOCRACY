@@ -1,13 +1,14 @@
 import 'package:democracy/src/core/provenance/source_metadata.dart';
+import 'package:democracy/src/features/district/domain/district_profile.dart';
 import 'package:democracy/src/features/results/domain/election_schedule.dart';
 import 'package:democracy/src/features/results/domain/poll_disclosure.dart';
 import 'package:democracy/src/features/results/domain/publication_gate.dart';
 
 /// One candidate's share in a district.
 ///
-/// Carries no party colour and no way to supply one, for the same reason
-/// [PartyRef] does not: the moment a bar can be tinted by party, the screen
-/// starts arguing.
+/// The party travels as a [PartyRef], so its colour and side reach the party
+/// tag beside the name. The bar itself stays neutral: it is ranked by tone,
+/// and a map or a bar tinted by party would turn the count into a party map.
 class CandidateTally {
   const CandidateTally({
     required this.name,
@@ -28,13 +29,13 @@ class CandidateTally {
 
     return CandidateTally(
       name: name,
-      party: json['party'] as String? ?? '무소속',
+      party: PartyRef.fromJson(json),
       share: share.toDouble().clamp(0, 100),
     );
   }
 
   final String name;
-  final String party;
+  final PartyRef party;
 
   /// Percent of counted votes.
   final double share;

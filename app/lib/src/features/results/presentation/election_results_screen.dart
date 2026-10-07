@@ -7,7 +7,6 @@ import 'package:democracy/src/design/components/app_labels.dart';
 import 'package:democracy/src/design/components/editorial.dart';
 import 'package:democracy/src/design/components/ink_loading.dart';
 import 'package:democracy/src/design/components/motion.dart';
-import 'package:democracy/src/features/district/domain/district_profile.dart';
 import 'package:democracy/src/features/results/application/results_providers.dart';
 import 'package:democracy/src/features/results/domain/election_results.dart';
 import 'package:democracy/src/features/results/domain/publication_gate.dart';
@@ -672,7 +671,7 @@ class _TallyRowState extends State<_TallyRow> {
               ),
             ),
             const SizedBox(width: AppSpacing.x2),
-            PartyTag(party: PartyRef(name: tally.party)),
+            PartyTag(party: tally.party),
             const Spacer(),
             Text(
               tally.display,

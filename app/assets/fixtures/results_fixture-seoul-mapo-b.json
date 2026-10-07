@@ -24,16 +24,31 @@
         {
           "name": "박서연",
           "party": "나다당",
+          "partyInfo": {
+            "name": "나다당",
+            "color": "#F2C230",
+            "side": "ruling"
+          },
           "share": 48.2
         },
         {
           "name": "김민준",
           "party": "가나당",
+          "partyInfo": {
+            "name": "가나당",
+            "color": "#1A4B8C",
+            "side": "opposition"
+          },
           "share": 44.7
         },
         {
           "name": "이도현",
           "party": "무소속",
+          "partyInfo": {
+            "name": "무소속",
+            "color": null,
+            "side": null
+          },
           "share": 7.1
         }
       ]
@@ -50,16 +65,31 @@
         {
           "name": "정하윤",
           "party": "다라당",
+          "partyInfo": {
+            "name": "다라당",
+            "color": null,
+            "side": "opposition"
+          },
           "share": 51.3
         },
         {
           "name": "최우진",
           "party": "가나당",
+          "partyInfo": {
+            "name": "가나당",
+            "color": "#1A4B8C",
+            "side": "opposition"
+          },
           "share": 41.0
         },
         {
           "name": "한지호",
           "party": "무소속",
+          "partyInfo": {
+            "name": "무소속",
+            "color": null,
+            "side": null
+          },
           "share": 7.7
         }
       ]
@@ -76,16 +106,31 @@
         {
           "name": "오세림",
           "party": "가나당",
+          "partyInfo": {
+            "name": "가나당",
+            "color": "#1A4B8C",
+            "side": "opposition"
+          },
           "share": 46.9
         },
         {
           "name": "배준영",
           "party": "나다당",
+          "partyInfo": {
+            "name": "나다당",
+            "color": "#F2C230",
+            "side": "ruling"
+          },
           "share": 45.5
         },
         {
           "name": "윤태경",
           "party": "무소속",
+          "partyInfo": {
+            "name": "무소속",
+            "color": null,
+            "side": null
+          },
           "share": 7.6
         }
       ]
@@ -102,16 +147,31 @@
         {
           "name": "문가온",
           "party": "나다당",
+          "partyInfo": {
+            "name": "나다당",
+            "color": "#F2C230",
+            "side": "ruling"
+          },
           "share": 49.8
         },
         {
           "name": "서다인",
           "party": "다라당",
+          "partyInfo": {
+            "name": "다라당",
+            "color": null,
+            "side": "opposition"
+          },
           "share": 42.2
         },
         {
           "name": "장현우",
           "party": "무소속",
+          "partyInfo": {
+            "name": "무소속",
+            "color": null,
+            "side": null
+          },
           "share": 8.0
         }
       ]
@@ -128,16 +188,31 @@
         {
           "name": "남시우",
           "party": "가나당",
+          "partyInfo": {
+            "name": "가나당",
+            "color": "#1A4B8C",
+            "side": "opposition"
+          },
           "share": 47.4
         },
         {
           "name": "도예린",
           "party": "나다당",
+          "partyInfo": {
+            "name": "나다당",
+            "color": "#F2C230",
+            "side": "ruling"
+          },
           "share": 44.1
         },
         {
           "name": "류지환",
           "party": "무소속",
+          "partyInfo": {
+            "name": "무소속",
+            "color": null,
+            "side": null
+          },
           "share": 8.5
         }
       ]
@@ -154,16 +229,31 @@
         {
           "name": "백가람",
           "party": "다라당",
+          "partyInfo": {
+            "name": "다라당",
+            "color": null,
+            "side": "opposition"
+          },
           "share": 50.6
         },
         {
           "name": "신유나",
           "party": "가나당",
+          "partyInfo": {
+            "name": "가나당",
+            "color": "#1A4B8C",
+            "side": "opposition"
+          },
           "share": 42.9
         },
         {
           "name": "조민석",
           "party": "무소속",
+          "partyInfo": {
+            "name": "무소속",
+            "color": null,
+            "side": null
+          },
           "share": 6.5
         }
       ]

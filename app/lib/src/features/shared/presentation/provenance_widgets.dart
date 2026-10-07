@@ -1,5 +1,6 @@
 import 'package:democracy/src/core/provenance/source_metadata.dart';
 import 'package:democracy/src/design/app_tokens.dart';
+import 'package:democracy/src/design/components/party_label.dart';
 import 'package:democracy/src/features/district/domain/district_profile.dart';
 import 'package:democracy/src/features/pledges/domain/pledge.dart';
 import 'package:flutter/material.dart';
@@ -62,11 +63,12 @@ class SourceBadge extends StatelessWidget {
   }
 }
 
-/// A party rendered as a grey outline tag.
+/// A party, wherever one is shown: its name in its own colour, and 여/야 for
+/// the record's date when the server knows it.
 ///
-/// There is no colour parameter. Party colour is barred from the interface,
-/// and the way to keep that true over time is to give callers no way to pass
-/// one in.
+/// Takes a [PartyRef] and nothing else, so every screen draws a party the
+/// same way and the colour can only be the one the server sourced. The name
+/// is always there as text; see [PartyLabel] for the contrast and the mark.
 class PartyTag extends StatelessWidget {
   const PartyTag({required this.party, super.key});
 
@@ -74,27 +76,12 @@ class PartyTag extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final surface = Theme.of(context).extension<AppSurfaceTokens>()!;
-
-    return DecoratedBox(
-      decoration: BoxDecoration(
-        border: Border.all(color: AppColors.neutral500),
-        borderRadius: BorderRadius.circular(
-          surface.isGlass ? 999 : AppRadii.androidChip,
-        ),
-      ),
-      child: Padding(
-        padding: const EdgeInsets.symmetric(
-          horizontal: AppSpacing.x2,
-          vertical: 2,
-        ),
-        child: Text(
-          party.name,
-          maxLines: 1,
-          overflow: TextOverflow.ellipsis,
-          style: AppTextStyles.tag.copyWith(color: AppColors.neutral700),
-        ),
-      ),
+    final color = party.colorValue;
+    return PartyLabel(
+      name: party.name,
+      color: color == null ? null : Color(color),
+      sideMark: party.side?.mark,
+      sideLabel: party.side?.label,
     );
   }
 }

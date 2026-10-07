@@ -45,7 +45,12 @@
         "winner": {
           "id": "fixture-former-1",
           "name": "가상 인물 라",
-          "party": "다라당"
+          "party": "다라당",
+          "partyInfo": {
+            "name": "다라당",
+            "color": null,
+            "side": "ruling"
+          }
         },
         "share": 44.1
       },
@@ -55,7 +60,12 @@
         "winner": {
           "id": "fixture-incumbent-1",
           "name": "가상 의원",
-          "party": "가나당"
+          "party": "가나당",
+          "partyInfo": {
+            "name": "가나당",
+            "color": "#1A4B8C",
+            "side": "ruling"
+          }
         },
         "share": 46.8
       },
@@ -65,7 +75,12 @@
         "winner": {
           "id": "fixture-incumbent-1",
           "name": "가상 의원",
-          "party": "가나당"
+          "party": "가나당",
+          "partyInfo": {
+            "name": "가나당",
+            "color": "#1A4B8C",
+            "side": "opposition"
+          }
         },
         "share": 45.2
       },
@@ -85,6 +100,11 @@
       "id": "fixture-incumbent-1",
       "name": "가상 의원",
       "party": "가나당",
+      "partyInfo": {
+        "name": "가나당",
+        "color": "#1A4B8C",
+        "side": "opposition"
+      },
       "summary": "재선"
     },
     "events": [

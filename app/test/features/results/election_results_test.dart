@@ -228,7 +228,7 @@ void main() {
       expect(find.text('44.7%'), findsOneWidget);
       expect(find.text('7.1%'), findsOneWidget);
       expect(find.textContaining('출처 info.nec.go.kr'), findsWidgets);
-      // Names and parties, but no party colour: the tags are outlines.
+      // Every party is named in text, coloured tag or not.
       expect(find.text('나다당'), findsOneWidget);
       expect(find.text('무소속'), findsOneWidget);
     });

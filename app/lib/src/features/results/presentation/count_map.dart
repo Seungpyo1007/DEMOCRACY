@@ -6,7 +6,9 @@ import 'package:flutter/material.dart';
 
 /// The map, shaded by how much has been counted and by nothing else.
 ///
-/// This is N-1 made structural. There is no parameter here that takes a party,
+/// This is the part of N-1 that still stands now that party tags carry the
+/// party's colour: the map is never tinted by party. There is no parameter
+/// here that takes a party,
 /// a leader or a winner -- the only thing that reaches the fill is
 /// [DistrictCount.countedShare], so the map cannot become a map of who is
 /// ahead. The reader's own district is marked by an inset outline in the

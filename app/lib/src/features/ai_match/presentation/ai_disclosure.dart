@@ -28,9 +28,9 @@ const aiReferenceLabel = 'AI 참고 자료';
 /// exactly the case that has to fail.
 ///
 /// N-6 was the weakest of the six neutrality rules in practice. Provenance
-/// throws when it is missing and a party colour has no field to live in, but
-/// the disclosure used to be a sliver anyone could delete while the screen
-/// went on compiling and the scores went on rendering.
+/// throws when it is missing, but the disclosure used to be a sliver anyone
+/// could delete while the screen went on compiling and the scores went on
+/// rendering.
 class MissingDisclosureScopeException implements Exception {
   const MissingDisclosureScopeException({
     required this.widget,
