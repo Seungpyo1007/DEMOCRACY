@@ -1,7 +1,7 @@
 name: democracy
 description: A politically neutral, source-first local democracy data app.
 publish_to: "none"
-version: 0.2.2+4
+version: 0.2.2+5
 
 environment:
   sdk: ">=3.12.0 <4.0.0"
@@ -25,6 +25,7 @@ dependencies:
   local_auth: ^3.0.2
   native_liquid_glass: ^0.2.14
   path_provider: ^2.1.6
+  pdfrx: ^2.4.8
   realtime_client: ^2.13.0
   share_plus: ^13.3.0
   shared_preferences: ^2.5.5

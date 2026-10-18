@@ -63,7 +63,7 @@ void main() {
     expect(find.text('읽기 전용'), findsOneWidget);
     // Android's floating toolbar is icons only; each tab is named by its
     // tooltip and semantics label.
-    for (final tab in const ['역사', '트래커', 'AI', '커뮤니티', '개표']) {
+    for (final tab in const ['지역구', 'AI', '커뮤니티', '개표']) {
       expect(find.byTooltip(tab), findsOneWidget);
     }
   });
