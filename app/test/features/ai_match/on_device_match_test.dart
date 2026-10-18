@@ -6,12 +6,14 @@ import 'package:democracy/src/core/on_device_ai/on_device_runner.dart';
 import 'package:democracy/src/core/provenance/source_metadata.dart';
 import 'package:democracy/src/core/time/clock.dart';
 import 'package:democracy/src/core/time/kst.dart';
+import 'package:democracy/src/features/ai_match/application/match_providers.dart';
 import 'package:democracy/src/features/ai_match/data/on_device/cited_items.dart';
 import 'package:democracy/src/features/ai_match/data/on_device/match_run.dart';
 import 'package:democracy/src/features/ai_match/data/on_device/on_device_match_repository.dart';
 import 'package:democracy/src/features/ai_match/domain/candidate_match.dart';
 import 'package:democracy/src/features/district/data/fake_district_repository.dart';
 import 'package:democracy/src/features/district/domain/district_profile.dart';
+import 'package:democracy/src/features/onboarding/domain/resident_profile.dart';
 import 'package:democracy/src/features/pledges/data/fake_pledge_repository.dart';
 import 'package:flutter_test/flutter_test.dart';
 
@@ -320,6 +322,24 @@ void main() {
       model.status = const ModelAvailable('test-model-2');
       await repository().loadReport(district, query: query);
       expect(model.requests, hasLength(3));
+    });
+
+    test('shows the model each interest with its related words', () async {
+      final query = matchQueryFor(
+        const ResidentProfile(topics: ['housing.rent', 'youth']),
+      );
+      model.answer = (_) => {
+        'axes': [
+          _axis('전월세', 40, [_reason('B1', '임대차 법안')]),
+        ],
+      };
+      await repository().loadReport(district, query: query);
+
+      final prompt = model.requests.single.prompt;
+      expect(prompt, contains('관심 분야: 전월세, 청년'));
+      expect(prompt, contains('- 전월세: 전세, 월세, 임대차'));
+      // A whole 분야 is described by its topics.
+      expect(prompt, contains('- 청년: 청년 주거, 청년 일자리·창업'));
     });
 
     test('an answer that fails validation is not cached', () async {

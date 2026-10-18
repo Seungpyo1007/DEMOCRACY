@@ -85,6 +85,14 @@ class DistrictHomeScreen extends ConsumerWidget {
           title: address.district!.displayName,
           kicker: '내 지역구',
           trailing: _verificationChip(address.status),
+          // The pledge tracker used to be a tab of its own. It is this
+          // district's incumbent's record, so it opens from beside the
+          // district's name instead.
+          titleAction: TitleLink(
+            key: DistrictHomeKeys.pledges,
+            label: '공약',
+            onTap: () => context.go(AppRoutes.tracker),
+          ),
           actions: [
             const AccountEntryButton(),
             AppToolbarButton(
@@ -128,12 +136,79 @@ class DistrictHomeScreen extends ConsumerWidget {
                       ),
                     ),
                   ),
+                  const SizedBox(height: AppSpacing.x8),
+                  const RevealIn(
+                    index: 4,
+                    child: Padding(
+                      padding: kPagePadding,
+                      child: _HistorySection(),
+                    ),
+                  ),
                 ],
               ),
             ),
           ],
         ),
       ),
+    );
+  }
+}
+
+/// Keys the tests reach for: `공약` is also the first of the record tabs.
+abstract final class DistrictHomeKeys {
+  static const pledges = ValueKey('district-home-pledges');
+  static const history = ValueKey('district-home-history');
+}
+
+/// Section 03: where the district has been, one row that opens the history.
+///
+/// The history was a tab of its own. It reads after the seat and the race,
+/// as the background to both, so it closes the page rather than taking a
+/// place in the tab bar. The row names what is behind it so the reader knows
+/// what the tap opens before making it.
+class _HistorySection extends StatelessWidget {
+  const _HistorySection();
+
+  @override
+  Widget build(BuildContext context) {
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.stretch,
+      children: [
+        const SectionHeader(number: '03', label: '역사'),
+        RuledRow(
+          key: DistrictHomeKeys.history,
+          onTap: () => context.go(AppRoutes.history),
+          padding: const EdgeInsets.symmetric(vertical: AppSpacing.x2),
+          child: Row(
+            children: [
+              Expanded(
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Text(
+                      '이 지역구가 걸어온 길',
+                      style: AppTextStyles.cardBody.copyWith(
+                        color: AppColors.ink,
+                      ),
+                    ),
+                    Text(
+                      '지역 연표 · 역대 선거 · 의원 기록',
+                      style: AppTextStyles.statLabel.copyWith(
+                        color: AppColors.neutral600,
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+              const SizedBox(width: AppSpacing.x3),
+              Text(
+                '역사 보기 →',
+                style: AppTextStyles.ctaSmall.copyWith(color: AppColors.ink),
+              ),
+            ],
+          ),
+        ),
+      ],
     );
   }
 }

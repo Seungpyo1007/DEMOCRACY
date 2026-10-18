@@ -18,20 +18,6 @@ class AppShell extends StatefulWidget {
       activeIcon: Icons.location_on,
     ),
     AdaptiveTabItem(
-      label: '역사',
-      sfSymbol: 'book.fill',
-      sfSymbolActive: 'book.fill',
-      icon: Icons.menu_book_outlined,
-      activeIcon: Icons.menu_book,
-    ),
-    AdaptiveTabItem(
-      label: '트래커',
-      sfSymbol: 'checkmark.circle.fill',
-      sfSymbolActive: 'checkmark.circle.fill',
-      icon: Icons.bar_chart_outlined,
-      activeIcon: Icons.bar_chart,
-    ),
-    AdaptiveTabItem(
       label: 'AI',
       sfSymbol: 'sparkles',
       sfSymbolActive: 'sparkles',
@@ -55,7 +41,10 @@ class AppShell extends StatefulWidget {
   ];
 
   /// Which branch can lend the tab bar its accessory action, by index.
-  static const _slots = {2: TabSlot.tracker, 4: TabSlot.community};
+  ///
+  /// The tracker is a page pushed on the home branch, so it lends through
+  /// the home's index; it only has something lent while it is open there.
+  static const _slots = {0: TabSlot.tracker, 2: TabSlot.community};
 
   final StatefulNavigationShell navigationShell;
 
