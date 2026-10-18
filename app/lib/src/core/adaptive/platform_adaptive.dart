@@ -98,7 +98,7 @@ CNTabBarItem _nativeItem(AdaptiveTabItem item) {
 }
 
 /// A primary action the current tab lends to the native iOS tab bar's round
-/// accessory, in place of the destination that normally sits there.
+/// accessory, in place of the destination that sits there when there is one.
 @immutable
 class AdaptiveTabAccessory {
   const AdaptiveTabAccessory({
@@ -127,9 +127,10 @@ class PlatformAdaptiveTabBar extends StatelessWidget {
   });
 
   /// While set, the round button beside the bar is this action instead of the
-  /// sixth destination, and morphs between the two as the reader changes tab
-  /// (native iOS and Android). Pages that lend one draw no floating button of
-  /// their own there.
+  /// first destination past the bar, and morphs between the two as the reader
+  /// changes tab (native iOS and Android). When every destination fits in the
+  /// bar the round button exists only while one is set. Pages that lend one
+  /// draw no floating button of their own there.
   final AdaptiveTabAccessory? accessory;
 
   /// The bar's visible surface, whatever it is made of.
@@ -191,8 +192,8 @@ class PlatformAdaptiveTabBar extends StatelessWidget {
     // iOS 26 one: a capsule only as wide as its own items. The material
     // underneath does differ -- iOS gets real glass, Android an opaque
     // surface -- but that is [_FloatingBarFrame]'s business, not this one's.
-    // Android: Material 3 Expressive's floating toolbar and FAB -- five icon
-    // tabs in a vibrant capsule, the page's action (or 개표) in the FAB --
+    // Android: Material 3 Expressive's floating toolbar and FAB -- up to five
+    // icon tabs in a vibrant capsule, the page's action in the FAB --
     // with a selection pill that travels and stretches between tabs, and a
     // press that squeezes the icon rather than spreading a ripple.
     if (!surfaceTokens.isGlass) {
@@ -254,6 +255,24 @@ class PlatformAdaptiveTabBar extends StatelessWidget {
                         : _extraButton(extras[i], maxTabs + i),
                   ),
                 ),
+              ),
+            // With no destination past the bar there is no round button to
+            // borrow, so one appears only while a page lends it an action.
+            if (extras.isEmpty)
+              _AccessorySwitcher(
+                child: accessory == null
+                    ? const SizedBox.shrink(key: ValueKey('no-accessory'))
+                    : Padding(
+                        key: ValueKey('accessory-slot-${accessory!.label}'),
+                        padding: const EdgeInsets.only(
+                          left: AppSpacing.x1,
+                          bottom: 8,
+                        ),
+                        child: SizedBox.square(
+                          dimension: 60,
+                          child: _accessoryButton(accessory!),
+                        ),
+                      ),
               ),
           ],
         ),
@@ -459,11 +478,11 @@ class _CapsuleTabItem extends StatelessWidget {
 
 /// Android's bar: Material 3 Expressive's floating toolbar paired with a FAB.
 ///
-/// Five destinations sit as icons in a vibrant capsule (primaryContainer)
-/// that floats above the page; their names are tooltips and semantics
-/// labels, as in an icon toolbar. Beside it sits a FAB: the current tab's
-/// primary action where one is lent (이행 제보, 평가 작성), the sixth
-/// destination (개표) elsewhere.
+/// Up to five destinations sit as icons in a vibrant capsule
+/// (primaryContainer) that floats above the page; their names are tooltips
+/// and semantics labels, as in an icon toolbar. Beside it sits a FAB: the
+/// current tab's primary action where one is lent (이행 제보, 평가 작성), a
+/// sixth destination where there is one, and nothing otherwise.
 ///
 /// The selection is one filled pill that travels: the edge on the side it is
 /// heading for leaves fast and the other follows, so it stretches across the
@@ -570,7 +589,15 @@ class _SlidingNavigationBarState extends State<_SlidingNavigationBar>
     const maxTabs = _SlidingNavigationBar.maxTabs;
     final tabs = widget.items.take(maxTabs).toList();
     final extras = widget.items.skip(maxTabs).toList();
-    final itemWidth = _itemWidthFor(context, tabs.length, extras.length);
+    // Past the capsule: the extra destinations, or -- when every
+    // destination fits inside it -- a lone round button while a page lends
+    // one an action.
+    final lentOnly = extras.isEmpty && widget.accessory != null;
+    final itemWidth = _itemWidthFor(
+      context,
+      tabs.length,
+      extras.length + (lentOnly ? 1 : 0),
+    );
     final pillVisible = widget.currentIndex < maxTabs;
 
     return SafeArea(
@@ -681,6 +708,27 @@ class _SlidingNavigationBarState extends State<_SlidingNavigationBar>
                       ),
               ),
             ],
+            if (extras.isEmpty)
+              _RoundButtonSwitcher(
+                child: widget.accessory == null
+                    ? const SizedBox.shrink(key: ValueKey('no-accessory'))
+                    : Row(
+                        key: ValueKey(
+                          'accessory-slot-${widget.accessory!.label}',
+                        ),
+                        mainAxisSize: MainAxisSize.min,
+                        children: [
+                          const SizedBox(width: _SlidingNavigationBar.gap),
+                          _RoundAction(
+                            key: ValueKey(
+                              'tab-accessory-${widget.accessory!.label}',
+                            ),
+                            action: widget.accessory!,
+                            shadow: shadow,
+                          ),
+                        ],
+                      ),
+              ),
           ],
         ),
       ),

@@ -43,17 +43,26 @@ abstract final class AppRoutes {
       ? path
       : Uri(path: path, queryParameters: {'next': next}).toString();
   static const home = '/';
+
+  /// The district's history and its pledge tracker. Pages pushed from the
+  /// home tab rather than tabs of their own: they are both about the district
+  /// the home is showing, so they open from it, keep its tab bar, and back
+  /// returns to it. The paths stayed as they were when these were tabs, so
+  /// old links still land.
   static const history = '/history';
   static const tracker = '/tracker';
+  static const historySegment = 'history';
+  static const trackerSegment = 'tracker';
+
   static const aiMatch = '/ai-match';
   static const community = '/community';
   static const results = '/results';
 
   /// A pledge's own page, and the app's first pushed route.
   ///
-  /// Nested under the tracker so opening one keeps the tab bar and the branch
-  /// it was opened from -- and so back returns to the list rather than to
-  /// whichever tab was last selected.
+  /// Nested under the tracker so opening one keeps the tab bar and the home
+  /// branch -- and so back returns to the list rather than to whichever tab
+  /// was last selected.
   static const pledgeDetailSegment = 'pledges/:id';
 
   static String pledgeDetail(String id) => '$tracker/pledges/$id';
