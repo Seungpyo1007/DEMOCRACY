@@ -112,7 +112,7 @@ class _TutorialScreenState extends ConsumerState<TutorialScreen> {
                     title: '당이 아닌 인물로,\n감정이 아닌 데이터로',
                     body:
                         '내 지역구의 의원과 후보를 출처가 붙은 수치로 봅니다. '
-                        '여섯 개의 탭을 차례로 소개합니다.',
+                        '네 개의 탭과 지역구 화면에서 여는 공약 · 역사를 차례로 소개합니다.',
                     illustration: _CoverIllustration(),
                   ),
                   _Page(
@@ -124,23 +124,24 @@ class _TutorialScreenState extends ConsumerState<TutorialScreen> {
                     illustration: _FiguresIllustration(),
                   ),
                   _Page(
-                    kicker: '02 역사',
+                    kicker: '01 지역구 · 역사',
                     title: '한 지역구가\n걸어온 길',
                     body:
-                        '지역의 연표, 역대 선거, 현직 의원의 기록을 한 곳에서 봅니다. '
-                        '위의 지역 · 선거 · 의원으로 바로 이동합니다.',
+                        '지역구 화면 아래 「역사」에서 지역의 연표, 역대 선거, '
+                        '현직 의원의 기록을 봅니다. 위의 지역 · 선거 · 의원으로 바로 이동합니다.',
                     illustration: _HistoryIllustration(),
                   ),
                   _Page(
-                    kicker: '03 트래커',
+                    kicker: '01 지역구 · 공약',
                     title: '공약은\n네 가지 상태로',
                     body:
-                        '이행 완료 · 진행 중 · 미이행은 먹의 진하기로, 번복만 색으로 '
-                        '표시합니다. 범례를 누르면 그 상태만 모아 봅니다.',
+                        '지역구 이름 옆 「공약」을 누르면 엽니다. 이행 완료 · 진행 중 · '
+                        '미이행은 먹의 진하기로, 번복만 색으로 표시합니다. '
+                        '범례를 누르면 그 상태만 모아 봅니다.',
                     illustration: _StatusIllustration(),
                   ),
                   _Page(
-                    kicker: '04 AI 분석',
+                    kicker: '02 AI 분석',
                     title: 'AI 분석은\n참고 자료입니다',
                     body:
                         '공약 원문을 대조한 결과이며 공인 평가가 아닙니다. '
@@ -148,7 +149,7 @@ class _TutorialScreenState extends ConsumerState<TutorialScreen> {
                     illustration: _AiIllustration(),
                   ),
                   _Page(
-                    kicker: '05 커뮤니티 · 06 개표',
+                    kicker: '03 커뮤니티 · 04 개표',
                     title: '주민의 목소리와\n개표',
                     body:
                         '평가는 주소 인증을 마친 주민만 쓰며, 기본은 익명이고 게시 후 '

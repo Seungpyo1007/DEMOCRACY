@@ -21,7 +21,9 @@ import 'package:democracy/src/features/ai_match/presentation/ai_match_screen.dar
 import 'package:democracy/src/features/ai_match/presentation/algorithm_log_screen.dart';
 import 'package:democracy/src/features/ai_match/presentation/on_device_notice.dart';
 import 'package:democracy/src/features/district/data/fake_district_repository.dart';
+import 'package:democracy/src/features/interests/presentation/interest_picker.dart';
 import 'package:democracy/src/features/onboarding/application/onboarding_providers.dart';
+import 'package:democracy/src/features/onboarding/domain/resident_profile.dart';
 import 'package:democracy/src/features/pledges/data/fake_pledge_repository.dart';
 import 'package:democracy/src/features/reviews/data/fake_review_repository.dart';
 import 'package:democracy/src/features/shared/presentation/provenance_widgets.dart';
@@ -90,7 +92,12 @@ Future<ProviderContainer> _pump(
   container
       .read(addressControllerProvider.notifier)
       .continueReadOnly(district: _district);
-  container.read(residentProfileProvider.notifier).setTags(tags);
+  // The old flat chips, through the same migration an upgraded install
+  // goes through: 세금 → 세금, 청년 → 청년 (분야 전체), 자영업 stays context.
+  final profile = ResidentProfile.fromLegacyTags(tags);
+  container
+      .read(residentProfileProvider.notifier)
+      .setSelection(topics: profile.topics, context: profile.context);
 
   final router = GoRouter(
     initialLocation: route,
@@ -261,6 +268,14 @@ void main() {
       expect(model.requests, isEmpty);
 
       await tester.tap(find.text('관심 분야 고르기'));
+      await tester.pumpAndSettle();
+      await tester.enterText(
+        find.descendant(
+          of: find.byType(InterestPicker),
+          matching: find.byType(EditableText),
+        ),
+        'ㅂㅈ',
+      );
       await tester.pumpAndSettle();
       await tester.tap(find.text('복지'));
       await tester.pumpAndSettle();

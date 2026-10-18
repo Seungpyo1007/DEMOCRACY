@@ -1,12 +1,10 @@
 import 'package:democracy/src/app/app_routes.dart';
-import 'package:democracy/src/core/adaptive/platform_adaptive.dart';
 import 'package:democracy/src/core/network/not_available.dart';
 import 'package:democracy/src/core/on_device_ai/on_device_model.dart';
 import 'package:democracy/src/core/time/kst.dart';
 import 'package:democracy/src/design/app_motion.dart';
 import 'package:democracy/src/design/app_tokens.dart';
 import 'package:democracy/src/design/components/app_card.dart';
-import 'package:democracy/src/design/components/app_controls.dart';
 import 'package:democracy/src/design/components/editorial.dart';
 import 'package:democracy/src/design/components/ink_loading.dart';
 import 'package:democracy/src/design/components/labeled_bar.dart';
@@ -17,13 +15,14 @@ import 'package:democracy/src/features/ai_match/domain/candidate_match.dart';
 import 'package:democracy/src/features/ai_match/presentation/ai_disclosure.dart';
 import 'package:democracy/src/features/ai_match/presentation/ai_tab_chrome.dart';
 import 'package:democracy/src/features/ai_match/presentation/on_device_notice.dart';
+import 'package:democracy/src/features/interests/presentation/interest_picker.dart';
 import 'package:democracy/src/features/onboarding/application/onboarding_providers.dart';
 import 'package:democracy/src/features/onboarding/domain/resident_profile.dart';
 import 'package:democracy/src/features/shared/presentation/provenance_widgets.dart';
+import 'package:democracy/src/features/shared/presentation/source_viewer.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
-import 'package:url_launcher/url_launcher.dart';
 
 /// Which candidates line up with what the reader said they care about.
 ///
@@ -123,8 +122,9 @@ class _MatchError extends ConsumerWidget {
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           Text(
-            '관심 분야(부동산·세금·복지·교육·청년)를 하나 이상 고르면 '
-            '현 의원의 공약과 최근 대표발의 법안을 이 기기에서 대조합니다.',
+            '관심 분야를 하나 이상(최대 ${ResidentProfile.maxTopics}개) 고르면 '
+            '현 의원의 공약과 최근 대표발의 법안을 이 기기에서 대조합니다. '
+            '지하철, 전월세, 돌봄처럼 좁혀 고를수록 근거가 분명해집니다.',
             style: style,
           ),
           const SizedBox(height: AppSpacing.x3),
@@ -154,82 +154,21 @@ class _MatchError extends ConsumerWidget {
   }
 }
 
-/// The chips from onboarding, again: the reader said they could change them
-/// later, and this is where the answer they change is used.
+/// The profile from onboarding, again: the reader was told they could change
+/// it later, and this is where the answer they change is used.
 ///
-/// Edits a copy and commits once, on 적용, so picking three chips starts one
-/// run on the device rather than three.
+/// The picker edits a copy and commits once, on 적용, so picking three
+/// topics starts one run on the device rather than three.
 Future<void> showInterestSheet(BuildContext context, WidgetRef ref) async {
-  final picked = await PlatformAdaptiveSheet.show<Set<String>>(
-    context: context,
-    builder: (context) =>
-        _InterestSheet(initial: ref.read(residentProfileProvider).tags),
+  final picked = await showInterestPicker(
+    context,
+    initial: ref.read(residentProfileProvider),
+    withContext: true,
   );
   if (picked != null) {
-    ref.read(residentProfileProvider.notifier).setTags(picked);
-  }
-}
-
-class _InterestSheet extends StatefulWidget {
-  const _InterestSheet({required this.initial});
-
-  final Set<String> initial;
-
-  @override
-  State<_InterestSheet> createState() => _InterestSheetState();
-}
-
-class _InterestSheetState extends State<_InterestSheet> {
-  late final Set<String> _tags = {...widget.initial};
-
-  @override
-  Widget build(BuildContext context) {
-    return SingleChildScrollView(
-      padding: const EdgeInsets.fromLTRB(
-        AppSpacing.screen,
-        AppSpacing.x6,
-        AppSpacing.screen,
-        AppSpacing.x6,
-      ),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.stretch,
-        mainAxisSize: MainAxisSize.min,
-        children: [
-          Text('관심사', style: Theme.of(context).textTheme.headlineSmall),
-          const SizedBox(height: AppSpacing.x2),
-          Text(
-            '고른 관심 분야마다 현 의원의 공약·법안과 얼마나 관련 있는지를 이 기기에서 '
-            '계산합니다. 30대·자영업·1인 가구는 참고로만 쓰며, 어디에도 보내지 않습니다.',
-            style: AppTextStyles.cardBody.copyWith(
-              color: AppColors.neutral700,
-              height: 1.55,
-            ),
-          ),
-          const SizedBox(height: AppSpacing.x4),
-          Wrap(
-            spacing: AppSpacing.x2,
-            runSpacing: AppSpacing.x2,
-            children: [
-              for (final tag in ResidentProfile.availableTags)
-                AppFilterChip(
-                  label: tag,
-                  selected: _tags.contains(tag),
-                  onSelected: (_) => setState(
-                    () => _tags.contains(tag)
-                        ? _tags.remove(tag)
-                        : _tags.add(tag),
-                  ),
-                ),
-            ],
-          ),
-          const SizedBox(height: AppSpacing.x6),
-          AppPrimaryButton(
-            label: '적용',
-            onPressed: () => Navigator.of(context).pop(_tags),
-          ),
-        ],
-      ),
-    );
+    ref
+        .read(residentProfileProvider.notifier)
+        .setSelection(topics: picked.topics, context: picked.context);
   }
 }
 
@@ -687,9 +626,10 @@ class _Reasoning extends ConsumerWidget {
                         if (match.reasons.isNotEmpty)
                           TextLink(
                             label: '원문 대조 보기 ↗',
-                            onTap: () => launchUrl(
+                            onTap: () => openSource(
+                              context,
                               match.reasons.first.source.sourceUrl,
-                              mode: LaunchMode.externalApplication,
+                              source: match.reasons.first.source,
                             ),
                           ),
                       ],

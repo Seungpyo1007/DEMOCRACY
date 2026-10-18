@@ -3,8 +3,8 @@ import 'package:democracy/src/design/app_tokens.dart';
 import 'package:democracy/src/design/components/party_label.dart';
 import 'package:democracy/src/features/district/domain/district_profile.dart';
 import 'package:democracy/src/features/pledges/domain/pledge.dart';
+import 'package:democracy/src/features/shared/presentation/source_viewer.dart';
 import 'package:flutter/material.dart';
-import 'package:url_launcher/url_launcher.dart';
 
 /// The attribution that has to accompany every external figure.
 ///
@@ -13,23 +13,24 @@ import 'package:url_launcher/url_launcher.dart';
 ///
 /// Tapping opens the original. That is the point of the rule rather than a
 /// convenience: an attribution the reader cannot follow is an assertion, and
-/// the whole design turns on figures being checkable.
+/// the whole design turns on figures being checkable. It opens in the app
+/// ([openSource]): a PDF in the reader, a page in the in-app browser.
 class SourceBadge extends StatelessWidget {
   const SourceBadge({required this.source, this.onOpen, super.key});
 
   final SourceMetadata source;
 
   /// Injected so tests can assert what would be opened without launching a
-  /// browser. Defaults to [launchUrl].
-  final Future<void> Function(Uri url)? onOpen;
+  /// browser. Defaults to [openSource].
+  final UrlOpener? onOpen;
 
-  Future<void> _open() async {
-    final open = onOpen ?? _launch;
-    await open(source.sourceUrl);
-  }
-
-  static Future<void> _launch(Uri url) async {
-    await launchUrl(url, mode: LaunchMode.externalApplication);
+  Future<void> _open(BuildContext context) async {
+    final open = onOpen;
+    if (open != null) {
+      await open(source.sourceUrl);
+      return;
+    }
+    await openSource(context, source.sourceUrl, source: source);
   }
 
   @override
@@ -38,7 +39,7 @@ class SourceBadge extends StatelessWidget {
       link: true,
       label: '출처 ${source.sourceUrl}',
       child: InkWell(
-        onTap: _open,
+        onTap: () => _open(context),
         child: ConstrainedBox(
           constraints: const BoxConstraints(minHeight: 24),
           child: Align(

@@ -75,8 +75,12 @@ class _PledgeTrackerScreenState extends ConsumerState<PledgeTrackerScreen> {
         body: EditorialScrollView(
           kicker: kicker.isEmpty ? null : kicker,
           title: '공약이행률 트래커',
-          // Where the tab bar takes it (native iOS, Android) the action lives in
-          // its round button, lent below; elsewhere it floats on the page.
+          // Opened from the home's 「공약」, so it goes back there. A deep
+          // link that landed here with nothing beneath goes to the home too.
+          onBack: () =>
+              context.canPop() ? context.pop() : context.go(AppRoutes.home),
+          // Where the tab bar takes it (native iOS, Android) the action lives
+          // in its round button, lent above; elsewhere it floats on the page.
           floatingAction: tabBarTakesAction(context)
               ? null
               : const PledgeReportAction(),

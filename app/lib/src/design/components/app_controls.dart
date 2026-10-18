@@ -86,6 +86,118 @@ class AppFilterChip extends StatelessWidget {
   }
 }
 
+/// A chosen value with a way to take it back out: the interests already
+/// picked, above the list they were picked from.
+///
+/// Android: Material 3's input chip and its delete icon. iOS: the selected
+/// [AppFilterChip]'s ink capsule with a × in place of the tick. The whole
+/// chip is the remove target on both, not only the icon, and its semantic
+/// label says so.
+class AppInputChip extends StatelessWidget {
+  const AppInputChip({
+    required this.label,
+    required this.onRemove,
+    this.caption,
+    super.key,
+  });
+
+  final String label;
+
+  /// A smaller second word after the label, for where it came from: the
+  /// 분야 of a topic.
+  final String? caption;
+  final VoidCallback onRemove;
+
+  @override
+  Widget build(BuildContext context) {
+    final surface = Theme.of(context).extension<AppSurfaceTokens>()!;
+    final semantic = '$label 빼기';
+
+    if (!surface.isGlass) {
+      return Semantics(
+        label: semantic,
+        excludeSemantics: true,
+        button: true,
+        child: InputChip(
+          label: Text.rich(
+            TextSpan(
+              children: [
+                TextSpan(text: label),
+                if (caption != null)
+                  TextSpan(
+                    text: '  $caption',
+                    style: const TextStyle(
+                      fontSize: 11,
+                      color: AppColors.neutral600,
+                    ),
+                  ),
+              ],
+            ),
+          ),
+          onPressed: onRemove,
+          onDeleted: onRemove,
+          deleteButtonTooltipMessage: semantic,
+        ),
+      );
+    }
+
+    final radius = BorderRadius.circular(999);
+    return Semantics(
+      button: true,
+      label: semantic,
+      excludeSemantics: true,
+      child: Material(
+        color: Colors.transparent,
+        child: InkWell(
+          onTap: onRemove,
+          borderRadius: radius,
+          child: Container(
+            constraints: const BoxConstraints(minHeight: 40),
+            padding: const EdgeInsets.only(
+              left: AppSpacing.x3 + 2,
+              right: AppSpacing.x2 + 2,
+            ),
+            decoration: BoxDecoration(
+              color: AppColors.ink,
+              borderRadius: radius,
+            ),
+            child: Row(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                Text(
+                  label,
+                  style: AppTextStyles.cardBody.copyWith(
+                    fontSize: 14,
+                    height: 1,
+                    fontWeight: FontWeight.w600,
+                    color: AppColors.ground,
+                  ),
+                ),
+                if (caption != null) ...[
+                  const SizedBox(width: AppSpacing.x1 + 2),
+                  Text(
+                    caption!,
+                    style: AppTextStyles.disclaimer.copyWith(
+                      height: 1,
+                      color: AppColors.neutral300,
+                    ),
+                  ),
+                ],
+                const SizedBox(width: AppSpacing.x1 + 2),
+                const Icon(
+                  CupertinoIcons.xmark,
+                  size: 13,
+                  color: AppColors.neutral300,
+                ),
+              ],
+            ),
+          ),
+        ),
+      ),
+    );
+  }
+}
+
 /// The anonymous/real-name toggle.
 ///
 /// The system switch on each platform: `UISwitch` on iOS (a Cupertino switch

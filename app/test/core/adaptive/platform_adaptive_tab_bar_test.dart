@@ -173,6 +173,81 @@ void main() {
     }
   });
 
+  // The app's own bar: four destinations, all inside the capsule. With no
+  // sixth destination to stand in for, the round button is there only while
+  // a page lends it an action -- the tracker's report, the community's
+  // review -- and goes when the page does.
+  group('four tabs', () {
+    const four = [
+      AdaptiveTabItem(label: '지역구', icon: Icons.location_on_outlined),
+      AdaptiveTabItem(label: 'AI', icon: Icons.auto_awesome_outlined),
+      AdaptiveTabItem(label: '커뮤니티', icon: Icons.chat_bubble_outline),
+      AdaptiveTabItem(label: '개표', icon: Icons.map_outlined),
+    ];
+
+    Widget fourTabs({AdaptiveTabAccessory? accessory}) {
+      return MaterialApp(
+        theme: AppTheme.light(TargetPlatform.android),
+        home: Scaffold(
+          bottomNavigationBar: PlatformAdaptiveTabBar(
+            currentIndex: 0,
+            items: four,
+            accessory: accessory,
+            onTap: (_) {},
+          ),
+        ),
+      );
+    }
+
+    testWidgets('Android draws no round button with nothing lent', (
+      tester,
+    ) async {
+      await tester.pumpWidget(fourTabs());
+      await tester.pumpAndSettle();
+
+      for (final item in four) {
+        expect(find.byTooltip(item.label), findsOneWidget);
+      }
+      expect(find.byKey(const ValueKey('tab-extra-4')), findsNothing);
+      expect(find.byKey(const ValueKey('tab-accessory-이행 제보')), findsNothing);
+    });
+
+    testWidgets('Android shows a lent action beside the capsule', (
+      tester,
+    ) async {
+      tester.view.physicalSize = const Size(360, 780);
+      tester.view.devicePixelRatio = 1;
+      addTearDown(tester.view.reset);
+      var pressed = 0;
+      await tester.pumpWidget(
+        fourTabs(
+          accessory: AdaptiveTabAccessory(
+            label: '이행 제보',
+            sfSymbol: 'plus',
+            icon: Icons.add,
+            onPressed: () => pressed++,
+          ),
+        ),
+      );
+      await tester.pumpAndSettle();
+
+      expect(tester.takeException(), isNull);
+      final action = find.byKey(const ValueKey('tab-accessory-이행 제보'));
+      expect(action, findsOneWidget);
+      final capsule = tester.getRect(
+        find.byKey(PlatformAdaptiveTabBar.surfaceKey),
+      );
+      expect(tester.getRect(action).left, greaterThan(capsule.right));
+      expect(
+        tester.getRect(action).right,
+        lessThanOrEqualTo(tester.getRect(find.byType(MaterialApp)).right),
+      );
+
+      await tester.tap(action);
+      expect(pressed, 1);
+    });
+  });
+
   group('minimized', () {
     Rect surfaceOf(WidgetTester tester) {
       return tester.getRect(find.byKey(PlatformAdaptiveTabBar.surfaceKey));

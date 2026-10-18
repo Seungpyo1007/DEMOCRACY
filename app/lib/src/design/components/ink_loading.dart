@@ -1,4 +1,4 @@
-/// The app's loading marks, in place of the platform spinners.
+/// The app's loading marks.
 ///
 /// Two, by what is waited on:
 ///
@@ -8,6 +8,14 @@
 /// * [InkStampIndicator] draws the 기표 도장 the app opens with, then lets
 ///   it fade, over and over: for a whole screen, the on-device model, a
 ///   pull to refresh, a pressed button.
+///
+/// That is the iOS page. Android shows Material 3 Expressive's
+/// [ExpressiveLoadingIndicator] instead -- the morphing shape on its own,
+/// contained in a circle for pull to refresh, and small beside still
+/// placeholder rows -- because there it is the system's loading language,
+/// the way the tab bar and buttons already are. Which one is drawn follows
+/// [ThemeData.platform], so tests and goldens pick a platform the same way
+/// they do for every other adaptive widget.
 ///
 /// Neither shows for the first [appearDelay] unless the reader asked for
 /// the wait: most loads here are a cache away, and a mark that flashes for
@@ -20,10 +28,17 @@ import 'dart:math' as math;
 
 import 'package:democracy/src/design/app_motion.dart';
 import 'package:democracy/src/design/app_tokens.dart';
+import 'package:democracy/src/design/components/expressive_loading_indicator.dart';
 import 'package:flutter/material.dart';
 
 /// How long a load runs before any mark appears.
 const appearDelay = Duration(milliseconds: 250);
+
+/// Whether this context draws Material's indicators rather than the ink.
+bool _material(BuildContext context) {
+  final platform = Theme.of(context).platform;
+  return platform != TargetPlatform.iOS && platform != TargetPlatform.macOS;
+}
 
 /// A section's placeholder: [rows] ruled rows with an ink stroke each.
 class InkLoadingRows extends StatelessWidget {
@@ -39,8 +54,13 @@ class InkLoadingRows extends StatelessWidget {
 
   static const _period = Duration(milliseconds: 2400);
 
+  /// Android's indicator beside the rows: two-thirds of the spec's 48, so
+  /// it marks the section without outweighing the rows themselves.
+  static const _rowIndicatorSize = 32.0;
+
   @override
   Widget build(BuildContext context) {
+    if (_material(context)) return _materialRows(context);
     return _Appear(
       child: _InkLoop(
         period: _period,
@@ -68,6 +88,67 @@ class InkLoadingRows extends StatelessWidget {
               ),
           ],
         ),
+      ),
+    );
+  }
+
+  /// Android: the same ruled rows, held still in the placeholder colour,
+  /// with a small loading indicator at the end of the first.
+  ///
+  /// Material 3 has no shimmer or written-in placeholder of its own; the
+  /// loading indicator is its mark for a wait. The rows stay so the content
+  /// still lands on its own lines, but they no longer move: one moving
+  /// thing per section, or the strokes and the shape read as two loads.
+  /// The indicator sits in the first row's free end, where no stroke
+  /// reaches, so neither is drawn over the other.
+  Widget _materialRows(BuildContext context) {
+    final placeholder = Theme.of(context).colorScheme.surfaceContainerHighest;
+    return _Appear(
+      child: Stack(
+        children: [
+          Column(
+            mainAxisSize: MainAxisSize.min,
+            crossAxisAlignment: CrossAxisAlignment.stretch,
+            children: [
+              for (var i = 0; i < rows; i++)
+                SizedBox(
+                  height: rowHeight,
+                  child: DecoratedBox(
+                    decoration: const BoxDecoration(
+                      border: Border(
+                        bottom: BorderSide(color: AppColors.divider),
+                      ),
+                    ),
+                    child: Align(
+                      alignment: AlignmentDirectional.centerStart,
+                      child: FractionallySizedBox(
+                        widthFactor: _lengths[i % _lengths.length],
+                        child: SizedBox(
+                          height: 6,
+                          child: DecoratedBox(
+                            decoration: BoxDecoration(
+                              color: placeholder,
+                              borderRadius: const BorderRadius.all(
+                                Radius.circular(3),
+                              ),
+                            ),
+                          ),
+                        ),
+                      ),
+                    ),
+                  ),
+                ),
+            ],
+          ),
+          PositionedDirectional(
+            top: 0,
+            end: 0,
+            height: rowHeight,
+            child: const Center(
+              child: ExpressiveLoadingIndicator(size: _rowIndicatorSize),
+            ),
+          ),
+        ],
       ),
     );
   }
@@ -118,17 +199,31 @@ class InkLoadingRows extends StatelessWidget {
 }
 
 /// The whole 기표 도장, drawn as at launch and faded, over and over.
+///
+/// On Android this is Material 3 Expressive's [ExpressiveLoadingIndicator]
+/// instead, in the theme's primary unless [color] is given.
 class InkStampIndicator extends StatelessWidget {
   const InkStampIndicator({
     this.size = 28,
-    this.color = AppColors.ink,
+    this.color,
     this.delayed = true,
     this.active = true,
+    this.contained = false,
     super.key,
   });
 
+  /// The stamp's square. On Android, 40 or more takes the spec's 48dp box;
+  /// anything smaller is an inline mark -- in a button, beside a line of
+  /// text -- and the shape is fitted to it.
   final double size;
-  final Color color;
+
+  /// The ink, or the shape's colour on Android. Null is [AppColors.ink] on
+  /// iOS and the theme's primary on Android.
+  final Color? color;
+
+  /// Android only: the shape in its primaryContainer circle, for where it
+  /// lands on top of content. iOS's stamp has nothing behind it either way.
+  final bool contained;
 
   /// False where the reader asked for the wait (a pull, a pressed button),
   /// so the stamp answers at once rather than after [appearDelay].
@@ -139,8 +234,21 @@ class InkStampIndicator extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final delay = delayed ? appearDelay : Duration.zero;
+    if (_material(context)) {
+      return _Appear(
+        delay: delay,
+        child: ExpressiveLoadingIndicator(
+          size: size >= 40 ? ExpressiveLoadingIndicator.defaultSize : size,
+          color: color,
+          contained: contained,
+          running: active,
+        ),
+      );
+    }
+    final ink = color ?? AppColors.ink;
     return _Appear(
-      delay: delayed ? appearDelay : Duration.zero,
+      delay: delay,
       child: _InkLoop(
         period: const Duration(milliseconds: 2600),
         enabled: active,
@@ -168,9 +276,9 @@ class InkStampIndicator extends StatelessWidget {
                         ring: part(0, 0.34),
                         stem: part(0.31, 0.48),
                         branch: part(0.46, 0.58),
-                        color: color,
+                        color: ink,
                       )
-                    : StampStrokes(ring: 1, stem: 1, branch: 1, color: color),
+                    : StampStrokes(ring: 1, stem: 1, branch: 1, color: ink),
               ),
             ),
           );
@@ -185,6 +293,9 @@ class InkStampIndicator extends StatelessWidget {
 /// The stamp shows still and faint while the page is pulled, whole once the
 /// pull would refresh, and is drawn over and over while the refresh runs.
 /// It sits on the page itself, below the top bar, with nothing behind it.
+///
+/// Android puts Material 3 Expressive's contained loading indicator there
+/// instead, in a raised puck, on the same pull.
 class InkRefresh extends StatefulWidget {
   const InkRefresh({required this.onRefresh, required this.child, super.key});
 
@@ -209,7 +320,47 @@ class _InkRefreshState extends State<InkRefresh> {
       _ => false,
     };
     final pulled = status != RefreshIndicatorStatus.drag;
+    final refreshing = status == RefreshIndicatorStatus.refresh;
     final reduced = AppMotion.reduced(context);
+    final duration = reduced ? Duration.zero : AppMotion.fast;
+    final material = _material(context);
+
+    // Android: the contained indicator in its puck, as in M3 Expressive's
+    // pull to refresh -- a little smaller while pulled, full size once the
+    // pull would refresh, morphing while it runs. Opaque throughout: a
+    // see-through disc reads as a disabled one.
+    final Widget mark;
+    if (!shown) {
+      mark = SizedBox.square(
+        dimension: material ? ExpressiveLoadingIndicator.defaultSize : 28,
+      );
+    } else if (material) {
+      mark = AnimatedScale(
+        scale: pulled ? 1 : 0.8,
+        duration: duration,
+        curve: AppMotion.settle,
+        child: DecoratedBox(
+          decoration: BoxDecoration(
+            shape: BoxShape.circle,
+            boxShadow: [
+              BoxShadow(
+                color: AppColors.ink.withValues(alpha: 0.2),
+                blurRadius: 6,
+                offset: const Offset(0, 2),
+              ),
+            ],
+          ),
+          child: InkStampIndicator(
+            size: ExpressiveLoadingIndicator.defaultSize,
+            delayed: false,
+            active: refreshing,
+            contained: true,
+          ),
+        ),
+      );
+    } else {
+      mark = InkStampIndicator(delayed: false, active: refreshing);
+    }
 
     return Stack(
       children: [
@@ -226,16 +377,13 @@ class _InkRefreshState extends State<InkRefresh> {
           right: 0,
           child: IgnorePointer(
             child: AnimatedOpacity(
-              opacity: shown ? (pulled ? 1 : 0.6) : 0,
-              duration: reduced ? Duration.zero : AppMotion.fast,
-              child: Center(
-                child: shown
-                    ? InkStampIndicator(
-                        delayed: false,
-                        active: status == RefreshIndicatorStatus.refresh,
-                      )
-                    : const SizedBox.square(dimension: 28),
-              ),
+              opacity: !shown
+                  ? 0
+                  : pulled || material
+                  ? 1
+                  : 0.6,
+              duration: duration,
+              child: Center(child: mark),
             ),
           ),
         ),

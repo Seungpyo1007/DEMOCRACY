@@ -3,6 +3,7 @@ import 'package:democracy/src/core/auth/address_controller.dart';
 import 'package:democracy/src/core/auth/address_state.dart';
 import 'package:democracy/src/core/auth/address_store.dart';
 import 'package:democracy/src/design/app_theme.dart';
+import 'package:democracy/src/features/interests/presentation/interest_picker.dart';
 import 'package:democracy/src/features/onboarding/application/onboarding_providers.dart';
 import 'package:democracy/src/features/onboarding/data/fake_address_repositories.dart';
 import 'package:democracy/src/features/onboarding/domain/address_search.dart';
@@ -283,7 +284,7 @@ void main() {
       expect(find.text('설정하지 않음 · 나중에 바꿀 수 있습니다'), findsOneWidget);
     });
 
-    testWidgets('offers every tag the guide lists and keeps the choices', (
+    testWidgets('keeps the context chips apart from the interests', (
       tester,
     ) async {
       final container = await pumpOnboarding(tester);
@@ -291,14 +292,46 @@ void main() {
       await tester.tap(find.text('다음'));
       await tester.pumpAndSettle();
 
-      for (final tag in ResidentProfile.availableTags) {
-        expect(find.textContaining(tag), findsWidgets, reason: 'missing $tag');
+      for (final tag in ResidentProfile.contextTags) {
+        expect(find.text(tag), findsOneWidget, reason: 'missing $tag');
       }
-
-      await tester.tap(find.text('세금'));
+      await tester.tap(find.text('자영업'));
       await tester.pumpAndSettle();
 
-      expect(container.read(residentProfileProvider).tags, contains('세금'));
+      final profile = container.read(residentProfileProvider);
+      expect(profile.context, {'자영업'});
+      expect(profile.topics, isEmpty);
+    });
+
+    testWidgets('finds an interest by 초성 and keeps it as a removable chip', (
+      tester,
+    ) async {
+      final container = await pumpOnboarding(tester);
+      await resolveDistrict(tester);
+      await tester.tap(find.text('다음'));
+      await tester.pumpAndSettle();
+
+      await tester.tap(find.text('검색하거나 분야별로 고르기'));
+      await tester.pumpAndSettle();
+      await tester.enterText(
+        find.descendant(
+          of: find.byType(InterestPicker),
+          matching: find.byType(EditableText),
+        ),
+        'ㅈㅇㅅ',
+      );
+      await tester.pumpAndSettle();
+      await tester.tap(find.text('전월세'));
+      await tester.pumpAndSettle();
+      await tester.tap(find.text('적용'));
+      await tester.pumpAndSettle();
+
+      expect(container.read(residentProfileProvider).topics, ['housing.rent']);
+      expect(find.bySemanticsLabel('전월세 빼기'), findsOneWidget);
+
+      await tester.tap(find.bySemanticsLabel('전월세 빼기'));
+      await tester.pumpAndSettle();
+      expect(container.read(residentProfileProvider).topics, isEmpty);
     });
 
     testWidgets('sets the interest on a five-stop slider', (tester) async {

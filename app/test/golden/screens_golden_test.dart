@@ -12,7 +12,9 @@ import 'package:democracy/src/features/ai_match/presentation/ai_direction_screen
 import 'package:democracy/src/features/ai_match/presentation/ai_match_screen.dart';
 import 'package:democracy/src/features/district/presentation/district_home_screen.dart';
 import 'package:democracy/src/features/history/presentation/history_screen.dart';
+import 'package:democracy/src/features/interests/presentation/interest_picker.dart';
 import 'package:democracy/src/features/onboarding/application/onboarding_providers.dart';
+import 'package:democracy/src/features/onboarding/domain/resident_profile.dart';
 import 'package:democracy/src/features/onboarding/presentation/onboarding_screen.dart';
 import 'package:democracy/src/features/pledges/presentation/pledge_detail_screen.dart';
 import 'package:democracy/src/features/pledges/presentation/pledge_tracker_screen.dart';
@@ -74,6 +76,31 @@ void main() {
         );
       });
     }
+
+    // The interest picker as the AI tab opens it: three picks on top, the
+    // context chips, then the 분야 list.
+    testWidgets('interest picker at 390dp on $name', (tester) async {
+      await pumpGolden(
+        tester,
+        screen: const Scaffold(
+          body: SafeArea(
+            child: InterestPicker(
+              withContext: true,
+              initial: ResidentProfile(
+                context: {'자영업'},
+                topics: ['transport.rail', 'housing.rent', 'youth'],
+              ),
+            ),
+          ),
+        ),
+        platform: platform,
+      );
+
+      await expectLater(
+        find.byType(MaterialApp),
+        matchesGoldenFile('goldens/interest_picker_${name}_390dp.png'),
+      );
+    });
 
     testWidgets('district home at 390dp on $name', (tester) async {
       await pumpGolden(

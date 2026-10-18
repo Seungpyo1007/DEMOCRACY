@@ -19,6 +19,7 @@ class MatchInput {
     required this.pledges,
     required this.bills,
     required this.billMonths,
+    this.relatedTerms = const {},
   }) : items = byKey([...pledges, ...bills]);
 
   final String memberId;
@@ -30,6 +31,10 @@ class MatchInput {
   final List<CitedItem> bills;
   final int billMonths;
 
+  /// Per interest, the other words the reader means by it, from the
+  /// taxonomy. Read by the model as a hint, never cited.
+  final Map<String, List<String>> relatedTerms;
+
   /// Every key the model may cite.
   final Map<String, CitedItem> items;
 
@@ -38,6 +43,7 @@ class MatchInput {
     'member': memberId,
     'interests': interests,
     'context': context,
+    'related': relatedTerms,
     'pledges': [for (final p in pledges) p.toFingerprint()],
     'bills': [for (final b in bills) b.toFingerprint()],
     'prompt': matchPromptVersion,
@@ -46,7 +52,7 @@ class MatchInput {
 
 /// Bumped whenever the instructions change, so cached answers to the old
 /// wording are not served as answers to the new one.
-const matchPromptVersion = 'match-v2';
+const matchPromptVersion = 'match-v3';
 
 /// The most pledges and bills one run reads. A small on-device context has
 /// room for about this much Korean alongside the instructions and the answer.
@@ -70,6 +76,16 @@ const _matchInstructions =
 OnDeviceRequest matchRequest(MatchInput input) {
   final buffer = StringBuffer()
     ..writeln('관심 분야: ${input.interests.join(', ')}');
+  final related = [
+    for (final interest in input.interests)
+      if (input.relatedTerms[interest]?.isNotEmpty ?? false)
+        '- $interest: ${input.relatedTerms[interest]!.join(', ')}',
+  ];
+  if (related.isNotEmpty) {
+    buffer
+      ..writeln('관심 분야별 관련어(이 말이 들어간 항목도 그 분야로 본다):')
+      ..writeAll(related.map((line) => '$line\n'));
+  }
   if (input.context.isNotEmpty) {
     buffer.writeln('독자 상황(참고만): ${input.context.join(', ')}');
   }
@@ -376,6 +392,7 @@ MatchReport buildMatchReport({
       'sampling': 'greedy (같은 입력이면 같은 결과)',
       'inputs': {
         'interests': input.interests,
+        'related': input.relatedTerms,
         'context': input.context,
         'pledges': input.pledges.length,
         'bills': input.bills.length,

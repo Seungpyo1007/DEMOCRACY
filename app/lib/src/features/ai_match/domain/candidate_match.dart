@@ -21,11 +21,54 @@ enum MatchSubject {
 /// [interests] are the policy areas the score is broken down by, in the order
 /// the reader was offered them; [context] is who is asking (자영업, 1인 가구),
 /// read as background only.
+///
+/// [relatedTerms] are, per interest, the other words the reader means by it
+/// (전월세 → 전세, 월세, 임대차): shown to the model beside the label.
+/// [matchTerms] are every word that marks a pledge or bill title as about
+/// one of the interests, used before the model runs to decide which titles
+/// it reads when there are more than it has room for.
 class MatchQuery {
-  const MatchQuery({this.interests = const [], this.context = const []});
+  const MatchQuery({
+    this.interests = const [],
+    this.context = const [],
+    this.relatedTerms = const {},
+    this.matchTerms = const [],
+  });
 
   final List<String> interests;
   final List<String> context;
+  final Map<String, List<String>> relatedTerms;
+  final List<String> matchTerms;
+
+  @override
+  bool operator ==(Object other) =>
+      other is MatchQuery &&
+      _sameList(other.interests, interests) &&
+      _sameList(other.context, context) &&
+      _sameList(other.matchTerms, matchTerms) &&
+      other.relatedTerms.length == relatedTerms.length &&
+      relatedTerms.entries.every(
+        (e) => _sameList(other.relatedTerms[e.key] ?? const [], e.value),
+      );
+
+  @override
+  int get hashCode => Object.hash(
+    Object.hashAll(interests),
+    Object.hashAll(context),
+    Object.hashAll(matchTerms),
+  );
+}
+
+bool _sameList(List<String> a, List<String> b) {
+  if (a.length != b.length) {
+    return false;
+  }
+  for (var i = 0; i < a.length; i++) {
+    if (a[i] != b[i]) {
+      return false;
+    }
+  }
+  return true;
 }
 
 /// Raised when an on-device match has no interests to be about.
