@@ -52,14 +52,58 @@ void main() {
     }
   });
 
-  test('a party is a name only, with no colour to leak into the interface', () {
-    const party = PartyRef(name: '가나당');
+  group('a party', () {
+    test('reads its colour and side from partyInfo', () {
+      final party = PartyRef.fromJson(const {
+        'party': '가나당',
+        'partyInfo': {'name': '가나당', 'color': '#1A4B8C', 'side': 'ruling'},
+      });
 
-    expect(party.name, '가나당');
-    expect(
-      party.toString(),
-      isNot(contains('Color')),
-      reason: 'PartyRef must not gain a colour field.',
-    );
+      expect(party.name, '가나당');
+      expect(party.colorValue, 0xFF1A4B8C);
+      expect(party.side, PartySide.ruling);
+      expect(party.side!.mark, '여');
+    });
+
+    test('is a name alone when partyInfo is missing (an older server)', () {
+      final party = PartyRef.fromJson(const {'party': '가나당'});
+
+      expect(party.name, '가나당');
+      expect(party.colorValue, isNull);
+      expect(party.side, isNull);
+    });
+
+    test('drops a malformed partyInfo instead of failing', () {
+      for (final info in <Object?>[
+        'blue',
+        {'name': '가나당', 'color': 'blue', 'side': '여'},
+        {'name': '가나당', 'color': 12, 'side': 3},
+      ]) {
+        final party = PartyRef.fromJson({'party': '가나당', 'partyInfo': info});
+        expect(party.name, '가나당');
+        expect(party.colorValue, isNull);
+        expect(party.side, isNull);
+      }
+      final opposition = PartyRef.fromJson(const {
+        'party': '가나당',
+        'partyInfo': {'name': '가나당', 'color': null, 'side': 'opposition'},
+      });
+      expect(opposition.side, PartySide.opposition);
+    });
+
+    test('ignores partyInfo that names another party', () {
+      final party = PartyRef.fromJson(const {
+        'party': '가나당',
+        'partyInfo': {'name': '다라당', 'color': '#1A4B8C', 'side': 'ruling'},
+      });
+
+      expect(party.colorValue, isNull);
+      expect(party.side, isNull);
+    });
+
+    test('with no name is 무소속', () {
+      expect(PartyRef.fromJson(const {}).name, '무소속');
+      expect(PartyRef.fromJson(const {'party': ''}).name, '무소속');
+    });
   });
 }

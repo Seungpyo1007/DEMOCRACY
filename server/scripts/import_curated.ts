@@ -28,6 +28,18 @@
 //   data/region_22/ holds one per 22대 선거구 (선거구 변천 from the 구역표), built by
 //   scripts/build_district_lineage.ts.
 //
+//   --kind parties : data/parties.json, party colours and 여당 periods (see the parties
+//                    migration). One file for the whole country.
+//
+// parties JSON:
+//   { "parties": [ { "name": "더불어민주당",              // as NEC / the Assembly spell it
+//                    "color": "#RRGGBB" | null,         // null: no authoritative colour found
+//                    "colorSource": { "sourceUrl": "...", "checkedAt": "2026-10-07" },
+//                    "aliases": [], "predecessor": "새누리당", "note": "..." } ],
+//     "rulingPeriods": [ { "startsOn": "2022-05-10", "endsOn": "2025-04-04" | null,
+//                          "party": "국민의힘" | null,   // null: acting presidency
+//                          "president": "윤석열", "note": "...", "sourceUrl": "..." } ] }
+//
 // Usage: deno run --allow-read scripts/import_curated.ts --kind pledges pledges.json > p.sql
 
 import { isDistrictId } from "../supabase/functions/_shared/district_names.ts";
@@ -157,10 +169,105 @@ export function regionToSql(doc: J): string {
   ].filter(Boolean).join("\n") + "\n";
 }
 
+const HEX = /^#[0-9A-F]{6}$/;
+const ISO_DATE = /^\d{4}-\d{2}-\d{2}$/;
+
+/**
+ * data/parties.json → parties + ruling_periods. The whole file is the truth: periods are
+ * replaced wholesale, parties upserted (a party is never deleted, since old results name it).
+ * A colour needs its own source; a period needs a source and must not overlap another.
+ */
+export function partiesToSql(doc: J): string {
+  const parties = Array.isArray(doc.parties) ? (doc.parties as J[]) : [];
+  const periods = Array.isArray(doc.rulingPeriods) ? (doc.rulingPeriods as J[]) : [];
+  if (parties.length === 0) throw new Error("parties: empty");
+  const names = new Set<string>();
+  const partyRows: Record<string, SqlValue>[] = parties.map((p, i) => {
+    const f = `parties[${i}]`;
+    if (typeof p.name !== "string" || p.name.trim() === "") throw new Error(`${f}: name required`);
+    if (p.name === "무소속") throw new Error(`${f}: 무소속 is not a party`);
+    if (names.has(p.name)) throw new Error(`${f}: duplicate ${p.name}`);
+    names.add(p.name);
+    let color: string | null = null;
+    let sourceUrl: string | null = null;
+    let checkedAt: string | null = null;
+    if (p.color !== null && p.color !== undefined) {
+      if (typeof p.color !== "string" || !HEX.test(p.color)) {
+        throw new Error(`${f}: color must be #RRGGBB in upper case`);
+      }
+      const s = p.colorSource as J | undefined;
+      if (!s || !isPresentableSourceUrl(s.sourceUrl) || !ISO_DATE.test(String(s.checkedAt))) {
+        throw new Error(`${f}: a colour needs colorSource {sourceUrl, checkedAt: YYYY-MM-DD}`);
+      }
+      color = p.color;
+      sourceUrl = s.sourceUrl;
+      checkedAt = String(s.checkedAt);
+    }
+    const aliases = Array.isArray(p.aliases) ? p.aliases.map(String) : [];
+    return {
+      name: p.name,
+      color,
+      color_source_url: sourceUrl,
+      color_checked_at: checkedAt,
+      aliases,
+      predecessor: typeof p.predecessor === "string" ? p.predecessor : null,
+      note: typeof p.note === "string" ? p.note : null,
+    };
+  });
+  for (const r of partyRows) {
+    if (r.predecessor !== null && !names.has(r.predecessor as string)) {
+      throw new Error(`${r.name}: predecessor ${r.predecessor} is not listed`);
+    }
+  }
+
+  const periodRows: Record<string, SqlValue>[] = periods.map((p, i) => {
+    const f = `rulingPeriods[${i}]`;
+    if (!ISO_DATE.test(String(p.startsOn))) throw new Error(`${f}: startsOn YYYY-MM-DD`);
+    if (p.endsOn !== null && !ISO_DATE.test(String(p.endsOn))) {
+      throw new Error(`${f}: endsOn YYYY-MM-DD or null`);
+    }
+    if (p.endsOn !== null && String(p.endsOn) <= String(p.startsOn)) {
+      throw new Error(`${f}: endsOn must be after startsOn`);
+    }
+    if (p.party !== null && !names.has(String(p.party))) {
+      throw new Error(`${f}: party ${p.party} is not listed`);
+    }
+    if (typeof p.president !== "string" || !p.president) throw new Error(`${f}: president`);
+    if (!isPresentableSourceUrl(p.sourceUrl)) throw new Error(`${f}: sourceUrl required`);
+    return {
+      starts_on: String(p.startsOn),
+      ends_on: p.endsOn === null ? null : String(p.endsOn),
+      party_name: p.party === null ? null : String(p.party),
+      president: p.president,
+      note: typeof p.note === "string" ? p.note : null,
+      source_url: p.sourceUrl,
+    };
+  });
+  const sorted = [...periodRows].sort((a, b) =>
+    String(a.starts_on).localeCompare(String(b.starts_on))
+  );
+  sorted.forEach((r, i) => {
+    const next = sorted[i + 1];
+    if (!next) return;
+    if (r.ends_on === null || String(r.ends_on) > String(next.starts_on)) {
+      throw new Error(`rulingPeriods: ${r.starts_on} overlaps ${next.starts_on}`);
+    }
+  });
+
+  return [
+    "begin;",
+    upsertSql("parties", partyRows, ["name"]).trim(),
+    "delete from public.ruling_periods;",
+    periodRows.length === 0 ? "" : upsertSql("ruling_periods", periodRows, []).trim(),
+    "commit;",
+  ].filter(Boolean).join("\n") + "\n";
+}
+
 if (import.meta.main) {
   const { flags, positional } = parseFlags(Deno.args);
   const doc = JSON.parse(await Deno.readTextFile(positional[0])) as J;
   if (flags.kind === "pledges") console.log(pledgesToSql(doc));
   else if (flags.kind === "region") console.log(regionToSql(doc));
-  else throw new Error("--kind pledges|region");
+  else if (flags.kind === "parties") console.log(partiesToSql(doc));
+  else throw new Error("--kind pledges|region|parties");
 }

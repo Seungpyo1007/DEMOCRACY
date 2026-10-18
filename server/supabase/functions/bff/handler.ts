@@ -114,7 +114,9 @@ export function createHandler(deps: BffDeps): (req: Request) => Promise<Response
         if (what === "profile") {
           return respond(await buildProfile(deps.store, id, now()), PROFILE_CACHE);
         }
-        if (what === "history") return respond(await buildHistory(deps.store, id), PROFILE_CACHE);
+        if (what === "history") {
+          return respond(await buildHistory(deps.store, id, now()), PROFILE_CACHE);
+        }
         if (what === "direction") {
           return respond(await buildDirection(deps.store, id), PROFILE_CACHE);
         }

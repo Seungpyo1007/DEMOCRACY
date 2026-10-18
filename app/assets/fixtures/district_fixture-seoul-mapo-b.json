@@ -12,6 +12,11 @@
     "id": "fixture-incumbent-1",
     "name": "가상 의원",
     "party": "가나당",
+    "partyInfo": {
+      "name": "가나당",
+      "color": "#1A4B8C",
+      "side": "opposition"
+    },
     "summary": "재선",
     "stats": [
       {
@@ -142,6 +147,11 @@
       "id": "fixture-candidate-3",
       "name": "가상 후보 다",
       "party": "다라당",
+      "partyInfo": {
+        "name": "다라당",
+        "color": null,
+        "side": "opposition"
+      },
       "summary": "3선 도전",
       "stats": [
         {
@@ -159,6 +169,11 @@
       "id": "fixture-candidate-1",
       "name": "가상 후보 가",
       "party": "나다당",
+      "partyInfo": {
+        "name": "나다당",
+        "color": "#F2C230",
+        "side": "ruling"
+      },
       "summary": "신인",
       "stats": [
         {
@@ -176,6 +191,11 @@
       "id": "fixture-candidate-2",
       "name": "가상 후보 나",
       "party": "무소속",
+      "partyInfo": {
+        "name": "무소속",
+        "color": null,
+        "side": null
+      },
       "summary": "구의원 출신",
       "stats": [
         {

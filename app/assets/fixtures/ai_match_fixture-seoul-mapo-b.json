@@ -28,6 +28,11 @@
       "candidateId": "fixture-candidate-1",
       "name": "가상 후보 가",
       "party": "나다당",
+      "partyInfo": {
+        "name": "나다당",
+        "color": "#F2C230",
+        "side": "ruling"
+      },
       "score": 87,
       "headline": "자영업 세제 공약 4건 · 1인 가구 주거 공약 3건",
       "axes": [
@@ -73,6 +78,11 @@
       "candidateId": "fixture-candidate-2",
       "name": "가상 후보 나",
       "party": "무소속",
+      "partyInfo": {
+        "name": "무소속",
+        "color": null,
+        "side": null
+      },
       "score": 73,
       "headline": "지역 상권 공약 3건 · 세제 공약 1건",
       "axes": [
@@ -111,6 +121,11 @@
       "candidateId": "fixture-candidate-3",
       "name": "가상 후보 다",
       "party": "다라당",
+      "partyInfo": {
+        "name": "다라당",
+        "color": null,
+        "side": "opposition"
+      },
       "score": 61,
       "headline": "교육 공약 5건 · 세제 공약 없음",
       "axes": [

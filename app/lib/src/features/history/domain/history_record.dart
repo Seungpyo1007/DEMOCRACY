@@ -142,7 +142,7 @@ class ElectionRow {
         // at the cost of treating namesakes as one person.
         id: winner['id'] is String ? winner['id'] as String : name,
         name: name,
-        party: PartyRef(name: winner['party'] as String? ?? '무소속'),
+        party: PartyRef.fromJson(winner),
       ),
       share: share.toDouble(),
     );
@@ -282,7 +282,7 @@ class LegislatorChronicle {
     return LegislatorChronicle(
       id: incumbent['id'] as String,
       name: incumbent['name'] as String,
-      party: PartyRef(name: incumbent['party'] as String? ?? '무소속'),
+      party: PartyRef.fromJson(incumbent),
       summary: incumbent['summary'] as String? ?? '',
       portraitUrl: incumbent['portraitUrl'] as String?,
       portraitCredit: incumbent['portraitCredit'] as String?,

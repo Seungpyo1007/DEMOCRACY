@@ -191,7 +191,7 @@ class CandidateMatch {
     return CandidateMatch(
       candidateId: id,
       name: name,
-      party: PartyRef(name: json['party'] as String? ?? '무소속'),
+      party: PartyRef.fromJson(json),
       score: score.toDouble().clamp(0, 100),
       headline: json['headline'] as String? ?? '',
       axes: List.unmodifiable(

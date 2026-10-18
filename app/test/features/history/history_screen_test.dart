@@ -223,7 +223,7 @@ void main() {
     expect(find.text('45.2%', findRichText: true), findsWidgets);
   });
 
-  testWidgets('party tags are grey and portraits grayscale', (tester) async {
+  testWidgets('every party is a tag and portraits grayscale', (tester) async {
     await pumpHistory(tester);
 
     // 3 winners in the table + the incumbent's header.

@@ -2,15 +2,76 @@ import 'package:democracy/src/core/auth/address_state.dart';
 import 'package:democracy/src/core/provenance/source_metadata.dart';
 import 'package:democracy/src/features/district/domain/legislator_record.dart';
 
-/// A party as the product is allowed to show it: a name only.
+/// Where a party stood on the date a record is about: holding the presidency
+/// (여당) or not (야당).
+enum PartySide {
+  ruling('여', '여당'),
+  opposition('야', '야당');
+
+  const PartySide(this.mark, this.label);
+
+  /// The one-character mark drawn beside the party name.
+  final String mark;
+
+  /// What a screen reader says for [mark].
+  final String label;
+}
+
+/// A party as the product shows it: always its name, and, when the server
+/// has a sourced one, its own colour and its side on the record's date.
 ///
-/// There is no colour field by design. The neutrality rules forbid party
-/// colour anywhere in the UI, and a colour that does not exist in the model
-/// cannot leak into a widget later.
+/// The name is never optional and never replaced by the colour: colour is
+/// drawn beside the name, so a reader who cannot tell the colours apart loses
+/// nothing. The colour is the party's own (the server keeps its source), and
+/// the side is computed by the server for the record's date -- today for a
+/// sitting member, election day for a result -- so neither is decided here.
 class PartyRef {
-  const PartyRef({required this.name});
+  const PartyRef({required this.name, this.colorValue, this.side});
+
+  /// Reads `party` (the name every payload carries) and the optional
+  /// `partyInfo` beside it. Anything missing or malformed in `partyInfo` is
+  /// dropped, not fatal: a payload without it is the older shape, and the
+  /// name alone is still a complete party.
+  factory PartyRef.fromJson(Map<Object?, Object?> json) {
+    final raw = json['party'];
+    final name = raw is String && raw.isNotEmpty ? raw : independent;
+    final info = json['partyInfo'];
+    if (info is! Map || info['name'] != name) {
+      return PartyRef(name: name);
+    }
+    return PartyRef(
+      name: name,
+      colorValue: parseColor(info['color']),
+      side: switch (info['side']) {
+        'ruling' => PartySide.ruling,
+        'opposition' => PartySide.opposition,
+        _ => null,
+      },
+    );
+  }
+
+  /// Not a party: never coloured, never 여 or 야.
+  static const independent = '무소속';
+
+  /// `#RRGGBB` → opaque ARGB, or null for anything else.
+  static int? parseColor(Object? raw) {
+    if (raw is! String) {
+      return null;
+    }
+    final match = RegExp(r'^#([0-9A-Fa-f]{6})$').firstMatch(raw);
+    return match == null
+        ? null
+        : 0xFF000000 | int.parse(match.group(1)!, radix: 16);
+  }
 
   final String name;
+
+  /// The party's own colour as opaque ARGB; null draws the neutral tag.
+  final int? colorValue;
+
+  /// Null when the date is not covered, during an acting presidency, or for
+  /// an independent.
+  final PartySide? side;
 }
 
 /// One measured figure about a person, ready to render with its badge.
@@ -74,7 +135,7 @@ class Politician {
     return Politician(
       id: id,
       name: name,
-      party: PartyRef(name: json['party'] as String? ?? '무소속'),
+      party: PartyRef.fromJson(json),
       summary: json['summary'] as String? ?? '',
       portraitUrl: json['portraitUrl'] as String?,
       portraitCredit: json['portraitCredit'] as String?,
