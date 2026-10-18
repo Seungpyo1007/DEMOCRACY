@@ -146,6 +146,9 @@ class _HistoryScreenState extends ConsumerState<HistoryScreen> {
         child: EditorialScrollView(
           controller: _scroll,
           title: '역사',
+          // Opened from the home's 「역사」 button, so it goes back there.
+          onBack: () =>
+              context.canPop() ? context.pop() : context.go(AppRoutes.home),
           kicker: district?.displayName,
           note: '한 지역구가 걸어온 길',
           bottomPadding: AppSpacing.x12,

@@ -5,7 +5,6 @@ import 'package:democracy/src/design/components/app_labels.dart';
 import 'package:democracy/src/design/components/app_timeline.dart';
 import 'package:democracy/src/design/components/editorial.dart';
 import 'package:democracy/src/design/components/motion.dart';
-import 'package:democracy/src/design/components/native_controls.dart';
 import 'package:democracy/src/features/district/application/district_providers.dart';
 import 'package:democracy/src/features/district/domain/legislator_record.dart';
 import 'package:democracy/src/features/pledges/application/pledge_providers.dart';
@@ -15,6 +14,7 @@ import 'package:democracy/src/features/pledges/presentation/pledge_report_action
 import 'package:democracy/src/features/shared/presentation/async_section.dart';
 import 'package:democracy/src/features/shared/presentation/provenance_widgets.dart';
 import 'package:democracy/src/features/shared/presentation/source_viewer.dart';
+import 'package:democracy/src/features/shell/application/tab_accessory.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
@@ -80,9 +80,13 @@ class PledgeDetailScreen extends ConsumerWidget {
         title: pledge?.title ?? '공약 상세',
         kicker: kicker == null || kicker.isEmpty ? null : kicker,
         onBack: () => _back(context),
-        // On native iOS the action lives in the tab bar's accessory (lent
-        // by the tracker below); everywhere else it floats on the page.
-        floatingAction: usesNativeIosControls(context)
+        // Opened over the tracker, the action is already in the tab bar's
+        // round button, lent by the tracker below. Opened straight from the
+        // home there is no tracker beneath to lend it, so the page floats
+        // its own -- the report stays one tap away either way.
+        floatingAction:
+            tabBarTakesAction(context) &&
+                ref.watch(tabAccessoriesProvider).containsKey(TabSlot.tracker)
             ? null
             : const PledgeReportAction(),
         slivers: [

@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:democracy/src/app/app_router.dart';
 import 'package:democracy/src/app/app_routes.dart';
 import 'package:democracy/src/core/adaptive/platform_adaptive.dart';
@@ -14,10 +16,13 @@ import 'package:democracy/src/features/ai_match/data/fake_match_repository.dart'
 import 'package:democracy/src/features/ai_match/presentation/ai_tab_page.dart';
 import 'package:democracy/src/features/district/application/district_providers.dart';
 import 'package:democracy/src/features/district/data/fake_district_repository.dart';
+import 'package:democracy/src/features/district/presentation/district_home_screen.dart';
 import 'package:democracy/src/features/history/application/history_providers.dart';
 import 'package:democracy/src/features/history/data/fake_history_repository.dart';
+import 'package:democracy/src/features/history/presentation/history_screen.dart';
 import 'package:democracy/src/features/pledges/application/pledge_providers.dart';
 import 'package:democracy/src/features/pledges/data/fake_pledge_repository.dart';
+import 'package:democracy/src/features/pledges/presentation/pledge_tracker_screen.dart';
 import 'package:democracy/src/features/results/application/results_providers.dart';
 import 'package:democracy/src/features/results/data/fake_results_repository.dart';
 import 'package:democracy/src/features/reviews/application/review_providers.dart';
@@ -174,7 +179,8 @@ void main() {
 
       if (platform == TargetPlatform.android) {
         // Android lends the action to the round button beside the bar, as
-        // native iOS does; the page floats nothing of its own.
+        // native iOS does; the page floats nothing of its own. The tracker
+        // is a page on the home tab now, and still lends it.
         await tester.pumpAndSettle();
         expect(find.byType(FloatingActionButton), findsNothing);
         expect(
@@ -217,6 +223,78 @@ void main() {
       expect(lowestTextBottom(tester), lessThanOrEqualTo(top(tester, action)));
     });
   }
+
+  // 역사 and 트래커 left the tab bar. Both open from the home now -- the
+  // tracker from 「공약」 beside the district's name, the history from the
+  // row that closes the page -- and both keep the bar and go back home.
+  for (final platform in [TargetPlatform.iOS, TargetPlatform.android]) {
+    testWidgets('$platform opens the tracker and the history from the home', (
+      tester,
+    ) async {
+      await pumpApp(tester, platform, AppRoutes.home);
+      final router = GoRouter.of(
+        tester.element(find.byType(PlatformAdaptiveTabBar)),
+      );
+      String path() => router.routerDelegate.currentConfiguration.uri.path;
+
+      // Android's large app bar draws its title twice, expanded and
+      // collapsed; the expanded one is the one on screen.
+      await tester.tap(
+        find.byKey(DistrictHomeKeys.pledges).hitTestable().first,
+      );
+      await tester.pumpAndSettle();
+      expect(path(), AppRoutes.tracker);
+      expect(find.byType(PledgeTrackerScreen), findsOneWidget);
+      expect(find.byKey(PlatformAdaptiveTabBar.surfaceKey), findsOneWidget);
+
+      router.pop();
+      await tester.pumpAndSettle();
+      expect(path(), AppRoutes.home);
+
+      await tester.scrollUntilVisible(
+        find.byKey(DistrictHomeKeys.history),
+        300,
+        scrollable: find.byType(Scrollable).hitTestable().first,
+      );
+      await tester.pumpAndSettle();
+      await tester.tap(find.byKey(DistrictHomeKeys.history));
+      await tester.pumpAndSettle();
+      expect(path(), AppRoutes.history);
+      expect(find.byType(HistoryScreen), findsOneWidget);
+      expect(find.byKey(PlatformAdaptiveTabBar.surfaceKey), findsOneWidget);
+
+      router.pop();
+      await tester.pumpAndSettle();
+      expect(path(), AppRoutes.home);
+    });
+  }
+
+  // A pledge opens from the home's summary straight over the home, with no
+  // tracker beneath to lend the report to the bar. The page floats it
+  // itself then, so reporting stays one tap away from either path.
+  testWidgets('android pledge detail keeps its report action either way', (
+    tester,
+  ) async {
+    await pumpApp(tester, TargetPlatform.android, AppRoutes.home);
+    final router = GoRouter.of(
+      tester.element(find.byType(PlatformAdaptiveTabBar)),
+    );
+    const accessory = ValueKey('tab-accessory-이행 제보');
+
+    // Over the tracker: the bar's round button carries it.
+    router.go(AppRoutes.pledgeDetail('fixture-pledge-1'));
+    await tester.pumpAndSettle();
+    expect(find.byKey(accessory), findsOneWidget);
+    expect(find.byType(FloatingActionButton), findsNothing);
+
+    // Straight from the home: the page floats it.
+    router.go(AppRoutes.home);
+    await tester.pumpAndSettle();
+    unawaited(router.push(AppRoutes.pledgeDetail('fixture-pledge-1')));
+    await tester.pumpAndSettle();
+    expect(find.byKey(accessory), findsNothing);
+    expect(find.byType(FloatingActionButton), findsOneWidget);
+  });
 
   // 후보 매칭 | 방향 분석 is a switch, not navigation. As a nested route the
   // direction view was pushed over the match with a page transition and a
