@@ -20,10 +20,10 @@ import 'package:democracy/src/features/ai_match/presentation/on_device_notice.da
 import 'package:democracy/src/features/onboarding/application/onboarding_providers.dart';
 import 'package:democracy/src/features/onboarding/domain/resident_profile.dart';
 import 'package:democracy/src/features/shared/presentation/provenance_widgets.dart';
+import 'package:democracy/src/features/shared/presentation/source_viewer.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
-import 'package:url_launcher/url_launcher.dart';
 
 /// Which candidates line up with what the reader said they care about.
 ///
@@ -687,9 +687,10 @@ class _Reasoning extends ConsumerWidget {
                         if (match.reasons.isNotEmpty)
                           TextLink(
                             label: '원문 대조 보기 ↗',
-                            onTap: () => launchUrl(
+                            onTap: () => openSource(
+                              context,
                               match.reasons.first.source.sourceUrl,
-                              mode: LaunchMode.externalApplication,
+                              source: match.reasons.first.source,
                             ),
                           ),
                       ],

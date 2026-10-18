@@ -340,7 +340,7 @@ void main() {
       expect(find.text('○ 판정 전'), findsOneWidget);
       expect(find.textContaining('아직 이행 여부를 판정하지 않은 공약입니다'), findsOneWidget);
       expect(find.text('판정 근거는 모두 원문으로 연결됩니다'), findsNothing);
-      expect(find.text('공약 원문'), findsOneWidget);
+      expect(find.text('선거공보 원문 보기'), findsOneWidget);
     });
   });
 

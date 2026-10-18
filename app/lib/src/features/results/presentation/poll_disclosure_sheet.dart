@@ -4,9 +4,9 @@ import 'package:democracy/src/design/components/motion.dart';
 import 'package:democracy/src/design/components/native_controls.dart';
 import 'package:democracy/src/features/results/domain/poll_disclosure.dart';
 import 'package:democracy/src/features/shared/presentation/provenance_widgets.dart';
+import 'package:democracy/src/features/shared/presentation/source_viewer.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:url_launcher/url_launcher.dart';
 
 /// The 제108조제5항 items in full.
 ///
@@ -163,18 +163,18 @@ class _DisclosureRow extends StatelessWidget {
 /// One of the two links, as the platform's own text button.
 ///
 /// The button is a real `TextButton` on Android and a `CupertinoButton` on
-/// iOS, led by the "opens elsewhere" glyph ([AppIcons.source]) so the reader
-/// knows before tapping that it leaves the app.
+/// iOS, led by the "opens the original" glyph ([AppIcons.source]) so the
+/// reader knows before tapping that it goes to the publisher's page. That
+/// page opens in the app ([openSource]), over the sheet.
 class _DisclosureLink extends StatelessWidget {
   const _DisclosureLink({required this.label, required this.url});
 
   final String label;
   final Uri url;
 
-  void _open() => launchUrl(url, mode: LaunchMode.externalApplication);
-
   @override
   Widget build(BuildContext context) {
+    void open() => openSource(context, url);
     final glass = Theme.of(context).extension<AppSurfaceTokens>()!.isGlass;
     final text = AppTextStyles.ctaSmall.copyWith(color: AppColors.ink);
 
@@ -182,7 +182,7 @@ class _DisclosureLink extends StatelessWidget {
         ? CupertinoButton(
             padding: EdgeInsets.zero,
             minimumSize: const Size(44, 44),
-            onPressed: _open,
+            onPressed: open,
             child: Row(
               mainAxisSize: MainAxisSize.min,
               children: [
@@ -205,7 +205,7 @@ class _DisclosureLink extends StatelessWidget {
               padding: const EdgeInsets.symmetric(horizontal: AppSpacing.x2),
               alignment: AlignmentDirectional.centerStart,
             ),
-            onPressed: _open,
+            onPressed: open,
             icon: Icon(AppIcons.source.material, size: 18),
             label: Text(label, style: text),
           );
