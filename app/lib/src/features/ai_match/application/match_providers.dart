@@ -17,19 +17,25 @@ final matchSubjectProvider = Provider<MatchSubject>(
   (ref) => MatchSubject.candidates,
 );
 
-/// The reader's profile as a match query: the policy chips are the axes, the
-/// rest is context.
+/// The reader's profile as a match query: the picked interests are the axes,
+/// named by their labels and carrying their keywords; the context chips are
+/// background.
 MatchQuery matchQueryFor(ResidentProfile profile) {
-  final policy = profile.policyTags;
+  final interests = profile.interests;
   return MatchQuery(
-    interests: [
-      for (final tag in ResidentProfile.availableTags)
-        if (policy.contains(tag)) tag,
-    ],
+    interests: [for (final interest in interests) interest.label],
     context: [
-      for (final tag in ResidentProfile.availableTags)
-        if (profile.tags.contains(tag) && !policy.contains(tag)) tag,
+      for (final tag in ResidentProfile.contextTags)
+        if (profile.context.contains(tag)) tag,
     ],
+    relatedTerms: {
+      for (final interest in interests)
+        if (interest.promptTerms.isNotEmpty)
+          interest.label: interest.promptTerms,
+    },
+    matchTerms: {
+      for (final interest in interests) ...interest.matchTerms,
+    }.toList(growable: false),
   );
 }
 
@@ -45,8 +51,9 @@ final matchReportProvider = FutureProvider<MatchReport>((ref) async {
     throw StateError('No district has been selected yet.');
   }
 
-  final tags = ref.watch(residentProfileProvider.select((p) => p.tags));
-  final query = matchQueryFor(ResidentProfile(tags: tags));
+  // The query, not the profile: moving the 관심도 slider must not start a
+  // run on the device. MatchQuery compares by value for this.
+  final query = ref.watch(residentProfileProvider.select(matchQueryFor));
   return ref
       .watch(matchRepositoryProvider)
       .loadReport(district.id, query: query);

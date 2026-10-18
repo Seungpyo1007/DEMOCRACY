@@ -10,6 +10,7 @@ import 'package:democracy/src/features/ai_match/data/on_device/match_run.dart';
 import 'package:democracy/src/features/ai_match/domain/candidate_match.dart';
 import 'package:democracy/src/features/ai_match/domain/member_bills.dart';
 import 'package:democracy/src/features/district/domain/district_repository.dart';
+import 'package:democracy/src/features/interests/domain/interest_catalog.dart';
 import 'package:democracy/src/features/pledges/domain/pledge.dart';
 import 'package:democracy/src/features/pledges/domain/pledge_repository.dart';
 
@@ -103,14 +104,31 @@ class OnDeviceMatchRepository implements MatchRepository, MatchProgressSource {
       throw const NotAvailableException('nothing to compare');
     }
 
+    // When there are more than fit, the ones naming the reader's interests
+    // go in first; see [keepRelevant].
     return MatchInput(
       memberId: member.id,
       memberName: member.name,
       party: member.party,
       interests: query.interests,
       context: query.context,
-      pledges: pledgeItems(pledgeList.take(matchMaxPledges)),
-      bills: billItems(billList.take(matchMaxBills)),
+      relatedTerms: query.relatedTerms,
+      pledges: pledgeItems(
+        keepRelevant(
+          pledgeList,
+          text: (pledge) => '${pledge.category} ${pledge.title}',
+          terms: query.matchTerms,
+          cap: matchMaxPledges,
+        ),
+      ),
+      bills: billItems(
+        keepRelevant(
+          billList,
+          text: (bill) => bill.title,
+          terms: query.matchTerms,
+          cap: matchMaxBills,
+        ),
+      ),
       billMonths: billMonths,
     );
   }

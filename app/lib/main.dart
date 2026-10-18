@@ -7,6 +7,8 @@ import 'package:democracy/src/core/network/bff_config.dart';
 import 'package:democracy/src/core/network/retry_policy.dart';
 import 'package:democracy/src/core/tips/tip_providers.dart';
 import 'package:democracy/src/core/tips/tip_store.dart';
+import 'package:democracy/src/features/onboarding/application/onboarding_providers.dart';
+import 'package:democracy/src/features/onboarding/data/resident_profile_store.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
@@ -20,6 +22,10 @@ void main() {
       // reports them as seen.
       overrides: [
         tipStoreProvider.overrideWithValue(SharedPreferencesTipStore()),
+        // The profile and interests, on this device and nowhere else.
+        residentProfileStoreProvider.overrideWithValue(
+          SharedPreferencesResidentProfileStore(),
+        ),
         // The device's own confirmation before an account is deleted.
         deviceAuthProvider.overrideWithValue(LocalDeviceAuth()),
         // Fixtures unless the build was given a BFF with --dart-define.
