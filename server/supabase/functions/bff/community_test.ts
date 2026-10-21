@@ -5,7 +5,12 @@ import { MemoryPostgrest } from "../_shared/memory_postgrest.ts";
 import { MemoryAccountStore, raised } from "./account_store.ts";
 import { ANONYMOUS_AUTHOR, communityError, DELETED_AUTHOR, HIDDEN_BODY } from "./community.ts";
 import { MemoryCommunityStore, PostgrestCommunityStore } from "./community_store.ts";
-import { validateCommunity, validateEnvelope, validateReviewBoard } from "./contract.ts";
+import {
+  validateCommunity,
+  validateEnvelope,
+  validateReviewBoard,
+  validateThread,
+} from "./contract.ts";
 import { createHandler } from "./handler.ts";
 import { MemoryStore } from "./store.ts";
 import { ANON_KEY, fakeGotrue, seededBytes, SUPABASE_URL } from "../../../testdata/fake_auth.ts";
@@ -437,5 +442,243 @@ Deno.test("channel broadcast: the trigger's payload is the GET message minus `mi
   assert(/^\d{4}-\d\d-\d\dT\d\d:\d\d:\d\d\.\d{3}Z$/.test(message.createdAt));
 
   assert(sql.includes("'district-chat:' || msg.district_id"));
+  assert(/jsonb_build_object\('id', old\.id, 'deleted', true\)/.test(sql));
+});
+
+// ---------------------------------------------------------------- threads
+
+async function threadSetup() {
+  const s = await setup();
+  s.community.syncBillThreads();
+  const list = await s.call("GET", `/districts/${MAPO_B}/community`, { token: null });
+  const id = list.body.data.threads[0].id as string;
+  return { ...s, id, path: `/threads/${id}`, replies: `/threads/${id}/replies` };
+}
+
+Deno.test("threads: a thread opens with its bill, public and briefly cached", async () => {
+  const { call, path } = await threadSetup();
+  const r = await call("GET", path, { token: null });
+  assertEquals(r.status, 200);
+  assertEquals(r.cache, "public, max-age=15");
+  assertEquals(validateThread(r.body.data), []);
+  const { thread, replies, nextCursor } = r.body.data;
+  assertEquals(thread.districtId, MAPO_B);
+  assertEquals(thread.title, "도시공원 보전 및 이용에 관한 법률 일부개정법률안");
+  assertEquals(thread.origin, "법안 발의로 자동 생성");
+  assertEquals(thread.replies, 0);
+  assert(thread.source.sourceUrl.startsWith("http://likms.assembly.go.kr/bill/billDetail.do"));
+  assertEquals(typeof thread.bill.stage, "string");
+  assert(/^\d{4}-\d\d-\d\d$/.test(thread.bill.proposedAt));
+  assertEquals([replies, nextCursor], [[], null]);
+
+  assertEquals((await call("GET", "/threads/bill-NOPE")).body.error.code, "not_found");
+  assertEquals((await call("GET", "/threads/a.b")).status, 400);
+  assertEquals((await call("GET", `${path}?limit=0`)).status, 400);
+  assertEquals((await call("GET", `${path}?after=yesterday`)).status, 400);
+  assertEquals((await call("PUT", path)).status, 400);
+  assertEquals((await call("GET", `${path}/replies`)).status, 400);
+});
+
+Deno.test("threads: replying needs residency in the thread's district, like the channel", async () => {
+  const { call, signUp, reside, replies } = await threadSetup();
+  const body = { body: "위원회 심사 일정이 궁금합니다." };
+  assertEquals((await call("POST", replies, { token: null, body })).status, 401);
+  await signUp();
+  const none = await call("POST", replies, { body });
+  assertEquals([none.status, none.body.error.code], [403, "residency_required"]);
+  reside(USER, MAPO_A);
+  const elsewhere = await call("POST", replies, { body });
+  assertEquals([elsewhere.status, elsewhere.body.error.code], [403, "residency_required"]);
+  assertEquals((await call("POST", "/threads/bill-NOPE/replies", { body })).status, 404);
+
+  reside(USER);
+  const ok = await call("POST", replies, { body });
+  assertEquals(ok.status, 200);
+  assertEquals(ok.cache, "no-store");
+  assertEquals(ok.body.data.reply.author, ANONYMOUS_AUTHOR);
+  assertEquals(ok.body.data.reply.mine, true);
+  assertEquals(ok.body.data.reply.verifiedResident, true);
+});
+
+Deno.test("threads: 1-500 characters, hate terms refused, rate limit shared with posts", async () => {
+  const { call, signUp, reside, advance, replies } = await threadSetup();
+  await signUp();
+  reside(USER);
+  for (const body of [{ body: "  " }, { body: "가".repeat(501) }, { body: "안녕", anonymous: 1 }]) {
+    assertEquals((await call("POST", replies, { body })).status, 400, JSON.stringify(body));
+  }
+  const hate = await call("POST", replies, { body: { body: "멍청한 법안이네요" } });
+  assertEquals([hate.status, hate.body.error.code], [422, "content_rejected"]);
+  assert(!JSON.stringify(hate.body).includes("멍청"));
+  assertEquals((await call("POST", replies, { body: { body: "가".repeat(500) } })).status, 200);
+
+  for (let i = 0; i < 4; i++) {
+    advance(1000);
+    const m = await call("POST", `/districts/${MAPO_B}/messages`, { body: { body: `${i}` } });
+    assertEquals(m.status, 200);
+  }
+  const sixth = await call("POST", replies, { body: { body: "여섯 번째" } });
+  assertEquals([sixth.status, sixth.body.error.code], [429, "rate_limited"]);
+  advance(60_000);
+  assertEquals((await call("POST", replies, { body: { body: "다시" } })).status, 200);
+});
+
+Deno.test("threads: replies oldest first, paged by cursor without gaps or repeats", async () => {
+  const { call, signUp, reside, advance, path, replies } = await threadSetup();
+  const handle = await signUp();
+  await signUp(OTHER_TOKEN);
+  reside(USER);
+  reside(OTHER);
+  const sent: string[] = [];
+  for (let i = 0; i < 7; i++) {
+    // Two posts in the same millisecond, so the cursor has to break the tie on id.
+    if (i % 2 === 0) advance(13_000);
+    const token = i % 3 === 0 ? OTHER_TOKEN : TOKEN;
+    const r = await call("POST", replies, {
+      token,
+      body: { body: `답글 ${i}`, anonymous: i !== 1 },
+    });
+    assertEquals(r.status, 200);
+    sent.push(r.body.data.reply.body);
+  }
+
+  const seen: string[] = [];
+  const mine: boolean[] = [];
+  let cursor: string | null = null;
+  let pages = 0;
+  do {
+    const q: string = cursor ? `&after=${encodeURIComponent(cursor)}` : "";
+    const r = await call("GET", `${path}?limit=3${q}`);
+    assertEquals(r.cache, "no-store", "a signed-in read carries `mine`");
+    assertEquals(validateThread(r.body.data), []);
+    seen.push(...r.body.data.replies.map((x: { body: string }) => x.body));
+    mine.push(...r.body.data.replies.map((x: { mine: boolean }) => x.mine));
+    if (pages === 0) assertEquals(r.body.data.replies[1].author, handle);
+    cursor = r.body.data.nextCursor;
+    pages += 1;
+  } while (cursor !== null);
+  assertEquals(seen, sent);
+  assertEquals(pages, 3);
+  assertEquals(mine, [false, true, true, false, true, true, false]);
+
+  const list = await call("GET", `/districts/${MAPO_B}/community`, { token: null });
+  assertEquals(list.body.data.threads[0].replies, 7, "the list counts the same replies");
+  assertEquals((await call("GET", path, { token: null })).body.data.thread.replies, 7);
+});
+
+Deno.test("threads: own replies only are deleted; reports and blocks cover replies", async () => {
+  const { call, signUp, reside, path, replies } = await threadSetup();
+  await signUp();
+  await signUp(OTHER_TOKEN);
+  reside(USER);
+  reside(OTHER);
+  const a = (await call("POST", replies, { body: { body: "첫 답글" } })).body.data.reply.id;
+  const b = (await call("POST", replies, { body: { body: "두 번째" } })).body.data.reply.id;
+
+  const reply = `/replies/${a}`;
+  assertEquals((await call("DELETE", reply, { token: null })).status, 401);
+  const theirs = await call("DELETE", reply, { token: OTHER_TOKEN });
+  assertEquals([theirs.status, theirs.body.error.code], [403, "forbidden"]);
+  assertEquals((await call("DELETE", reply)).body.data, { deleted: true });
+  assertEquals((await call("DELETE", reply)).body.error.code, "not_found");
+  assertEquals((await call("DELETE", "/replies/not-a-uuid")).status, 400);
+
+  const report = await call("POST", "/reports", {
+    token: OTHER_TOKEN,
+    body: { targetType: "reply", targetId: b, reason: "privacy" },
+  });
+  assertEquals(report.body.data, { reported: true, hidden: true });
+  const shown = (await call("GET", path, { token: null })).body.data.replies;
+  assertEquals(shown.map((r: { body: string; hidden: boolean }) => [r.body, r.hidden]), [
+    [HIDDEN_BODY, true],
+  ]);
+
+  const block = await call("POST", "/blocks", {
+    token: OTHER_TOKEN,
+    body: { targetType: "reply", targetId: b },
+  });
+  assertEquals(block.status, 200);
+  assertEquals((await call("GET", path, { token: OTHER_TOKEN })).body.data.replies, []);
+  assertEquals((await call("GET", path)).body.data.replies.length, 1, "only for the blocker");
+});
+
+Deno.test("threads: export and DELETE /me include replies", async () => {
+  for (const choice of ["keep", "delete"]) {
+    const { call, signUp, reside, community, path, replies } = await threadSetup();
+    await signUp();
+    reside(USER);
+    await call("POST", replies, { body: { body: "답글입니다", anonymous: false } });
+    const exported = (await call("GET", "/me/export")).body.data.posts.threadReplies;
+    assertEquals(exported.map((r: { body: string }) => r.body), ["답글입니다"]);
+    assertEquals(exported[0].anonymous, false);
+
+    assertEquals((await call("DELETE", `/me?posts=${choice}`)).status, 200);
+    const left = (await call("GET", path, { token: null })).body.data.replies;
+    if (choice === "keep") {
+      assertEquals(left.map((r: { author: string }) => r.author), [DELETED_AUTHOR]);
+    } else {
+      assertEquals(left, []);
+      assertEquals(community.t.replies, []);
+    }
+  }
+});
+
+Deno.test("PostgREST: thread reads and the reply write pass their arguments", async () => {
+  const db = new MemoryPostgrest();
+  db.rpcs.set("bff_thread_replies", (args) => {
+    assertEquals(args, {
+      p_thread_id: "bill-X",
+      p_after_at: "2026-09-01T10:00:00.123456+00:00",
+      p_after_id: USER,
+      p_limit: 31,
+    });
+    return [];
+  });
+  db.rpcs.set("post_thread_reply", (args) => {
+    assertEquals(args, {
+      p_user_id: USER,
+      p_thread_id: "bill-X",
+      p_body: "안녕",
+      p_anonymous: true,
+    });
+    throw raised("not_found");
+  });
+  db.rpcs.set("bff_thread", (args) => {
+    assertEquals(args, { p_thread_id: "bill-X" });
+    return [];
+  });
+  const store = new PostgrestCommunityStore(db);
+  assertEquals(
+    await store.threadReplies("bill-X", { at: "2026-09-01T10:00:00.123456+00:00", id: USER }, 31),
+    [],
+  );
+  assertEquals(await store.thread("bill-X"), null);
+  let caught: unknown;
+  try {
+    await store.postReply({ userId: USER, threadId: "bill-X", body: "안녕", anonymous: true });
+  } catch (error) {
+    caught = communityError(error);
+  }
+  assertEquals((caught as ApiError).code, "not_found");
+});
+
+Deno.test("thread broadcast: the trigger's payload is the GET reply minus `mine`", async () => {
+  const sql = await Deno.readTextFile(
+    new URL("../../migrations/20261021000000_thread_replies.sql", import.meta.url),
+  );
+  const payload = /function public\.thread_reply_payload[\s\S]*?\$\$;/.exec(sql)?.[0] ?? "";
+  const sqlKeys = [...payload.matchAll(/^\s+'(\w+)', /gm)].map((m) => m[1])
+    .filter((k) => k !== "authorTag").sort();
+
+  const { call, signUp, reside, replies } = await threadSetup();
+  await signUp();
+  reside(USER);
+  const reply = (await call("POST", replies, { body: { body: "안녕하세요" } })).body.data.reply;
+  assertEquals(sqlKeys, Object.keys(reply).filter((k) => k !== "mine").sort());
+  assert(payload.includes(`'${ANONYMOUS_AUTHOR}'`));
+  assert(payload.includes(`'${DELETED_AUTHOR}'`));
+  assert(payload.includes(`'${HIDDEN_BODY}'`));
+  assert(!/'author_id'|'anonymous'|'mine'/.test(payload));
+  assert(sql.includes("'thread:' || reply.thread_id"));
   assert(/jsonb_build_object\('id', old\.id, 'deleted', true\)/.test(sql));
 });

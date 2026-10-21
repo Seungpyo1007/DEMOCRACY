@@ -30,8 +30,9 @@ class RealtimeChannelTransport implements ChannelTransport {
   final String endpoint;
   final String anonKey;
 
-  /// The two events the trigger sends.
-  static const events = ['message', 'delete'];
+  /// The events the triggers send: the channel's messages and a thread's
+  /// replies, deletions, and posts hidden or shown again.
+  static const events = ['message', 'reply', 'delete', 'hidden'];
 
   @override
   ChannelLink join(

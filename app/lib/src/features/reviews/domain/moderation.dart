@@ -9,7 +9,8 @@ library;
 
 enum PostKind {
   review('review'),
-  message('message');
+  message('message'),
+  reply('reply');
 
   const PostKind(this.wire);
 

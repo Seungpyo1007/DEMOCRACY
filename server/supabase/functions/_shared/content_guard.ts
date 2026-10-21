@@ -30,3 +30,4 @@ export function normaliseBody(raw: string): string {
 
 export const REVIEW_BODY = { min: 10, max: 500 } as const;
 export const MESSAGE_BODY = { min: 1, max: 300 } as const;
+export const REPLY_BODY = { min: 1, max: 500 } as const;

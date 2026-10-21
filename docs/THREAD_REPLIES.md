@@ -49,7 +49,7 @@ begin
 end $$;
 ```
 
-- `bff_district_threads`의 `replies`를 실제 count로 바꿈 (지금 0 고정)
+- `bff_district_threads`는 community 마이그레이션 때부터 실제 count를 셈. 답글이 없어서 0으로 보였던 것뿐이라 손댈 것 없음
 - 둘 다 `revoke execute … from public, anon, authenticated`, BFF만 service role로 부름
 - 법안이 철회·폐기돼도 스레드는 닫지 않음. 상태는 법안 쪽 정보로 보여줌 (아래 `bill.stage`)
 
@@ -57,7 +57,7 @@ end $$;
 
 | 경로 | 설명 |
 |---|---|
-| `GET /threads/{id}?before=<cursor>&limit=30` | 스레드 + 답글 한 페이지. 로그인 안 해도 됨. 로그인하면 `mine` 표시 때문에 캐시 안 함 (채팅이랑 같음), 비로그인 15초 캐시 |
+| `GET /threads/{id}?after=<cursor>&limit=30` | 스레드 + 답글 한 페이지. 로그인 안 해도 됨. 로그인하면 `mine` 표시 때문에 캐시 안 함 (채팅이랑 같음), 비로그인 15초 캐시 |
 | `POST /threads/{id}/replies` | `{body, anonymous?}` → `{reply}` |
 | `DELETE /replies/{id}` | → `{deleted:true}`. 본인 것만, 아니면 403 |
 

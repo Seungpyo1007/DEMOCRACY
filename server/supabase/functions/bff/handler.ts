@@ -6,7 +6,8 @@
 //   /me/... (account routes, signed-in only; see account.ts)
 //   POST /residency/verify, DELETE /residency (signed-in; see residency.ts)
 //   GET|POST /districts/{id}/reviews, GET /districts/{id}/community,
-//   POST /districts/{id}/messages, DELETE /reviews/{id} | /messages/{id} (see community.ts)
+//   POST /districts/{id}/messages, DELETE /reviews/{id} | /messages/{id} | /replies/{id},
+//   GET /threads/{id}, POST /threads/{id}/replies (see community.ts)
 //   POST /reports, GET|POST /blocks, DELETE /blocks/{id}, /staff/reports (see moderation.ts)
 //
 // The public routes are GET only and need no account. Signed-in routes are no-store.
