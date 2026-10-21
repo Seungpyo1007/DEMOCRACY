@@ -10,6 +10,10 @@
     }
   },
   "overallCountedShare": 67.2,
+  "overallSource": {
+    "sourceUrl": "https://www.data.go.kr/data/15000900/openapi.do",
+    "fetchedAt": "2026-07-30T09:00:00Z"
+  },
   "live": true,
   "districts": [
     {

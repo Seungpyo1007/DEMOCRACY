@@ -41,8 +41,8 @@
         "label": "공약 이행",
         "unit": "%",
         "value": {
-          "value": 58,
-          "sourceUrl": "https://open.assembly.go.kr/portal/openapi/fixture-pledges",
+          "value": 38,
+          "sourceUrl": "https://open.assembly.go.kr/portal/openapi/fixture-pledge-board",
           "fetchedAt": "2026-07-30T09:00:00Z"
         }
       }

@@ -62,6 +62,7 @@ class FakeResultsRepository implements ResultsRepository {
       schedule: results.schedule,
       electionName: results.electionName,
       overallCountedShare: overall,
+      overallSource: results.overallSource,
       districts: List.unmodifiable(districts),
       historical: results.historical,
       polls: results.polls,

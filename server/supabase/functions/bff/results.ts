@@ -9,7 +9,7 @@
 import { ApiError } from "../_shared/envelope.ts";
 import { CURRENT_DISTRICT_SG_ID } from "../_shared/district_names.ts";
 import { generalElectionTerm } from "../_shared/normalize_nec.ts";
-import { sourceMeta } from "../_shared/provenance.ts";
+import { sourceMeta, SOURCES } from "../_shared/provenance.ts";
 import type { CountRec, DistrictRec, ReadStore } from "./store.ts";
 import { loadPartyBook, PartyBook, type PartyInfo, sgIdDate } from "./parties.ts";
 
@@ -121,6 +121,12 @@ export async function buildResults(store: ReadStore, id: string) {
     electionSchedule: null,
     overallCountedShare: round1(
       served.reduce((sum, d) => sum + d.countedShare, 0) / served.length,
+    ),
+    // The national share is our average of the district counts, so it cites the
+    // count feed itself, dated by the oldest count that went into it.
+    overallSource: sourceMeta(
+      SOURCES.necCounts.url,
+      served.map((d) => d.source.fetchedAt).sort()[0],
     ),
     live: false,
     districts: served,
