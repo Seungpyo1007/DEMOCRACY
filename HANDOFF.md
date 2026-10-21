@@ -22,7 +22,7 @@
 
 ## 디자인 전면 개편 (2026-09-24)
 
-`design_handoff_democracy_app/`의 레드·Archivo 디자인을 **"파인 아카이브"**로 교체했다. 목업은 Claude Design 캔버스(비공개 아티팩트)에 iOS/Android 13화면으로 있고, 이제 그쪽이 정본이다. 원본 번들은 기록으로만 남는다.
+`design_handoff_democracy_app/`의 레드·Archivo 디자인을 **"파인 아카이브"**로 교체했다. 목업은 비공개 디자인 캔버스에 iOS/Android 13화면으로 있고, 이제 그쪽이 정본이다. 원본 번들은 기록으로만 남는다.
 
 - **색.** 세이지 종이 `#EEF0EB`, 먹 `#1B2220`, 강조 소나무 `#2F5D50` 하나. 강조색은 주 CTA·손글씨 주석·번복 **세 곳에만** 쓴다. 적·주황 계열을 버린 이유는 N-1 — 한국에서 정당색으로 읽힌다. 공약 상태는 이행/진행/미이행이 먹의 명도 램프, 번복만 소나무라서 색맹 독자에게도 명도로 구분된다. Android도 흰색이 아니라 같은 종이 위에 그린다(모순 해소 규칙의 「Android 배경 `#fff`」 행을 대체).
 - **글꼴.** 제목·이름·수치는 Gowun Batang(OFL), 여백 주석은 Nanum Pen Script(OFL), 본문은 시스템 글꼴. Gowun Batang은 KS X 1001 2,350자+라틴으로 서브셋해 16MB → 2.8MB. Nanum은 라이선스가 수정본의 이름 사용을 막아 원본 그대로 싣는다. 라이선스는 `LicenseRegistry`에 등록된다(`lib/src/app/font_licenses.dart`).
@@ -112,7 +112,7 @@
 
 ## 실데이터 연동 (2026-09-24)
 
-계획: `~/.claude/plans/streamed-moseying-nest.md`. 백엔드는 Supabase(`server/`), 앱은 BFF 하나만 부른다.
+백엔드는 Supabase(`server/`), 앱은 BFF 하나만 부른다.
 
 - **fixture가 곧 계약이다.** BFF의 `data`는 `assets/fixtures/*.json`과 같은 모양이다(`_note`만 뺀다). `test/core/network/remote_repositories_test.dart`가 각 fixture를 envelope에 싸서 remote 리포지토리로 파싱한다. fixture 모양을 바꾸면 서버도 바꿔야 한다.
 - envelope: `{servedAt, data}` / `{servedAt, error:{code,message}}`. `not_found`·`not_curated`는 `NotAvailableException`이 되고 화면은 "준비 중"을 보인다(재시도 없음). 샘플 데이터로 대신 채우지 않는다.
@@ -305,7 +305,7 @@ UI Guide HTML과 README가 14곳에서 어긋난다. 아래 규칙으로 일괄 
 
 ### 재검토 조건
 
-macOS 환경이 확보되고 M3에 진입한 뒤, `CLAUDE.md`의 규칙대로 인터페이스 뒤에서 한 패키지씩 성능·접근성 spike를 거쳐 결정한다. 탭 상태 보존을 어떻게 유지할지가 선결 과제다.
+macOS 환경이 확보되고 M3에 진입한 뒤, 원래 원칙대로 인터페이스 뒤에서 한 패키지씩 성능·접근성 spike를 거쳐 결정한다. 탭 상태 보존을 어떻게 유지할지가 선결 과제다.
 
 ## 백로그
 
