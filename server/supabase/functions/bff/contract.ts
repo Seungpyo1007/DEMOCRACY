@@ -2,6 +2,7 @@
 // (app/lib/src/core/provenance/source_metadata.dart, features/district/domain/*,
 // features/history/domain/history_record.dart, features/pledges/domain/pledge.dart,
 // features/results/domain/*, features/reviews/domain/resident_review.dart,
+// features/reviews/domain/discussion.dart,
 // features/reviews/data/remote_*).
 // Returns a list of violations; empty = the app would parse it.
 //
@@ -482,6 +483,54 @@ export function validateCommunity(json: unknown): string[] {
       errs.push(`threads[${i}].replies: must be an integer`);
     }
   });
+  return errs;
+}
+
+/**
+ * ThreadPage.fromJson: thread {id, title, source}, bill optional, replies[] with id, author
+ * and body. nextCursor is a string or null.
+ */
+export function validateThread(json: unknown): string[] {
+  const errs: string[] = [];
+  if (!isMap(json)) return ["thread page: not an object"];
+  const t = json.thread;
+  if (!isMap(t) || !nonEmpty(t.id) || !nonEmpty(t.title)) {
+    errs.push("thread: id and title");
+  } else {
+    source(t.source, "thread.source", errs);
+    if (t.replies !== undefined && !Number.isInteger(t.replies)) {
+      errs.push("thread.replies: must be an integer");
+    }
+    const b = t.bill;
+    if (b !== undefined && b !== null) {
+      if (!isMap(b)) {
+        errs.push("thread.bill: object or null");
+      } else {
+        for (const k of ["proposer", "committee", "stage", "proposedAt"]) {
+          if (b[k] !== undefined && b[k] !== null && typeof b[k] !== "string") {
+            errs.push(`thread.bill.${k}: must be a string`);
+          }
+        }
+      }
+    }
+  }
+  if (!Array.isArray(json.replies)) errs.push("replies: list required");
+  (Array.isArray(json.replies) ? json.replies : []).forEach((r, i) => {
+    if (!isMap(r) || !nonEmpty(r.id) || typeof r.author !== "string" || !nonEmpty(r.body)) {
+      return errs.push(`replies[${i}]: id, author and body`);
+    }
+    for (const k of ["verifiedResident", "mine", "hidden"]) {
+      if (r[k] !== undefined && typeof r[k] !== "boolean") {
+        errs.push(`replies[${i}].${k}: must be a boolean`);
+      }
+    }
+    if (r.createdAt !== undefined && Number.isNaN(Date.parse(String(r.createdAt)))) {
+      errs.push(`replies[${i}].createdAt: unparseable`);
+    }
+  });
+  if (json.nextCursor !== undefined && json.nextCursor !== null && !nonEmpty(json.nextCursor)) {
+    errs.push("nextCursor: string or null");
+  }
   return errs;
 }
 

@@ -163,6 +163,32 @@ export interface ThreadView {
   replies: number;
 }
 
+/** One thread as GET /threads/{id} reads it; bill_* are null without a bill row. */
+export interface ThreadDetailRec {
+  id: string;
+  district_id: string;
+  title: string;
+  origin: "bill";
+  bill_id: string | null;
+  source_url: string;
+  opened_at: string;
+  created_at: string;
+  replies: number;
+  bill_proposer: string | null;
+  bill_committee: string | null;
+  bill_propose_dt: string | null;
+  bill_committee_dt: string | null;
+  bill_cmt_proc_dt: string | null;
+  bill_proc_result: string | null;
+  bill_fetched_at: string | null;
+}
+
+/** Where a page of replies starts: after this reply, in (created_at, id) order. */
+export interface ReplyCursor {
+  at: string;
+  id: string;
+}
+
 export interface ReviewSummaryRec {
   respondents: number;
   average: number | null;
@@ -190,6 +216,13 @@ export interface NewMessage {
   anonymous: boolean;
 }
 
+export interface NewReply {
+  userId: string;
+  threadId: string;
+  body: string;
+  anonymous: boolean;
+}
+
 export interface CommunityStore {
   reviewSummary(districtId: string): Promise<ReviewSummaryRec>;
   recentReviews(districtId: string, limit: number): Promise<WithHandle<ReviewRec>[]>;
@@ -204,6 +237,17 @@ export interface CommunityStore {
   postMessage(m: NewMessage): Promise<MessageRec>;
   deleteMessage(id: string): Promise<void>;
   threads(districtId: string, limit: number): Promise<ThreadView[]>;
+  thread(id: string): Promise<ThreadDetailRec | null>;
+  /** Up to [limit] replies after [after], oldest first. */
+  threadReplies(
+    threadId: string,
+    after: ReplyCursor | null,
+    limit: number,
+  ): Promise<WithHandle<ReplyRec>[]>;
+  reply(id: string): Promise<ReplyRec | null>;
+  /** post_thread_reply: raises not_found, then like postReview. */
+  postReply(r: NewReply): Promise<ReplyRec>;
+  deleteReply(id: string): Promise<void>;
   /** Everything the user wrote, for GET /me/export. */
   postsBy(userId: string): Promise<{
     reviews: ReviewRec[];
@@ -449,6 +493,66 @@ export class MemoryCommunityStore implements CommunityStore {
           replies: this.t.replies.filter((r) => r.thread_id === t.id).length,
         })),
     );
+  }
+  thread(id: string) {
+    const t = this.t.threads.find((t) => t.id === id);
+    if (!t) return Promise.resolve(null);
+    const b = this.read.bills.find((b) => b.bill_id === t.bill_id);
+    return Promise.resolve({
+      id: t.id,
+      district_id: t.district_id,
+      title: t.title,
+      origin: t.origin,
+      bill_id: t.bill_id,
+      source_url: t.source_url,
+      opened_at: t.opened_at,
+      created_at: t.opened_at,
+      replies: this.t.replies.filter((r) => r.thread_id === t.id).length,
+      bill_proposer: b?.proposer ?? null,
+      bill_committee: b?.committee ?? null,
+      bill_propose_dt: b?.propose_dt ?? null,
+      bill_committee_dt: b?.committee_dt ?? null,
+      bill_cmt_proc_dt: b?.cmt_proc_dt ?? null,
+      bill_proc_result: b?.proc_result ?? null,
+      bill_fetched_at: b?.fetched_at ?? null,
+    });
+  }
+  threadReplies(threadId: string, after: ReplyCursor | null, limit: number) {
+    const at = (r: ReplyRec) => Date.parse(r.created_at);
+    const from = after === null ? null : Date.parse(after.at);
+    return Promise.resolve(
+      this.t.replies
+        .filter((r) => r.thread_id === threadId)
+        .filter((r) => from === null || at(r) > from || (at(r) === from && r.id > after!.id))
+        .sort((a, b) => at(a) - at(b) || a.id.localeCompare(b.id))
+        .slice(0, limit)
+        .map((r) => ({ ...this.live(r), author_handle: this.handle(this.author(r.author_id)) })),
+    );
+  }
+  reply(id: string) {
+    const r = this.t.replies.find((r) => r.id === id);
+    return Promise.resolve(r ? this.live(r) : null);
+  }
+  postReply(r: NewReply) {
+    const thread = this.t.threads.find((t) => t.id === r.threadId);
+    if (!thread) return Promise.reject(raised("not_found"));
+    const failed = this.writeCheck(r.userId, thread.district_id);
+    if (failed) return Promise.reject(failed);
+    const row: ReplyRec = {
+      id: this.nextId(),
+      thread_id: r.threadId,
+      author_id: r.userId,
+      body: r.body,
+      anonymous: r.anonymous,
+      verified_resident: true,
+      created_at: this.now().toISOString(),
+    };
+    this.t.replies.push(row);
+    return Promise.resolve({ ...row });
+  }
+  deleteReply(id: string) {
+    this.t.replies = this.t.replies.filter((r) => r.id !== id);
+    return Promise.resolve();
   }
   postsBy(userId: string) {
     const mine = <T extends { author_id: string | null }>(rows: T[]) =>
@@ -772,6 +876,37 @@ export class PostgrestCommunityStore implements CommunityStore {
       p_district_id: districtId,
       p_limit: limit,
     });
+  }
+  async thread(id: string) {
+    const [row] = await this.db.rpc<ThreadDetailRec[]>("bff_thread", { p_thread_id: id });
+    return row ?? null;
+  }
+  threadReplies(threadId: string, after: ReplyCursor | null, limit: number) {
+    return this.db.rpc<WithHandle<ReplyRec>[]>("bff_thread_replies", {
+      p_thread_id: threadId,
+      p_after_at: after?.at ?? null,
+      p_after_id: after?.id ?? null,
+      p_limit: limit,
+    });
+  }
+  async reply(id: string) {
+    const [row] = await this.db.select<ReplyRec>("thread_replies", {
+      select: REPLY_COLS,
+      id: `eq.${id}`,
+    });
+    return row ?? null;
+  }
+  async postReply(r: NewReply) {
+    const [row] = await this.db.rpc<ReplyRec[]>("post_thread_reply", {
+      p_user_id: r.userId,
+      p_thread_id: r.threadId,
+      p_body: r.body,
+      p_anonymous: r.anonymous,
+    });
+    return row;
+  }
+  deleteReply(id: string) {
+    return this.db.delete("thread_replies", { id: `eq.${id}` });
   }
   async postsBy(userId: string) {
     const by = { author_id: `eq.${userId}` };

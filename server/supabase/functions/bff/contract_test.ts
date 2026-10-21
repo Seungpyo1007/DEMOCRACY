@@ -14,6 +14,7 @@ import {
   validateMemberBills,
   validatePledgeBoard,
   validateReviewBoard,
+  validateThread,
 } from "./contract.ts";
 import { windowStart } from "./bills.ts";
 import { createHandler } from "./handler.ts";
@@ -535,6 +536,9 @@ Deno.test("the app's own fixtures pass the validator (validator is not too stric
     validateCommunity(JSON.parse(await text("community_fixture-seoul-mapo-b.json"))),
     [],
   );
+  for (const n of [1, 2, 3]) {
+    assertEquals(validateThread(JSON.parse(await text(`thread_fixture-thread-${n}.json`))), []);
+  }
   assertEquals(
     validateElectionResults(JSON.parse(await text("results_fixture-seoul-mapo-b.json"))),
     [],

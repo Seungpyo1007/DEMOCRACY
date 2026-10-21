@@ -7,6 +7,9 @@
 //   GET    /districts/{id}/community   {messages[], threads[]}
 //   POST   /districts/{id}/messages    {body, anonymous?} → {message}
 //   DELETE /messages/{id}              own only → {deleted: true}
+//   GET    /threads/{id}?after=&limit=  {thread, replies[], nextCursor}, replies oldest first
+//   POST   /threads/{id}/replies       {body, anonymous?} → {reply}
+//   DELETE /replies/{id}               own only → {deleted: true}
 //
 // Reading needs no account. A signed-in reader gets `mine` on their own posts, so those
 // answers are no-store; anonymous reads are cached briefly.
@@ -27,18 +30,25 @@ import {
   inspectContent,
   MESSAGE_BODY,
   normaliseBody,
+  REPLY_BODY,
   REVIEW_BODY,
 } from "../_shared/content_guard.ts";
+import { isoDateOrNull } from "../_shared/dates.ts";
 import { isDistrictId } from "../_shared/district_names.ts";
 import { ApiError } from "../_shared/envelope.ts";
+import { billStage } from "../_shared/normalize_assembly.ts";
 import { PostgrestError } from "../_shared/postgrest.ts";
+import { sourceMeta } from "../_shared/provenance.ts";
 import { type AccountContext, accountError, readBody, requireUser } from "./account.ts";
 import {
   type CommunityStore,
   type MessageRec,
+  type ReplyCursor,
+  type ReplyRec,
   REVIEW_AXES,
   type ReviewRec,
   type ReviewSummaryRec,
+  type ThreadDetailRec,
   type WithHandle,
 } from "./community_store.ts";
 
@@ -47,6 +57,8 @@ export const COMMUNITY_CACHE = "public, max-age=15";
 const REVIEW_LIMIT = 50;
 const MESSAGE_LIMIT = 50;
 const THREAD_LIMIT = 30;
+export const REPLY_PAGE = 30;
+export const REPLY_PAGE_MAX = 50;
 
 export const ANONYMOUS_AUTHOR = "익명 주민";
 /** Shown in place of a post hidden by reports or staff; the body never leaves. */
@@ -55,6 +67,8 @@ export const DELETED_AUTHOR = "탈퇴한 주민";
 export const BILL_THREAD_ORIGIN = "법안 발의로 자동 생성";
 
 const UUID = /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/;
+/** 'bill-<bill_id>' today; kept loose so another origin's ids fit. */
+const THREAD_ID = /^[A-Za-z0-9_-]{1,100}$/;
 
 export interface CommunityContext extends AccountContext {
   community: CommunityStore;
@@ -113,6 +127,71 @@ function messageView(m: WithHandle<MessageRec>, me: string | null) {
   };
 }
 
+function replyView(r: WithHandle<ReplyRec>, me: string | null) {
+  const hidden = Boolean(r.hidden_at);
+  return {
+    id: r.id,
+    author: authorOf(r),
+    body: hidden ? HIDDEN_BODY : r.body,
+    hidden,
+    verifiedResident: r.verified_resident,
+    mine: me !== null && r.author_id === me,
+    createdAt: iso(r.created_at),
+  };
+}
+
+function threadView(t: ThreadDetailRec) {
+  // The bill row is the thread's source; without one, the thread's own link stands.
+  const hasBill = t.bill_id !== null && t.bill_fetched_at !== null;
+  return {
+    id: t.id,
+    districtId: t.district_id,
+    title: t.title,
+    origin: BILL_THREAD_ORIGIN,
+    openedAt: iso(t.opened_at),
+    replies: t.replies,
+    source: sourceMeta(t.source_url, t.bill_fetched_at ?? t.created_at),
+    bill: hasBill
+      ? {
+        proposer: t.bill_proposer,
+        committee: t.bill_committee,
+        stage: billStage({
+          proc_result: t.bill_proc_result,
+          cmt_proc_dt: t.bill_cmt_proc_dt,
+          committee_dt: t.bill_committee_dt,
+        }),
+        proposedAt: isoDateOrNull(t.bill_propose_dt),
+      }
+      : null,
+  };
+}
+
+/**
+ * `<created_at>|<id>` of the last reply on a page. created_at is passed on as the database
+ * wrote it, so no precision is lost between pages.
+ */
+const cursorOf = (r: ReplyRec) => `${r.created_at}|${r.id}`;
+
+function cursorFrom(raw: string | null): ReplyCursor | null {
+  if (raw === null || raw === "") return null;
+  const cut = raw.lastIndexOf("|");
+  const at = raw.slice(0, cut);
+  const id = raw.slice(cut + 1);
+  if (cut < 1 || Number.isNaN(Date.parse(at)) || !UUID.test(id)) {
+    throw new ApiError("bad_request", "Malformed cursor.");
+  }
+  return { at, id };
+}
+
+function pageSize(raw: string | null): number {
+  if (raw === null || raw === "") return REPLY_PAGE;
+  const n = Number(raw);
+  if (!Number.isInteger(n) || n < 1 || n > REPLY_PAGE_MAX) {
+    throw new ApiError("bad_request", `limit must be an integer 1-${REPLY_PAGE_MAX}.`);
+  }
+  return n;
+}
+
 /** Leaves out the posts of authors the reader blocked. */
 function notBlocked<T extends { author_id: string | null }>(rows: T[], blocked: Set<string>) {
   return blocked.size === 0
@@ -132,6 +211,9 @@ export function communityError(error: unknown): unknown {
     }
     if (error.code === "P0001" && error.dbMessage === "rate_limited") {
       return new ApiError("rate_limited", "Too many posts. Wait a minute and try again.");
+    }
+    if (error.code === "P0001" && error.dbMessage === "not_found") {
+      return new ApiError("not_found", "No such thread.");
     }
     if (error.code === "23503") return new ApiError("not_found", "No such district.");
     if (error.code === "23514") return new ApiError("bad_request", "The post is out of bounds.");
@@ -225,10 +307,13 @@ export async function handleCommunity(
   path: string,
 ): Promise<Answer | null> {
   const inDistrict = /^\/districts\/([^/]+)\/(reviews|community|messages)$/.exec(path);
-  const own = /^\/(reviews|messages)\/([^/]+)$/.exec(path);
-  if (!inDistrict && !own) return null;
+  const own = /^\/(reviews|messages|replies)\/([^/]+)$/.exec(path);
+  const thread = /^\/threads\/([^/]+)(\/replies)?$/.exec(path);
+  if (!inDistrict && !own && !thread) return null;
 
   try {
+    if (thread) return await handleThread(ctx, req, thread[1], thread[2] !== undefined);
+
     if (own) {
       if (req.method !== "DELETE") {
         throw new ApiError("bad_request", `${req.method} is not supported here.`);
@@ -238,12 +323,18 @@ export async function handleCommunity(
       const user = await requireUser(ctx, req);
       const row = kind === "reviews"
         ? await ctx.community.review(id)
-        : await ctx.community.message(id);
+        : kind === "messages"
+        ? await ctx.community.message(id)
+        : await ctx.community.reply(id);
       if (!row) throw new ApiError("not_found", "No such post.");
       if (row.author_id !== user.id) {
         throw new ApiError("forbidden", "Only the author can delete this.");
       }
-      await (kind === "reviews" ? ctx.community.deleteReview(id) : ctx.community.deleteMessage(id));
+      await (kind === "reviews"
+        ? ctx.community.deleteReview(id)
+        : kind === "messages"
+        ? ctx.community.deleteMessage(id)
+        : ctx.community.deleteReply(id));
       return { data: { deleted: true } };
     }
 
@@ -310,4 +401,56 @@ export async function handleCommunity(
   } catch (error) {
     throw communityError(error);
   }
+}
+
+/** GET /threads/{id} and POST /threads/{id}/replies. */
+async function handleThread(
+  ctx: CommunityContext,
+  req: Request,
+  id: string,
+  replies: boolean,
+): Promise<Answer> {
+  const route = `${req.method} ${replies ? "replies" : "thread"}`;
+  if (route !== "GET thread" && route !== "POST replies") {
+    throw new ApiError("bad_request", `${req.method} is not supported here.`);
+  }
+  if (!THREAD_ID.test(id)) throw new ApiError("bad_request", "Malformed thread id.");
+
+  if (req.method === "GET") {
+    const url = new URL(req.url);
+    const after = cursorFrom(url.searchParams.get("after"));
+    const limit = pageSize(url.searchParams.get("limit"));
+    const me = await reader(ctx, req);
+    const t = await ctx.community.thread(id);
+    if (!t) throw new ApiError("not_found", "No such thread.");
+    // One more than the page, to know whether there is a next one.
+    const [rows, blocked] = await Promise.all([
+      ctx.community.threadReplies(id, after, limit + 1),
+      blockedBy(ctx, me?.id ?? null),
+    ]);
+    const page = rows.slice(0, limit);
+    return {
+      data: {
+        thread: threadView(t),
+        replies: notBlocked(page, blocked).map((r) => replyView(r, me?.id ?? null)),
+        nextCursor: rows.length > limit ? cursorOf(page[page.length - 1]) : null,
+      },
+      cache: me ? undefined : COMMUNITY_CACHE,
+    };
+  }
+
+  const user = await requireUser(ctx, req);
+  const t = await ctx.community.thread(id);
+  if (!t) throw new ApiError("not_found", "No such thread.");
+  const body = await readBody(req);
+  await requireResidency(ctx, user.id, t.district_id);
+  const text = bodyFrom(body.body, REPLY_BODY);
+  const row = await ctx.community.postReply({
+    userId: user.id,
+    threadId: id,
+    body: text,
+    anonymous: anonymousFrom(body.anonymous),
+  });
+  const handle = (await ctx.accounts.profile(user.id))?.handle ?? null;
+  return { data: { reply: replyView({ ...row, author_handle: handle }, user.id) } };
 }

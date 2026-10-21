@@ -75,6 +75,8 @@ export interface BillRec extends Sourced {
   bill_name: string;
   age: number;
   rst_mona_cd: string | null;
+  /** 제안자 as the Assembly writes it ("홍길동의원 등 10인"). Read by the thread view. */
+  proposer?: string | null;
   /** 소관위원회. Read by the direction view; the profile does not select it. */
   committee?: string | null;
   propose_dt: string | null;
