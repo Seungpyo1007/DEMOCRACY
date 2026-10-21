@@ -23,7 +23,9 @@ import 'package:democracy/src/features/pledges/data/fake_pledge_repository.dart'
 import 'package:democracy/src/features/results/application/results_providers.dart';
 import 'package:democracy/src/features/results/data/fake_results_repository.dart';
 import 'package:democracy/src/features/reviews/application/review_providers.dart';
+import 'package:democracy/src/features/reviews/application/thread_providers.dart';
 import 'package:democracy/src/features/reviews/data/fake_review_repository.dart';
+import 'package:democracy/src/features/reviews/data/remote_thread_repository.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_test/flutter_test.dart';
@@ -137,6 +139,9 @@ Future<ProviderContainer> pumpGolden(
       communityRepositoryProvider.overrideWithValue(
         FakeCommunityRepository(loader: loader),
       ),
+      threadRepositoryProvider.overrideWithValue(
+        FakeThreadRepository(loader: loader),
+      ),
       historyRepositoryProvider.overrideWithValue(
         FakeHistoryRepository(loader: loader),
       ),
@@ -209,6 +214,7 @@ void expectFixturesReadableFromDisk() {
     'reviews_fixture-seoul-mapo-b',
     'history_fixture-seoul-mapo-b',
     'ai_direction_fixture-seoul-mapo-b',
+    'thread_fixture-thread-1',
   ]) {
     expect(
       File('assets/fixtures/$name.json').existsSync(),

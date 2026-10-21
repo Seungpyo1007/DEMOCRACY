@@ -21,6 +21,7 @@ import 'package:democracy/src/features/pledges/presentation/pledge_tracker_scree
 import 'package:democracy/src/features/results/presentation/election_results_screen.dart';
 import 'package:democracy/src/features/reviews/presentation/community_screen.dart';
 import 'package:democracy/src/features/reviews/presentation/review_compose_screen.dart';
+import 'package:democracy/src/features/reviews/presentation/thread_screen.dart';
 import 'package:democracy/src/features/shell/presentation/app_shell.dart';
 import 'package:democracy/src/features/tutorial/presentation/tutorial_screen.dart';
 import 'package:flutter/foundation.dart';
@@ -352,6 +353,18 @@ final appRouterProvider = Provider<GoRouter>((ref) {
                   key: state.pageKey,
                   child: const CommunityScreen(),
                 ),
+                routes: [
+                  GoRoute(
+                    path: AppRoutes.threadDetailSegment,
+                    pageBuilder: (context, state) => PlatformAdaptiveRoute.page(
+                      context: context,
+                      key: state.pageKey,
+                      child: ThreadScreen(
+                        threadId: state.pathParameters['id'] ?? '',
+                      ),
+                    ),
+                  ),
+                ],
               ),
             ],
           ),

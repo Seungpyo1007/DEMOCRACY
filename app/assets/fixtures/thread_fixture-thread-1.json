@@ -1,0 +1,53 @@
+{
+  "_note": "Sample thread payload. Not real residents and not a real bill.",
+  "thread": {
+    "id": "fixture-thread-1",
+    "districtId": "fixture-seoul-mapo-b",
+    "title": "역세권 청년주택 공급 촉진법 개정안",
+    "origin": "법안 발의로 자동 생성",
+    "openedAt": "2026-07-21T00:00:00Z",
+    "replies": 4,
+    "source": {
+      "sourceUrl": "https://likms.assembly.go.kr/bill/fixture-bill-1",
+      "fetchedAt": "2026-07-30T09:00:00Z"
+    },
+    "bill": {
+      "proposer": "가상 의원의원 등 10인",
+      "committee": "국토교통위원회",
+      "stage": "위원회 심사",
+      "proposedAt": "2026-07-21"
+    }
+  },
+  "replies": [
+    {
+      "id": "fixture-reply-1",
+      "author": "익명 주민",
+      "body": "공급 물량 기준이 시행령으로 넘어가는 부분이 있네요. 위원회 검토보고서 나오면 같이 보면 좋겠습니다.",
+      "verifiedResident": true,
+      "createdAt": "2026-07-28T01:12:00Z"
+    },
+    {
+      "id": "fixture-reply-2",
+      "author": "솔숲 42",
+      "body": "합정역 주변이 대상에 들어가는지 궁금합니다.",
+      "verifiedResident": true,
+      "createdAt": "2026-07-28T03:40:00Z"
+    },
+    {
+      "id": "fixture-reply-3",
+      "author": "익명 주민",
+      "body": "신고로 가려진 글입니다.",
+      "verifiedResident": true,
+      "hidden": true,
+      "createdAt": "2026-07-29T08:05:00Z"
+    },
+    {
+      "id": "fixture-reply-4",
+      "author": "익명 주민",
+      "body": "의안 원문 3조에 역세권 범위가 나와 있습니다.",
+      "verifiedResident": false,
+      "createdAt": "2026-07-30T00:30:00Z"
+    }
+  ],
+  "nextCursor": null
+}

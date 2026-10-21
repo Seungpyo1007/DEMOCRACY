@@ -19,10 +19,10 @@ import 'package:democracy/src/features/reviews/domain/moderation.dart';
 import 'package:democracy/src/features/reviews/domain/resident_review.dart';
 import 'package:democracy/src/features/reviews/domain/review_draft.dart';
 import 'package:democracy/src/features/reviews/presentation/community_kicker.dart';
+import 'package:democracy/src/features/reviews/presentation/community_parts.dart';
 import 'package:democracy/src/features/reviews/presentation/moderation_actions.dart';
 import 'package:democracy/src/features/shared/presentation/async_section.dart';
 import 'package:democracy/src/features/shell/application/tab_accessory.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
@@ -231,7 +231,11 @@ class _CommunityScreenState extends ConsumerState<CommunityScreen> {
     // The channel's field is a bar across the foot; the review tab's write
     // action is a compact floating button, placed as the tracker's is.
     final composer = _tab == 1
-        ? _Composer(controller: _message, enabled: verified, onSend: _send)
+        ? CommunityComposer(
+            controller: _message,
+            enabled: verified,
+            onSend: _send,
+          )
         : null;
 
     return TabAccessoryScope(
@@ -351,7 +355,7 @@ class _ReviewTab extends ConsumerWidget {
             // read as a verdict nobody gave.
             RevealIn(
               child: data.summary.isEmpty
-                  ? const _EmptyNote(
+                  ? const CommunityEmptyNote(
                       title: '아직 올라온 평가가 없습니다.',
                       detail:
                           '이 지역구 주소 인증을 마친 주민이 평가를 올리면 '
@@ -380,42 +384,6 @@ class _ReviewTab extends ConsumerWidget {
               ),
           ],
         ),
-      ),
-    );
-  }
-}
-
-/// What a tab says when there is nothing in it yet: a real district starts
-/// empty, and that should read as a beginning rather than a failure.
-class _EmptyNote extends StatelessWidget {
-  const _EmptyNote({required this.title, required this.detail});
-
-  final String title;
-  final String detail;
-
-  @override
-  Widget build(BuildContext context) {
-    return Padding(
-      padding: const EdgeInsets.symmetric(vertical: AppSpacing.x6),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          Text(
-            title,
-            style: AppTextStyles.reading.copyWith(
-              color: AppColors.ink,
-              fontWeight: FontWeight.w700,
-            ),
-          ),
-          const SizedBox(height: AppSpacing.x1),
-          Text(
-            detail,
-            style: AppTextStyles.cardBody.copyWith(
-              color: AppColors.neutral600,
-              height: 1.5,
-            ),
-          ),
-        ],
       ),
     );
   }
@@ -527,7 +495,7 @@ class _ReviewEntry extends StatelessWidget {
             ),
             const SizedBox(height: AppSpacing.x2),
             if (review.hidden)
-              _HiddenBody(text: review.body)
+              HiddenPostBody(text: review.body)
             else
               Text(
                 '“${review.body}”',
@@ -569,10 +537,6 @@ class _Stars extends StatelessWidget {
     );
   }
 }
-
-/// The send glyph, named for both systems so the iOS field never carries a
-/// Material arrow.
-const _sendIcon = AppIcon(Icons.send, 'paperplane.fill');
 
 /// The write action: a compact prominent glass button on iOS, Material 3's
 /// extended FAB on Android. Writing is behind the gate, so an unverified
@@ -680,7 +644,7 @@ class _ChannelTab extends ConsumerWidget {
               crossAxisAlignment: CrossAxisAlignment.stretch,
               children: [
                 if (data.isEmpty)
-                  const _EmptyNote(
+                  const CommunityEmptyNote(
                     title: '아직 메시지가 없습니다.',
                     detail: '이 지역구 주소 인증 주민이 보낸 메시지가 여기에 쌓입니다.',
                   ),
@@ -781,7 +745,7 @@ class _Message extends StatelessWidget {
                 vertical: AppSpacing.x2 + 2,
               ),
               child: message.hidden
-                  ? _HiddenBody(text: message.body)
+                  ? HiddenPostBody(text: message.body)
                   : Text(
                       message.body,
                       style: AppTextStyles.cardBody.copyWith(
@@ -790,35 +754,6 @@ class _Message extends StatelessWidget {
                       ),
                     ),
             ),
-          ),
-        ),
-      ],
-    );
-  }
-}
-
-/// What stands in for a post hidden by reports or staff: the server's
-/// placeholder, set apart from what residents wrote.
-class _HiddenBody extends StatelessWidget {
-  const _HiddenBody({required this.text});
-
-  final String text;
-
-  @override
-  Widget build(BuildContext context) {
-    return Row(
-      mainAxisSize: MainAxisSize.min,
-      children: [
-        const Icon(
-          Icons.visibility_off_outlined,
-          size: 16,
-          color: AppColors.neutral600,
-        ),
-        const SizedBox(width: AppSpacing.x1 + 2),
-        Flexible(
-          child: Text(
-            text,
-            style: AppTextStyles.cardBody.copyWith(color: AppColors.neutral600),
           ),
         ),
       ],
@@ -886,121 +821,6 @@ class _NewMessages extends StatelessWidget {
   );
 }
 
-/// The message field: a Cupertino text field with a glass send button on
-/// iOS, a Material 3 text field with a filled icon button on Android.
-///
-/// Sending is a write, so it goes through the gate: an unverified resident
-/// gets the explanation rather than a dead button.
-class _Composer extends StatelessWidget {
-  const _Composer({
-    required this.controller,
-    required this.enabled,
-    required this.onSend,
-  });
-
-  final TextEditingController controller;
-  final bool enabled;
-  final VoidCallback onSend;
-
-  @override
-  Widget build(BuildContext context) {
-    final surface = Theme.of(context).extension<AppSurfaceTokens>()!;
-    final hint = enabled ? '메시지 보내기' : '주소 인증 주민만 보낼 수 있습니다';
-
-    final send = VerifiedGate(
-      onVerified: onSend,
-      builder: (context, onPressed) {
-        if (surface.isGlass) {
-          return AppToolbarButton(
-            icon: _sendIcon,
-            label: '보내기',
-            onPressed: onPressed,
-          );
-        }
-        // Tonal until the resident is verified: still pressable, since it
-        // explains the gate, but not dressed as the page's live action.
-        return enabled
-            ? IconButton.filled(
-                tooltip: '보내기',
-                onPressed: onPressed,
-                icon: Icon(_sendIcon.material),
-              )
-            : IconButton.filledTonal(
-                tooltip: '보내기',
-                onPressed: onPressed,
-                icon: Icon(_sendIcon.material),
-              );
-      },
-    );
-
-    if (surface.isGlass) {
-      return AppFloatingBar(
-        child: Row(
-          children: [
-            Expanded(
-              child: CupertinoTextField(
-                controller: controller,
-                enabled: enabled,
-                placeholder: hint,
-                placeholderStyle: AppTextStyles.cardBody.copyWith(
-                  color: AppColors.neutral600,
-                ),
-                style: AppTextStyles.cardBody.copyWith(color: AppColors.ink),
-                textInputAction: TextInputAction.send,
-                onSubmitted: enabled ? (_) => onSend() : null,
-                padding: const EdgeInsets.symmetric(
-                  horizontal: AppSpacing.x4,
-                  vertical: AppSpacing.x3,
-                ),
-                decoration: BoxDecoration(
-                  color: AppColors.white.withValues(alpha: 0.85),
-                  border: Border.all(color: AppColors.neutral300),
-                  borderRadius: BorderRadius.circular(999),
-                ),
-              ),
-            ),
-            const SizedBox(width: AppSpacing.x2),
-            send,
-          ],
-        ),
-      );
-    }
-
-    return DecoratedBox(
-      decoration: const BoxDecoration(
-        color: AppColors.ground,
-        border: Border(top: BorderSide(color: AppColors.divider)),
-      ),
-      child: SafeArea(
-        top: false,
-        child: Padding(
-          padding: const EdgeInsets.fromLTRB(
-            AppSpacing.x4,
-            AppSpacing.x2,
-            AppSpacing.x3,
-            AppSpacing.x2,
-          ),
-          child: Row(
-            children: [
-              Expanded(
-                child: TextField(
-                  controller: controller,
-                  enabled: enabled,
-                  textInputAction: TextInputAction.send,
-                  onSubmitted: enabled ? (_) => onSend() : null,
-                  decoration: InputDecoration(isDense: true, hintText: hint),
-                ),
-              ),
-              const SizedBox(width: AppSpacing.x2),
-              send,
-            ],
-          ),
-        ),
-      ),
-    );
-  }
-}
-
 /// Threads, as a ruled index. Each is opened by an event, and says which.
 class _ThreadTab extends ConsumerWidget {
   const _ThreadTab();
@@ -1047,7 +867,7 @@ class _ThreadTab extends ConsumerWidget {
             if (data.isEmpty)
               const RevealIn(
                 index: 2,
-                child: _EmptyNote(
+                child: CommunityEmptyNote(
                   title: '아직 열린 토론이 없습니다.',
                   detail: '현직 의원이 대표발의한 법안이 수집되면 토론이 자동으로 열립니다.',
                 ),
@@ -1073,8 +893,10 @@ class _ThreadRow extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return RuledRow(
+      key: ValueKey('thread-${thread.id}'),
       minHeight: 64,
       padding: const EdgeInsets.symmetric(vertical: AppSpacing.x3 + 2),
+      onTap: () => context.push(AppRoutes.threadDetail(thread.id)),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [

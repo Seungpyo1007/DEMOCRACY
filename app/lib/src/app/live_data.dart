@@ -33,9 +33,11 @@ import 'package:democracy/src/features/results/application/results_providers.dar
 import 'package:democracy/src/features/results/data/remote_results_repository.dart';
 import 'package:democracy/src/features/reviews/application/moderation_providers.dart';
 import 'package:democracy/src/features/reviews/application/review_providers.dart';
+import 'package:democracy/src/features/reviews/application/thread_providers.dart';
 import 'package:democracy/src/features/reviews/data/realtime_channel_transport.dart';
 import 'package:democracy/src/features/reviews/data/remote_moderation_repository.dart';
 import 'package:democracy/src/features/reviews/data/remote_review_repository.dart';
+import 'package:democracy/src/features/reviews/data/remote_thread_repository.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_riverpod/misc.dart';
@@ -78,14 +80,15 @@ List<Override> liveDataOverrides(BffConfig? config) {
   final bills = RemoteMemberBillsRepository(client);
   // One instance for the community tab and the direction view's thread
   // titles, so both read the same channel.
+  // Realtime lives beside the BFF at <project>/realtime/v1 and takes the
+  // same anon key; the channel's and the threads' topics are public.
+  final realtime = RealtimeChannelTransport(
+    projectUrl: config.baseUrl.replace(path: '/'),
+    anonKey: config.anonKey,
+  );
   final community = RemoteCommunityRepository(
     client,
-    // Realtime lives beside the BFF at <project>/realtime/v1 and takes the
-    // same anon key; the channel's topics are public.
-    transport: RealtimeChannelTransport(
-      projectUrl: config.baseUrl.replace(path: '/'),
-      anonKey: config.anonKey,
-    ),
+    transport: realtime,
     foreground: appForegroundChanges,
   );
   const model = PlatformOnDeviceModel();
@@ -148,6 +151,13 @@ List<Override> liveDataOverrides(BffConfig? config) {
       RemoteModerationRepository(client),
     ),
     communityRepositoryProvider.overrideWithValue(community),
+    threadRepositoryProvider.overrideWithValue(
+      RemoteThreadRepository(
+        client,
+        transport: realtime,
+        foreground: appForegroundChanges,
+      ),
+    ),
     addressStoreProvider.overrideWith(
       (ref) => LiveAddressStore(const SecureAddressStore()),
     ),

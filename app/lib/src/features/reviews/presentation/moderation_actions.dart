@@ -9,12 +9,13 @@ import 'package:democracy/src/design/components/editorial.dart';
 import 'package:democracy/src/design/components/native_controls.dart';
 import 'package:democracy/src/features/reviews/application/moderation_providers.dart';
 import 'package:democracy/src/features/reviews/application/review_providers.dart';
+import 'package:democracy/src/features/reviews/application/thread_providers.dart';
 import 'package:democracy/src/features/reviews/domain/moderation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 
-/// The 「…」 on someone else's review or message: 신고하기, 이 주민 글 숨기기.
+/// The 「…」 on someone else's review, message or reply: 신고하기, 이 주민 글 숨기기.
 ///
 /// Not shown on the reader's own posts or on a post already hidden. Both
 /// need an account (not a residency: a reader of any district can report
@@ -68,7 +69,8 @@ Future<bool> _signedIn(BuildContext context, WidgetRef ref, String what) async {
 void _refresh(WidgetRef ref) {
   ref
     ..invalidate(reviewBoardProvider)
-    ..invalidate(channelProvider);
+    ..invalidate(channelProvider)
+    ..invalidate(threadProvider);
 }
 
 Future<void> _settle(BuildContext context, WidgetRef ref, Object error) async {

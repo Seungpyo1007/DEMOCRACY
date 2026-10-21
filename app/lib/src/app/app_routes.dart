@@ -56,6 +56,12 @@ abstract final class AppRoutes {
 
   static const aiMatch = '/ai-match';
   static const community = '/community';
+
+  /// One discussion thread, opened from the community tab's 정책 토론 list.
+  static const threadDetailSegment = 'threads/:id';
+
+  static String threadDetail(String id) =>
+      '$community/threads/${Uri.encodeComponent(id)}';
   static const results = '/results';
 
   /// A pledge's own page, and the app's first pushed route.
