@@ -279,6 +279,13 @@ Deno.test("results: matches the RawElectionResults contract", async () => {
   assert("electionSchedule" in r);
   assertEquals(r.electionSchedule, null);
   assertEquals([r.overallCountedShare, r.live, r.polls], [100, false, []]);
+  // The national share cites the count feed, dated by its oldest district count.
+  const oldest = r.districts.map((d: { source: { fetchedAt: string } }) => d.source.fetchedAt)
+    .sort()[0];
+  assertEquals(r.overallSource, {
+    sourceUrl: "https://www.data.go.kr/data/15000900/openapi.do",
+    fetchedAt: oldest,
+  });
   // Every district with a count, in NEC's order; the app selects its own.
   assertEquals(
     r.districts.map((d: { districtName: string }) => d.districtName),

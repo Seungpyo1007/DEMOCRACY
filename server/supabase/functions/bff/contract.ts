@@ -372,6 +372,10 @@ export function validateElectionResults(json: unknown): string[] {
   if (json.live !== undefined && json.live !== null && typeof json.live !== "boolean") {
     errs.push("live: must be a boolean");
   }
+  // Optional so a fixture without it still parses; when present it must be a source.
+  if (json.overallSource !== undefined && json.overallSource !== null) {
+    source(json.overallSource, "overallSource", errs);
+  }
 
   (Array.isArray(json.districts) ? json.districts : []).forEach((d, i) => {
     const f = `districts[${i}]`;

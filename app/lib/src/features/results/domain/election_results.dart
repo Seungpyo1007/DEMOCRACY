@@ -198,6 +198,7 @@ class RawElectionResults {
     required this.polls,
     required this.live,
     required this.schedule,
+    this.overallSource,
   });
 
   factory RawElectionResults.fromJson(Map<String, Object?> json) {
@@ -227,11 +228,21 @@ class RawElectionResults {
             : const <PollSeries>[],
       ),
       live: json['live'] as bool? ?? false,
+      overallSource: json['overallSource'] == null
+          ? null
+          : SourceMetadata.fromJson(
+              json['overallSource'],
+              field: 'overallSource',
+            ),
     );
   }
 
   final String electionName;
   final double overallCountedShare;
+
+  /// Where the national share comes from. Older payloads leave it out, and
+  /// then the screen falls back to the district feed it was averaged from.
+  final SourceMetadata? overallSource;
   final List<DistrictCount> districts;
   final List<HistoricalPoint> historical;
   final List<PollSeries> polls;

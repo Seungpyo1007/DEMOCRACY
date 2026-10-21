@@ -1,3 +1,4 @@
+import 'package:democracy/src/core/provenance/source_metadata.dart';
 import 'package:democracy/src/core/time/kst.dart';
 import 'package:democracy/src/features/results/domain/election_results.dart';
 import 'package:democracy/src/features/results/domain/election_schedule.dart';
@@ -49,9 +50,11 @@ class CountView {
     required this.overallCountedShare,
     required this.districts,
     required this.live,
+    this.overallSource,
   });
 
   final double overallCountedShare;
+  final SourceMetadata? overallSource;
   final List<DistrictCount> districts;
   final bool live;
 
@@ -79,6 +82,7 @@ abstract final class PublicationGate {
 
     final counts = CountView(
       overallCountedShare: raw.overallCountedShare,
+      overallSource: raw.overallSource,
       districts: raw.districts,
       live: raw.live,
     );

@@ -207,9 +207,10 @@ class _OverallCount extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    // The national share arrives in the same feed as the district counts and
-    // carries no provenance of its own, so it is attributed to that feed.
-    final source = counts.districts.firstOrNull?.source;
+    // The server cites the count feed for the national share. An older
+    // payload without it falls back to the district counts it was averaged
+    // from.
+    final source = counts.overallSource ?? counts.districts.firstOrNull?.source;
 
     return Padding(
       padding: const EdgeInsets.fromLTRB(
