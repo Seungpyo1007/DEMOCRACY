@@ -77,6 +77,25 @@ void main() {
     expect(offline.fromCache, isTrue);
   });
 
+  test('fresh responses report server time, cached ones do not', () async {
+    final cache = InMemoryResponseCache();
+    final routes = <String, FakeRoute>{
+      '/profile': (status: 200, body: envelope({'v': 1})),
+    };
+    final seen = <DateTime>[];
+    final client = fakeBffClient(
+      FakeBffAdapter(routes),
+      cache: cache,
+      onServedAt: seen.add,
+    );
+
+    await client.get('/profile', cacheable: true);
+    routes.clear();
+    await client.get('/profile', cacheable: true);
+
+    expect(seen, hasLength(1));
+  });
+
   test('a request not marked cacheable is never kept', () async {
     final cache = InMemoryResponseCache();
     final client = fakeBffClient(

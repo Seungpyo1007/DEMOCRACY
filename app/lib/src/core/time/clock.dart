@@ -13,10 +13,10 @@ abstract interface class Clock {
 /// The production clock.
 ///
 /// Note what this cannot defend against: the device clock is user-writable, so
-/// setting the phone back a week is a one-tap way around a blackout. That is
-/// not fixable on the client -- see [ServerAnchoredClock] -- and it is why the
-/// gate this feeds is defence in depth rather than the legal guarantee. The
-/// guarantee is that the server must not put embargoed figures on the wire.
+/// setting the phone back a week is a one-tap way around a blackout. Live
+/// builds use [ServerAnchoredClock] for that reason. Either way the client gate
+/// is defence in depth; the guarantee is that the server does not put
+/// embargoed figures on the wire.
 final class SystemClock implements Clock {
   const SystemClock();
 
@@ -37,11 +37,52 @@ final class FixedClock implements Clock {
   KstInstant now() => _at;
 }
 
-/// Not built yet, and deliberately left as a note rather than a stub.
+/// Server time, carried forward on a monotonic stopwatch.
 ///
-/// The honest clock anchors on a server timestamp in the response envelope and
-/// advances it with a monotonic `Stopwatch`, so a resident who moves the device
-/// clock changes nothing. It needs a `servedAt` field the BFF does not exist to
-/// send, and a half-built version that silently falls back to the device clock
-/// would be worse than none: it would read as solved.
-const serverAnchoredClockIsBffWork = true;
+/// Anchors on the `servedAt` of each fresh BFF response and advances it with
+/// a [Stopwatch], so moving the device clock changes nothing. Until the first
+/// fresh response arrives there is no server time, and [verifiedNow] says so
+/// with null rather than quietly standing in the device clock: a gate that
+/// reads it then withholds instead of guessing.
+///
+/// Cached responses never anchor. An old timestamp would put "now" in the
+/// past, and the past is where the poll blackout had not started yet.
+final class ServerAnchoredClock implements Clock {
+  ServerAnchoredClock({Stopwatch Function()? stopwatch})
+    : _newStopwatch = stopwatch ?? Stopwatch.new;
+
+  final Stopwatch Function() _newStopwatch;
+  DateTime? _anchor;
+  Stopwatch? _sinceAnchor;
+
+  /// Takes the server's time from a fresh response. A timestamp behind the
+  /// current estimate is ignored, so the clock only moves forward.
+  void anchor(DateTime servedAt) {
+    final at = servedAt.toUtc();
+    final current = _estimate();
+    if (current != null && !at.isAfter(current)) {
+      return;
+    }
+    _anchor = at;
+    _sinceAnchor = _newStopwatch()..start();
+  }
+
+  bool get isAnchored => _anchor != null;
+
+  /// Server time now, or null before any fresh response.
+  KstInstant? verifiedNow() {
+    final at = _estimate();
+    return at == null ? null : KstInstant.fromDateTime(at);
+  }
+
+  /// For rules without legal weight (session expiry, labels), where a device
+  /// time before the first response is fine. Legal gates use [verifiedNow].
+  @override
+  KstInstant now() => verifiedNow() ?? KstInstant.fromDateTime(DateTime.now());
+
+  DateTime? _estimate() {
+    final anchor = _anchor;
+    final elapsed = _sinceAnchor?.elapsed;
+    return anchor == null || elapsed == null ? null : anchor.add(elapsed);
+  }
+}

@@ -1,6 +1,7 @@
 import 'dart:async';
 
 import 'package:democracy/src/core/auth/address_controller.dart';
+import 'package:democracy/src/core/time/clock.dart';
 import 'package:democracy/src/core/time/clock_providers.dart';
 import 'package:democracy/src/features/results/data/fake_results_repository.dart';
 import 'package:democracy/src/features/results/domain/election_results.dart';
@@ -35,7 +36,13 @@ final electionResultsProvider = StreamProvider<ElectionResults>((ref) {
   ref.onDispose(() => boundary?.cancel());
 
   return ref.watch(resultsRepositoryProvider).watch(district.id).map((raw) {
-    final now = clock.now();
+    // Live builds keep server time. Before the first fresh response there is
+    // none, and the gate withholds rather than trusting the device clock.
+    final verified = clock is ServerAnchoredClock ? clock.verifiedNow() : null;
+    if (clock is ServerAnchoredClock && verified == null) {
+      return PublicationGate.applyWithoutServerTime(raw);
+    }
+    final now = verified ?? clock.now();
     boundary?.cancel();
     final next = PublicationGate.nextBoundary(raw.schedule, now: now);
     if (next != null) {
