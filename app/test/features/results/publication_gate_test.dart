@@ -269,4 +269,27 @@ void main() {
       );
     });
   });
+
+  group('before the app has server time', () {
+    // The device clock is the reader's to change. With an election pending,
+    // nothing restricted is shown until a fresh response gives server time.
+    test('withholds counts and polls while an election is pending', () {
+      final results = PublicationGate.applyWithoutServerTime(
+        RawElectionResults.fromJson(_payload(schedule: _schedule)),
+      );
+
+      expect(results.counts, isA<Withheld<CountView>>());
+      expect(results.polls, isA<Withheld<List<PollSeries>>>());
+      expect(results.historical, isNotEmpty);
+    });
+
+    test('shows everything when no election is pending', () {
+      final results = PublicationGate.applyWithoutServerTime(
+        RawElectionResults.fromJson(_payload(schedule: null)),
+      );
+
+      expect(results.counts, isA<Published<CountView>>());
+      expect(results.polls, isA<Published<List<PollSeries>>>());
+    });
+  });
 }

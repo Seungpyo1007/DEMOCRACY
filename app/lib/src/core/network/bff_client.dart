@@ -62,6 +62,9 @@ class SessionExpiredException extends BffException {
 /// nobody is signed in and requests go out under the anon key alone.
 typedef UserTokenSource = Future<String?> Function();
 
+/// Told the server's time on every fresh response (never a cached one).
+typedef ServedAtSink = void Function(DateTime servedAt);
+
 /// The only thing in the app that talks to the network.
 ///
 /// Every response is `{servedAt, data}` or `{servedAt, error}`. The data is
@@ -69,16 +72,23 @@ typedef UserTokenSource = Future<String?> Function();
 /// the same `fromJson` the fixtures go through, so the provenance checks
 /// apply to live data exactly as they do to samples.
 class BffClient {
-  BffClient({required this._dio, this._cache, this._userToken});
+  BffClient({
+    required this._dio,
+    this._cache,
+    this._userToken,
+    this._onServedAt,
+  });
 
   factory BffClient.fromConfig(
     BffConfig config, {
     ResponseCache? cache,
     UserTokenSource? userToken,
+    ServedAtSink? onServedAt,
   }) {
     return BffClient(
       cache: cache,
       userToken: userToken,
+      onServedAt: onServedAt,
       dio: Dio(
         BaseOptions(
           baseUrl: config.baseUrl.toString(),
@@ -100,6 +110,7 @@ class BffClient {
   final Dio _dio;
   final ResponseCache? _cache;
   final UserTokenSource? _userToken;
+  final ServedAtSink? _onServedAt;
 
   /// Error codes that mean "not here yet" rather than "broken".
   static const _notAvailable = {'not_found', 'not_curated'};
@@ -164,6 +175,7 @@ class BffClient {
     final status = response.statusCode ?? 0;
     if (status >= 200 && status < 300) {
       final decoded = _decode(text);
+      _onServedAt?.call(decoded.servedAt);
       if (useCache) {
         await _cache?.write(path, text);
       }

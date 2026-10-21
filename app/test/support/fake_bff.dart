@@ -64,6 +64,7 @@ BffClient fakeBffClient(
   FakeBffAdapter adapter, {
   ResponseCache? cache,
   UserTokenSource? userToken,
+  ServedAtSink? onServedAt,
 }) {
   final dio = Dio(
     BaseOptions(
@@ -72,5 +73,10 @@ BffClient fakeBffClient(
       validateStatus: (_) => true,
     ),
   )..httpClientAdapter = adapter;
-  return BffClient(dio: dio, cache: cache, userToken: userToken);
+  return BffClient(
+    dio: dio,
+    cache: cache,
+    userToken: userToken,
+    onServedAt: onServedAt,
+  );
 }

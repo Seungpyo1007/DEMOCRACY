@@ -12,6 +12,7 @@ import 'package:democracy/src/core/on_device_ai/on_device_cache.dart';
 import 'package:democracy/src/core/on_device_ai/on_device_providers.dart';
 import 'package:democracy/src/core/on_device_ai/on_device_runner.dart';
 import 'package:democracy/src/core/on_device_ai/platform_on_device_model.dart';
+import 'package:democracy/src/core/time/clock.dart';
 import 'package:democracy/src/core/time/clock_providers.dart';
 import 'package:democracy/src/features/ai_match/application/direction_providers.dart';
 import 'package:democracy/src/features/ai_match/application/match_providers.dart';
@@ -63,10 +64,14 @@ List<Override> liveDataOverrides(BffConfig? config) {
     anonKey: config.anonKey,
     config: authConfig,
   );
+  // Server time for the legal gates. Fresh responses anchor it; see
+  // ServerAnchoredClock for why cached ones do not.
+  final clock = ServerAnchoredClock();
   final client = BffClient.fromConfig(
     config,
     cache: SharedPreferencesResponseCache(),
     userToken: auth.accessToken,
+    onServedAt: clock.anchor,
   );
   final districts = RemoteDistrictRepository(client);
   final pledges = RemotePledgeRepository(client);
@@ -94,6 +99,7 @@ List<Override> liveDataOverrides(BffConfig? config) {
     ),
   );
   return [
+    clockProvider.overrideWithValue(clock),
     authRepositoryProvider.overrideWithValue(auth),
     accountRepositoryProvider.overrideWithValue(
       RemoteAccountRepository(client),

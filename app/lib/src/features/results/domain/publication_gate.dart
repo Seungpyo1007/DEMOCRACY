@@ -123,6 +123,43 @@ abstract final class PublicationGate {
     );
   }
 
+  /// The gate when the app has no server time yet.
+  ///
+  /// With no election pending there is nothing to withhold. Otherwise the
+  /// device clock cannot be trusted to place "now" either side of a deadline,
+  /// so counts and polls both wait until a fresh response gives server time.
+  static ElectionResults applyWithoutServerTime(RawElectionResults raw) {
+    final schedule = raw.schedule;
+    if (schedule == null) {
+      return ElectionResults.published(
+        electionName: raw.electionName,
+        counts: CountView(
+          overallCountedShare: raw.overallCountedShare,
+          overallSource: raw.overallSource,
+          districts: raw.districts,
+          live: raw.live,
+        ),
+        historical: raw.historical,
+        polls: raw.polls,
+      );
+    }
+    const notice = '서버 시각을 확인한 뒤에 표시합니다. 연결되면 바로 보입니다.';
+    return ElectionResults.gated(
+      electionName: raw.electionName,
+      historical: raw.historical,
+      counts: Withheld(
+        article: '공직선거법 제167조제2항',
+        notice: notice,
+        until: schedule.pollsClose,
+      ),
+      polls: Withheld(
+        article: '공직선거법 제108조제1항',
+        notice: notice,
+        until: schedule.pollsClose,
+      ),
+    );
+  }
+
   /// The next moment a verdict changes, or null if none is ahead.
   ///
   /// The gate runs per emission, so a stream that goes quiet at 17:59 would
