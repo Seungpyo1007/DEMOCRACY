@@ -25,3 +25,6 @@ verify_jwt = false
 
 [functions.ingest-nec]
 verify_jwt = false
+
+[functions.ingest-kpa]
+verify_jwt = false

@@ -26,10 +26,12 @@ community_messages insert/delete ──trigger→realtime.send──▶ Realtime
 | `supabase/migrations/20260927130000_pledge_not_judged.sql` | Pledge status `notJudged` (「판정 전」), which may carry no evidence, judgement or bills                                                                                                                |
 | `supabase/migrations/20260930000000_channel_broadcast.sql` | 지역 채팅 live: a trigger broadcasts each new or deleted channel message to Realtime                                                                                                                    |
 | `supabase/migrations/20261007000000_parties.sql`           | Party colours with their source (`parties`) and 여당 by date (`ruling_periods`), filled from `data/parties.json`                                                                                        |
+| `supabase/migrations/20261025000000_kpa_import.sql`        | `kpa_apply`, which writes a KoreaPoliticsAPI release in one transaction; `kpa_imports`, the tags applied                                                                                                |
 | `supabase/seed.sql`                                        | **Sample** 마포구 갑/을 + 종로구 district mapping, generated from `testdata/`. Not verified against [별표 1].                                                                                           |
 | `supabase/functions/_shared/`                              | API clients, normalizers (one per source), envelope, provenance, PostgREST client                                                                                                                       |
 | `supabase/functions/ingest-assembly/`                      | Members (daily), bills and plenary votes (every 6 h), 21대 bills (`?mode=bills_backfill&age=21`)                                                                                                        |
 | `supabase/functions/ingest-nec/`                           | Election and district codes and candidates (weekly), historical winners (`?mode=backfill`), final counts (`?mode=counts`)                                                                               |
+| `supabase/functions/ingest-kpa/`                           | KoreaPoliticsAPI release (daily): parties, 여당 periods, pledges, portrait licences. `?tag=` pins a release, `&force=1` reapplies                                                                       |
 | `supabase/functions/bff/`                                  | The API. `contract.ts` mirrors the app's Dart parsers. `account.ts`, `residency.ts`: signed-in. `community.ts`: posts.                                                                                  |
 | `scripts/`                                                 | One-off importers that write SQL to stdout; `build_district_*.ts` build the mapping and 선거구 변천 data                                                                                                |
 | `data/`                                                    | Inputs kept in git: the 22대 district mapping; `pledges_22/`, pilot pledge lists from 선거공보; `attendance_22/`, 본회의 출결; `region_22/` + lineage, 선거구 변천; `parties.json`, 정당 색과 여당 기간 |
@@ -265,6 +267,7 @@ write function.
    supabase functions deploy bff
    supabase functions deploy ingest-assembly --no-verify-jwt
    supabase functions deploy ingest-nec --no-verify-jwt
+   supabase functions deploy ingest-kpa --no-verify-jwt
    ```
    - pg_cron and pg_net must be enabled. The migration runs `create extension`. If the dashboard
      requires it, enable both under Database → Extensions.
@@ -296,9 +299,12 @@ write function.
    select public.call_ingest('ingest-assembly', 'mode=members'); -- check: ~300 rows, summary.unmatchedDistricts
    select public.call_ingest('ingest-assembly', 'mode=bills_votes');
    select public.sync_bill_threads();                            -- after bills land; cron repeats it
+   select public.call_ingest('ingest-kpa', 'mode=latest');       -- after codes; refused if a pledge board names an unknown district
    ```
    - Check the result of each call with
      `select * from net._http_response order by id desc limit 5;`.
+   - `ingest-kpa` records a licence only on a portrait already copied by `mode=portraits`. The rest
+     are listed in `summary.photosUnmatched`; rerun with `mode=latest&force=1` once they are copied.
    - Votes backfill 40 bills per call. The hourly `ingest-assembly-votes` job works through the 22대
      backlog.
    - 21대 bills, for the direction view's term comparison, are a by-hand backfill. It runs after
