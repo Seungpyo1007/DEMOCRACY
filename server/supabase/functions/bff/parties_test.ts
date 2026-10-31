@@ -1,8 +1,7 @@
-// Party colour and 여/야: the book's rules at period boundaries, unknown parties, the curated
-// file itself, and the three routes that carry a party.
+// Party colour and 여/야: the book's rules at period boundaries, unknown parties, and the
+// three routes that carry a party.
 
-import { assert, assertEquals, assertThrows } from "@std/assert";
-import { partiesToSql } from "../../../scripts/import_curated.ts";
+import { assert, assertEquals } from "@std/assert";
 import {
   validateDistrictProfile,
   validateElectionResults,
@@ -15,116 +14,30 @@ import { signedOut } from "../../../testdata/fake_auth.ts";
 import { fakeUpstream } from "../../../testdata/fake_upstream.ts";
 import { MAPO_B, NOW, runPipeline, toTables } from "../../../testdata/pipeline.ts";
 
-interface CuratedParty {
-  name: string;
-  color: string | null;
-  colorSource?: { sourceUrl: string; checkedAt: string };
-  aliases?: string[];
-}
-interface CuratedPeriod {
-  startsOn: string;
-  endsOn: string | null;
-  party: string | null;
-}
-const curated = JSON.parse(
-  await Deno.readTextFile(new URL("../../../data/parties.json", import.meta.url)),
-) as { parties: CuratedParty[]; rulingPeriods: CuratedPeriod[] };
+// The rows as kpa_apply writes them from KoreaPoliticsAPI v2026.10.26 (ruling_periods.json
+// and the parties it names), trimmed to what these tests read.
+const sourced = { color_source_url: "https://example.org/ci", color_checked_at: "2026-10-07" };
+const unsourced = { color: null, color_source_url: null, color_checked_at: null };
+const PARTIES: PartyRec[] = [
+  { name: "새누리당", ...unsourced },
+  { name: "자유한국당", ...unsourced },
+  { name: "미래통합당", ...unsourced },
+  { name: "국민의당", ...unsourced },
+  { name: "더불어민주당", color: "#003B95", ...sourced },
+  { name: "국민의힘", color: "#E61E2B", ...sourced },
+];
+const PERIODS: RulingPeriodRec[] = [
+  { starts_on: "2013-02-25", ends_on: "2017-02-13", party_name: "새누리당" },
+  { starts_on: "2017-02-13", ends_on: "2017-03-10", party_name: "자유한국당" },
+  { starts_on: "2017-03-10", ends_on: "2017-05-10", party_name: null },
+  { starts_on: "2017-05-10", ends_on: "2022-05-10", party_name: "더불어민주당" },
+  { starts_on: "2022-05-10", ends_on: "2025-04-04", party_name: "국민의힘" },
+  { starts_on: "2025-04-04", ends_on: "2025-06-04", party_name: null },
+  { starts_on: "2025-06-04", ends_on: null, party_name: "더불어민주당" },
+];
 
-/** The curated file as the store would read it once imported. */
-function curatedRows(): { parties: PartyRec[]; periods: RulingPeriodRec[] } {
-  return {
-    parties: curated.parties.map((p) => ({
-      name: p.name,
-      color: p.color,
-      color_source_url: p.colorSource?.sourceUrl ?? null,
-      color_checked_at: p.colorSource?.checkedAt ?? null,
-      aliases: p.aliases ?? [],
-    })),
-    periods: curated.rulingPeriods.map((p) => ({
-      starts_on: p.startsOn,
-      ends_on: p.endsOn,
-      party_name: p.party,
-    })),
-  };
-}
-
-const book = () => {
-  const { parties, periods } = curatedRows();
-  return new PartyBook(parties, periods);
-};
+const book = () => new PartyBook(PARTIES, PERIODS);
 const side = (name: string, date: string) => book().info(name, date).side;
-
-Deno.test("parties.json imports: sourced colours, periods that do not overlap", () => {
-  const sql = partiesToSql(curated as unknown as Record<string, unknown>);
-  assert(sql.startsWith("begin;"));
-  assert(sql.includes("insert into public.parties"));
-  assert(sql.includes("delete from public.ruling_periods;"));
-  assert(sql.includes("'국민의힘'"));
-  for (const p of curated.parties) {
-    if (p.color !== null) assert(/^#[0-9A-F]{6}$/.test(p.color), p.name);
-  }
-});
-
-Deno.test("parties importer refuses an unsourced colour, overlaps and unknown parties", () => {
-  const base = {
-    parties: [{ name: "가나당", color: null }, { name: "다라당", color: null }],
-    rulingPeriods: [] as unknown[],
-  };
-  assertThrows(
-    () => partiesToSql({ ...base, parties: [{ name: "가나당", color: "#112233" }] }),
-    Error,
-    "colorSource",
-  );
-  assertThrows(
-    () => partiesToSql({ ...base, parties: [{ name: "가나당", color: "#abcdef" }] }),
-    Error,
-    "upper case",
-  );
-  assertThrows(() => partiesToSql({ ...base, parties: [{ name: "무소속", color: null }] }));
-  const period = (startsOn: string, endsOn: string | null, party: string | null) => ({
-    startsOn,
-    endsOn,
-    party,
-    president: "가상 대통령",
-    sourceUrl: "https://example.org/president",
-  });
-  assertThrows(
-    () =>
-      partiesToSql({
-        ...base,
-        rulingPeriods: [
-          period("2020-01-01", "2021-01-02", "가나당"),
-          period("2021-01-01", null, "다라당"),
-        ],
-      }),
-    Error,
-    "overlaps",
-  );
-  assertThrows(
-    () =>
-      partiesToSql({
-        ...base,
-        rulingPeriods: [period("2020-01-01", null, "가나당"), period("2021-01-01", null, "다라당")],
-      }),
-    Error,
-    "overlaps",
-  );
-  assertThrows(
-    () => partiesToSql({ ...base, rulingPeriods: [period("2020-01-01", null, "마바당")] }),
-    Error,
-    "not listed",
-  );
-  // Back to back is fine, and an acting presidency has no party.
-  const ok = partiesToSql({
-    ...base,
-    rulingPeriods: [
-      period("2020-01-01", "2021-01-01", "가나당"),
-      period("2021-01-01", "2021-03-01", null),
-      period("2021-03-01", null, "다라당"),
-    ],
-  });
-  assert(ok.includes("insert into public.ruling_periods"));
-});
 
 Deno.test("side: every general election day reads against that day's government", () => {
   // 20대: 박근혜 정부, 새누리당.

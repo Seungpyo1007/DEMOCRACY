@@ -20,7 +20,7 @@ void main() {
   group('onColor', () {
     test('clears WCAG AA on every colour, light, dark or mid-tone', () {
       final colors = <Color>[
-        // The sourced party colours in server/data/parties.json.
+        // The sourced party colours in KoreaPoliticsAPI parties.json.
         const Color(0xFF003B95),
         const Color(0xFFE61E2B),
         const Color(0xFF0073CF),
