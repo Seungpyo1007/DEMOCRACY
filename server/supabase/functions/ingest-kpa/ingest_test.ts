@@ -32,7 +32,19 @@ function dump(): Record<string, J[]> {
         note: "주조색",
       },
       { id: "saenuridang-2020", name: "새누리당", predecessor: null, colors: [] },
-      { id: "saenuridang", name: "새누리당", predecessor: null, colors: [] },
+      {
+        id: "saenuridang",
+        name: "새누리당",
+        predecessor: null,
+        // Optional since v2026.10.26. The parties table has no period, so it is not passed on.
+        period: {
+          starts_on: "2012-02-13",
+          ends_on: "2017-02-13",
+          source_urls: ["https://ko.wikipedia.org/wiki/새누리당"],
+          checked_at: "2026-10-25",
+        },
+        colors: [],
+      },
       { id: "jayu-hangukdang", name: "자유한국당", predecessor: "saenuridang", colors: [] },
     ],
     "ruling_periods.json": [
@@ -360,6 +372,17 @@ Deno.test("toApplyArgs: parties, periods and the photo join", () => {
   assertEquals(args.parties.filter((p) => p.name === "새누리당").map((p) => p.kpa_id), [
     "saenuridang",
   ]);
+  for (const p of args.parties) {
+    assertEquals(Object.keys(p).sort(), [
+      "color",
+      "color_checked_at",
+      "color_source_url",
+      "kpa_id",
+      "name",
+      "note",
+      "predecessor",
+    ]);
+  }
   assertEquals(args.parties.find((p) => p.name === "자유한국당")!.predecessor, "새누리당");
   assertEquals(args.rulingPeriods.map((r) => r.party_name), ["국민의힘", null]);
   assertEquals(args.photos.map((p) => p.mona_cd), ["FAKE0001", null]);

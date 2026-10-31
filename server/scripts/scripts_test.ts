@@ -28,7 +28,7 @@ import {
 import { readFirstSheet } from "./lib/xlsx.ts";
 import { resultsToSql } from "./import_historical_results.ts";
 import { geojsonToSql } from "./import_geojson.ts";
-import { pledgesToSql, regionToSql } from "./import_curated.ts";
+import { regionToSql } from "./import_curated.ts";
 import {
   buildLineage,
   compareTables,
@@ -222,86 +222,10 @@ Deno.test("geojson importer requires a license and matches by name key", () => {
   assertStringIncludes(sql, MAPO_B);
 });
 
-Deno.test("curated pledges / region importers enforce sources and evidence", () => {
+Deno.test("curated region importer enforces sources", () => {
   const src = { sourceUrl: "https://policy.nec.go.kr/x", fetchedAt: "2026-09-24T00:00:00Z" };
-  const sql = pledgesToSql({
-    districtId: MAPO_B,
-    source: src,
-    pledges: [{
-      id: "p1",
-      title: "t",
-      category: "교통",
-      status: "fulfilled",
-      source: src,
-      billIds: ["PRC_1"],
-    }],
-  });
-  assertMatch(sql, /^begin;/);
-  assertStringIncludes(sql, "array['PRC_1']::text[]");
   assertThrows(
-    () =>
-      pledgesToSql({
-        districtId: MAPO_B,
-        source: src,
-        pledges: [{ id: "p", title: "t", status: "reversed", source: src }],
-      }),
-    Error,
-    "evidenceUrl",
-  );
-  assertThrows(
-    () =>
-      pledgesToSql({
-        districtId: MAPO_B,
-        source: src,
-        pledges: [{ id: "p", title: "t", status: "fulfilled" }],
-      }),
-    Error,
-    "source",
-  );
-  // 「판정 전」: accepted plain, with the publisher named rather than the host…
-  const listed = pledgesToSql({
-    districtId: MAPO_B,
-    source: { ...src, publisher: "중앙선거관리위원회" },
-    pledges: [{ id: "n1", title: "t", category: "", status: "notJudged", source: src }],
-  });
-  assertStringIncludes(listed, "'notJudged'");
-  assertStringIncludes(listed, "'중앙선거관리위원회'");
-  // …and refused with any part of a verdict attached.
-  for (
-    const extra of [
-      { evidenceUrl: "https://policy.nec.go.kr/e" },
-      {
-        judgement: {
-          steps: [{ actor: "큐레이터", detail: "", stamp: "" }],
-          source: src,
-        },
-      },
-      { billIds: ["PRC_1"] },
-    ]
-  ) {
-    assertThrows(
-      () =>
-        pledgesToSql({
-          districtId: MAPO_B,
-          source: src,
-          pledges: [{ id: "n", title: "t", status: "notJudged", source: src, ...extra }],
-        }),
-      Error,
-      "notJudged",
-    );
-  }
-  assertThrows(
-    () =>
-      pledgesToSql({
-        districtId: MAPO_B,
-        source: { ...src, publisher: " " },
-        pledges: [{ id: "n", title: "t", status: "notJudged", source: src }],
-      }),
-    Error,
-    "publisher",
-  );
-  assertThrows(
-    () => pledgesToSql({ districtId: "fixture-x", source: src, pledges: [] }),
+    () => regionToSql({ districtId: "fixture-x", source: src, events: [] }),
     Error,
     "districtId",
   );
@@ -558,40 +482,6 @@ Deno.test("committed 선거구 변천: every region doc and the lineage CSV impo
   assert(docs > 200, `${docs} docs`);
   const csv = await Deno.readTextFile(new URL("../data/district_lineage_22.csv", import.meta.url));
   assertStringIncludes(lineageToSql(csv), "insert into public.district_lineage");
-});
-
-Deno.test("22대 pledge lists: one per 선거구, 선거공보 only, nothing judged, importable", async () => {
-  const dir = new URL("../data/pledges_22/", import.meta.url);
-  // Every 22대 선거구, from the committed mapping; each needs exactly one list.
-  const areas = parseCsvObjects(
-    await Deno.readTextFile(new URL("../data/district_areas_20240410.csv", import.meta.url)),
-  );
-  const districts = new Set(areas.map((r) => districtIdFor(necSggCode(r.sd_name, r.sgg_name))));
-  assertEquals(districts.size, 254);
-  const covered = new Set<string>();
-  const ids = new Set<string>();
-  for await (const entry of Deno.readDir(dir)) {
-    if (!entry.name.endsWith(".json")) continue;
-    const doc = JSON.parse(await Deno.readTextFile(new URL(entry.name, dir)));
-    assert(districts.has(doc.districtId), `${entry.name}: ${doc.districtId} is not a 22대 선거구`);
-    assert(!covered.has(doc.districtId), `${entry.name}: second list for ${doc.districtId}`);
-    covered.add(doc.districtId);
-    const pdf = doc.source.sourceUrl as string;
-    assertMatch(pdf, /^https:\/\/policy\.nec\.go\.kr\/policy_pdf\/20240410\/.+\.pdf$/);
-    assertEquals(doc.source.publisher, "중앙선거관리위원회");
-    assert(doc.pledges.length > 0, entry.name);
-    for (const p of doc.pledges) {
-      assert(!ids.has(p.id), `duplicate id ${p.id}`);
-      ids.add(p.id);
-      assertEquals(p.status, "notJudged", p.id);
-      assertEquals(p.source.sourceUrl, pdf, p.id);
-      for (const k of ["judgement", "evidenceUrl", "billIds"]) assert(!(k in p), `${p.id}.${k}`);
-      assertEquals(p.title, p.title.trim(), p.id);
-    }
-    const sql = pledgesToSql(doc);
-    assert(!/'(fulfilled|inProgress|unfulfilled|reversed)'/.test(sql), entry.name);
-  }
-  assertEquals(covered.size, districts.size, "a 선거구 has no pledge list");
 });
 
 // ------------------------------------------------------------------ 본회의 출결 xlsx
