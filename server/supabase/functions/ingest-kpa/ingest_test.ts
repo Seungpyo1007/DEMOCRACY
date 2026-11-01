@@ -365,6 +365,19 @@ Deno.test("toApplyArgs: parties, periods and the photo join", () => {
   assertEquals(args.photos.map((p) => p.mona_cd), ["FAKE0001", null]);
 });
 
+Deno.test("toApplyArgs: Commons photos are left out", () => {
+  const f = dump();
+  f["photos.json"][0].license = "cc-by-sa";
+  const args = toApplyArgs({
+    parties: f["parties.json"],
+    rulingPeriods: f["ruling_periods.json"],
+    pledges: f["pledges.json"],
+    photos: f["photos.json"],
+    people: [{ id: "ga-sang-1970", external_ids: { assembly_mona_cd: "FAKE0001" } }],
+  }, "2026-10-25");
+  assertEquals(args.photos.map((p) => p.person_id), ["no-portrait-1980"]);
+});
+
 Deno.test("toApplyArgs: an unknown ruling party refuses", () => {
   const f = dump();
   f["ruling_periods.json"][0].party_id = "no-such-party";

@@ -13,6 +13,9 @@ import type { Postgrest } from "../_shared/postgrest.ts";
 export const KPA_REPO = "Seungpyo1007/KoreaPoliticsAPI";
 export const SCHEMA_VERSION = 1;
 
+/** The licences public.portraits accepts. */
+const ASSEMBLY_LICENSES = new Set(["unconfirmed", "kogl-1", "permitted"]);
+
 /** The files this pass reads. people.json only maps a photo's person to a mona_cd. */
 export const KPA_FILES = [
   "parties.json",
@@ -234,7 +237,9 @@ export function toApplyArgs(dump: Dump, today: string) {
       typeof ids?.assembly_mona_cd === "string" ? ids.assembly_mona_cd : null,
     );
   }
-  const photos = dump.photos.map((p) => ({
+  // portraits holds copies of Assembly photos, so only their licences apply. A
+  // Commons photo (cc-by, cc-by-sa) is someone else's file and is left out.
+  const photos = dump.photos.filter((p) => ASSEMBLY_LICENSES.has(String(p.license))).map((p) => ({
     person_id: String(p.person_id),
     mona_cd: monaCd.get(String(p.person_id)) ?? null,
     license: p.license,
