@@ -32,7 +32,13 @@ function dump(): Record<string, J[]> {
         note: "주조색",
       },
       { id: "saenuridang-2020", name: "새누리당", predecessor: null, colors: [] },
-      { id: "saenuridang", name: "새누리당", predecessor: null, colors: [] },
+      {
+        id: "saenuridang",
+        name: "새누리당",
+        predecessor: null,
+        colors: [],
+        period: { starts_on: "2012-02-13", ends_on: "2017-02-13" },
+      },
       { id: "jayu-hangukdang", name: "자유한국당", predecessor: "saenuridang", colors: [] },
     ],
     "ruling_periods.json": [
@@ -62,6 +68,13 @@ function dump(): Record<string, J[]> {
       ],
       source_urls: [NEC_PDF],
       checked_at: "2026-09-27",
+    }, {
+      election_id: "20200415",
+      office: "assembly/seoul-mapogueul-21",
+      candidate: { name: "지난", person_id: "ji-nan-1960" },
+      pledges: [{ id: "21-seoul-mapogueul-01", title: "지난 공약", page: 2 }],
+      source_urls: [NEC_PDF],
+      checked_at: "2026-11-01",
     }],
     "photos.json": [
       {
@@ -79,10 +92,23 @@ function dump(): Record<string, J[]> {
         decision: "운영자 결정",
         checked_at: "2026-10-07",
       },
+      {
+        person_id: "ji-nan-1960",
+        license: "permitted",
+        attribution: "국회",
+        decision: "운영자 결정",
+        checked_at: "2026-10-07",
+      },
     ],
     "people.json": [
       { id: "ga-sang-1970", external_ids: { assembly_mona_cd: "FAKE0001" } },
       { id: "no-portrait-1980", external_ids: { assembly_mona_cd: "FAKE0009" } },
+      { id: "ji-nan-1960", external_ids: { assembly_mona_cd: "FAKE0021" } },
+    ],
+    "terms.json": [
+      { office: `assembly/${MAPO_B}`, person_id: "ga-sang-1970", ends_on: null },
+      { office: "assembly/proportional-22", person_id: "no-portrait-1980", ends_on: null },
+      { office: "assembly/seoul-mapogueul-21", person_id: "ji-nan-1960", ends_on: "2024-05-29" },
     ],
     "offices.json": [],
   };
@@ -215,6 +241,7 @@ Deno.test("kpa: applies a release, keeping verdicts and portrait files", async (
   assertEquals(summary.tag, TAG);
   assertEquals(summary.judgedKept, ["mapo-b-09"]);
   assertEquals(summary.photosUnmatched, ["no-portrait-1980"]);
+  assertEquals(summary.pastTermBoards, 1);
   assertEquals(summary.partiesSharingName, [{
     name: "새누리당",
     kpaIds: ["saenuridang", "saenuridang-2020"],
@@ -275,14 +302,14 @@ async function assertRefused(
 
 Deno.test("kpa: a sha256 that does not match refuses the release", async () => {
   await assertRefused((_, m) => {
-    (m.files as J)["photos.json"] = { records: 2, sha256: "0".repeat(64) };
+    (m.files as J)["photos.json"] = { records: 3, sha256: "0".repeat(64) };
   }, "photos.json: sha256");
 });
 
 Deno.test("kpa: a wrong record count refuses the release", async () => {
   await assertRefused((_, m) => {
-    ((m.files as J)["pledges.json"] as J).records = 2;
-  }, "pledges.json: 1 records, the manifest says 2");
+    ((m.files as J)["pledges.json"] as J).records = 3;
+  }, "pledges.json: 2 records, the manifest says 3");
 });
 
 Deno.test("kpa: another schema_version refuses the release", async () => {
@@ -351,6 +378,7 @@ Deno.test("toApplyArgs: parties, periods and the photo join", () => {
     pledges: f["pledges.json"],
     photos: f["photos.json"],
     people: [{ id: "ga-sang-1970", external_ids: { assembly_mona_cd: "FAKE0001" } }],
+    terms: f["terms.json"],
   }, "2026-10-25");
 
   const ppp = args.parties.find((p) => p.name === "국민의힘")!;
@@ -374,6 +402,7 @@ Deno.test("toApplyArgs: Commons photos are left out", () => {
     pledges: f["pledges.json"],
     photos: f["photos.json"],
     people: [{ id: "ga-sang-1970", external_ids: { assembly_mona_cd: "FAKE0001" } }],
+    terms: f["terms.json"],
   }, "2026-10-25");
   assertEquals(args.photos.map((p) => p.person_id), ["no-portrait-1980"]);
 });
@@ -389,8 +418,60 @@ Deno.test("toApplyArgs: an unknown ruling party refuses", () => {
         pledges: f["pledges.json"],
         photos: [],
         people: [],
+        terms: [],
       }, "2026-10-25"),
     Error,
     "ruling_periods 2022-05-10: party no-such-party unknown",
   );
+});
+
+function argsOf(f: Record<string, J[]>) {
+  return toApplyArgs({
+    parties: f["parties.json"],
+    rulingPeriods: f["ruling_periods.json"],
+    pledges: f["pledges.json"],
+    photos: f["photos.json"],
+    people: f["people.json"],
+    terms: f["terms.json"],
+  }, "2026-10-25");
+}
+
+Deno.test("toApplyArgs: an earlier term's board is counted, not sent", () => {
+  const args = argsOf(dump());
+  assertEquals(args.boards.map((b) => b.district_id), [MAPO_B]);
+  assertEquals(args.pastTermBoards, 1);
+});
+
+Deno.test("toApplyArgs: an office that is neither refuses", () => {
+  const f = dump();
+  f["pledges.json"][0].office = "metro-head/seoul";
+  assertThrows(() => argsOf(f), Error, "office metro-head/seoul is not assembly/<district id>");
+});
+
+Deno.test("toApplyArgs: a former member's photo is left out", () => {
+  assertEquals(argsOf(dump()).photos.map((p) => p.person_id), ["ga-sang-1970", "no-portrait-1980"]);
+});
+
+Deno.test("toApplyArgs: the latest of several same-name parties gives the row", () => {
+  const f = dump();
+  const colour = {
+    hex: "#C9151E",
+    from: null,
+    source_urls: ["https://example.or.kr/saenuri"],
+    checked_at: "2026-10-25",
+  };
+  f["parties.json"].push({
+    id: "saenuridang-1990",
+    name: "새누리당",
+    predecessor: null,
+    colors: [colour],
+    period: { starts_on: "1990-01-01", ends_on: "1991-01-01" },
+    note: "옛 기록",
+  });
+  const row = argsOf(f).parties.find((p) => p.name === "새누리당")!;
+  // 2012 beats 1990, and the undated 2020 record goes last.
+  assertEquals(row.kpa_id, "saenuridang");
+  assertEquals(row.note, null);
+  // The newest record has no colour, so the next one that does supplies it.
+  assertEquals(row.color, "#C9151E");
 });

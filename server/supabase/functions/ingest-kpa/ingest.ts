@@ -16,13 +16,17 @@ export const SCHEMA_VERSION = 1;
 /** The licences public.portraits accepts. */
 const ASSEMBLY_LICENSES = new Set(["unconfirmed", "kogl-1", "permitted"]);
 
-/** The files this pass reads. people.json only maps a photo's person to a mona_cd. */
+/**
+ * The files this pass reads. people.json only maps a photo's person to a mona_cd, and
+ * terms.json only says who sits in the Assembly today.
+ */
 export const KPA_FILES = [
   "parties.json",
   "ruling_periods.json",
   "pledges.json",
   "photos.json",
   "people.json",
+  "terms.json",
 ] as const;
 
 export interface KpaIngestDeps {
@@ -155,6 +159,7 @@ export interface Dump {
   pledges: J[];
   photos: J[];
   people: J[];
+  terms: J[];
 }
 
 /** Turns the dump into kpa_apply's arguments. Throws on anything kpa_apply cannot take. */
@@ -162,9 +167,14 @@ export function toApplyArgs(dump: Dump, today: string) {
   const partyName = new Map<string, string>();
   for (const p of dump.parties) partyName.set(String(p.id), String(p.name));
 
-  // One row per name; the record whose id sorts first gives the row its kpa_id.
+  // One row per name. The record that started last gives the row its kpa_id and note
+  // (a record without a period goes after the dated ones), since results look parties up
+  // by name and recent elections are the ones shown.
+  const started = (p: J) => String((p.period as J | undefined)?.starts_on ?? "");
+  const order = (a: J, b: J) =>
+    started(b).localeCompare(started(a)) || String(a.id).localeCompare(String(b.id));
   const byName = new Map<string, J[]>();
-  for (const p of [...dump.parties].sort((a, b) => String(a.id).localeCompare(String(b.id)))) {
+  for (const p of [...dump.parties].sort(order)) {
     const name = String(p.name ?? "");
     if (!name || !p.id) throw new Error(`parties: a record without id or name`);
     byName.set(name, [...(byName.get(name) ?? []), p]);
@@ -173,7 +183,7 @@ export function toApplyArgs(dump: Dump, today: string) {
   const parties = [...byName.entries()].map(([name, records]) => {
     if (records.length > 1) sameName.push({ name, kpaIds: records.map((r) => String(r.id)) });
     const p = records[0];
-    const color = pickColor(p.colors, today);
+    const color = records.map((r) => pickColor(r.colors, today)).find((c) => c) ?? null;
     let predecessor: string | null = null;
     if (p.predecessor) {
       predecessor = partyName.get(String(p.predecessor)) ?? null;
@@ -206,10 +216,22 @@ export function toApplyArgs(dump: Dump, today: string) {
     };
   });
 
+  // pledge_boards holds the sitting Assembly, whose districts KPA names by NEC code. A
+  // board for an earlier term (assembly/<slug>-<term>) has nowhere to go and is counted.
+  let pastTermBoards = 0;
+  const current = dump.pledges.filter((b) => {
+    const office = String(b.office ?? "");
+    if (/^assembly\/nec-[0-9a-z]+$/.test(office)) return true;
+    if (/^assembly\/[0-9a-z-]+-\d{1,2}$/.test(office)) {
+      pastTermBoards++;
+      return false;
+    }
+    throw new Error(`pledges: office ${b.office} is not assembly/<district id>`);
+  });
+
   const seen = new Set<string>();
-  const boards = dump.pledges.map((b) => {
-    const office = /^assembly\/(nec-[0-9a-z]+)$/.exec(String(b.office ?? ""));
-    if (!office) throw new Error(`pledges: office ${b.office} is not assembly/<district id>`);
+  const boards = current.map((b) => {
+    const office = /^assembly\/(nec-[0-9a-z]+)$/.exec(String(b.office))!;
     const sourceUrl = firstUrl(b.source_urls, `pledges ${b.office}`);
     const list = (Array.isArray(b.pledges) ? b.pledges : []) as J[];
     return {
@@ -237,9 +259,17 @@ export function toApplyArgs(dump: Dump, today: string) {
       typeof ids?.assembly_mona_cd === "string" ? ids.assembly_mona_cd : null,
     );
   }
-  // portraits holds copies of Assembly photos, so only their licences apply. A
-  // Commons photo (cc-by, cc-by-sa) is someone else's file and is left out.
-  const photos = dump.photos.filter((p) => ASSEMBLY_LICENSES.has(String(p.license))).map((p) => ({
+  const sitting = new Set<string>();
+  for (const t of dump.terms) {
+    const open = t.ends_on === null || t.ends_on === undefined || String(t.ends_on) >= today;
+    if (String(t.office ?? "").startsWith("assembly/") && open) sitting.add(String(t.person_id));
+  }
+  // portraits holds copies of the sitting members' Assembly photos, so only their
+  // licences apply. A Commons photo (cc-by, cc-by-sa) is someone else's file and a
+  // former member has no portrait row; both are left out.
+  const photos = dump.photos.filter((p) =>
+    ASSEMBLY_LICENSES.has(String(p.license)) && sitting.has(String(p.person_id))
+  ).map((p) => ({
     person_id: String(p.person_id),
     mona_cd: monaCd.get(String(p.person_id)) ?? null,
     license: p.license,
@@ -248,7 +278,7 @@ export function toApplyArgs(dump: Dump, today: string) {
     license_note: typeof p.decision === "string" ? p.decision : null,
   }));
 
-  return { parties, rulingPeriods, boards, photos, sameName };
+  return { parties, rulingPeriods, boards, photos, sameName, pastTermBoards };
 }
 
 async function release(deps: KpaIngestDeps, tag: string | null): Promise<Release> {
@@ -297,6 +327,7 @@ export async function runKpaIngest(mode: string, deps: KpaIngestDeps, url: URL) 
     pledges: files["pledges.json"],
     photos: files["photos.json"],
     people: files["people.json"],
+    terms: files["terms.json"],
   }, today);
 
   const applied = await deps.db.rpc<J>("kpa_apply", {
@@ -308,5 +339,10 @@ export async function runKpaIngest(mode: string, deps: KpaIngestDeps, url: URL) 
     p_boards: args.boards,
     p_photos: args.photos,
   });
-  return { tag, ...applied, partiesSharingName: args.sameName };
+  return {
+    tag,
+    ...applied,
+    partiesSharingName: args.sameName,
+    pastTermBoards: args.pastTermBoards,
+  };
 }
