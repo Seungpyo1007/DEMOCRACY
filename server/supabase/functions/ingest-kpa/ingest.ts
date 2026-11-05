@@ -17,8 +17,9 @@ export const SCHEMA_VERSION = 1;
 const ASSEMBLY_LICENSES = new Set(["unconfirmed", "kogl-1", "permitted"]);
 
 /**
- * The files this pass reads. people.json only maps a photo's person to a mona_cd, and
- * terms.json only says who sits in the Assembly today.
+ * The files this pass reads. people.json maps a photo's person to a mona_cd and names
+ * the local heads; terms.json says who sits in the Assembly and who holds a local office
+ * today; offices.json is read for the 시·도 and 시·군·구 offices only.
  */
 export const KPA_FILES = [
   "parties.json",
@@ -27,7 +28,14 @@ export const KPA_FILES = [
   "photos.json",
   "people.json",
   "terms.json",
+  "offices.json",
 ] as const;
+
+/** KPA's office types for local government heads, and the level each one is stored as. */
+const LOCAL_LEVELS: Record<string, "metro" | "local"> = {
+  "metro-head": "metro",
+  "local-head": "local",
+};
 
 export interface KpaIngestDeps {
   db: Postgrest;
@@ -160,6 +168,7 @@ export interface Dump {
   photos: J[];
   people: J[];
   terms: J[];
+  offices: J[];
 }
 
 /** Turns the dump into kpa_apply's arguments. Throws on anything kpa_apply cannot take. */
@@ -278,7 +287,71 @@ export function toApplyArgs(dump: Dump, today: string) {
     license_note: typeof p.decision === "string" ? p.decision : null,
   }));
 
-  return { parties, rulingPeriods, boards, photos, sameName, pastTermBoards };
+  const localOffices = dump.offices.filter((o) => String(o.type) in LOCAL_LEVELS).map((o) => {
+    const level = LOCAL_LEVELS[String(o.type)];
+    const code = String(o.id ?? "");
+    if (!(level === "metro" ? /^[0-9]{2}$/ : /^[0-9]{5}$/).test(code)) {
+      throw new Error(
+        `offices ${o.type}/${o.id}: id is not a ${level === "metro" ? 2 : 5}-digit code`,
+      );
+    }
+    if (typeof o.name !== "string" || !o.name || typeof o.sido !== "string" || !o.sido) {
+      throw new Error(`offices ${o.type}/${o.id} needs name and sido`);
+    }
+    return {
+      id: `${o.type}/${code}`,
+      level,
+      code,
+      sido: o.sido,
+      name: o.name,
+      source_url: firstUrl(o.source_urls, `offices ${o.type}/${o.id}`),
+      checked_at: o.checked_at,
+    };
+  });
+
+  // The holder is the open term; if KPA ever lists two, the later start wins.
+  const officeIds = new Set(localOffices.map((o) => o.id));
+  const personName = new Map(dump.people.map((p) => [String(p.id), String(p.name ?? "")]));
+  const holder = new Map<string, J>();
+  for (const t of dump.terms) {
+    const office = String(t.office ?? "");
+    if (!(office.split("/")[0] in LOCAL_LEVELS)) continue;
+    if (t.ends_on !== null && t.ends_on !== undefined && String(t.ends_on) < today) continue;
+    if (!officeIds.has(office)) throw new Error(`terms ${office}: no such office`);
+    const seen = holder.get(office);
+    if (!seen || String(t.starts_on) > String(seen.starts_on)) holder.set(office, t);
+  }
+  const localHeads = [...holder.entries()].map(([office, t]) => {
+    const name = personName.get(String(t.person_id));
+    if (!name) throw new Error(`terms ${office}: person ${t.person_id} unknown`);
+    let party: string | null = null;
+    if (t.party_id !== null && t.party_id !== undefined) {
+      party = partyName.get(String(t.party_id)) ?? null;
+      if (!party) throw new Error(`terms ${office}: party ${t.party_id} unknown`);
+    }
+    return {
+      office_id: office,
+      kpa_person_id: String(t.person_id),
+      name,
+      party,
+      starts_on: t.starts_on,
+      how: String(t.how ?? "elected"),
+      election_id: typeof t.election_id === "string" ? t.election_id : null,
+      source_url: firstUrl(t.source_urls, `terms ${office}`),
+      checked_at: t.checked_at,
+    };
+  });
+
+  return {
+    parties,
+    rulingPeriods,
+    boards,
+    photos,
+    sameName,
+    pastTermBoards,
+    localOffices,
+    localHeads,
+  };
 }
 
 async function release(deps: KpaIngestDeps, tag: string | null): Promise<Release> {
@@ -328,6 +401,7 @@ export async function runKpaIngest(mode: string, deps: KpaIngestDeps, url: URL) 
     photos: files["photos.json"],
     people: files["people.json"],
     terms: files["terms.json"],
+    offices: files["offices.json"],
   }, today);
 
   const applied = await deps.db.rpc<J>("kpa_apply", {
@@ -338,6 +412,8 @@ export async function runKpaIngest(mode: string, deps: KpaIngestDeps, url: URL) 
     p_ruling_periods: args.rulingPeriods,
     p_boards: args.boards,
     p_photos: args.photos,
+    p_local_offices: args.localOffices,
+    p_local_heads: args.localHeads,
   });
   return {
     tag,

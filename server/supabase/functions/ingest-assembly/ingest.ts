@@ -73,6 +73,8 @@ export async function ingestPortraits(deps: AssemblyIngestDeps) {
   const batch = todo.slice(0, deps.portraitBatch ?? 60);
 
   let failed = 0;
+  // Why copies failed, by reason, so the job's answer says what the Assembly sent back.
+  const reasons: Record<string, number> = {};
   const rows: object[] = [];
   for (const m of batch) {
     try {
@@ -96,9 +98,11 @@ export async function ingestPortraits(deps: AssemblyIngestDeps) {
         sha256: sha,
         fetched_at: fetchedAt,
       });
-    } catch {
+    } catch (e) {
       // One bad image does not stop the rest; it is tried again tomorrow.
       failed += 1;
+      const reason = e instanceof Error ? e.message : String(e);
+      reasons[reason] = (reasons[reason] ?? 0) + 1;
     }
   }
   if (rows.length > 0) await deps.db.upsert("portraits", rows, "mona_cd");
@@ -106,6 +110,7 @@ export async function ingestPortraits(deps: AssemblyIngestDeps) {
     candidates: todo.length,
     copied: rows.length,
     failed,
+    reasons,
     remaining: todo.length - batch.length,
   };
 }

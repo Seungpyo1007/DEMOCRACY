@@ -110,13 +110,43 @@ function dump(): Record<string, J[]> {
       { id: "ga-sang-1970", external_ids: { assembly_mona_cd: "FAKE0001" } },
       { id: "no-portrait-1980", external_ids: { assembly_mona_cd: "FAKE0009" } },
       { id: "ji-nan-1960", external_ids: { assembly_mona_cd: "FAKE0021" } },
+      { id: "si-jang-1961", name: "시장", external_ids: {} },
     ],
     "terms.json": [
       { office: `assembly/${MAPO_B}`, person_id: "ga-sang-1970", ends_on: null },
       { office: "assembly/proportional-22", person_id: "no-portrait-1980", ends_on: null },
       { office: "assembly/seoul-mapogueul-21", person_id: "ji-nan-1960", ends_on: "2024-05-29" },
+      {
+        office: "metro-head/11",
+        person_id: "si-jang-1961",
+        party_id: "gungminui-him",
+        starts_on: "2026-07-01",
+        ends_on: null,
+        how: "elected",
+        election_id: "20260603",
+        source_urls: ["https://www.data.go.kr/data/15000864/openapi.do"],
+        checked_at: "2026-11-01",
+      },
     ],
-    "offices.json": [],
+    "offices.json": [
+      { id: MAPO_B, type: "assembly", name: "서울 마포구을", source_urls: [NEC_PDF] },
+      {
+        id: "11",
+        type: "metro-head",
+        name: "서울특별시",
+        sido: "서울특별시",
+        source_urls: ["https://www.code.go.kr/stdcode/regCodeL.do"],
+        checked_at: "2026-11-01",
+      },
+      {
+        id: "11440",
+        type: "local-head",
+        name: "마포구",
+        sido: "서울특별시",
+        source_urls: ["https://www.code.go.kr/stdcode/regCodeL.do"],
+        checked_at: "2026-11-01",
+      },
+    ],
   };
 }
 
@@ -271,8 +301,6 @@ Deno.test("kpa: applies a release, keeping verdicts and portrait files", async (
   assertEquals(portrait.storage_path, "FAKE0001/abc.jpg");
   assertEquals(portrait.sha256, "abc");
 
-  // offices.json is ignored, so it is never downloaded.
-  assertEquals(up.requests.some((u) => u.endsWith("/offices.json")), false);
   assertEquals(db.rows("kpa_imports").map((r) => r.tag), [TAG]);
 });
 
@@ -383,8 +411,12 @@ Deno.test("toApplyArgs: parties, periods and the photo join", () => {
     rulingPeriods: f["ruling_periods.json"],
     pledges: f["pledges.json"],
     photos: f["photos.json"],
-    people: [{ id: "ga-sang-1970", external_ids: { assembly_mona_cd: "FAKE0001" } }],
+    people: [
+      { id: "ga-sang-1970", external_ids: { assembly_mona_cd: "FAKE0001" } },
+      { id: "si-jang-1961", name: "시장" },
+    ],
     terms: f["terms.json"],
+    offices: f["offices.json"],
   }, "2026-10-25");
 
   const ppp = args.parties.find((p) => p.name === "국민의힘")!;
@@ -418,8 +450,12 @@ Deno.test("toApplyArgs: Commons photos are left out", () => {
     rulingPeriods: f["ruling_periods.json"],
     pledges: f["pledges.json"],
     photos: f["photos.json"],
-    people: [{ id: "ga-sang-1970", external_ids: { assembly_mona_cd: "FAKE0001" } }],
+    people: [
+      { id: "ga-sang-1970", external_ids: { assembly_mona_cd: "FAKE0001" } },
+      { id: "si-jang-1961", name: "시장" },
+    ],
     terms: f["terms.json"],
+    offices: f["offices.json"],
   }, "2026-10-25");
   assertEquals(args.photos.map((p) => p.person_id), ["no-portrait-1980"]);
 });
@@ -436,6 +472,7 @@ Deno.test("toApplyArgs: an unknown ruling party refuses", () => {
         photos: [],
         people: [],
         terms: [],
+        offices: [],
       }, "2026-10-25"),
     Error,
     "ruling_periods 2022-05-10: party no-such-party unknown",
@@ -450,6 +487,7 @@ function argsOf(f: Record<string, J[]>) {
     photos: f["photos.json"],
     people: f["people.json"],
     terms: f["terms.json"],
+    offices: f["offices.json"],
   }, "2026-10-25");
 }
 
@@ -491,4 +529,48 @@ Deno.test("toApplyArgs: the latest of several same-name parties gives the row", 
   assertEquals(row.note, null);
   // The newest record has no colour, so the next one that does supplies it.
   assertEquals(row.color, "#C9151E");
+});
+
+Deno.test("toApplyArgs: local offices from offices.json, holders from open terms", () => {
+  const f = dump();
+  f["terms.json"].push({
+    office: "local-head/11440",
+    person_id: "ji-nan-1960",
+    party_id: null,
+    starts_on: "2022-07-01",
+    ends_on: "2026-06-30",
+    how: "elected",
+    source_urls: ["https://www.data.go.kr/data/15000864/openapi.do"],
+    checked_at: "2026-11-01",
+  });
+  f["people.json"].find((p) => p.id === "ji-nan-1960")!.name = "지난";
+  const args = argsOf(f);
+  assertEquals(args.localOffices.map((o) => [o.id, o.level, o.code, o.name]), [
+    ["metro-head/11", "metro", "11", "서울특별시"],
+    ["local-head/11440", "local", "11440", "마포구"],
+  ]);
+  // 마포구청장's term ended, so the office has no holder.
+  assertEquals(args.localHeads, [{
+    office_id: "metro-head/11",
+    kpa_person_id: "si-jang-1961",
+    name: "시장",
+    party: "국민의힘",
+    starts_on: "2026-07-01",
+    how: "elected",
+    election_id: "20260603",
+    source_url: "https://www.data.go.kr/data/15000864/openapi.do",
+    checked_at: "2026-11-01",
+  }]);
+});
+
+Deno.test("toApplyArgs: a local term for an office KPA does not list refuses", () => {
+  const f = dump();
+  f["terms.json"].at(-1)!.office = "metro-head/99";
+  assertThrows(() => argsOf(f), Error, "terms metro-head/99: no such office");
+});
+
+Deno.test("toApplyArgs: a local office id that is not a region code refuses", () => {
+  const f = dump();
+  f["offices.json"][2].id = "mapo";
+  assertThrows(() => argsOf(f), Error, "offices local-head/mapo: id is not a 5-digit code");
 });
