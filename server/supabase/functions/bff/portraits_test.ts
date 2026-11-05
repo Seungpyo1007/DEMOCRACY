@@ -67,6 +67,7 @@ Deno.test("portraits: copied into Storage, by content hash, and only once", asyn
   const first = await ingestPortraits(deps);
   assert(first.copied > 0);
   assertEquals(first.failed, 0);
+  assertEquals(first.reasons, {});
   assert(up.requested.every((u) => u.startsWith("https://www.assembly.go.kr/")));
   const [row] = db.rows("portraits") as { storage_path: string; source_url: string }[];
   assert(/^members\/.+-[0-9a-f]{16}\.jpg$/.test(row.storage_path));
@@ -88,6 +89,7 @@ Deno.test("portraits: a non-image answer is skipped and tried again later", asyn
   });
   assertEquals(result.copied, 0);
   assert(result.failed > 0);
+  assertEquals(result.reasons, { "status 200, type text/html": result.failed });
   assertEquals(files.size, 0);
   assertEquals(db.rows("portraits").length, 0);
 });
